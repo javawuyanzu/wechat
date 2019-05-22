@@ -6,7 +6,7 @@
       <view style='height:50rpx;color:white;'>
         <open-data type="userNickName" lang="zh_CN" style="margin-left:50rpx;"></open-data>
       </view>
-      <view style='height:50rpx;margin-left:50rpx;margin-top:20rpx;color:white;'>{{wxEnterpriseName}}</view>
+      <view style='height:50rpx;margin-left:50rpx;margin-top:20rpx;color:white;'  bindtap="error">{{wxEnterpriseName}}</view>
     </view>
   </view>
 
@@ -55,7 +55,7 @@
         </view>
       </view>
     </navigator> -->
-     <navigator url="../reports/reports" hover-class="none">
+     <!-- <navigator url="../reports/reports" hover-class="none">
       <view class="user-list-item">
         <view class="item-left">
           <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
@@ -65,6 +65,6 @@
           <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
         </view>
       </view>
-    </navigator>
+    </navigator> -->
   </view>
 </view>

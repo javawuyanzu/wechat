@@ -28,71 +28,126 @@ Page({
   },
   scanCode: function (e) {
     var that = this
+    var deviceNo;
     wx.scanCode({
       success: (res) => {
-        var deviceNo;
         if (res.result.indexOf('?') > 0){
            deviceNo = res.result.substr(43, 55);
         }else{
           deviceNo = res.result;
         }
-        console.log(deviceNo)
         var deviceList = []
         var type = ''
-        wx.getStorage({
-          key: 'deviceList',
-          success(res) {
-            deviceList = res.data;
-            for (var i = 0; i < deviceList.length; i++) {
-              if (deviceList[i].deviceNo == deviceNo) {
-                wx.showToast({
-                  title: that.data.content.operation_deviceexist,
-                  icon: 'none',
-                  duration: 2000
-                });
-                return;
-              }
-            }
-            wx.request({
-              url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
-              // url: 'http://localhost:8080/device/getdecode',
-              data: {
-                deviceNo: deviceNo,
-              },
-              header: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-              },
-              method: 'GET',
-              success: function (res) {
-                console.log(res)
-                if (res.data.code==0){
+        if (deviceNo.substr(0, 2) === '20') {
+          wx.getStorage({
+            key: 'deviceList-mqtt',
+            success(res) {
+              deviceList = res.data;
+              for (var i = 0; i < deviceList.length; i++) {
+                if (deviceList[i].deviceNo == deviceNo) {
                   wx.showToast({
-                    title: res.data.msg,
+                    title: that.data.content.operation_deviceexist,
                     icon: 'none',
                     duration: 2000
                   });
                   return;
-                } 
-                deviceNo = res.data.deviceSuffix
-                deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" +deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)});
-                wx.setStorage({
-                  key: 'deviceList',
-                  data: deviceList,
-                  success: function (res) {
+                }
+              }
+              wx.request({
+                url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+                data: {
+                  deviceNo: deviceNo,
+                },
+                header: {
+                  "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                },
+                method: 'GET',
+                success: function (res) {
+                  if (res.data.code == 0) {
                     wx.showToast({
-                      title: that.data.content.operation_addsuccess,
-                      icon: 'success',
+                      title: that.data.content.operation_devicenoexist,
+                      icon: 'none',
                       duration: 2000
                     });
+                    return;
                   }
-                })
-                wx.switchTab({
-                  url: '../deviceList/deviceList'
-                }) 
+                  deviceNo = res.data.deviceSuffix
+                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
+                  wx.setStorage({
+                    key: 'deviceList-mqtt',
+                    data: deviceList,
+                    success: function (res) {
+                      wx.showToast({
+                        title: that.data.content.operation_addsuccess,
+                        icon: 'success',
+                        duration: 2000
+                      });
+                    }
+                  })
+                }
+              })
+
+              wx.switchTab({
+                url: '../deviceList/deviceList'
+              })
+            }
+          })
+        } else {
+          wx.getStorage({
+            key: 'deviceList',
+            success(res) {
+              deviceList = res.data;
+              for (var i = 0; i < deviceList.length; i++) {
+                if (deviceList[i].deviceNo ==deviceNo) {
+                  wx.showToast({
+                    title: that.data.content.operation_deviceexist,
+                    icon: 'none',
+                    duration: 2000
+                  });
+                  return;
+                }
               }
-            })
-          }
-        })
+              wx.request({
+                url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+                data: {
+                  deviceNo: deviceNo,
+                },
+                header: {
+                  "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                },
+                method: 'GET',
+                success: function (res) {
+                  if (res.data.code == 0) {
+                    wx.showToast({
+                      title: res.data.msg,
+                      icon: 'none',
+                      duration: 2000
+                    });
+                    return;
+                  }
+                  deviceNo = res.data.deviceSuffix
+                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0 });
+                  wx.setStorage({
+                    key: 'deviceList',
+                    data: deviceList,
+                    success: function (res) {
+                      wx.showToast({
+                        title: that.data.content.operation_addsuccess,
+                        icon: 'success',
+                        duration: 2000
+                      });
+                    }
+                  })
+
+                  wx.switchTab({
+                    url: '../deviceList/deviceList'
+                  })
+                }
+              })
+            }
+          })
+
+        }
       }
     })
   },
@@ -153,61 +208,119 @@ Page({
     }else{
       var deviceList = []
       var type=''
-      wx.getStorage({
-        key: 'deviceList',
-        success(res) {
-          deviceList=res.data;
-          for (var i = 0; i < deviceList.length;i++){
-            if (deviceList[i].deviceNo == formData.deviceNo){
-              wx.showToast({
-                title: that.data.content.operation_deviceexist,
-                icon: 'none',
-                duration: 2000
-              });
-              return;
-            }
-          }
-          var deviceNo = formData.deviceNo
-          wx.request({
-            url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
-            // url: 'http://localhost:8080/device/getdecode',
-            data: {
-              deviceNo: deviceNo,
-            },
-            header: {
-              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-            },
-            method: 'GET',
-            success: function (res) {
-              console.log(res)
-              if (res.data.code == 0) {
-                wx.showToast({
-                  title: res.data.msg,
-                  icon: 'none',
-                  duration: 2000
-                });
-                return;
-              }
-              deviceNo = res.data.deviceSuffix
-              deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
-              wx.setStorage({
-                key: 'deviceList',
-                data: deviceList,
-                success: function (res) {
+      var deviceNo = formData.deviceNo
+      if (deviceNo.substr(0, 2) === '20') {
+          wx.getStorage({
+            key: 'deviceList-mqtt',
+            success(res) {
+              deviceList = res.data;
+              for (var i = 0; i < deviceList.length; i++) {
+                if (deviceList[i].deviceNo == formData.deviceNo) {
                   wx.showToast({
-                    title: that.data.content.operation_addsuccess,
-                    icon: 'success',
+                    title: that.data.content.operation_deviceexist,
+                    icon: 'none',
                     duration: 2000
                   });
+                  return;
+                }
+              }
+               deviceNo = formData.deviceNo
+              wx.request({
+                url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+                data: {
+                  deviceNo: deviceNo,
+                },
+                header: {
+                  "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                },
+                method: 'GET',
+                success: function (res) {
+                  if (res.data.code == 0) {
+                    wx.showToast({
+                      title: that.data.content.operation_devicenoexist,
+                      icon: 'none',
+                      duration: 2000
+                    });
+                    return;
+                  }
+                  deviceNo = res.data.deviceSuffix
+                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
+                  wx.setStorage({
+                    key: 'deviceList-mqtt',
+                    data: deviceList,
+                    success: function (res) {
+                      wx.showToast({
+                        title: that.data.content.operation_addsuccess,
+                        icon: 'success',
+                        duration: 2000
+                      });
+                    }
+                  })  
                 }
               })
+             
               wx.switchTab({
                 url: '../deviceList/deviceList'
               })
             }
           })
-        }
-      })
+      }else{
+        wx.getStorage({
+          key: 'deviceList',
+          success(res) {
+            deviceList = res.data;
+            for (var i = 0; i < deviceList.length; i++) {
+              if (deviceList[i].deviceNo == formData.deviceNo) {
+                wx.showToast({
+                  title: that.data.content.operation_deviceexist,
+                  icon: 'none',
+                  duration: 2000
+                });
+                return;
+              }
+            }
+            var deviceNo = formData.deviceNo
+            wx.request({
+              url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+              data: {
+                deviceNo: deviceNo,
+              },
+              header: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+              },
+              method: 'GET',
+              success: function (res) {
+                if (res.data.code == 0) {
+                  wx.showToast({
+                    title: res.data.msg,
+                    icon: 'none',
+                    duration: 2000
+                  });
+                  return;
+                }
+                deviceNo = res.data.deviceSuffix
+                deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0 });
+                  wx.setStorage({
+                    key: 'deviceList',
+                    data: deviceList,
+                    success: function (res) {
+                      wx.showToast({
+                        title: that.data.content.operation_addsuccess,
+                        icon: 'success',
+                        duration: 2000
+                      });
+                    }
+                  })
+               
+                wx.switchTab({
+                  url: '../deviceList/deviceList'
+                })
+              }
+            })
+          }
+        })
+      
+      }
       
     }
   }

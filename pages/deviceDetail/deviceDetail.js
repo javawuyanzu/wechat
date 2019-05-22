@@ -256,73 +256,73 @@ Page({
    
     app.globalData.callBack[1] = function (t, m) {
       console.log('详情页收到数据：' + t + ':=' + m);
-      var deviceNo = that.data.deviceNo
-      console.log(that.data.deviceType)
-      let data = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang,that.data.deviceType, new Uint8Array(m))
+      // var deviceNo = that.data.deviceNo
+      // console.log(that.data.deviceType)
+      // let data = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang,that.data.deviceType, new Uint8Array(m))
      
-      var errorList = []
+      // var errorList = []
 
-      if (typeof (data.getCommands()) != "undefined") {
-        that.setData({
-          showList: data.getCommands()
-        })
-        if (that.data.controlList.length == 0) {
-          that.setData({
-            controlList: data.getCommands()
-          })
-        }
-      }
+      // if (typeof (data.getCommands()) != "undefined") {
+      //   that.setData({
+      //     showList: data.getCommands()
+      //   })
+      //   if (that.data.controlList.length == 0) {
+      //     that.setData({
+      //       controlList: data.getCommands()
+      //     })
+      //   }
+      // }
 
-      var myDate = new Date();
-      for (var index in data.getExceptionFields().map) {
-        errorList.push({
-          deviceNo: deviceNo,
-          title: data.getExceptionFields().map[index].title,
-          date: myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + '-' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds(),
-          states: that.data.content.detail_nochuli
-        })
-      }
-      that.getException(errorList);
-      var imgstyle1 = that.data.imgstyle
-      that.setData({
-        src : 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
-        bengAnimationList: data.getBeng(),
-        exceptionInfoMap: data.getExceptionFields().map,
-        fanAnimationList: data.getFan(),
-        baseInfoMap: data.getBaseInfoFields().map,
-        mockInfoMap: data.getMockFields().map,
-        settingInfoMap: data.getSettingFields().map,
-        deviceInfoMap: data.getDeviceFields().map,
-      })
-      wx.hideLoading()
-      for (var index in data.getMockFields().map) {
-        if (that.data.mock1 == null) {
-          that.setData({
-            mock1: data.getMockFields().map[index].name,
-            mock1Name: data.getMockFields().map[index].title
-          })
-          break;
-        }
-      }
-      for (var i = 0; i < that.data.bengAnimationList.length; i++) {
-        console.log()
-        var src = 'bengList[' + i + '].src'
-        var title = 'bengList[' + i + '].title'
+      // var myDate = new Date();
+      // for (var index in data.getExceptionFields().map) {
+      //   errorList.push({
+      //     deviceNo: deviceNo,
+      //     title: data.getExceptionFields().map[index].title,
+      //     date: myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + '-' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds(),
+      //     states: that.data.content.detail_nochuli
+      //   })
+      // }
+      // that.getException(errorList);
+      // var imgstyle1 = that.data.imgstyle
+      // that.setData({
+      //   src : 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
+      //   bengAnimationList: data.getBeng(),
+      //   exceptionInfoMap: data.getExceptionFields().map,
+      //   fanAnimationList: data.getFan(),
+      //   baseInfoMap: data.getBaseInfoFields().map,
+      //   mockInfoMap: data.getMockFields().map,
+      //   settingInfoMap: data.getSettingFields().map,
+      //   deviceInfoMap: data.getDeviceFields().map,
+      // })
+      // wx.hideLoading()
+      // for (var index in data.getMockFields().map) {
+      //   if (that.data.mock1 == null) {
+      //     that.setData({
+      //       mock1: data.getMockFields().map[index].name,
+      //       mock1Name: data.getMockFields().map[index].title
+      //     })
+      //     break;
+      //   }
+      // }
+      // for (var i = 0; i < that.data.bengAnimationList.length; i++) {
+      //   console.log()
+      //   var src = 'bengList[' + i + '].src'
+      //   var title = 'bengList[' + i + '].title'
 
-        that.setData({
-          [title]: that.data.bengAnimationList[i].getTitle(),
-          [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/beng/' + that.data.bengAnimationList[i].getElementPrefixAndValuesString() + '.gif'
-        })
-      }
+      //   that.setData({
+      //     [title]: that.data.bengAnimationList[i].getTitle(),
+      //     [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/beng/' + that.data.bengAnimationList[i].getElementPrefixAndValuesString() + '.gif'
+      //   })
+      // }
 
-      for (var i = 0; i < that.data.fanAnimationList.length; i++) {
-        var src = 'fanList[' + i + '].src'
-        var title = 'fanList[' + i + '].title'
-        that.setData({
-          [title]: that.data.fanAnimationList[i].getTitle(),
-          [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/fan/' + that.data.fanAnimationList[i].getElementPrefixAndValuesString() + '.gif'
-        })
-      }
+      // for (var i = 0; i < that.data.fanAnimationList.length; i++) {
+      //   var src = 'fanList[' + i + '].src'
+      //   var title = 'fanList[' + i + '].title'
+      //   that.setData({
+      //     [title]: that.data.fanAnimationList[i].getTitle(),
+      //     [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/fan/' + that.data.fanAnimationList[i].getElementPrefixAndValuesString() + '.gif'
+      //   })
+      // }
     }
   },
   // 展开折叠选择  

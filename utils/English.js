@@ -56,7 +56,6 @@ var English = {
   operation_deviceexist: "The device already exists",
   operation_addsuccess: "Add  success",
   operation_pleasedeviceno: "Please enter the device number",
-  operation_deviceexist: "The device already exists",
   operation_devicenoexist: "The device does not exist",
   operation_devicesucces: "Add  success",
   login_title: "User Login",

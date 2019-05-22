@@ -289,12 +289,18 @@ Page({
   onLoad: function (options) {
     var that = this;
     that.timer(); 
-    
-    // getApp().conmqtt().then(function () {
-    //   console.log("list")
-    //   console.log(app.globalData.client)
-    //   that.subTopic("123")
-    // })
+    getApp().conmqtt().then(function () {
+      wx.getStorage({
+        key: 'deviceList-mqtt',
+        success(res) {
+          console.log(res.data)
+          var mqttlist = res.data
+          for (var i = 0; i < mqttlist.length; i++) {
+            that.subTopic(mqttlist[i].mqttName)
+          }
+        }
+      })
+    })
   },
   subTopic: function (topic) {
     var client = app.globalData.client;
@@ -390,6 +396,9 @@ Page({
   },
   onShow: function () {
     var that = this
+    // app.globalData.callBack[0] = function (t, m) {
+    //   console.log('列表页收到数据：' + t + ':=' + m);
+    // }
     that.setData({
       timerStates: true
     })

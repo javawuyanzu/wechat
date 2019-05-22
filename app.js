@@ -112,6 +112,10 @@ App({
             data: []
           })
           wx.setStorage({
+            key: 'deviceList-mqtt',
+            data: []
+          })
+          wx.setStorage({
             key: 'errorList',
             data: []
           })

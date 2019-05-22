@@ -56,7 +56,6 @@ var Chinese = {
   operation_deviceexist: "该设备已存在",
   operation_addsuccess: "添加成功",
   operation_pleasedeviceno: "请输入设备编号",
-  operation_deviceexist: "该设备已存在",
   operation_devicenoexist: "该设备不存在",
   operation_devicesucces: "添加成功",
   login_title: "用户登录",

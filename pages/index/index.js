@@ -16,6 +16,11 @@ Page({
       }
     }
   },
+  error: function () {
+    wx.navigateTo({
+      url: '../reports/reports'
+    })
+  },
   //事件处理函数
   tologin: function() {
     wx.navigateTo({
