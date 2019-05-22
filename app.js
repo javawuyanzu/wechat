@@ -1,7 +1,7 @@
 const app = getApp();
 var openid='';
 
-
+//
 import {
   DeviceAdapterUtil
 } from '/libs/devices-lib/index.js'
