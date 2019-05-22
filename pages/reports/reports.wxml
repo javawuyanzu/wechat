@@ -1,0 +1,3 @@
+ <view class="li" wx:for="{{list}}" wx:for-item="item">
+  <text>{{item.deviceNo}}-{{item.deviceType}}</text>
+ </view>
