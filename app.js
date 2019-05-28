@@ -61,7 +61,6 @@ App({
                 rejectUnauthorized: false
               }
               var client = mqtt.connect('wxs://mqtt.sdcsoft.com.cn:8084/mqtt', options);
-              console.log("app")
               that.globalData.client = client
               console.log(that.globalData.client)
             
@@ -73,7 +72,8 @@ App({
                 console.log('client connected:' + options.clientId)
                 resolve("200")
               })
-              client.on('close', function () {
+              client.on('close', function (e) {
+                console.log(e)
                 console.log(options.clientId + ' disconnected');
                 client.reconnect();
               })
@@ -84,7 +84,6 @@ App({
                   }
                 }
               })
-             
             }
           })
         }
@@ -109,10 +108,6 @@ App({
         if (res.keys.length == 0) {
           wx.setStorage({
             key: 'deviceList',
-            data: []
-          })
-          wx.setStorage({
-            key: 'deviceList-mqtt',
             data: []
           })
           wx.setStorage({
@@ -145,5 +140,7 @@ App({
     openid: null,
     startTime: null,
     endTime: null,
+    bytedata:[],
+    device:null,
   },
 })

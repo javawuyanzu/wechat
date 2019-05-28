@@ -61,7 +61,7 @@ var Chinese = {
   login_title: "用户登录",
   login_userName: "用户名",
   login_password: "密码",
-  login_pleaseuserName: "请输入用户名",
+  login_pleaseuserName: "请输入手机号",
   login_pleasepassword: "请输入密码",
   login_creatuser: "创建一个账户",
   login_forgetPW: "忘记密码",
@@ -90,6 +90,7 @@ var Chinese = {
   register_existuser: "该用户已存在", 
   register_zhucesuccess: "注册成功", 
 
+ 
   forgotPw_title:"忘记密码",
   forgotPw_pleasephone: "请输入手机号",
   forgotPw_getPw: "获取密码",

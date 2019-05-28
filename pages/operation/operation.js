@@ -1,12 +1,12 @@
 const app = getApp();
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     openid:'',
     content: null,
+    inputValue:'',
   },
   onShow: function () {
     var that = this
@@ -38,61 +38,6 @@ Page({
         }
         var deviceList = []
         var type = ''
-        if (deviceNo.substr(0, 2) === '20') {
-          wx.getStorage({
-            key: 'deviceList-mqtt',
-            success(res) {
-              deviceList = res.data;
-              for (var i = 0; i < deviceList.length; i++) {
-                if (deviceList[i].deviceNo == deviceNo) {
-                  wx.showToast({
-                    title: that.data.content.operation_deviceexist,
-                    icon: 'none',
-                    duration: 2000
-                  });
-                  return;
-                }
-              }
-              wx.request({
-                url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
-                data: {
-                  deviceNo: deviceNo,
-                },
-                header: {
-                  "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-                },
-                method: 'GET',
-                success: function (res) {
-                  if (res.data.code == 0) {
-                    wx.showToast({
-                      title: that.data.content.operation_devicenoexist,
-                      icon: 'none',
-                      duration: 2000
-                    });
-                    return;
-                  }
-                  deviceNo = res.data.deviceSuffix
-                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
-                  wx.setStorage({
-                    key: 'deviceList-mqtt',
-                    data: deviceList,
-                    success: function (res) {
-                      wx.showToast({
-                        title: that.data.content.operation_addsuccess,
-                        icon: 'success',
-                        duration: 2000
-                      });
-                    }
-                  })
-                }
-              })
-
-              wx.switchTab({
-                url: '../deviceList/deviceList'
-              })
-            }
-          })
-        } else {
           wx.getStorage({
             key: 'deviceList',
             success(res) {
@@ -126,7 +71,12 @@ Page({
                     return;
                   }
                   deviceNo = res.data.deviceSuffix
-                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0 });
+                  if (deviceNo.substr(0, 2) === '20') {
+                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type: 2 });
+                    that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                  } else {
+                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, type: 1 });
+                  }
                   wx.setStorage({
                     key: 'deviceList',
                     data: deviceList,
@@ -146,10 +96,27 @@ Page({
               })
             }
           })
-
-        }
       }
     })
+  },
+  subTopic: function (topic) {
+    var client = app.globalData.client;
+    if (client.connected != null & client.connected) {
+      client.subscribe(topic, null, function (err, granted) {
+        if (!err) {
+          console.log('订阅成功' + topic)
+        } else {
+          console.log('订阅失败')
+        }
+      })
+    } else {
+      wx.showToast({
+        title: '连接失败，请稍后再试',
+        icon: 'none',
+        duration: 1000,
+        mask: true
+      })
+    }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -209,62 +176,6 @@ Page({
       var deviceList = []
       var type=''
       var deviceNo = formData.deviceNo
-      if (deviceNo.substr(0, 2) === '20') {
-          wx.getStorage({
-            key: 'deviceList-mqtt',
-            success(res) {
-              deviceList = res.data;
-              for (var i = 0; i < deviceList.length; i++) {
-                if (deviceList[i].deviceNo == formData.deviceNo) {
-                  wx.showToast({
-                    title: that.data.content.operation_deviceexist,
-                    icon: 'none',
-                    duration: 2000
-                  });
-                  return;
-                }
-              }
-               deviceNo = formData.deviceNo
-              wx.request({
-                url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
-                data: {
-                  deviceNo: deviceNo,
-                },
-                header: {
-                  "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-                },
-                method: 'GET',
-                success: function (res) {
-                  if (res.data.code == 0) {
-                    wx.showToast({
-                      title: that.data.content.operation_devicenoexist,
-                      icon: 'none',
-                      duration: 2000
-                    });
-                    return;
-                  }
-                  deviceNo = res.data.deviceSuffix
-                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
-                  wx.setStorage({
-                    key: 'deviceList-mqtt',
-                    data: deviceList,
-                    success: function (res) {
-                      wx.showToast({
-                        title: that.data.content.operation_addsuccess,
-                        icon: 'success',
-                        duration: 2000
-                      });
-                    }
-                  })  
-                }
-              })
-             
-              wx.switchTab({
-                url: '../deviceList/deviceList'
-              })
-            }
-          })
-      }else{
         wx.getStorage({
           key: 'deviceList',
           success(res) {
@@ -299,7 +210,12 @@ Page({
                   return;
                 }
                 deviceNo = res.data.deviceSuffix
-                deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0 });
+                if (deviceNo.substr(0, 2) === '20') {
+                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type:2 });
+                  that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                }else{
+                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0,type:1 });
+                }
                   wx.setStorage({
                     key: 'deviceList',
                     data: deviceList,
@@ -319,9 +235,6 @@ Page({
             })
           }
         })
-      
-      }
-      
     }
   }
 })

@@ -18,10 +18,10 @@
                 <!-- <text>运行时间：{{item.runday}}</text> -->
               </view>
               <view class="image">
-                <image src="{{item.src}}" style="width: 140px; height: 70px;" mode="aspectFit"></image>
+                <image src="" style="width: 140px; height: 70px;" mode="aspectFit"></image>
               </view>
             </view>
-            <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgstyle}}'   data-control='{{item.control}}' data-title='{{item.title}}'   data-type='{{item.type}}' bindlongtap="longTap">
+            <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgstyle}}'   data-control='{{item.control}}' data-title='{{item.title}}'   data-type='{{item.type}}' data-device='{{item.device}}' bindlongtap="longTap">
               <view class="title">
                 <text>{{item.title}}——{{item.runstate}}</text>
                 <view style='float:right;' wx:if="{{item.errcount >0}}">

@@ -35,7 +35,6 @@ exports.NumberHashMap = NumberHashMap;
 var StringHashMap = /** @class */ (function () {
     function StringHashMap() {
         this.map = {};
-        this.map2 = new Map();
     }
     StringHashMap.prototype.addItem = function (key, value) {
         this.map[key] = value;

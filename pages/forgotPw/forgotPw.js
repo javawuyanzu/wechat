@@ -52,13 +52,14 @@ Page({
         icon: 'none',
         duration: 2000
       })
-    } else if (phone.trim().length != 11 || !/^1[3|4|5|6|7|8|9]\d{9}$/.test(phone)) {
-      wx.showToast({
-        title: that.data.content.forgotPw_falsephone,
-        icon: 'none',
-        duration: 2000
-      })
-    }
+    } 
+    // else if (phone.trim().length != 11 || !/^1[3|4|5|6|7|8|9]\d{9}$/.test(phone)) {
+    //   wx.showToast({
+    //     title: that.data.content.forgotPw_falsephone,
+    //     icon: 'none',
+    //     duration: 2000
+    //   })
+    // }
     else {
       wx.request({
         url: 'https://app.weixin.sdcsoft.cn/employee/findEmployee',
@@ -69,13 +70,13 @@ Page({
         header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
         success: function (res) {
           console.log(res)
-          if (!res.data) {
-            wx.showToast({
-              icon: 'none',
-              title: that.data.content.forgotPw_nouser,
-              duration: 2000
-            })
-          }else{
+          // if (!res.data) {
+          //   wx.showToast({
+          //     icon: 'none',
+          //     title: that.data.content.forgotPw_nouser,
+          //     duration: 2000
+          //   })
+          // }else{
             wx.request({
               url: 'https://app.weixin.sdcsoft.cn/getNewPd',
               method: "GET",
@@ -98,7 +99,7 @@ Page({
                 
               }
             })
-          }
+          // }
         }
       })
     };

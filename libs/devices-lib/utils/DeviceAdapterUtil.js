@@ -12,7 +12,6 @@ var DeviceAdapter = /** @class */ (function () {
      */
     DeviceAdapter.prototype.getSubDevice = function (type, sub, data) {
         var t = type + '_' + sub;
-        console.log('t:=' + t);
         var device = this.createDeviceFunc(t);
         var map = this.createMapFunc(this.lang, t);
         if (device.validateFalse(data.byteLength)) {

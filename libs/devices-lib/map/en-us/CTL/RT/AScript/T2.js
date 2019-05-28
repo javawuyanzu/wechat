@@ -22,13 +22,13 @@ var Map_CTL_RT_T2_Ts = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         // this.subTypes.addItem('燃油气蒸汽','CTL_RT_T2_RYZQ');
         // this.subTypes.addItem('燃油气热水','CTL_RT_T2_RYRS');
-      _this.addPoint(new meta_1.DeviceField(RT_2.CTL_RT.KEY_POINT_RAN_SHAO_QI_KONGZHI, 9, 2, "Start-stop control of burner", 0, Map_CTL_RT_T2_Ts.coms_open_close));
+        _this.addPoint(new meta_1.DeviceField(RT_2.CTL_RT.KEY_POINT_RAN_SHAO_QI_KONGZHI, 9, 2, 'Start-stop control of burner', 0, Map_CTL_RT_T2_Ts.coms_open_close));
         return _this;
     }
     Map_CTL_RT_T2_Ts.coms_status = {
         0: "Wait",
         1: "Warn",
-        2: "Run"
+        2: "Runing"
     };
     return Map_CTL_RT_T2_Ts;
 }(RT_1.Map_CTL_RT));

@@ -57,3 +57,11 @@ page{
   margin: 20rpx;
  
 }
+.itemview {
+ overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding:0rpx 40rpx;
+  border-top:1px solid #b1b1b1;
+  background-color:white;
+}

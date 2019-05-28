@@ -64,7 +64,7 @@ Page({
     })
   },
   tolist: function () {
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/operation/operation'
     })
   },
@@ -132,16 +132,16 @@ Page({
               })
             }
           })
-          wx.request({
-            url: 'https://app.weixin.sdcsoft.cn/employee/addCreateTime',
-            method: "GET",
-            data: {
-              mobile: that.data.userName,
-            },
-            header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
-            success: function (res) {
-            }
-          })
+          // wx.request({
+          //   url: 'https://app.weixin.sdcsoft.cn/employee/addCreateTime',
+          //   method: "GET",
+          //   data: {
+          //     mobile: that.data.userName,
+          //   },
+          //   header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
+          //   success: function (res) {
+          //   }
+          // })
         }
       })
      
