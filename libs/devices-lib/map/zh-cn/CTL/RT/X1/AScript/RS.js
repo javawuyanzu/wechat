@@ -17,12 +17,13 @@ var meta_1 = require("../../../../../../meta/RT/meta");
 var FixedValueField_1 = require("../../../../../../meta/FixedValueField");
 var SdcSoftDevice_1 = require("../../../../../../devices/SdcSoftDevice");
 var X1_1 = require("./X1");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var Map_CTL_RT_X1_ReShui = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_X1_ReShui, _super);
     function Map_CTL_RT_X1_ReShui() {
         var _this = _super.call(this) || this;
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "介质类型", 0, Map_CTL_RT_X1_ReShui.coms_media));
-        _this.addPoint(new meta_1.ExceptionField('ex_jixiandishuiweibaojing', 45, 2, '极限低水位报警', 0));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, '极限低水位报警', 0));
         _this.addPoint(new meta_1.ExceptionField('ex_chushuiwenduchuanganqiguzhang', 45, 2, '出水温度传感器故障', 1));
         _this.addPoint(new meta_1.ExceptionField('ex_chushuiwendugaobaojing', 45, 2, '出水温度高报警', 2));
         _this.addPoint(new meta_1.MockField("mo_chushuiwendu", 13, 2, "出水温度", "℃"));

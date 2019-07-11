@@ -20,6 +20,7 @@ var CountShowField_1 = require("../../../../../meta/CountShowField");
 var FixedValueField_1 = require("../../../../../meta/FixedValueField");
 var RT_1 = require("../../../../../devices/CTL/RT/RT");
 var T2_1 = require("../AScript/T2");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYRS_Ts, _super);
     function Map_CTL_RT_T2_RYRS_Ts() {
@@ -29,8 +30,8 @@ var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_RAN_SHAO_QI, "Burner"));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 3, 2, "System State", '', Map_CTL_RT_T2_RYRS_Ts.coms_status));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_LIFE, 53, 2, "Running Time", "Hour"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYRS_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "Running Days", "Days"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYRS_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "Running Hours", "Hour"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "Running Days", "Days"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "Running Hours", "Hour"));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "Fuel Type", 0, Map_CTL_RT_T2_RYRS_Ts.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "Medium Type", 0, Map_CTL_RT_T2_RYRS_Ts.coms_media));
         _this.addPoint(new meta_1.OpenCloseField("oc_queshuidianji", 5, 2, "Lack Of Water Electrode", 0, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));

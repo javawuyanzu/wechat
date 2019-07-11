@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var X1_1 = require("../../AScript/X1");
+var X1_NoSub_1 = require("../../AScript/X1_NoSub");
 module.exports = /** @class */ (function (_super) {
     __extends(CTL_RT_X1_HNRT_8, _super);
     function CTL_RT_X1_HNRT_8() {
@@ -38,4 +38,4 @@ module.exports = /** @class */ (function (_super) {
         list.push(map.getItem('mo_chushuiwendu'));
     };
     return CTL_RT_X1_HNRT_8;
-}(X1_1.CTL_RT_X1_Ts));
+}(X1_NoSub_1.CTL_RT_X1_NoSub_Ts));

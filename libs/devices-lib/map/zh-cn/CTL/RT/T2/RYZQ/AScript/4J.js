@@ -17,12 +17,14 @@ var RYZQ_Base_1 = require("../../RYZQ_Base");
 var meta_1 = require("../../../../../../../meta/RT/meta");
 var CountShowField_1 = require("../../../../../../../meta/CountShowField");
 var _4J_1 = require("../../../../../../../devices/CTL/RT/T2/RYZQ/AScript/4J");
+var gfrm_1 = require("@sdcsoft/gfrm");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T2_RYZQ_4J = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_4J, _super);
     //4电极
     function Map_CTL_RT_T2_RYZQ_4J() {
         var _this = _super.call(this) || this;
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYZQ_4J.KEY_BASE, _4J_1.CTL_RT_T2_RYZQ_4J.KEY_POINT_SHUI_WEI_STATUS, "水位", '', false, Map_CTL_RT_T2_RYZQ_4J.ShuiWeiStatus));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, _4J_1.CTL_RT_T2_RYZQ_4J.KEY_POINT_SHUI_WEI_STATUS, "水位", '', false, Map_CTL_RT_T2_RYZQ_4J.ShuiWeiStatus));
         _this.addPoint(new meta_1.OpenCloseField("oc_queshuidianji", 5, 2, "缺水电极", 0, Map_CTL_RT_T2_RYZQ_4J.coms_open_close));
         //this.addPoint(new OpenCloseField("oc_dishuiweibaojingdianji_6dianjiteyou_", 5, 2, "低水位报警电极（6电极特有）", 1, Map_CTL_RT_T2_RYZQ_4J.coms_open_close))
         _this.addPoint(new meta_1.OpenCloseField("oc_dishuiweidianji", 5, 2, "低水位电极", 2, Map_CTL_RT_T2_RYZQ_4J.coms_open_close));
@@ -30,7 +32,7 @@ var Map_CTL_RT_T2_RYZQ_4J = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweidianji", 5, 2, "高水位电极", 4, Map_CTL_RT_T2_RYZQ_4J.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweibaojingdianji", 5, 2, "高水位报警电极", 5, Map_CTL_RT_T2_RYZQ_4J.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_queshuidianji2", 5, 2, "缺水电极2", 7, Map_CTL_RT_T2_RYZQ_4J.coms_open_close));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警", 2));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警", 2), "ex_chaoyabaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_ranqiyaligaobaojing", 45, 2, "燃气压力高报警", 15));
         _this.addPoint(new meta_1.ExceptionField("ex_ranqixieloubaojing", 47, 2, "燃气泄漏报警", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhang", 47, 2, "燃烧器故障", 1));

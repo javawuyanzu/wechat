@@ -5,7 +5,7 @@
       <view class="ul">
         <view class='ff_anniu' >
           <view class="li"  wx:for="{{imgList}}" wx:key="key" wx:for-item="item">
-            <view wx:if="{{item.runstate === '未连接' || item.runstate === 'Not connected'}}" data-id='{{item.deviceNo}}' bindlongtap="longTap">
+            <view wx:if="{{item.runstate === '未连接' || item.runstate === 'Not connected'|| item.runstate === 'Error' }}" data-id='{{item.deviceNo}}' bindlongtap="longTap">
               <view class="title">
                 <text>{{item.title}}——{{item.runstate}}</text>
               </view>
@@ -51,7 +51,7 @@
                 <text>{{content.list_runtime}}：{{item.runday}}</text>
               </view>
               <view class="image">
-                <view style=' position: absolute;right:110rpx;top:70rpx;' wx:if="{{item.jiarezu1 !=''}}">
+                <view style=' position: absolute;right:110rpx;top:70rpx;' wx:if="{{item.jiarezu !=''}}">
                   <text>{{item.jiarezu}}</text>
                 </view>
                 <image src="{{item.src}}" style="width: 140px; height: 70px;" mode="aspectFit"></image>

@@ -199,14 +199,14 @@ var OpenCloseField = /** @class */ (function (_super) {
     return OpenCloseField;
 }(OpenCloseField_1.OpenCloseField));
 exports.OpenCloseField = OpenCloseField;
-var map_1 = require("../../map/map");
+var comms_1 = require("@sdcsoft/comms");
 var SettingField = /** @class */ (function (_super) {
     __extends(SettingField, _super);
     function SettingField(name, startIndex, bytesLength, title, unit) {
         return _super.call(this, name, startIndex, bytesLength, title, unit, 0) || this;
     }
     SettingField.prototype.setDeviceFieldForUIKey = function (fieldForUI) {
-        fieldForUI.setKey(map_1.map.KEY_SETTING);
+        fieldForUI.setKey(comms_1.GroupKeys.KEY_SETTING);
     };
     return SettingField;
 }(MockField));

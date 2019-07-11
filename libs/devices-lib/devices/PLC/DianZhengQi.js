@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 var Dian_1 = require("./Dian");
 var SdcSoftDevice_1 = require("../SdcSoftDevice");
 var Collections_1 = require("../../entities/Collections");
+var gfrm_1 = require("@sdcsoft/gfrm");
 module.exports = /** @class */ (function (_super) {
     __extends(PLC_DianZhengQi, _super);
     function PLC_DianZhengQi() {
@@ -42,7 +43,7 @@ module.exports = /** @class */ (function (_super) {
             list.push(map.getItem('ba_guoluyalizhuangtai'));
         }
         else {
-            list.push(map2.getItem('mo_zhengqiyali'));
+            list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi));
         }
         return list.toArray();
     };

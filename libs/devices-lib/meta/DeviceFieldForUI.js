@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var ExceptionField_1 = require("./ExceptionField");
 //namespace DevicesLib.meta {
 var DeviceFieldForUI = /** @class */ (function () {
     function DeviceFieldForUI(valueMap) {
@@ -7,7 +8,8 @@ var DeviceFieldForUI = /** @class */ (function () {
         this.value = 0;
         this.key = '';
         this.title = '';
-        this.valueString = '';
+        this.valueString = null;
+        this.exceptionLevel = null;
         this.valueMap = null;
         this.unit = '';
         if (valueMap) {
@@ -22,6 +24,9 @@ var DeviceFieldForUI = /** @class */ (function () {
     };
     DeviceFieldForUI.prototype.setUnit = function (unit) {
         this.unit = unit;
+    };
+    DeviceFieldForUI.prototype.setExcptionLevel = function (level) {
+        this.exceptionLevel = level;
     };
     // setNeedFormat(needFormat: boolean) {
     //     this.needFormat = needFormat
@@ -40,7 +45,9 @@ var DeviceFieldForUI = /** @class */ (function () {
         this.name = name;
     };
     DeviceFieldForUI.prototype.getValue = function () {
-        return this.value;
+        if (this.value)
+            return this.value;
+        return 0;
     };
     DeviceFieldForUI.prototype.setValue = function (value) {
         this.value = value;
@@ -58,10 +65,17 @@ var DeviceFieldForUI = /** @class */ (function () {
         // if (this.needFormat){
         //     return this.valueString.replace('%s', this.value.toString())
         // }
-        return this.valueString;
+        if (this.valueString)
+            return this.valueString;
+        return '';
     };
     DeviceFieldForUI.prototype.setValueString = function (valueString) {
         this.valueString = valueString;
+    };
+    DeviceFieldForUI.prototype.getExceptionLevel = function () {
+        if (this.exceptionLevel)
+            return this.exceptionLevel;
+        return ExceptionField_1.ExceptionField.Exception_NULL;
     };
     return DeviceFieldForUI;
 }());

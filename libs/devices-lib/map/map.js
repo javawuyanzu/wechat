@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Collections_1 = require("../entities/Collections");
+var comms_1 = require("@sdcsoft/comms");
 var map = /** @class */ (function () {
     function map() {
-        this.pointMap = new Collections_1.StringHashMap();
-        this.commandMap = new Collections_1.StringHashMap();
+        this.pointMap = new comms_1.StringHashMap();
+        //protected commandMap: StringHashMap<Command[] | null> = new StringHashMap<Command[] | null>()
+        this.commandMap = new comms_1.StringHashMap();
     }
     //protected subTypes: StringHashMap<string> = new StringHashMap<string>()
     //protected warningMsg:string = ''
@@ -14,26 +15,31 @@ var map = /** @class */ (function () {
     map.prototype.getCommandsMap = function () {
         return this.commandMap;
     };
-    // getSubTypes(){
-    //     return this.subTypes
-    // }
-    // getwarningMsg(){
-    //     return this.warningMsg
-    // }
-    map.prototype.addCommandGroup = function (groupKey) {
-        this.commandMap.addItem(groupKey, null);
-    };
-    map.prototype.addPoint = function (byteField) {
+    map.prototype.addPoint = function (byteField, key) {
+        if (key) {
+            this.pointMap.addItem(key, byteField);
+            return;
+        }
         this.pointMap.addItem(byteField.getName(), byteField);
     };
-    map.KEY_BASE = 'baseInfo';
-    map.KEY_RUN = 'runInfo';
-    map.KEY_EXCEPTION = 'exceptionInfo';
-    map.KEY_MOCK = 'mockInfo';
-    map.KEY_SETTING = 'settingInfo';
-    map.KEY_START_STOP = 'startStopInfo';
-    map.KEY_DEVICE = 'deviceInfo';
-    map.KEY_OPEN_CLOSE = 'openclose';
+    map.prototype.addCommand = function (groupKey, cmd) {
+        if (this.commandMap.containsKey(groupKey)) {
+            var cmds = this.commandMap.getItem(groupKey);
+            cmds.push(cmd);
+        }
+        else {
+            var cmds = [cmd];
+            this.commandMap.addItem(groupKey, cmds);
+        }
+    };
+    // static readonly KEY_BASE = 'baseInfo'
+    // static readonly KEY_RUN = 'runInfo'
+    // static readonly KEY_EXCEPTION = 'exceptionInfo'
+    // static readonly KEY_MOCK = 'mockInfo'
+    // static readonly KEY_SETTING = 'settingInfo'
+    // static readonly KEY_START_STOP = 'startStopInfo'
+    // static readonly KEY_DEVICE = 'deviceInfo'
+    // static readonly KEY_OPEN_CLOSE = 'openclose'
     /**
      * 计算属性的KEY
      */

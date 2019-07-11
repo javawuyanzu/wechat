@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var map_1 = require("../map/map");
 var NumberHashMap = /** @class */ (function () {
     function NumberHashMap(map) {
         this.map = {};
@@ -14,13 +13,6 @@ var NumberHashMap = /** @class */ (function () {
     NumberHashMap.prototype.getItem = function (key) {
         return this.map[key];
     };
-    Object.defineProperty(NumberHashMap.prototype, "count", {
-        get: function () {
-            return map_1.map.length;
-        },
-        enumerable: true,
-        configurable: true
-    });
     NumberHashMap.prototype.each = function (func) {
         for (var k in this.map) {
             func(new Number(k).valueOf(), this.map[k]);
@@ -32,52 +24,44 @@ var NumberHashMap = /** @class */ (function () {
     return NumberHashMap;
 }());
 exports.NumberHashMap = NumberHashMap;
-var StringHashMap = /** @class */ (function () {
-    function StringHashMap() {
-        this.map = {};
-    }
-    StringHashMap.prototype.addItem = function (key, value) {
-        this.map[key] = value;
-    };
-    StringHashMap.prototype.getItem = function (key) {
-        return this.map[key];
-    };
-    Object.defineProperty(StringHashMap.prototype, "count", {
-        get: function () {
-            var i = 0;
-            this.each(function () {
-                i++;
-            });
-            return i;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    // get Keys(): string[] {
-    //     // let keys: string[] = []
-    //     // this.each((k, v) => {
-    //     //     keys.push(k)
-    //     // })
-    //     //return keys
-    //     return this.map2.keys()
-    // }
-    StringHashMap.prototype.each = function (func) {
-        for (var key in this.map) {
-            func(key, this.map[key]);
-        }
-    };
-    StringHashMap.prototype.containsKey = function (key) {
-        return this.map[key] ? true : false;
-    };
-    StringHashMap.prototype.remove = function (key) {
-        delete this.map[key];
-    };
-    StringHashMap.prototype.clear = function () {
-        this.map = {};
-    };
-    return StringHashMap;
-}());
-exports.StringHashMap = StringHashMap;
+// export class StringHashMap<TValue>{
+//     private map: { [key: string]: TValue } = {}
+//     addItem(key: string, value: TValue) {
+//         this.map[key] = value
+//     }
+//     getItem(key: string) {
+//         return this.map[key]
+//     }
+//     get count(): number {
+//         let i = 0
+//         this.each(function(){
+//             i++
+//         })
+//         return i
+//     }
+//     // get Keys(): string[] {
+//     //     // let keys: string[] = []
+//     //     // this.each((k, v) => {
+//     //     //     keys.push(k)
+//     //     // })
+//     //     //return keys
+//     //     return this.map2.keys()
+//     // }
+//     each(func: (key: string, value: TValue) => void) {
+//         for (const key in this.map) {
+//             func(key, this.map[key])
+//         }
+//     }
+//     containsKey(key: string): boolean {
+//         return this.map[key] ? true : false
+//     }
+//     remove(key: string): void {
+//         delete this.map[key]
+//     }
+//     clear(): void {
+//         this.map = {}
+//     }
+// }
 var List = /** @class */ (function () {
     function List() {
         this.list = [];

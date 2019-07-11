@@ -16,12 +16,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CTL_NJZJ_1 = require("./CTL_NJZJ");
 var SdcSoftDevice_1 = require("../../../../devices/SdcSoftDevice");
 var _485_1 = require("../../../../meta/NJZJ/485");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
     __extends(Map_CTL_NJZJ_IP_485, _super);
     function Map_CTL_NJZJ_IP_485() {
         var _this = _super.call(this) || this;
-        _this.addCommandGroup(Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting);
-        _this.addCommandGroup(Map_CTL_NJZJ_IP_485.Commands_Key_System_Ctl);
+        // this.addCommandGroup(Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting)
+        // this.addCommandGroup(Map_CTL_NJZJ_IP_485.Commands_Key_System_Ctl)
         _this.addPoint(new _485_1.SystemStatusField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 7, 2, '系统状态', CTL_NJZJ_1.Map_CTL_NJZJ.coms_status, Map_CTL_NJZJ_IP_485.Commands_Key_System_Ctl, '0602', 1, 2));
         _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, 51, 2, '工作天数', '天'));
         _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, 53, 2, '工作小时数', '时'));
@@ -36,18 +37,18 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.BaseInfoField('ba_xiaohuoshijian', 57, 2, '小火工作时间', '时'));
         _this.addPoint(new _485_1.BaseInfoField('ba_fangdongkaiguan', 61, 2, '防冻开关', '', Map_CTL_NJZJ_IP_485.coms_open_close));
         //
-        _this.addPoint(new _485_1.ExceptionField('ex_paiyanwendugaobaojing', 88, 2, '排烟温度高报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 88, 2, '排烟温度高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_lushuiwendugaobaojing', 90, 2, '炉水温度高报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_chukouwendugaobaojing', 92, 2, '出口温度高报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_chaoyabaojing', 94, 2, '超压报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_jixiandishuiweibaojing', 96, 2, '极限低水位报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChuKouWenDuChaoGao, 92, 2, '出口温度高报警', _485_1.ExceptionField.Exception_Error));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 94, 2, '超压报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 96, 2, '极限低水位报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_dishuiweibaojing', 98, 2, '低水位报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_gaoshuiweibaojing', 100, 2, '高水位报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 100, 2, '高水位报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_shuiweixinhaoluojicuobaojing', 102, 2, '水位信号逻辑错报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_lubiwendugaobaojing', 104, 2, '炉壁温度高报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 104, 2, '炉壁温度高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_fuyazhengqiwendugaobaojing', 106, 2, '负压蒸汽温度高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_ranshaoqiguzhangbaojing', 108, 2, '燃烧器故障报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_ranqixieloubaojing', 110, 2, '燃气泄漏报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 110, 2, '燃气泄漏报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_ranqiyalidibaojing', 112, 2, '燃气压力低报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_ranqiyaliyichangbaojing', 114, 2, '燃气压力异常报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_ranqiyaligaobaojing', 116, 2, '燃气压力高报警'));
@@ -70,7 +71,7 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.ExceptionField('ex_shizhongguzhang', 150, 2, '时钟故障'));
         _this.addPoint(new _485_1.ExceptionField('ex_cunchuqiguzhang', 152, 2, '存储器故障'));
         _this.addPoint(new _485_1.ExceptionField('ex_waibuliansuobaojing', 154, 2, '外部连锁报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_queyoubaojing', 156, 2, '缺油报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 156, 2, '缺油报警'), 'ex_queyoubaojing');
         _this.addPoint(new _485_1.ExceptionField('ex_diyouweibaojing', 158, 2, '低油位报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_bentipaiyanwendugaobaojing', 160, 2, '本体排烟温度高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_bianpinqiguzhangbaojing', 162, 2, '变频器故障报警'));
@@ -147,7 +148,7 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.ExceptionField('ex_jishuiyaligaobaojing', 304, 2, '给水压力高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_jienengqichukouyanwengaobaojing', 306, 2, '节能器出口烟温高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_lengningqichukouyanwengaobaojing', 308, 2, '冷凝器出口烟温高报警'));
-        _this.addPoint(new _485_1.ExceptionField('ex_chushuiwendugaobaojing', 310, 2, '出水温度高报警'));
+        _this.addPoint(new _485_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChuKouWenDuChaoGao, 310, 2, '出水温度高报警'), 'ex_chushuiwendugaobaojing');
         _this.addPoint(new _485_1.ExceptionField('ex_gaowenbaohuwendugaobaojing', 312, 2, '高温保护温度高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_youwengaobaojing', 314, 2, '油温高报警'));
         _this.addPoint(new _485_1.ExceptionField('ex_wenchagaobaojing', 316, 2, '温差高报警'));
@@ -274,10 +275,10 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.ExceptionField('ex_jiezhiyalichuanganqiguzhang', 784, 2, '介质压力传感器故障'));
         //
         _this.addPoint(new _485_1.MockField('mo_bentipaiyanwendu', 823, 2, '本体排烟温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_paiyanwendu', 825, 2, '排烟温度', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu, 825, 2, '排烟温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_lushuiwendu', 827, 2, '炉水温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_chukouwendu', 829, 2, '出口温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_jinkouwendu', 831, 2, '进口温度', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu, 829, 2, '出口温度', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu, 831, 2, '进口温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_jienengqichukouwendu(shui_', 833, 2, '节能器出口温度(水）', '℃'));
         _this.addPoint(new _485_1.MockField('mo_jienengqijinkouwendu(shui_', 835, 2, '节能器进口温度(水）', '℃'));
         _this.addPoint(new _485_1.MockField('mo_jishuiwendu', 837, 2, '给水温度', '℃'));
@@ -294,7 +295,7 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.MockField('mo_huilu4wendu', 859, 2, '回路4温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_huilu5wendu', 861, 2, '回路5温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_shiwaiwendu', 863, 2, '室外温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_zhengqiyali', 865, 2, '蒸汽压力', 'MPa', 100));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi, 865, 2, '蒸汽压力', 'MPa', 100));
         _this.addPoint(new _485_1.MockField('mo_jishuiyali', 867, 2, '给水压力', 'MPa', 100));
         _this.addPoint(new _485_1.MockField('mo_chukouyali', 869, 2, '出口压力', 'MPa', 100));
         _this.addPoint(new _485_1.MockField('mo_jinkouyali', 871, 2, '进口压力', 'MPa', 100));
@@ -325,7 +326,7 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.MockField('mo_shanzhengguanwendu', 921, 2, '闪蒸罐温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_lengningyeguanwendu', 923, 2, '冷凝液罐温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_chuguanwendu', 925, 2, '储罐温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_xitongyali_yongyuchengyareshuiguolu_', 927, 2, '系统压力（用于承压热水锅炉）', 'MPa', 100));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ReShuiYaLi, 927, 2, '系统压力（用于承压热水锅炉）', 'MPa', 100), 'mo_xitongyali_yongyuchengyareshuiguolu_');
         _this.addPoint(new _485_1.MockField('mo_guorezhengqiyali', 929, 2, '过热蒸汽压力', 'MPa', 100));
         _this.addPoint(new _485_1.MockField('mo_paiyanchuyali', 931, 2, '排烟处压力', 'Pa'));
         _this.addPoint(new _485_1.MockField('mo_fengshifengya', 933, 2, '风室风压', 'KPa'));
@@ -342,8 +343,8 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.MockField('mo_panguan8wendu', 955, 2, '盘管8温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_panguan9wendu', 957, 2, '盘管9温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_panguan10wendu', 959, 2, '盘管10温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_cainuanchukouwendu', 961, 2, '采暖出口温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_reshuichukouwendu', 963, 2, '热水出口温度', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_CaiNuanChuKouWenDu, 961, 2, '采暖出口温度', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ShengHuoChuKouWenDu, 963, 2, '热水出口温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_jinchukouyacha', 965, 2, '进出口压差', 'MPa', 100));
         _this.addPoint(new _485_1.MockField('mo_1#chukouwendu', 967, 2, '1#出口温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_2#chukouwendu', 969, 2, '2#出口温度', '℃'));
@@ -353,16 +354,16 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.MockField('mo_lengningqijinkouwendu_shui_', 977, 2, '冷凝器进口温度（水）', '℃'));
         _this.addPoint(new _485_1.MockField('mo_lengningqichukouyanwen', 979, 2, '冷凝器出口烟温', '℃'));
         _this.addPoint(new _485_1.MockField('mo_lengningqijinkouyanwen', 981, 2, '冷凝器进口烟温', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_cainuanjinkouwendu', 983, 2, '采暖进口温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_reshuijinkouwendu', 985, 2, '热水进口温度', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_CaiNuanHuiLiuWenDu, 983, 2, '采暖进口温度', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ShengHuoHuiLiuWenDu, 985, 2, '热水进口温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_kongzhixiangwendu', 987, 2, '控制箱温度', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_zhenkongyali', 989, 2, '真空压力', 'KPa'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ReShuiYaLi, 989, 2, '真空压力', 'KPa'));
         _this.addPoint(new _485_1.MockField('mo_chushuiwendu', 991, 2, '出水温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_jinshuiwendu', 993, 2, '进水温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_youwenjiance', 995, 2, '油温检测', '℃'));
         _this.addPoint(new _485_1.MockField('mo_gaowenbaohu', 997, 2, '高温保护', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_chukouyouwen', 999, 2, '出口油温', '℃'));
-        _this.addPoint(new _485_1.MockField('mo_jinkouyouwen', 1001, 2, '进口油温', '℃'));
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu, 999, 2, '出口油温', '℃'), 'mo_chukouyouwen');
+        _this.addPoint(new _485_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu, 1001, 2, '进口油温', '℃'), 'mo_jinkouyouwen');
         _this.addPoint(new _485_1.MockField('mo_huanrewendu', 1003, 2, '换热温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_xitongwendu', 1005, 2, '系统温度', '℃'));
         _this.addPoint(new _485_1.MockField('mo_nengliangshezhiwendu', 1007, 2, '能量设置温度', '℃'));
@@ -535,9 +536,9 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.DeviceField('de_ecigufengji_fan', 1615, 2, '二次鼓风机', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
         _this.addPoint(new _485_1.DeviceField('de_dianhuoqi', 1617, 2, '点火器', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
         _this.addPoint(new _485_1.DeviceField('de_shangmeiji_fan', 1619, 2, '上煤机', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
-        _this.addPoint(new _485_1.DeviceField('de_songliaoji', 1621, 2, '送料机', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
+        _this.addPoint(new _485_1.DeviceField('de_songliaoji_fan', 1621, 2, '送料机', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
         _this.addPoint(new _485_1.DeviceField('de_jiayao_beng', 1623, 2, '加药泵', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
-        _this.addPoint(new _485_1.DeviceField('de_paiwufa', 1625, 2, '排污阀', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
+        _this.addPoint(new _485_1.DeviceField('de_paiwufa_fan', 1625, 2, '排污阀', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
         _this.addPoint(new _485_1.DeviceField('de_huilu1xunhuan_beng', 1627, 2, '回路1循环泵', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
         _this.addPoint(new _485_1.DeviceField('de_huilu2xunhuan_beng', 1629, 2, '回路2循环泵', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
         _this.addPoint(new _485_1.DeviceField('de_huilu3xunhuan_beng', 1631, 2, '回路3循环泵', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));

@@ -18,11 +18,12 @@ var EN_US_1 = require("../../../../../EN_US");
 var _6J_1 = require("./6J");
 var CountShowField_1 = require("../../../../../../../meta/CountShowField");
 var _6J_KZ_1 = require("../../../../../../../devices/CTL/RT/T2/RYZQ/AScript/6J_KZ");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T2_RYZQ_6JKZ = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_6JKZ, _super);
     function Map_CTL_RT_T2_RYZQ_6JKZ() {
         var _this = _super.call(this) || this;
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYZQ_6JKZ.KEY_BASE, _6J_KZ_1.CTL_RT_T2_RYZQ_6JKZ.KEY_POINT_YA_LI_STATUS, "Pressure state", ''));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, _6J_KZ_1.CTL_RT_T2_RYZQ_6JKZ.KEY_POINT_YA_LI_STATUS, "Pressure state", ''));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqifuhe_zengda", 9, 2, "Burner Load Increase Regulation", 1, EN_US_1.Map_EN_US.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_fuhetiaojie", 5, 2, "Load regulation", 7, EN_US_1.Map_EN_US.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_qitingkongzhi", 5, 2, "Start stop control", 8, EN_US_1.Map_EN_US.coms_open_close));

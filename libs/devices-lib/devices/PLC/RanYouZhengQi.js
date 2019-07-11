@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 var RanYou_1 = require("./RanYou");
 var SdcSoftDevice_1 = require("../SdcSoftDevice");
 var Collections_1 = require("../../entities/Collections");
+var gfrm_1 = require("@sdcsoft/gfrm");
 module.exports = /** @class */ (function (_super) {
     __extends(PLC_RanYouZhengQi, _super);
     function PLC_RanYouZhengQi() {
@@ -29,12 +30,12 @@ module.exports = /** @class */ (function (_super) {
         list.push(map.getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS));
         var map2 = this.getMockFields();
         list.push(map.getItem('ba_shuiweizhuangtai'));
-        list.push(map2.getItem('mo_zuizhongpaiyanwendu'));
+        list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
         if (map.containsKey('ba_guoluyalizhuangtai')) {
             list.push(map.getItem('ba_guoluyalizhuangtai'));
         }
         else {
-            list.push(map2.getItem('mo_zhengqiyali'));
+            list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi));
         }
         return list.toArray();
     };

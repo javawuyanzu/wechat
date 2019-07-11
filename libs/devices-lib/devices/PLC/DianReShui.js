@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 var Dian_1 = require("./Dian");
 var SdcSoftDevice_1 = require("../SdcSoftDevice");
 var Collections_1 = require("../../entities/Collections");
+var gfrm_1 = require("@sdcsoft/gfrm");
 module.exports = /** @class */ (function (_super) {
     __extends(PLC_DianReShui, _super);
     function PLC_DianReShui() {
@@ -37,7 +38,7 @@ module.exports = /** @class */ (function (_super) {
             field.setValue(0);
         }
         list.push(field);
-        list.push(map2.getItem('mo_huishuiwendu'));
+        list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu));
         list.push(map.getItem('ba_shuiweizhuangtai'));
         return list.toArray();
     };

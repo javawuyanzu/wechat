@@ -27,7 +27,6 @@ var CTL_RT_X1_RY_ZhengQi_DJD = /** @class */ (function (_super) {
         var map2 = this.getOpenCloseFields();
         var a = map2.getItem('oc_dianjiedianyalibiaodizhen').getValue() == 1 ? 2 : 0;
         var b = map2.getItem('oc_dianjiedianyalibiaogaozhen').getValue() == 1 ? 1 : 0;
-        console.log('a=' + a + ' b=' + b);
         f.setValue(a | b);
         list.push(f);
         var map3 = this.getMockFields();

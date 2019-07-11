@@ -64,7 +64,7 @@ Page({
     })
   },
   tolist: function () {
-    wx.redirectTo({
+    wx.switchTab({
       url: '/pages/operation/operation'
     })
   },

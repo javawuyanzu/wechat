@@ -1,4 +1,3 @@
-
 const app = getApp();
 var wxCharts = require('../../utils/wxcharts.js');
 var lineChart = null;
@@ -46,20 +45,20 @@ Page({
     tian: -1,
     deviceType: '',
     systemStateCategories: ["2018-0405", "2018-0405"],
-    systemStateData: [1,2],
-    mockList:[],
-    mock1:null,
+    systemStateData: [1, 2],
+    mockList: [],
+    mock1: null,
     mock1Name: "",
-    zuotianList:[],
+    zuotianList: [],
     qiantianList: [],
     daqiantianList: [],
     content: null,
-    lang:'',
+    lang: '',
 
   },
   switchChange: function(e) {
     var that = this
-    
+
     var state = -1;
     if (e.detail.value) {
       state = 2
@@ -74,11 +73,9 @@ Page({
       controlList: cList,
       'inputValue': ''
     })
-    
   },
   editData: function(e) {
     var that = this;
-   
     that.setData({
       ifedit: true,
       index: e.currentTarget.dataset.index,
@@ -112,8 +109,10 @@ Page({
     } else {
       let cList = []
       cList = that.data.controlList
+      console.log(cList)
       let temp = cList[that.data.index][that.data.index1];
-      temp.setValue(that.data.inputvalue)
+  
+      temp.setValue(parseFloat(that.data.inputvalue))
       // cList[index].splice(that.data.index, 1);
       // cList[index].push(temp)
       that.setData({
@@ -121,8 +120,6 @@ Page({
         ifedit: false,
         'inputValue': ''
       })
-      console.log(cList)
-      console.log(that.data.controlList)
     }
 
   },
@@ -138,45 +135,47 @@ Page({
     let str = ''
     for (var i in that.data.controlList) {
       for (var commmd in that.data.controlList[i]) {
-        console.log(that.data.controlList[i][commmd])
+      
         str += that.data.controlList[i][commmd].getCommandString();
       }
     }
-    wx.login({
-      success: function(res) {
-        wx.request({
-          //获取openid接口  
-          url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
-          data: {
-            js_code: res.code,
-          },
-          method: 'GET',
-          success: function(res) {
-            wx.request({
-              url: 'https://app.weixin.sdcsoft.cn/device/sendcmd',
-              method: "GET",
-              data: {
-                command: str,
-              },
-              header: {
-                'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                'DeviceSuffix': that.data.deviceNo,
-                'UserId': res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
-              },
-              success: function(res) {
-                if (res.statusCode) {
-                  wx.showToast({
-                    title: that.data.content.detail_zhixing,
-                    icon: 'success',
-                    duration: 2000
-                  });
+    if (str!=''){
+      wx.login({
+        success: function (res) {
+          wx.request({
+            //获取openid接口  
+            url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+            data: {
+              js_code: res.code,
+            },
+            method: 'GET',
+            success: function (res) {
+              wx.request({
+                url: 'https://app.weixin.sdcsoft.cn/device/sendcmd',
+                method: "GET",
+                data: {
+                  command: str,
+                },
+                header: {
+                  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                  'DeviceSuffix': that.data.deviceNo,
+                  'UserId': res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
+                },
+                success: function (res) {
+                  if (res.statusCode) {
+                    wx.showToast({
+                      title: that.data.content.detail_zhixing,
+                      icon: 'success',
+                      duration: 2000
+                    });
+                  }
                 }
-              }
-            })
-          }
-        })
-      }
-    })
+              })
+            }
+          })
+        }
+      })
+    }
     console.log(that.data.controlList)
     console.log(str)
   },
@@ -189,15 +188,15 @@ Page({
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
-    if (e.currentTarget.dataset.idx==2){
+    if (e.currentTarget.dataset.idx == 2 & that.data.report) {
       var type = that.data.deviceType
-        that.getreportdatabykey(that.data.mock1)
+      that.getreportdatabykey(that.data.mock1)
     }
   },
-  onHide: function () {
+  onHide: function() {
     app.globalData.callBack[1] = null
     this.setData({
-      timerStates:false
+      timerStates: false
     })
   },
   onUnload: function() {
@@ -210,7 +209,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    var that=this
+    var that = this
     wx.showLoading({
       title: "loading...",
     })
@@ -232,44 +231,43 @@ Page({
     }
     wx.login({
       success: function(res) {
-        // wx.request({
-        //   //获取openid接口  
-        //   url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
-        //   data: {
-        //     js_code: res.code,
-        //   },
-        //   method: 'GET',
-        //   success: function(res) {
-        //     wx.request({
-        //       //获取openid接口   
-        //       url: 'https://app.weixin.sdcsoft.cn/devicecontrol/getdevicecontrolList',
-        //       data: {
-        //         openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
-        //       },
-        //       method: 'GET',
-        //       success: function(res) {
-        //         console.log(res)
-        //         for (var index in res.data.data) {
-        //           if (res.data.data[index].deviceNo == options.deviceNo) {
-        //             that.setData({
-        //               control: true,
-        //               navbar: that.data.content.detail_navbar,
-        //             })
-        //           }
-        //         }
-        //       }
-        //     })
-        //   }
-        // })
+        wx.request({
+          //获取openid接口  
+          url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+          data: {
+            js_code: res.code,
+          },
+          method: 'GET',
+          success: function(res) {
+            wx.request({
+              //获取openid接口   
+              url: 'https://app.weixin.sdcsoft.cn/devicecontrol/getdevicecontrolList',
+              data: {
+                openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
+              },
+              method: 'GET',
+              success: function(res) {
+                for (var index in res.data.data) {
+                  if (res.data.data[index].deviceNo == options.deviceNo) {
+                    that.setData({
+                      control: true,
+                      navbar: that.data.content.detail_cnavbar,
+                    })
+                  }
+                }
+              }
+            })
+          }
+        })
       }
     })
     that.setData({
-      deviceNo: options.deviceNo,
-      imgstyle: options.imgstyle,
-      deviceType:options.type,
-      zuotian: that.getDateStr(null, -1),
-      qiantian: that.getDateStr(null, -2),
-      daqiantian: that.getDateStr(null, -3)
+        deviceNo: options.deviceNo,
+        imgstyle: options.imgstyle,
+        deviceType: options.type,
+        zuotian: that.getDateStr(null, -1),
+        qiantian: that.getDateStr(null, -2),
+        daqiantian: that.getDateStr(null, -3)
       }),
       wx.setNavigationBarTitle({
         title: options.title
@@ -278,21 +276,22 @@ Page({
       that.timer();
     } else {
       that.dataparse(app.globalData.device)
-      app.globalData.callBack[1] = function (t, m) {
+      app.globalData.callBack[1] = function(t, m) {
         var mqttname = "/RPT/" + options.deviceNo.substr(0, 2) + "/" + options.deviceNo.substr(2, 3) + "/" + options.deviceNo.substr(5, 5)
         console.log(mqttname)
-        if (mqttname == t){
+        if (mqttname == t) {
           // console.log('详情页收到数据：' + t + ':=' + m);
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang, that.data.deviceType, new Uint8Array(m))
-          that.dataparse(data)
+          console.log(data)
+          that.dataparse(data, options.deviceNo)
         }
-       
+
       }
     }
-   
+
   },
-  dataparse: function(data){
-    var that=this
+  dataparse: function (data, deviceNo) {
+    var that = this
     var errorList = []
     var clist = data.getCommands().map
     if (JSON.stringify(clist) != '{}') {
@@ -389,18 +388,17 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    console.log('onshow')
     var that = this;
     var type = that.data.deviceType
     if (type === "PLC_DianReShui" || type === "PLC_DianZhengQi" || type === "PLC_RanMeiZhengQi" || type === "PLC_RanYouDaoReYou" || type === "PLC_RanYouReShui" || type === "PLC_RanYouZhengQi" || type === "PLC_RanYouZhenKong" || type === "PLC_YuReZhengQi") {
       that.getreportdatabyday(that.data.tian)
       that.setData({
-        report:true,
+        report: true,
         navbar: that.data.content.detail_navbar1,
       })
     }
     var deviceNo = that.data.deviceNo
-    if (deviceNo.substr(0, 2) != '20'){
+    if (deviceNo.substr(0, 2) != '20') {
       wx.request({
         //获取openid接口    
         url: 'https://app.weixin.sdcsoft.cn/device/getdata',
@@ -412,10 +410,12 @@ Page({
           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
         },
         responseType: 'arraybuffer',
-        success: function (res) {
+        success: function(res) {
+
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang, that.data.deviceType, new Uint8Array(res.data))
           var clist = data.getCommands().map
+          console.log(clist)
           if (JSON.stringify(clist) != '{}') {
             that.setData({
               controlList: clist,
@@ -442,6 +442,8 @@ Page({
               break;
             }
           }
+          console.log(data)
+          console.log()
           that.setData({
             src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
             bengAnimationList: data.getBeng(),
@@ -472,17 +474,17 @@ Page({
           }
         }
       })
-    }else{
+    } else {
       wx.hideLoading()
     }
   },
-  timer: function () {
+  timer: function() {
     var that = this
     wx.getStorage({
       key: 'time',
       success(res) {
         that.setData({
-          timer: setInterval(function () {
+          timer: setInterval(function() {
             if (that.data.timerStates) {
               that.onShow()
             }
@@ -490,7 +492,7 @@ Page({
         })
       }
     })
-  }, 
+  },
   getException: function(errorList) {
     var that = this
     var deviceNo = that.data.deviceNo
@@ -573,15 +575,12 @@ Page({
                         }
                       }
                     })
-
                     errorList.splice(i, 1);
                     break;
                   }
                 }
               }
-
             }
-
             for (var i = 0; i < errorList.length; i++) {
               oldList.push({
                 deviceNo: errorList[i].deviceNo,
@@ -656,124 +655,182 @@ Page({
     return true;
   },
   //wxchart
-  getreportdatabyday: function (tian) {
-    console.log('getreportdatabyday')
+  getreportdatabyday: function(tian) {
     var that = this
     var beginDate = that.getDateStr(null, tian)
     var endDate = that.getDateStr(beginDate, 1)
     wx.request({
-      url: 'https://app.weixin.sdcsoft.cn/deviceinfo/find'+that.data.deviceType,
+      url: 'https://report.sdcsoft.com.cn/wechat/device',
       data: {
-        beginDate: beginDate,
-        endDate: endDate,
+        deviceType: that.data.deviceType,
+        begintime: beginDate,
+        endtime: endDate,
         deviceNo: that.data.deviceNo
       },
       header: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
       },
       method: 'GET',
-      success: function (res) {
-        if (res.data.length > 0) {
+      success: function(res) {
+        if (res.data.err_code==200) {
           if (tian == -1) {
             that.setData({
-              zuotianList: res.data,
+              zuotianList: res.data.data,
             })
           } else if (tian == -2) {
             that.setData({
-              qiantianList: res.data,
+              qiantianList: res.data.data,
             })
-          }
-          else if (tian == -3) {
+          } else if (tian == -3) {
             that.setData({
-              daqiantianList: res.data,
+              daqiantianList: res.data.data,
             })
           }
-          
-        } 
-       
-        // else {
-        //   wx.showToast({
-        //     title: "此设备在" + beginDate + "未开机",
-        //     icon: 'none',
-        //     duration: 5000
-        //   });
-        // }
+        }
       }
     })
+    // wx.request({
+    //   url: 'http://app.weixin.sdcsoft.cn/deviceinfo/find' + that.data.deviceType,
+    //   data: {
+    //     beginDate: beginDate,
+    //     endDate: endDate,
+    //     deviceNo: that.data.deviceNo
+    //   },
+    //   header: {
+    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    //   },
+    //   method: 'GET',
+    //   success: function(res) {
+
+    //     if (res.data.length > 0) {
+    //       if (tian == -1) {
+    //         that.setData({
+    //           zuotianList: res.data,
+    //         })
+    //       } else if (tian == -2) {
+    //         that.setData({
+    //           qiantianList: res.data,
+    //         })
+    //       } else if (tian == -3) {
+    //         that.setData({
+    //           daqiantianList: res.data,
+    //         })
+    //       }
+    //     } else {
+         
+    //       // wx.showToast({
+    //       //   title: "此设备在" + beginDate + "未开机",
+    //       //   icon: 'none',
+    //       //   duration: 5000
+    //       // });
+    //     }
+    //   },
+    // })
   },
-  getreportdatabykey: function (key) {
-    console.log('getreportdatabykey')
+  getreportdatabykey: function(key) {
     var that = this
-    var tian=that.data.tian
+    var tian = that.data.tian
     var systemStateCategories = []
     var systemStateData = []
-    if(tian==-1){
+    if (tian == -1) {
       for (var index in that.data.zuotianList) {
-        systemStateCategories.push(that.data.zuotianList[index]["createDate"])
+        systemStateCategories.push(that.getDatefmt(that.data.zuotianList[index]["createDate"]))
         systemStateData.push(that.data.zuotianList[index][key]);
       }
-   
     }
+
     if (tian == -2) {
       for (var index in that.data.qiantianList) {
-        systemStateCategories.push(that.data.qiantianList[index]["createDate"])
+        systemStateCategories.push(that.getDatefmt(that.data.qiantianList[index]["createDate"]))
         systemStateData.push(that.data.qiantianList[index][key]);
       }
     }
     if (tian == -3) {
       for (var index in that.data.daqiantianList) {
-        systemStateCategories.push(that.data.daqiantianList[index]["createDate"])
+        systemStateCategories.push(that.getDatefmt(that.data.daqiantianList[index]["createDate"]))
         systemStateData.push(that.data.daqiantianList[index][key]);
       }
     }
-    var windowWidth = 320;
-    try {
-      var res = wx.getSystemInfoSync();
-      windowWidth = res.windowWidth;
-    } catch (e) {
-      console.error('getSystemInfoSync failed!');
+
+ 
+    if (systemStateData.length > 0) {
+      var windowWidth = 320;
+      try {
+        var res = wx.getSystemInfoSync();
+        windowWidth = res.windowWidth;
+      } catch (e) {
+        console.error('getSystemInfoSync failed!');
+      }
+
+      lineChart = new wxCharts({
+        canvasId: 'mockLine',
+        type: 'line',
+        categories: systemStateCategories,
+        animation: false,
+        series: [{
+          name: that.data.mock1Name,
+          data: systemStateData,
+          format: function(val, name) {
+            var fomatFloat = parseFloat(val);
+            return fomatFloat.toFixed(2);
+          }
+        }],
+        xAxis: {
+          disableGrid: false
+        },
+        yAxis: {
+          title: that.data.content.detail_y,
+          format: function(val) {
+            return val.toFixed(2);
+          },
+          min: 0
+        },
+        width: windowWidth,
+        height: 200,
+        dataLabel: true,
+        dataPointShape: true,
+        enableScroll: true,
+        extra: {
+          lineStyle: 'curve'
+        }
+      });
+    }else{
+      that.setData({
+        report: false,
+      })
     }
 
-    lineChart = new wxCharts({
-      canvasId: 'mockLine',
-      type: 'line',
-      categories: systemStateCategories,
-      animation: false,
-      series: [{
-        name: that.data.mock1Name,
-        data: systemStateData,
-        format: function (val, name) {
-          var fomatFloat = parseFloat(val);
-          return fomatFloat.toFixed(2);
-        }
-      }
-      ],
-      xAxis: {
-        disableGrid: false
-      },
-      yAxis: {
-        title: that.data.content.detail_y,
-        format: function (val) {
-          return val.toFixed(2);
-        },
-        min: 0
-      },
-      width: windowWidth,
-      height: 200,
-      dataLabel: true,
-      dataPointShape: true,
-      enableScroll: true,
-      extra: {
-        lineStyle: 'curve'
-      }
-    });
   },
-  radiochange: function (res) {
-    var that=this
+  radiochange: function(res) {
+    var that = this
     that.setData({
       mock1Name: that.data.mockInfoMap[res.detail.value].title
     })
     that.getreportdatabykey(res.detail.value)
+  },
+  getDatefmt: function getDateStr(today) {
+    var dd;
+    dd = new Date(today);
+    dd.setDate(dd.getDate()); //获取AddDayCount天后的日期
+    var y = dd.getFullYear();
+    var m = dd.getMonth() + 1; //获取当前月份的日期 
+    var d = dd.getDate();
+    if (m < 10) {
+      m = '0' + m;
+    };
+    if (d < 10) {
+      d = '0' + d;
+    };
+
+    var h = dd.getHours();
+    var m = dd.getMinutes();
+    if (h < 10) {
+      h = "0" + h;
+    }
+    if (m < 10) {
+      m = "0" + m;
+    }
+    return y + "-" + m + "-" + d + " " + h + ':' + m;
   },
   getDateStr: function getDateStr(today, addDayCount) {
     var dd;
@@ -794,13 +851,13 @@ Page({
     };
     return y + "-" + m + "-" + d;
   },
-  choosedata: function (e) {
+  choosedata: function(e) {
     var that = this
     that.setData({
       tian: e.currentTarget.dataset.tian,
     })
-    if (e.currentTarget.dataset.tian==-2){
-      if(!that.data.qiantianList.length>0){
+    if (e.currentTarget.dataset.tian == -2) {
+      if (!that.data.qiantianList.length > 0) {
         that.getreportdatabyday(-2);
       }
     }
@@ -811,16 +868,16 @@ Page({
     }
   },
   //wxchart  方法 
-  touchHandler: function (e) {
+  touchHandler: function(e) {
     lineChart.scrollStart(e);
   },
-  moveHandler: function (e) {
+  moveHandler: function(e) {
     lineChart.scroll(e);
   },
-  touchEndHandler: function (e) {
+  touchEndHandler: function(e) {
     lineChart.scrollEnd(e);
     lineChart.showToolTip(e, {
-      format: function (item, category) {
+      format: function(item, category) {
         return category + ' ' + item.name + ':' + item.data
       }
     });

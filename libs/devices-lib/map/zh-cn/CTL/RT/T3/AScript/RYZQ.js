@@ -20,6 +20,7 @@ var FixedValueField_1 = require("../../../../../../meta/FixedValueField");
 var SdcSoftDevice_1 = require("../../../../../../devices/SdcSoftDevice");
 var RT_1 = require("../../../../../../devices/CTL/RT/RT");
 var T3_1 = require("../../AScript/T3");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T3_RYZQ_Ts = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T3_RYZQ_Ts, _super);
     function Map_CTL_RT_T3_RYZQ_Ts() {
@@ -33,8 +34,8 @@ var Map_CTL_RT_T3_RYZQ_Ts = /** @class */ (function (_super) {
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_RAN_SHAO_QI, "燃烧器"));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 3, 2, "工作状态", '', Map_CTL_RT_T3_RYZQ_Ts.coms_status));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_LIFE, 53, 2, "累计燃烧时间", "时"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T3_RYZQ_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "运行天数", "天"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T3_RYZQ_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "运行小时数", "时"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "运行天数", "天"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "运行小时数", "时"));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "燃料类型", 0, Map_CTL_RT_T3_RYZQ_Ts.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "介质类型", 1, Map_CTL_RT_T3_RYZQ_Ts.coms_media));
         _this.addPoint(new meta_1.OpenCloseField("oc_queshuidianji", 5, 2, "缺水电极", 0, Map_CTL_RT_T3_RYZQ_Ts.coms_open_close));

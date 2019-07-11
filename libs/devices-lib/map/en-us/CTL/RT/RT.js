@@ -20,6 +20,7 @@ var SdcSoftDevice_1 = require("../../../../devices/SdcSoftDevice");
 var FixedValueField_1 = require("../../../../meta/FixedValueField");
 var RT_1 = require("../../../../devices/CTL/RT/RT");
 var CountShowField_1 = require("../../../../meta/CountShowField");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT = /** @class */ (function (_super) {
     __extends(Map_CTL_RT, _super);
     function Map_CTL_RT() {
@@ -28,8 +29,8 @@ var Map_CTL_RT = /** @class */ (function (_super) {
         /*计算属性（不显示）*/
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_RAN_SHAO_QI, "Burner"));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_LIFE, 53, 2, "Running Time", "Hour"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "Running Days", "Day"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "Running Hours", "Hour"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "Running Days", "Day"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "Running Hours", "Hour"));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "Fuel Type", 0, EN_US_1.Map_EN_US.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "Medium Type", 0, EN_US_1.Map_EN_US.coms_media));
         return _this;

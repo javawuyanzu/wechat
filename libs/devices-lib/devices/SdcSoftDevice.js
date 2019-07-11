@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Collections_1 = require("../entities/Collections");
+var comms_1 = require("@sdcsoft/comms");
 var DeviceFieldForUI_1 = require("../meta/DeviceFieldForUI");
 var Element_1 = require("../entities/Element");
-var map_1 = require("../map/map");
+var comms_2 = require("@sdcsoft/comms");
 var ByteField_1 = require("../meta/ByteField");
-var CommandField_1 = require("../meta/CommandField");
+var map_1 = require("../map/map");
 var Media;
 (function (Media) {
     Media[Media["ReShui"] = 0] = "ReShui";
@@ -24,22 +24,26 @@ var Power;
 })(Power = exports.Power || (exports.Power = {}));
 var SdcSoftDevice = /** @class */ (function () {
     function SdcSoftDevice() {
-        this.fieldMap = new Collections_1.StringHashMap();
-        this.commandMap = new Collections_1.StringHashMap();
+        this.fieldMap = new comms_1.StringHashMap();
+        this.commandMap = new comms_1.StringHashMap();
         this.modbusNo = 1;
         this.BYTE_ARRAY_LENGTH = 0;
         this.power = SdcSoftDevice.POWER_MEDIA_VALUE_NULL;
         this.media = SdcSoftDevice.POWER_MEDIA_VALUE_NULL;
         this.deviceNo = '';
         this.warningMsg = '';
-        this.fieldMap.addItem(map_1.map.KEY_BASE, new Collections_1.StringHashMap());
-        this.fieldMap.addItem(map_1.map.KEY_EXCEPTION, new Collections_1.StringHashMap());
-        this.fieldMap.addItem(map_1.map.KEY_MOCK, new Collections_1.StringHashMap());
-        this.fieldMap.addItem(map_1.map.KEY_SETTING, new Collections_1.StringHashMap());
-        this.fieldMap.addItem(map_1.map.KEY_DEVICE, new Collections_1.StringHashMap());
-        this.fieldMap.addItem(map_1.map.KEY_START_STOP, new Collections_1.StringHashMap());
-        this.fieldMap.addItem(map_1.map.KEY_OPEN_CLOSE, new Collections_1.StringHashMap());
-        this.fieldMap.addItem(map_1.map.KEY_Count_Fields, new Collections_1.StringHashMap());
+        /**
+         * 设置设备类型信息
+         */
+        this.typeName = '';
+        this.fieldMap.addItem(comms_2.GroupKeys.KEY_BASE, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_2.GroupKeys.KEY_EXCEPTION, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_2.GroupKeys.KEY_MOCK, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_2.GroupKeys.KEY_SETTING, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_2.GroupKeys.KEY_DEVICE, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_2.GroupKeys.KEY_START_STOP, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_2.GroupKeys.KEY_OPEN_CLOSE, new comms_1.StringHashMap());
+        this.fieldMap.addItem(map_1.map.KEY_Count_Fields, new comms_1.StringHashMap());
     }
     SdcSoftDevice.prototype.initCommandsMapKeys = function (map) {
         this.commandMap = map;
@@ -57,25 +61,25 @@ var SdcSoftDevice = /** @class */ (function () {
         return this.fieldMap.getItem(groupKey);
     };
     SdcSoftDevice.prototype.getBaseInfoFields = function () {
-        return this.getFieldsMap(map_1.map.KEY_BASE);
+        return this.getFieldsMap(comms_2.GroupKeys.KEY_BASE);
     };
     SdcSoftDevice.prototype.getDeviceFields = function () {
-        return this.getFieldsMap(map_1.map.KEY_DEVICE);
+        return this.getFieldsMap(comms_2.GroupKeys.KEY_DEVICE);
     };
     SdcSoftDevice.prototype.getExceptionFields = function () {
-        return this.getFieldsMap(map_1.map.KEY_EXCEPTION);
+        return this.getFieldsMap(comms_2.GroupKeys.KEY_EXCEPTION);
     };
     SdcSoftDevice.prototype.getMockFields = function () {
-        return this.getFieldsMap(map_1.map.KEY_MOCK);
+        return this.getFieldsMap(comms_2.GroupKeys.KEY_MOCK);
     };
     SdcSoftDevice.prototype.getSettingFields = function () {
-        return this.getFieldsMap(map_1.map.KEY_SETTING);
+        return this.getFieldsMap(comms_2.GroupKeys.KEY_SETTING);
     };
     SdcSoftDevice.prototype.getStartStopFields = function () {
-        return this.getFieldsMap(map_1.map.KEY_START_STOP);
+        return this.getFieldsMap(comms_2.GroupKeys.KEY_START_STOP);
     };
     SdcSoftDevice.prototype.getOpenCloseFields = function () {
-        return this.getFieldsMap(map_1.map.KEY_OPEN_CLOSE);
+        return this.getFieldsMap(comms_2.GroupKeys.KEY_OPEN_CLOSE);
     };
     SdcSoftDevice.prototype.getCountFields = function () {
         return this.getFieldsMap(map_1.map.KEY_Count_Fields);
@@ -117,13 +121,6 @@ var SdcSoftDevice = /** @class */ (function () {
             }
             return;
         }
-        if (field instanceof CommandField_1.CommandField) {
-            var cmd = field.getCommand();
-            if (cmd) {
-                this.addCommand(field.getCommandGroupKey(), cmd);
-            }
-            return;
-        }
         if (field instanceof DeviceFieldForUI_1.DeviceFieldForUI) {
             this.addUIField(field);
         }
@@ -159,6 +156,24 @@ var SdcSoftDevice = /** @class */ (function () {
      */
     SdcSoftDevice.prototype.getSubDeviceType = function () {
         return SdcSoftDevice.NO_SUB_DEVICE_TYPE;
+    };
+    SdcSoftDevice.prototype.setTypeName = function (typeName) {
+        this.typeName = typeName;
+    };
+    /**
+     * 获取设备类型信息
+     */
+    SdcSoftDevice.prototype.getTypeName = function () {
+        return this.typeName;
+    };
+    SdcSoftDevice.prototype.handleCommandFields = function (commandsGroup) {
+        var _this = this;
+        commandsGroup.each(function (key, values) {
+            values.forEach(function (v) {
+                _this.addCommand(key, v);
+            });
+        });
+        commandsGroup.clear();
     };
     SdcSoftDevice.POWER_MEDIA_VALUE_NULL = -1;
     SdcSoftDevice.KEY_POINT_SYSTEM_STATUS = 'o_system_status';

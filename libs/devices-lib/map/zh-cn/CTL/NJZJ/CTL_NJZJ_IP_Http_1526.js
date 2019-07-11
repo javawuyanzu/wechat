@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var meta_1 = require("../../../../meta/NJZJ/meta");
 var CTL_NJZJ_IP_Http_1 = require("./CTL_NJZJ_IP_Http");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var Map_CTL_NJZJ_IP_Http_1526 = /** @class */ (function (_super) {
     __extends(Map_CTL_NJZJ_IP_Http_1526, _super);
     function Map_CTL_NJZJ_IP_Http_1526() {
@@ -98,13 +99,13 @@ var Map_CTL_NJZJ_IP_Http_1526 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField('mo_cainuanjinkouwendu', 437, 2, '采暖进口温度'));
         _this.addPoint(new meta_1.MockField('mo_reshuijinkouwendu', 439, 2, '热水进口温度'));
         _this.addPoint(new meta_1.MockField('mo_kongzhixiangwendu', 441, 2, '控制箱温度'));
-        _this.addPoint(new meta_1.MockField('mo_zhenkongyali', 443, 2, '真空压力'));
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ReShuiYaLi, 443, 2, '真空压力'));
         _this.addPoint(new meta_1.MockField('mo_chushuiwendu', 445, 2, '出水温度'));
         _this.addPoint(new meta_1.MockField('mo_jinshuiwendu', 447, 2, '进水温度'));
         _this.addPoint(new meta_1.MockField('mo_youwenjiance', 449, 2, '油温检测'));
         _this.addPoint(new meta_1.MockField('mo_gaowenbaohu', 451, 2, '高温保护'));
-        _this.addPoint(new meta_1.MockField('mo_chukouyouwen', 453, 2, '出口油温'));
-        _this.addPoint(new meta_1.MockField('mo_jinkouyouwen', 455, 2, '进口油温'));
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu, 453, 2, '出口油温'), 'mo_chukouyouwen');
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu, 455, 2, '进口油温'), 'mo_jinkouyouwen');
         _this.addPoint(new meta_1.MockField('mo_huanrewendu', 457, 2, '换热温度'));
         _this.addPoint(new meta_1.MockField('mo_xitongwendu', 459, 2, '系统温度'));
         _this.addPoint(new meta_1.MockField('mo_nengliangshezhiwendu', 461, 2, '能量设置温度'));

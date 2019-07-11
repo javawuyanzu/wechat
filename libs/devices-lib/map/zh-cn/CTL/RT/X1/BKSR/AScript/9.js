@@ -20,6 +20,7 @@ var ZQ_1 = require("../../AScript/ZQ");
 var FixedValueField_1 = require("../../../../../../../meta/FixedValueField");
 var SdcSoftDevice_1 = require("../../../../../../../devices/SdcSoftDevice");
 var CountShowField_1 = require("../../../../../../../meta/CountShowField");
+var comms_1 = require("@sdcsoft/comms");
 //燃煤蒸汽
 var Map_CTL_RT_X1_BKSR_RMZQ_9 = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_X1_BKSR_RMZQ_9, _super);
@@ -31,7 +32,7 @@ var Map_CTL_RT_X1_BKSR_RMZQ_9 = /** @class */ (function (_super) {
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_YIN_FENG_FAN, "引风机"));
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_Add_SHUI_BENG, "给水泵"));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "燃料类型", 2, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_power));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_X1_BKSR_RMZQ_9.KEY_BASE, 'ba_yalizhuangtai', '压力状态', '', false, Map_CTL_RT_X1_BKSR_RMZQ_9.DJD_YaLiStatus));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, 'ba_yalizhuangtai', '压力状态', '', false, Map_CTL_RT_X1_BKSR_RMZQ_9.DJD_YaLiStatus));
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_LENG_NING_BENG_1, 9, 2, '给水泵', 2, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_open_close));
         _this.addPoint(new meta_1.DeviceField('de_xunhuanbeng_zidong/shoudong_', 49, 2, '给水泵 手/自', 3, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_auto));
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_YIN_FENG_FAN_1, 9, 2, "引风机", 0, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_open_close));

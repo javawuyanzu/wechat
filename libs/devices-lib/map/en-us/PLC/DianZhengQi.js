@@ -20,6 +20,7 @@ var _485_1 = require("../../../meta/NJZJ/485");
 var FixedValueField_1 = require("../../../meta/FixedValueField");
 var SdcSoftDevice_1 = require("../../../devices/SdcSoftDevice");
 var CountShowField_1 = require("../../../meta/CountShowField");
+var comms_1 = require("@sdcsoft/comms");
 module.exports = /** @class */ (function (_super) {
     __extends(Map_PLC_DianZhengQi, _super);
     //static readonly Key = "PLC_DianReShui";
@@ -34,7 +35,7 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 13, 2, "System State", '', BaseMap_1.Map_PLC.coms_status));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "Fuel", 1, Map_PLC_DianZhengQi.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "Medium", 1, Map_PLC_DianZhengQi.coms_media));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_PLC_DianZhengQi.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_JIA_RE_ZU, "Put into heating group", ''));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_JIA_RE_ZU, "Put into heating group", ''));
         _this.addPoint(new _485_1.BaseInfoField("ba_shuiweizhuangtai", 19, 2, "Water Level State", '', Map_PLC_DianZhengQi.coms_level));
         _this.addPoint(new _485_1.BaseInfoField("ba_ranshaoqizhuangtai", 21, 2, "Burner State", '', BaseMap_1.Map_PLC.coms_ranshaoqi_status));
         _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 35, 4, "Steam Pressure", "MPa"));

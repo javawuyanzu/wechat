@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 var RanYou_1 = require("./RanYou");
 var SdcSoftDevice_1 = require("../SdcSoftDevice");
 var Collections_1 = require("../../entities/Collections");
+var gfrm_1 = require("@sdcsoft/gfrm");
 module.exports = /** @class */ (function (_super) {
     __extends(PLC_RanYouReShui, _super);
     function PLC_RanYouReShui() {
@@ -28,9 +29,9 @@ module.exports = /** @class */ (function (_super) {
         list.push(map.getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS));
         list.push(map.getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS));
         var map2 = this.getMockFields();
-        list.push(map2.getItem('mo_paiyanwendu'));
-        list.push(map2.getItem('mo_chushuiwendu'));
-        list.push(map2.getItem('mo_huishuiwendu'));
+        list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
+        list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu));
+        list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu));
         list.push(map.getItem('ba_shuiweizhuangtai'));
         return list.toArray();
     };

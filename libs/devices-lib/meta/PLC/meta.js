@@ -18,7 +18,7 @@ var DeviceField_1 = require("../DeviceField");
 var ExceptionField_1 = require("../ExceptionField");
 var MockField_1 = require("../MockField");
 var OpenCloseField_1 = require("../OpenCloseField");
-var map_1 = require("../../map/map");
+var comms_1 = require("@sdcsoft/comms");
 var Command_1 = require("../../command/Command");
 var Collections_1 = require("../../entities/Collections");
 var BaseInfoField = /** @class */ (function (_super) {
@@ -80,8 +80,10 @@ var DeviceField = /** @class */ (function (_super) {
 exports.DeviceField = DeviceField;
 var ExceptionField = /** @class */ (function (_super) {
     __extends(ExceptionField, _super);
-    function ExceptionField(name, startIndex, bytesLength, title, bit) {
+    function ExceptionField(name, startIndex, bytesLength, title, bit, level) {
+        if (level === void 0) { level = ExceptionField.Exception_Waring; }
         var _this = _super.call(this) || this;
+        _this.level = level;
         _this.name = name;
         _this.startIndex = startIndex;
         _this.bytesLength = bytesLength;
@@ -211,10 +213,10 @@ var SettingField = /** @class */ (function (_super) {
         return _this;
     }
     SettingField.prototype.setDeviceFieldForUIKey = function (fieldForUI) {
-        fieldForUI.setKey(map_1.map.KEY_SETTING);
+        fieldForUI.setKey(comms_1.GroupKeys.KEY_SETTING);
     };
     SettingField.prototype.createCommandAndInitValue = function () {
-        var cmd = new Command_1.FloatCommand();
+        var cmd = new Command_1.FloatCommand(this.title, this.address, this.maxValue, this.minValue);
         cmd.initValue(this.getValue());
         return cmd;
     };

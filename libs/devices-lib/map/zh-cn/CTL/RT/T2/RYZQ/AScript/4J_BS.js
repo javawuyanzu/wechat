@@ -15,12 +15,13 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var meta_1 = require("../../../../../../../meta/RT/meta");
 var _4J_1 = require("./4J");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var Map_CTL_RT_T2_RYZQ_4JBS = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_4JBS, _super);
     //4电极压力变送器内置比调
     function Map_CTL_RT_T2_RYZQ_4JBS() {
         var _this = _super.call(this) || this;
-        _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 17, 2, "蒸汽压力", "MPa", 100));
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi, 17, 2, "蒸汽压力", "MPa", 100), "mo_zhengqiyali");
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu", 45, 2, "压力变送器断路", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu1", 45, 2, "压力变送器短路", 1));
         return _this;

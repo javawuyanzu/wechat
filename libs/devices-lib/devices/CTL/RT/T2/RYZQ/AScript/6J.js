@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var RYZQ_1 = require("../../AScript/RYZQ");
+var RYZQ_NoSub_1 = require("../../AScript/RYZQ_NoSub");
 var CTL_RT_T2_RYZQ_6J = /** @class */ (function (_super) {
     __extends(CTL_RT_T2_RYZQ_6J, _super);
     function CTL_RT_T2_RYZQ_6J() {
@@ -35,5 +35,5 @@ var CTL_RT_T2_RYZQ_6J = /** @class */ (function (_super) {
     };
     CTL_RT_T2_RYZQ_6J.KEY_POINT_SHUI_WEI_STATUS = 'ba_shuiwei_status';
     return CTL_RT_T2_RYZQ_6J;
-}(RYZQ_1.CTL_RT_T2_RYZQ_Ts));
+}(RYZQ_NoSub_1.CTL_RT_T2_RYZQ_NoSub_Ts));
 exports.CTL_RT_T2_RYZQ_6J = CTL_RT_T2_RYZQ_6J;

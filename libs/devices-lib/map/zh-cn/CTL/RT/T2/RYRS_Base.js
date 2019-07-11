@@ -20,6 +20,9 @@ var CountShowField_1 = require("../../../../../meta/CountShowField");
 var FixedValueField_1 = require("../../../../../meta/FixedValueField");
 var RT_1 = require("../../../../../devices/CTL/RT/RT");
 var T2_1 = require("../AScript/T2");
+var Command_1 = require("../../../../../command/Command");
+var gfrm_1 = require("@sdcsoft/gfrm");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYRS_Ts, _super);
     function Map_CTL_RT_T2_RYRS_Ts() {
@@ -29,8 +32,8 @@ var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_RAN_SHAO_QI, "燃烧器"));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 3, 2, "工作状态", '', Map_CTL_RT_T2_RYRS_Ts.coms_status));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_LIFE, 53, 2, "累计燃烧时间", "时"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYRS_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "运行天数", "天"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYRS_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "运行小时数", "时"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "运行天数", "天"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "运行小时数", "时"));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "燃料类型", 0, Map_CTL_RT_T2_RYRS_Ts.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "介质类型", 0, Map_CTL_RT_T2_RYRS_Ts.coms_media));
         _this.addPoint(new meta_1.OpenCloseField("oc_queshuidianji", 5, 2, "缺水电极", 0, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
@@ -39,7 +42,7 @@ var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweibaojingdianji", 5, 2, "高水位报警电极", 3, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_dianjiedianyalibiaodizhen", 5, 2, "电接点压力表低针", 4, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_dianjiedianyalibiaogaozhen", 5, 2, "电接点压力表高针", 5, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
-        _this.addPoint(new meta_1.OpenCloseField("oc_chaoyabaojingxinhao", 5, 2, "超压报警", 9, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
+        _this.addPoint(new meta_1.OpenCloseField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 5, 2, "超压报警", 9, Map_CTL_RT_T2_RYRS_Ts.coms_open_close), "oc_chaoyabaojingxinhao");
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqiguzhangxinhao", 5, 2, "燃烧器故障信号", 10, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyalidibaojingxinhao", 5, 2, "燃气压力低报警信号", 12, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqixieloubaojingxinhao", 5, 2, "燃气泄漏报警信号", 11, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
@@ -54,21 +57,21 @@ var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_Add_SHUI_BENG_2, 9, 2, "补水泵备控制", 4, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_LENG_NING_BENG_1, 9, 2, "循环泵主控制", 5, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_LENG_NING_BENG_2, 9, 2, "循环泵备控制", 6, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
-        _this.addPoint(new meta_1.MockField("mo_chushuiwendu", 13, 2, "出水温度", "℃"));
-        _this.addPoint(new meta_1.MockField("mo_huishuiwendu", 15, 2, "回水温度", "℃"));
-        _this.addPoint(new meta_1.MockField("mo_paiyanwendu", 21, 2, "排烟温度", "℃"));
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu, 13, 2, "出水温度", "℃"), "mo_chushuiwendu");
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu, 15, 2, "回水温度", "℃"), "mo_huishuiwendu");
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu, 21, 2, "排烟温度", "℃"), "mo_paiyanwendu");
         _this.addPoint(new meta_1.ExceptionField("ex_chushuiwenduchuanganqiduanlu1", 45, 2, "出水温度传感器断路", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_chushuiwenduchuanganqiduanlu", 45, 2, "出水温度传感器短路", 1));
         _this.addPoint(new meta_1.ExceptionField("ex_chushuiwendugaobaojing_", 45, 2, "出水温度高报警", 2));
         _this.addPoint(new meta_1.ExceptionField("ex_huishuiwenduchuanganqiduanlu1", 45, 2, "回水温度传感器断路", 3));
-        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "排烟温度高报警", 4));
-        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibaojing", 45, 2, "极限低水位报警", 5));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 45, 2, "排烟温度高报警", 4), "ex_paiyanwendugaobaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, "极限低水位报警", 5), "ex_jixiandishuiweibaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweidianjiluojicuo", 45, 2, "水位电极逻辑错", 6));
-        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 7));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 45, 2, "高水位报警", 7), "ex_gaoshuiweibaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_dianjiedianyalibiaoduanlu", 45, 2, "电接点压力表短路", 8));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing_kongzhiqi_", 45, 2, "超压报警（控制器）", 9));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警（控制器）", 9), "ex_chaoyabaojing_kongzhiqi_");
         _this.addPoint(new meta_1.ExceptionField("ex_ranqiyalidibaojing", 45, 2, "燃气压力低报警", 10));
-        _this.addPoint(new meta_1.ExceptionField("ex_ranqixieloubaojing", 47, 2, "燃气泄漏报警", 11));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 47, 2, "燃气泄漏报警", 11), "ex_ranqixieloubaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhang", 47, 2, "燃烧器故障", 12));
         _this.addPoint(new meta_1.SettingField("se_paiyanchaowen", 67, 2, "排烟超温", "℃"));
         _this.addPoint(new meta_1.SettingField("se_lushuichaowen", 69, 2, "炉水超温", "℃"));
@@ -84,6 +87,7 @@ var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.BaseInfoField("o_ranshaoqigongzuofangshi", 89, 2, "燃烧器工作方式", '', Map_CTL_RT_T2_RYRS_Ts.coms_ranshaoqi));
         _this.addPoint(new meta_1.BaseInfoField("o_bushuibengkongzhifangshi", 91, 2, "补水泵控制方式", '', Map_CTL_RT_T2_RYRS_Ts.coms_bushuibeng));
         _this.addPoint(new meta_1.BaseInfoField("o_xunhuanbengkongzhifangshi", 93, 2, "循环泵控制方式", '', Map_CTL_RT_T2_RYRS_Ts.coms_xunhuanbeng));
+        _this.addCommand('设备控制', new Command_1.OpenCloseCommand('控制器 运行|待命', '00a0', 1, 2));
         return _this;
     }
     Map_CTL_RT_T2_RYRS_Ts.coms_guolu = {

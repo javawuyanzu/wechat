@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var X1_1 = require("../../AScript/X1");
+var X1_NoSub_1 = require("../../AScript/X1_NoSub");
 var CTL_RT_X1_RS3JDJD = /** @class */ (function (_super) {
     __extends(CTL_RT_X1_RS3JDJD, _super);
     function CTL_RT_X1_RS3JDJD() {
@@ -47,5 +47,5 @@ var CTL_RT_X1_RS3JDJD = /** @class */ (function (_super) {
         list.push(map3.getItem('mo_chushuiwendu'));
     };
     return CTL_RT_X1_RS3JDJD;
-}(X1_1.CTL_RT_X1_Ts));
+}(X1_NoSub_1.CTL_RT_X1_NoSub_Ts));
 exports.CTL_RT_X1_RS3JDJD = CTL_RT_X1_RS3JDJD;

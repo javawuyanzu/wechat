@@ -17,6 +17,7 @@ var CountField_1 = require("../../../../../../../meta/CountField");
 var meta_1 = require("../../../../../../../meta/RT/meta");
 var RT_1 = require("../../../../../../../devices/CTL/RT/RT");
 var RS_1 = require("../../AScript/RS");
+var gfrm_1 = require("@sdcsoft/gfrm");
 //燃油开水3电极
 var Map_CTL_RT_X1_HNRT_RYRS_8 = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_X1_HNRT_RYRS_8, _super);
@@ -34,7 +35,7 @@ var Map_CTL_RT_X1_HNRT_RYRS_8 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.ExceptionField('ex_shuiweichuanganqiguzhang', 45, 2, '水位传感器故障', 1));
         _this.addPoint(new meta_1.ExceptionField('ex_chushuiwenduchuanganqiguzhang', 45, 2, '出水温度传感器故障', 2));
         _this.addPoint(new meta_1.ExceptionField('ex_chushuiwendugaobaojing', 45, 2, '出水温度高报警', 3));
-        _this.addPoint(new meta_1.ExceptionField('ex_lubichaowenbaojing', 45, 2, '炉壁超温报警', 4));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 45, 2, '炉壁超温报警', 4));
         _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhangbaojing', 45, 2, '燃烧器故障报警', 5));
         _this.addPoint(new meta_1.OpenCloseField('oc_jixiandishuiweidianji', 5, 2, '极限低水位电极', 0, Map_CTL_RT_X1_HNRT_RYRS_8.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField('oc_didianji', 5, 2, '低位电极', 1, Map_CTL_RT_X1_HNRT_RYRS_8.coms_open_close));

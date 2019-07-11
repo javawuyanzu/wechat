@@ -21,6 +21,8 @@ var FixedValueField_1 = require("../../../../../meta/FixedValueField");
 var RT_1 = require("../../../../../devices/CTL/RT/RT");
 var CountShowField_1 = require("../../../../../meta/CountShowField");
 var H1_1 = require("../AScript/H1");
+var gfrm_1 = require("@sdcsoft/gfrm");
+var comms_1 = require("@sdcsoft/comms");
 module.exports = (_a = /** @class */ (function (_super) {
         __extends(Map_CTL_RT_H1_RYRS, _super);
         function Map_CTL_RT_H1_RYRS() {
@@ -30,15 +32,15 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_RAN_SHAO_QI, '燃烧器'));
             _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 3, 2, '工作状态', '', Map_CTL_RT_H1_RYRS.coms_status));
             _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_LIFE, 53, 2, '累计燃烧时间', '时'));
-            _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_H1_RYRS.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, '运行天数', '天'));
-            _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_H1_RYRS.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, '运行小时数', '时'));
+            _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, '运行天数', '天'));
+            _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, '运行小时数', '时'));
             _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, '燃料类型', 0, Map_CTL_RT_H1_RYRS.coms_power));
             _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, '介质类型', 1, Map_CTL_RT_H1_RYRS.coms_media));
             _this.addPoint(new meta_1.DeviceField('de_bushuibengzhubei', 49, 2, '给水泵', 0, Map_CTL_RT_H1_RYRS.coms_master));
             _this.addPoint(new meta_1.DeviceField('de_bushuibengshoudongzidong', 49, 2, '给水泵', 1, Map_CTL_RT_H1_RYRS.coms_auto));
             _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_Add_SHUI_BENG_1, 9, 2, '补水泵主控制', 3, Map_CTL_RT_H1_RYRS.coms_open_close));
             _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_Add_SHUI_BENG_2, 9, 2, '补水泵备控制', 4, Map_CTL_RT_H1_RYRS.coms_open_close));
-            _this.addPoint(new meta_1.ExceptionField('ex_jixiandishuiweibaojing', 45, 2, '极限低水位报警', 0));
+            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, '极限低水位报警', 0));
             _this.addPoint(new meta_1.ExceptionField('ex_zhengqiyalibiansongqiduanlu', 45, 2, '蒸汽压力变送器断路', 1));
             _this.addPoint(new meta_1.ExceptionField('ex_zhengqiyalibiansongqiduanlu', 45, 2, '蒸汽压力变送器短路', 2));
             _this.addPoint(new meta_1.ExceptionField('ex_chaoyabaojing_biansongqi_', 45, 2, '超压报警（变送器）', 3));
@@ -46,9 +48,9 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.ExceptionField('ex_chaoyabaojing_kongzhiqi_', 45, 2, '超压报警（控制器）', 5));
             _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhang', 45, 2, '燃烧器故障', 6));
             _this.addPoint(new meta_1.ExceptionField('ex_ranqiyalidi', 45, 2, '燃气压力低', 7));
-            _this.addPoint(new meta_1.ExceptionField('ex_ranqixieloubaojing', 45, 2, '燃气泄漏报警', 8));
+            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 45, 2, '燃气泄漏报警', 8));
             _this.addPoint(new meta_1.ExceptionField('ex_shuiweidianjiluojicuo', 45, 2, '水位电极逻辑错', 9));
-            _this.addPoint(new meta_1.ExceptionField('ex_gaoshuiweibaojing', 45, 2, '高水位报警', 10));
+            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 45, 2, '高水位报警', 10));
             _this.addPoint(new meta_1.ExceptionField('ex_paiyanwenduchuanganqiduanlu', 45, 2, '排烟温度传感器断路', 11));
             _this.addPoint(new meta_1.ExceptionField('ex_dishuiweibaojing', 45, 2, '低水位报警', 12));
             _this.addPoint(new meta_1.ExceptionField('ex_bianpinqiguzhangbaojing', 45, 2, '变频器故障报警', 13));
@@ -98,8 +100,8 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.SettingField('se_gaoshuiwei', 125, 2, '高水位', '%'));
             _this.addPoint(new meta_1.SettingField('se_gaobaojingshuiwei', 127, 2, '高报警水位', '%'));
             _this.addPoint(new meta_1.SettingField('se_mubiaoshuiwei', 129, 2, '目标水位', '%'));
-            _this.addPoint(new meta_1.MockField('mo_paiyanwendu', 19, 2, '排烟温度', '℃'));
-            _this.addPoint(new meta_1.MockField('mo_zhengqiyali', 21, 2, '蒸汽压力', 'Mpa', 100));
+            _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu, 19, 2, '排烟温度', '℃'));
+            _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi, 21, 2, '蒸汽压力', 'Mpa', 100));
             _this.addPoint(new meta_1.MockField('mo_4-20mAxinhaolianxujishui', 23, 2, '4-20mA信号连续给水', '%'));
             return _this;
         }

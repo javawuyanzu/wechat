@@ -17,9 +17,11 @@ var DeviceAdapter = /** @class */ (function () {
         if (device.validateFalse(data.byteLength)) {
             return null;
         }
+        device.setTypeName(t);
         map.getPointMap().each(function (key, value) {
             device.handleByteField(value, data);
         });
+        device.handleCommandFields(map.getCommandsMap());
         return device;
     };
     DeviceAdapter.prototype.getSdcSoftDevice = function (lang, type, data, power, media) {
@@ -50,6 +52,10 @@ var DeviceAdapter = /** @class */ (function () {
             if (null == subDevice)
                 return null;
             device = subDevice;
+        }
+        else {
+            device.setTypeName(type);
+            device.handleCommandFields(map.getCommandsMap());
         }
         var powerUI = device.getBaseInfoFields().getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER);
         var mediaUI = device.getBaseInfoFields().getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA);

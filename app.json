@@ -8,7 +8,9 @@
     "pages/warningType/warningType",
     "pages/register/register",
     "pages/forgotPw/forgotPw",
-    "pages/reports/reports"
+    "pages/reports/reports",
+    "pages/soldUpdate/soldUpdate",
+    "pages/salesChange/salesChange"
   ],
   "window": {
     "backgroundTextStyle": "light",

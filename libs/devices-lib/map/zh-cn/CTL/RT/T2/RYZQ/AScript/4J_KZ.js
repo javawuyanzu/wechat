@@ -16,11 +16,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var meta_1 = require("../../../../../../../meta/RT/meta");
 var _4J_1 = require("./4J");
 var CountShowField_1 = require("../../../../../../../meta/CountShowField");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T2_RYZQ_4JKZ = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_4JKZ, _super);
     function Map_CTL_RT_T2_RYZQ_4JKZ() {
         var _this = _super.call(this) || this;
-        _this.addPoint(new CountShowField_1.CountShowField(_4J_1.Map_CTL_RT_T2_RYZQ_4J.KEY_BASE, Map_CTL_RT_T2_RYZQ_4JKZ.KEY_POINT_YA_LI_STATUS, "压力状态", '', false, Map_CTL_RT_T2_RYZQ_4JKZ.KZQ_YaLiStatus));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, Map_CTL_RT_T2_RYZQ_4JKZ.KEY_POINT_YA_LI_STATUS, "压力状态", '', false, Map_CTL_RT_T2_RYZQ_4JKZ.KZQ_YaLiStatus));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqifuhe_zengda", 9, 2, "燃烧器负荷增大调节", 1, Map_CTL_RT_T2_RYZQ_4JKZ.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_fuhetiaojie", 5, 2, "负荷调节", 7, Map_CTL_RT_T2_RYZQ_4JKZ.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_qitingkongzhi", 5, 2, "启停控制", 8, Map_CTL_RT_T2_RYZQ_4JKZ.coms_open_close));

@@ -116,7 +116,7 @@ Page({
     * 获取验证码
     */
   return_home: function (e) {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/login/login',
     })
 
@@ -342,7 +342,7 @@ Page({
               title: that.data.content.register_zhucesuccess,
               duration: 2000,
               success(res) {
-                wx.navigateTo({
+                wx.switchTab({
                   url: "/pages/operation/operation",
                 })
               }

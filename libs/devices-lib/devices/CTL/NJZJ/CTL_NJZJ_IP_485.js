@@ -32,7 +32,6 @@ var IP_485 = /** @class */ (function (_super) {
         if (field.haveValue(bytes[field.getStartIndex()], bytes[field.getStartIndex() + 1])) {
             /*
             if(field.getName()=='se_baojingwendu'){
-                console.log('aaaaaaaa')
             }*/
             this.addField(field);
         }

@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var ByteField_1 = require("./ByteField");
-var map_1 = require("../map/map");
+var comms_1 = require("@sdcsoft/comms");
 //namespace DevicesLib.meta {
 var DeviceField = /** @class */ (function (_super) {
     __extends(DeviceField, _super);
@@ -22,7 +22,7 @@ var DeviceField = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DeviceField.prototype.setDeviceFieldForUIKey = function (fieldForUI) {
-        fieldForUI.setKey(map_1.map.KEY_DEVICE);
+        fieldForUI.setKey(comms_1.GroupKeys.KEY_DEVICE);
     };
     return DeviceField;
 }(ByteField_1.ByteField));

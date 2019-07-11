@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var SdcSoftDevice_1 = require("../../SdcSoftDevice");
 var Element_1 = require("../../../entities/Element");
 var Collections_1 = require("../../../entities/Collections");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var IP = /** @class */ (function (_super) {
     __extends(IP, _super);
     function IP() {
@@ -46,8 +47,16 @@ var IP = /** @class */ (function (_super) {
             list.push(this.getDeviceFields().getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_JIA_RE_ZU));
             if (this.media == SdcSoftDevice_1.Media.ReShui) {
                 var map2 = this.getMockFields();
-                list.push(map2.getItem('mo_chukouwendu'));
-                list.push(map2.getItem('mo_rukouwendu'));
+                map2.each(function (k, v) {
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                });
                 list.push(map.getItem('ba_shuixiangshuiweizhuangtai'));
                 list.push(map.getItem('ba_guolushuiweizhuangtai'));
             }
@@ -63,7 +72,7 @@ var IP = /** @class */ (function (_super) {
                 }
                 else {
                     var map2 = this.getMockFields();
-                    list.push(map2.getItem('mo_zhengqiyali'));
+                    list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi));
                 }
             }
             else if (this.media == SdcSoftDevice_1.Media.ZhenKong) {
@@ -72,28 +81,46 @@ var IP = /** @class */ (function (_super) {
         else if (this.power == SdcSoftDevice_1.Power.Mei) {
             if (this.media == SdcSoftDevice_1.Media.ReShui) {
                 var map2 = this.getMockFields();
-                list.push(map2.getItem('mo_paiyanwendu'));
-                list.push(map2.getItem('mo_chukouwendu'));
-                list.push(map2.getItem('mo_rukouwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
+                map2.each(function (k, v) {
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                });
+                // list.push(map2.getItem('mo_chukouwendu'))
+                // list.push(map2.getItem('mo_rukouwendu'))
                 var item = map.getItem('ba_guoluyalizhuangtai');
                 if (item) {
                     list.push(item);
                 }
                 else {
-                    list.push(map2.getItem('mo_zhengqiyali'));
+                    list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi));
                 }
             }
             else if (this.media == SdcSoftDevice_1.Media.DaoReYou) {
                 var map2 = this.getMockFields();
-                list.push(map2.getItem('mo_paiyanwendu'));
-                list.push(map2.getItem('mo_chukouwendu'));
-                list.push(map2.getItem('mo_rukouwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
+                map2.each(function (k, v) {
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                });
                 var item = map.getItem('ba_guoluyalizhuangtai');
                 if (item) {
                     list.push(item);
                 }
                 else {
-                    list.push(map2.getItem('mo_zhengqiyali'));
+                    list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi));
                 }
             }
             else if (this.media == SdcSoftDevice_1.Media.ReFeng) {
@@ -105,9 +132,9 @@ var IP = /** @class */ (function (_super) {
                     list.push(item);
                 }
                 else {
-                    list.push(map2.getItem('mo_zhengqiyali'));
+                    list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi));
                 }
-                list.push(map2.getItem('mo_paiyanwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
                 list.push(map.getItem('ba_guolushuiweizhuangtai'));
             }
             else if (this.media == SdcSoftDevice_1.Media.ZhenKong) {
@@ -128,26 +155,52 @@ var IP = /** @class */ (function (_super) {
         else if (this.power == SdcSoftDevice_1.Power.YouQi) {
             var map2 = this.getMockFields();
             if (this.media == SdcSoftDevice_1.Media.ReShui) {
-                list.push(map2.getItem('mo_paiyanwendu'));
-                list.push(map2.getItem('mo_chukouwendu'));
-                list.push(map2.getItem('mo_jinkouwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
+                map2.each(function (k, v) {
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                });
                 list.push(map.getItem('ba_guolushuiweizhuangtai'));
                 list.push(map.getItem('ba_shuixiangshuiweizhuangtai'));
             }
             else if (this.media == SdcSoftDevice_1.Media.DaoReYou) {
-                list.push(map2.getItem('mo_paiyanwendu'));
-                list.push(map2.getItem('mo_chukouwendu'));
-                list.push(map2.getItem('mo_rukouwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
+                map2.each(function (k, v) {
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                });
             }
             else if (this.media == SdcSoftDevice_1.Media.ReFeng) {
                 var map3 = this.getDeviceFields();
-                list.push(map2.getItem('mo_chukouwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
+                map2.each(function (k, v) {
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                });
                 list.push(map3.getItem('de_ranshaoqi'));
                 list.push(map3.getItem('de_yinfengji'));
             }
             else if (this.media == SdcSoftDevice_1.Media.ZhengQi) {
                 list.push(map.getItem('ba_guolushuiweizhuangtai'));
-                list.push(map2.getItem('mo_paiyanwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
                 var item = map.getItem('ba_guoluyalizhuangtai');
                 if (item) {
                     list.push(item);
@@ -157,16 +210,24 @@ var IP = /** @class */ (function (_super) {
                 }
             }
             else if (this.media == SdcSoftDevice_1.Media.ZhenKong) {
-                list.push(map2.getItem('mo_paiyanwendu'));
-                list.push(map2.getItem('mo_chukouwendu'));
-                list.push(map2.getItem('mo_meishuiwendu'));
+                list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
+                map2.each(function (k, v) {
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                    if (v.getName() == gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu) {
+                        list.push(v);
+                        return;
+                    }
+                });
                 list.push(map.getItem('ba_guolushuiweizhuangtai'));
                 var item = map.getItem('ba_guoluyalizhuangtai');
                 if (item) {
                     list.push(item);
                 }
                 else {
-                    list.push(map2.getItem('mo_zhengqiyali'));
+                    list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi));
                 }
             }
         }
@@ -174,9 +235,12 @@ var IP = /** @class */ (function (_super) {
     };
     IP.prototype.getPowerInfo = function () {
         if (this.power == SdcSoftDevice_1.Power.Dian) {
-            return this.getSettingFields().getItem(IP.KEY_POINT_JIA_RE_ZU).getValue() > 0 ? 1 : 0;
+            return this.getDeviceFields().getItem(IP.KEY_POINT_JIA_RE_ZU).getValue() > 0 ? 1 : 0;
         }
         else if (this.power == SdcSoftDevice_1.Power.Mei) {
+            return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0;
+        }
+        else if (this.power == SdcSoftDevice_1.Power.ShengWuZhi) {
             return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0;
         }
         return this.getDeviceFields().getItem(IP.KEY_POINT_RAN_SHAO_QI).getValue() > 0x7F ? 1 : 0;

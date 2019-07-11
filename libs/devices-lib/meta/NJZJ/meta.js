@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var BaseInfoField_1 = require("../BaseInfoField");
 var DeviceField_1 = require("../DeviceField");
 var Collections_1 = require("../../entities/Collections");
+var comms_1 = require("@sdcsoft/comms");
 var BaseInfoField = /** @class */ (function (_super) {
     __extends(BaseInfoField, _super);
     function BaseInfoField(name, startIndex, bytesLength, title, unit, valueMap) {
@@ -105,8 +106,10 @@ exports.DeviceField = DeviceField;
 var ExceptionField_1 = require("../ExceptionField");
 var ExceptionField = /** @class */ (function (_super) {
     __extends(ExceptionField, _super);
-    function ExceptionField(name, startIndex, bytesLength, title) {
+    function ExceptionField(name, startIndex, bytesLength, title, level) {
+        if (level === void 0) { level = ExceptionField.Exception_Waring; }
         var _this = _super.call(this) || this;
+        _this.level = level;
         _this.name = name;
         _this.startIndex = startIndex;
         _this.bytesLength = bytesLength;
@@ -201,7 +204,6 @@ var RunDaysField = /** @class */ (function (_super) {
     return RunDaysField;
 }(BaseInfoField));
 exports.RunDaysField = RunDaysField;
-var map_1 = require("../../map/map");
 var SettingField = /** @class */ (function (_super) {
     __extends(SettingField, _super);
     function SettingField(name, startIndex, bytesLength, title, unit, baseNumber, cmdGroupKey, address, minValue, maxValue) {
@@ -225,7 +227,7 @@ var SettingField = /** @class */ (function (_super) {
         return _this;
     }
     SettingField.prototype.setDeviceFieldForUIKey = function (fieldForUI) {
-        fieldForUI.setKey(map_1.map.KEY_SETTING);
+        fieldForUI.setKey(comms_1.GroupKeys.KEY_SETTING);
     };
     return SettingField;
 }(MockField));
@@ -260,8 +262,7 @@ var StartStopField = /** @class */ (function (_super) {
         return h + ':' + m;
     };
     StartStopField.prototype.getCommand = function () {
-        var cmd = new Command_1.TimeCommand();
-        cmd.setAddress(this.address);
+        var cmd = new Command_1.TimeCommand(this.title, this.address);
         cmd.setMaxValue(this.maxValue);
         cmd.setMinValue(this.minValue);
         cmd.initValue(this.value / 60, this.value % 60);

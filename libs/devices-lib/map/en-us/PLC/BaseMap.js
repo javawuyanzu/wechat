@@ -17,10 +17,9 @@ var EN_US_1 = require("../EN_US");
 var Map_PLC = /** @class */ (function (_super) {
     __extends(Map_PLC, _super);
     function Map_PLC() {
-        var _this = _super.call(this) || this;
-        _this.addCommandGroup(Map_PLC.Commands_Key_Parameters_Setting);
-        _this.addCommandGroup(Map_PLC.Commands_Key_System_Ctl);
-        return _this;
+        return _super.call(this) || this;
+        //this.addCommandGroup(Map_PLC.Commands_Key_Parameters_Setting);
+        //this.addCommandGroup(Map_PLC.Commands_Key_System_Ctl);
         /*
                 this.addPoint(new BaseInfoField(SdcSoftDevice.KEY_POINT_RUN_HOURS, 9, 2, "运行小时数", "时"));
                 this.addPoint(new BaseInfoField(SdcSoftDevice.KEY_POINT_RUN_DAYS, 11, 2, "运行天数", "天"));

@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var X1_1 = require("../../AScript/X1");
+var X1_NoSub_1 = require("../../AScript/X1_NoSub");
 var CTL_RT_X1_ZhengQi = /** @class */ (function (_super) {
     __extends(CTL_RT_X1_ZhengQi, _super);
     function CTL_RT_X1_ZhengQi() {
@@ -36,5 +36,5 @@ var CTL_RT_X1_ZhengQi = /** @class */ (function (_super) {
         }
     };
     return CTL_RT_X1_ZhengQi;
-}(X1_1.CTL_RT_X1_Ts));
+}(X1_NoSub_1.CTL_RT_X1_NoSub_Ts));
 exports.CTL_RT_X1_ZhengQi = CTL_RT_X1_ZhengQi;

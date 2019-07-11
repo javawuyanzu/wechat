@@ -20,6 +20,7 @@ var CountField_1 = require("../../../../../meta/CountField");
 var RT_1 = require("../../../../../devices/CTL/RT/RT");
 var SdcSoftDevice_1 = require("../../../../../devices/SdcSoftDevice");
 var T2_1 = require("../AScript/T2");
+var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_Ts, _super);
     function Map_CTL_RT_T2_RYZQ_Ts() {
@@ -38,8 +39,8 @@ var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_LENG_NING_BENG, "Circulat Pump"));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 3, 2, "System State", '', Map_CTL_RT_T2_RYZQ_Ts.coms_status));
         _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_LIFE, 53, 2, "Running Time", "Hour"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYZQ_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "Running Days", "Day"));
-        _this.addPoint(new CountShowField_1.CountShowField(Map_CTL_RT_T2_RYZQ_Ts.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "Running Hours", "Hour"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, "Running Days", "Day"));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, "Running Hours", "Hour"));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "Fuel Type", 0, Map_CTL_RT_T2_RYZQ_Ts.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "Medium Type", 1, Map_CTL_RT_T2_RYZQ_Ts.coms_media));
         // this.addPoint(new OpenCloseField("oc_queshuidianji", 5, 2, "缺水电极", 0, Map_ZH_CN.coms_open_close))

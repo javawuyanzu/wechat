@@ -15,7 +15,8 @@ Page({
     timer: '',
     timerStates: true ,
     content: null,
-    devices: map
+    devices: map,
+    mqttif: false,
   },
   timer: function () {
     var that = this
@@ -46,6 +47,7 @@ Page({
           return;
         }
         var httplist = res.data
+        var imglist = []
         for (var i = 0; i < httplist.length; i++) {
           if (httplist[i].type == 2) {
             httplist.splice(i, 1);
@@ -72,7 +74,7 @@ Page({
       ifName: false,
       lock: false,
     })
-  },
+  }, 
   closeStyle: function (e) {
     var that = this;
     that.setData({
@@ -313,25 +315,96 @@ Page({
 
   onLoad: function (options) {
     var that = this;
-   
+    if (app.globalData.lang === 'zh-cn') {
+      var chinese = require("../../utils/Chinses.js")
+      that.setData({
+        content: chinese.Content
+      })
+      wx.setTabBarItem({
+        index: 0,
+        text: '设备',
+        iconPath: 'images/tab_activity.png',
+        selectedIconPath: 'images/tab_activity_selected.png'
+      }),
+        wx.setTabBarItem({
+          index: 1,
+          text: '主页',
+          iconPath: 'images/tab_home.png',
+          selectedIconPath: 'images/tab_home_selected.png'
+        }),
+        wx.setTabBarItem({
+          index: 2,
+          text: '添加',
+          iconPath: 'images/add.png',
+          selectedIconPath: 'images/add_select.png'
+        })
+    }
+    if (app.globalData.lang === 'en-us') {
+      var english = require("../../utils/English.js")
+      that.setData({
+        content: english.Content
+      })
+      wx.setTabBarItem({
+        index: 0,
+        text: 'Devices',
+        iconPath: 'images/tab_activity.png',
+        selectedIconPath: 'images/tab_activity_selected.png'
+      }),
+        wx.setTabBarItem({
+          index: 1,
+          text: 'Home',
+          iconPath: 'images/tab_home.png',
+          selectedIconPath: 'images/tab_home_selected.png'
+        }),
+        wx.setTabBarItem({
+          index: 2,
+          text: 'Add',
+          iconPath: 'images/add.png',
+          selectedIconPath: 'images/add_select.png'
+        })
+    }
+    wx.setNavigationBarTitle({
+      title: that.data.content.list_title
+    })
+    wx.getStorage({
+      key: 'deviceList',
+      success(res) {
+        var httplist = res.data
+        var imglist = []
+        var ifmqtt=false
+        for (var i = 0; i < httplist.length; i++) {
+          if (httplist[i].type==2){
+            ifmqtt=true
+          }
+          imglist.push({ title: httplist[i].deviceNo, runstate: that.data.content.list_runstate, deviceNo: httplist[i].deviceNo, imgstyle: 0, errcount: 0, src: '', runday: '', type: '', lang: app.globalData.lang, jiarezu: 0 })
+        }
+        that.setData({
+          imgList: imglist,
+          mqttif: ifmqtt
+        })
+      }
+    })
     that.timer(); 
+    that.httptimer()
     app.globalData.callBack[0] = function (t, m) {
-      // console.log('列表页收到数据：' + t + ':=' + m);
+      console.log('列表页收到数据：' + t + ':=' + m);
       that.getmqttdata(t, m)
     }
-    getApp().conmqtt().then(function () {
-      wx.getStorage({
-        key: 'deviceList',
-        success(res) {
-          var mqttlist = res.data
-          for (var i = 0; i < mqttlist.length; i++) {
-            if (mqttlist[i].type == 2) {
-              that.subTopic(mqttlist[i].mqttName)
+    if(that.data.mqttif){
+      getApp().conmqtt().then(function () {
+        wx.getStorage({
+          key: 'deviceList',
+          success(res) {
+            var mqttlist = res.data
+            for (var i = 0; i < mqttlist.length; i++) {
+              if (mqttlist[i].type == 2) {
+                that.subTopic(mqttlist[i].mqttName)
+              }
             }
           }
-        }
+        })
       })
-    })
+    }
   },
   subTopic: function (topic) {
     var client = app.globalData.client;
@@ -373,7 +446,14 @@ Page({
       })
     }
   },
-  
+  finddevice: function (list, deviceNo) {
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].deviceNo === deviceNo) {
+        return true;
+      }
+    }
+    return false;
+  },
   findx: function (list, ex) {
     for (var i = 0; i < list.length; i++) {
       if (list[i].title === ex.title) {
@@ -431,57 +511,6 @@ Page({
     that.setData({
       timerStates: true
     })
-    if (app.globalData.lang === 'zh-cn') {
-      var chinese = require("../../utils/Chinses.js")
-      that.setData({
-        content: chinese.Content
-      })
-      wx.setTabBarItem({
-        index: 0,
-        text: '设备',
-        iconPath: 'images/tab_activity.png',
-        selectedIconPath: 'images/tab_activity_selected.png'
-      }),
-        wx.setTabBarItem({
-          index: 1,
-          text: '主页',
-        iconPath: 'images/tab_home.png',
-        selectedIconPath: 'images/tab_home_selected.png'
-        }),
-        wx.setTabBarItem({
-          index: 2,
-           text: '添加',
-        iconPath: 'images/add.png',
-        selectedIconPath: 'images/add_select.png'
-        })
-    }
-    if (app.globalData.lang === 'en-us') {
-      var english = require("../../utils/English.js")
-      that.setData({
-        content: english.Content
-      })
-      wx.setTabBarItem({
-        index: 0,
-        text: 'Devices',
-        iconPath: 'images/tab_activity.png',
-        selectedIconPath: 'images/tab_activity_selected.png'
-      }),
-        wx.setTabBarItem({
-          index: 1,
-          text: 'Home',
-          iconPath: 'images/tab_home.png',
-          selectedIconPath: 'images/tab_home_selected.png'
-        }),
-        wx.setTabBarItem({
-          index: 2,
-          text: 'Add',
-          iconPath: 'images/add.png',
-          selectedIconPath: 'images/add_select.png'
-        })
-    }
-    wx.setNavigationBarTitle({
-      title: that.data.content.list_title
-    })
   }, 
   getDeviceFromBytes(deviceNo,deviceType,data){
     var that = this;
@@ -512,7 +541,7 @@ Page({
     if (deviceNos[index].type==1) {
       var title1 = ''
       var deviceType = ''
-      var runstate1 = that.data.content.list_runstate
+      var runstate1 = ''
       var src1 = ''
       var errcount1 = 0
       if (deviceNos[index].deviceName == '') {
@@ -544,87 +573,151 @@ Page({
             success: function (res) {
               if (res.data.byteLength == 0) {
                 var ilist = that.data.imgList
-                for (var i = 0; i < ilist.length; i++) {
-                  if (ilist[i].deviceNo === deviceno) {
-                    ilist.splice(i, 1);
-                    break;
+                if (that.finddevice(ilist, deviceno)) {
+                  for (var i = 0; i < ilist.length; i++) {
+                    if (ilist[i].deviceNo === deviceno) {
+                      ilist[i].deviceNo = deviceno
+                      ilist[i].title = deviceno
+                      ilist[i].runstate = that.data.content.list_runstate
+                      ilist[i].imgstyle = imgstyle1
+                      ilist[i].errcount = errcount1
+                      ilist[i].src = src1
+                      ilist[i].mock1 = ""
+                      ilist[i].mock2 = ""
+                      that.setData({
+                        imgList: ilist
+                      })
+                      break;
+                    }
                   }
-                }
-                ilist.push({ title: deviceno, runstate: runstate1, deviceNo: deviceno, imgstyle: imgstyle1, errcount: errcount1})
-                that.setData({
-                  imgList: ilist
-                })
-              }
-              else {
-                let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
-                var errorList = []
-                for (var index in data.getExceptionFields().map) {
-                  errorList.push({
-                    deviceNo: deviceNo,
-                    title: data.getExceptionFields().map[index].title
+                }else{
+                  ilist.push({ title: deviceno, runstate: that.data.content.list_runstate, deviceNo: deviceno, imgstyle: imgstyle1})
+                  that.setData({
+                    imgList: ilist
                   })
                 }
-                that.setData({
-                  errorNewList: that.data.errorNewList.concat(errorList)
-                })
-                var day = ''
-                var hour = ''
-                var jiarezu1 = ''
-                var mock11 = ''
-                var mock22 = ''
-                for (var index in data.getBaseInfoFields().map) {
-                  if (data.getBaseInfoFields().map[index].name === "o_system_status") {
-                    runstate1 = data.getBaseInfoFields().map[index].valueString
-                  }
-                }
-
-                for (var index in data.getDeviceFocusFields()) {
-                  if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
-                    jiarezu1 = data.getDeviceFocusFields()[index].valueString
-                  }
-                  if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
-                    day = data.getDeviceFocusFields()[index].valueString
-                  }
-                  if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
-                    hour = data.getDeviceFocusFields()[index].valueString
-                  }
-                }
-
-                for (var index in data.getMockFields().map) {
-                  if (mock11 === "") {
-                    mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-                    continue;
-                  }
-                  if (mock22 === "") {
-                    mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-                    break;
-                  }
-                }
-                errcount1 = errorList.length,
-                  src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
               }
-             
-              var ilist = that.data.imgList
-              for (var i = 0; i < ilist.length; i++) {
-                if (ilist[i].deviceNo === deviceno) {
-                  ilist.splice(i, 1);
-                  break;
+              else {
+                try { 
+                  let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
+                  console.log(data)
+                  if (data.getTypeName() == deviceType) {
+                    var errorList = []
+                    for (var index in data.getExceptionFields().map) {
+                      errorList.push({
+                        deviceNo: deviceNo,
+                        title: data.getExceptionFields().map[index].title
+                      })
+                    }
+                    that.setData({
+                      errorNewList: that.data.errorNewList.concat(errorList)
+                    })
+                    var day = ''
+                    var hour = ''
+                    var jiarezu1 = ''
+                    var mock11 = ''
+                    var mock22 = ''
+                    for (var index in data.getBaseInfoFields().map) {
+                      if (data.getBaseInfoFields().map[index].name === "o_system_status") {
+                        runstate1 = data.getBaseInfoFields().map[index].valueString
+                      }
+                    }
+
+                    for (var index in data.getDeviceFocusFields()) {
+                      if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
+                        jiarezu1 = data.getDeviceFocusFields()[index].valueString
+                      }
+                      if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
+                        day = data.getDeviceFocusFields()[index].valueString
+                      }
+                      if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
+                        hour = data.getDeviceFocusFields()[index].valueString
+                      }
+                    }
+
+                    for (var index in data.getMockFields().map) {
+                      if (mock11 === "") {
+                        mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
+                        continue;
+                      }
+                      if (mock22 === "") {
+                        mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
+                        break;
+                      }
+                    }
+                    errcount1 = errorList.length,
+                      src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
+                    var ilist = that.data.imgList
+                    if (that.finddevice(ilist, deviceno)) {
+                      for (var i = 0; i < ilist.length; i++) {
+                        if (ilist[i].deviceNo === deviceno) {
+                          ilist[i].deviceNo = deviceno
+                          ilist[i].title = title1
+                          ilist[i].runstate = runstate1
+                          ilist[i].imgstyle = imgstyle1
+                          ilist[i].errcount = errcount1
+                          ilist[i].src = src1
+                          ilist[i].mock1 = mock11
+                          ilist[i].mock2 = mock22
+                          ilist[i].runday = day + hour
+                          ilist[i].type = deviceType
+                          ilist[i].lang = app.globalData.lang
+                          ilist[i].jiarezu = jiarezu1
+                          that.setData({
+                            imgList: ilist
+                          })
+                          break;
+                        }
+                      }
+                    } else {
+                      ilist.push({ title: title1, runstate: runstate1, deviceNo: deviceno, imgstyle: imgstyle1, errcount: errcount1, src: src1, mock1: mock11, mock2: mock22, runday: day + hour, type: deviceType, lang: app.globalData.lang, jiarezu: jiarezu1 })
+                      that.setData({
+                        imgList: ilist
+                      })
+                    }
+                  }
+                  
+                } catch (e) {
+                  console.log(e)
+                  var ilist = that.data.imgList
+                  if (that.finddevice(ilist, deviceno)) {
+                    for (var i = 0; i < ilist.length; i++) {
+                      if (ilist[i].deviceNo === deviceno) {
+                        if (ilist[i].runstate != "Error") {
+                          ilist[i].deviceNo = deviceno
+                          ilist[i].title = deviceno
+                          ilist[i].runstate = "Error"
+                          ilist[i].error = 1
+                          that.setData({
+                            imgList: ilist
+                          })
+                          wx.showModal({
+                            title: that.data.content.list_prompt,
+                            content: that.data.content.list_error1 + deviceno + that.data.content.list_error2,
+                            success(res) {
+                            }
+                          })
+                        }
+                        break;
+                      }
+                    }
+                  }else{
+                    var ilist = that.data.imgList
+                    ilist.push({ title: deviceno, runstate: "Error", deviceNo: deviceno, lang: app.globalData.lang })
+                  }
+                  that.setData({
+                    imgList: ilist
+                  })
                 }
               }
-              ilist.push({ title: title1, runstate: runstate1, deviceNo: deviceno, imgstyle: imgstyle1, errcount: errcount1, src: src1, mock1: mock11, mock2: mock22, runday: day + hour, type: deviceType, lang: app.globalData.lang})
-              that.setData({
-                imgList: ilist
-              })
             }
           })
         }
       })
-      
     }
     index++ 
     that.getdata(deviceNos, index)
   }, 
-  
   getmqttdata(deviceNo, byte) {
     var that = this;
     var runstate1 = ''
@@ -658,78 +751,127 @@ Page({
             break;
           }
         }
-        var databyte = new Uint8Array(byte)
-        let data = that.getDeviceFromBytes(deviceNo, deviceType, databyte)
-        // data.getMockFields().each((key, value) => {
-        //   console.log('title:=' + value.getTitle() + ' value:=' + value.getValueString());
-        // });
-        if (data == null) {
+        try{
+          var databyte = new Uint8Array(byte)
+          let data = that.getDeviceFromBytes(deviceNo, deviceType, databyte)
+          console.log(data);
+          // data.getMockFields().each((key, value) => {
+          //   console.log('title:=' + value.getTitle() + ' value:=' + value.getValueString());
+          // });
+          if (data == null) {
             title1: deviceNo,
-             runstate1 = that.data.content.list_runstate,
-            deviceNo = deviceNo,
-            imgstyle = 0,
-            errcount1 = 0,
-            src1 = '',
-            mock1 = ''
-        }
-        else {
-          var errorList = []
-          for (var index in data.getExceptionFields().map) {
-            errorList.push({
-              deviceNo: deviceNo,
-              title: data.getExceptionFields().map[index].title
+              runstate1 = that.data.content.list_runstate,
+              deviceNo = deviceNo,
+              imgstyle = 0,
+              errcount1 = 0,
+              src1 = '',
+              mock1 = ''
+          }
+          else {
+            var errorList = []
+            for (var index in data.getExceptionFields().map) {
+              errorList.push({
+                deviceNo: deviceNo,
+                title: data.getExceptionFields().map[index].title
+              })
+            }
+            that.setData({
+              errorNewList: that.data.errorNewList.concat(errorList)
+            })
+            var day = ''
+            var hour = ''
+            var jiarezu1 = ''
+            var mock11 = ''
+            var mock22 = ''
+            for (var index in data.getBaseInfoFields().map) {
+              if (data.getBaseInfoFields().map[index].name === "o_system_status") {
+                runstate1 = data.getBaseInfoFields().map[index].valueString
+              }
+            }
+
+            for (var index in data.getDeviceFocusFields()) {
+              if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
+                jiarezu1 = data.getDeviceFocusFields()[index].valueString
+              }
+              if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
+                day = data.getDeviceFocusFields()[index].valueString
+              }
+              if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
+                hour = data.getDeviceFocusFields()[index].valueString
+              }
+            }
+
+            for (var index in data.getMockFields().map) {
+              if (mock11 === "") {
+                mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
+                continue;
+              }
+              if (mock22 === "") {
+                mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
+                break;
+              }
+            }
+            errcount1 = errorList.length,
+              src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
+          }
+          var ilist = that.data.imgList
+          if (that.finddevice(ilist, deviceNo)) {
+            for (var i = 0; i < ilist.length; i++) {
+              if (ilist[i].deviceNo === deviceNo) {
+                ilist[i].deviceNo = deviceNo
+                ilist[i].title = title1
+                ilist[i].runstate = runstate1
+                ilist[i].imgstyle = imgstyle1
+                ilist[i].errcount = errcount1
+                ilist[i].src = src1
+                ilist[i].mock1 = mock11
+                ilist[i].mock2 = mock22
+                ilist[i].runday = day + hour
+                ilist[i].type = deviceType
+                ilist[i].lang = app.globalData.lang
+                ilist[i].jiarezu = jiarezu1
+                that.setData({
+                  imgList: ilist
+                })
+                break;
+              }
+            }
+          } else {
+            ilist.push({ title: title1, runstate: runstate1, deviceNo: deviceNo, imgstyle: imgstyle1, errcount: errcount1, src: src1, mock1: mock11, mock2: mock22, runday: day + hour, type: deviceType, lang: app.globalData.lang, jiarezu: jiarezu1 })
+            that.setData({
+              imgList: ilist
             })
           }
+        } catch(e) {
+          console.log(e)
+          var ilist = that.data.imgList
+          if (that.finddevice(ilist, deviceNo)) {
+            for (var i = 0; i < ilist.length; i++) {
+              if (ilist[i].deviceNo === deviceNo) {
+                ilist[i].deviceNo = deviceNo
+                ilist[i].title = deviceNo
+                ilist[i].runstate = "Error"
+                that.setData({
+                  imgList: ilist
+                })
+                wx.showModal({
+                  title: that.data.content.list_prompt,
+                  content: that.data.content.list_error1 + deviceno + that.data.content.list_error2,
+                  success(res) {
+                  }
+                })
+                break;
+              }
+            }
+          } else {
+            var ilist = that.data.imgList
+            ilist.push({ title: deviceNo, runstate: "Error", deviceNo: deviceNo, lang: app.globalData.lang })
+          }
           that.setData({
-            errorNewList: that.data.errorNewList.concat(errorList)
+            imgList: ilist
           })
-          var day = ''
-          var hour = ''
-          var jiarezu1 = ''
-          var mock11 = ''
-          var mock22 = ''
-          for (var index in data.getBaseInfoFields().map) {
-            if (data.getBaseInfoFields().map[index].name === "o_system_status") {
-              runstate1 = data.getBaseInfoFields().map[index].valueString
-            }
+          
           }
-
-          for (var index in data.getDeviceFocusFields()) {
-            if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
-              jiarezu1 = data.getDeviceFocusFields()[index].valueString
-            }
-            if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
-              day = data.getDeviceFocusFields()[index].valueString
-            }
-            if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
-              hour = data.getDeviceFocusFields()[index].valueString
-            }
-          }
-
-          for (var index in data.getMockFields().map) {
-            if (mock11 === "") {
-              mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-              continue;
-            }
-            if (mock22 === "") {
-              mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-              break;
-            }
-          }
-          errcount1 = errorList.length,
-            src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
-        }
-        var ilist = that.data.imgList
-        for (var i = 0; i < ilist.length; i++) {
-          if (ilist[i].deviceNo === deviceNo) {
-            ilist.splice(i, 1);
-            break;
-          }
-        }
-        ilist.push({ title: title1, runstate: runstate1, deviceNo: deviceNo, imgstyle: imgstyle1, errcount: errcount1, src: src1, mock1: mock11, mock2: mock22, runday: day + hour, type: deviceType, lang:app.globalData.lang,})
-        that.setData({
-          imgList: ilist
-        })
       }
     })
   },

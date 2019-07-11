@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var RYZQ_1 = require("../../AScript/RYZQ");
+var RYZQ_NoSub_1 = require("../../AScript/RYZQ_NoSub");
 var CTL_RT_T2_RYZQ_4M = /** @class */ (function (_super) {
     __extends(CTL_RT_T2_RYZQ_4M, _super);
     function CTL_RT_T2_RYZQ_4M() {
@@ -25,5 +25,5 @@ var CTL_RT_T2_RYZQ_4M = /** @class */ (function (_super) {
         list.push(map.getItem('mo_shuiweixinhao'));
     };
     return CTL_RT_T2_RYZQ_4M;
-}(RYZQ_1.CTL_RT_T2_RYZQ_Ts));
+}(RYZQ_NoSub_1.CTL_RT_T2_RYZQ_NoSub_Ts));
 exports.CTL_RT_T2_RYZQ_4M = CTL_RT_T2_RYZQ_4M;
