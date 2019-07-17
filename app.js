@@ -7,7 +7,6 @@ import {
 } from '/libs/devices-lib/index.js'
 import mqtt from '/libs/mqtt/mqtt.min.js'
 function createDevice(type) {
-  
   let strs = type.split('_')
   let path = '/libs/devices-lib/devices/' + strs.join('/');
   let deviceType = require(path);

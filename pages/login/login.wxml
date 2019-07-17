@@ -1,33 +1,26 @@
-<view class="container">
-  <view class="login-icon">
-    <image class="login-img" src="../../images/loginLog.jpg"></image>
-  </view>
-  <view class="login-from">
-
-    <!--账号-->
-    <view class="inputView">
-      <image class="nameImage" src="../../images/name.png"></image>
-      <label class="loginLab">{{content.login_userName}}</label>
-      <input class="inputText"  placeholder="{{content.login_pleaseuserName}}"  bindinput="userNameInput" />
+<view wx:if="{{lang}}">
+  <view class='row'>
+    <view class='info'>
+      <input class="info-input" bindinput="bindinput" value="{{inputValue}}" placeholder="{{content.register_pguojia}}" />
     </view>
-    <view class="line"></view>
+    <scroll-view scroll-y="true" class="scrollview">
+      <view wx:for="{{bindSource}}">
+        <view id="{{item}}" bindtap="itemtap" class="itemview">{{item}}</view>
+      </view>
+    </scroll-view>
 
-    <!--密码-->
-    <view class="inputView">
-      <image class="keyImage" src="../../images/key.png"></image>
-      <label class="loginLab">{{content.login_password}}</label>
-      <input class="inputText" password="true" placeholder="{{content.login_pleasepassword}}" bindinput="passwordInput" />
-    </view>
-
-    <view class="">
-
-      <label class="loginLab" style='display:block;float:left;' bindtap="register">{{content.login_creatuser}}</label>
-      <label class="loginLab" style='display:block;float:right;' bindtap="forgotPw">{{content.login_forgetPW}}</label>
-    </view>
-
-    <!--按钮-->
-    <view class="loginBtnView">
-      <button class="loginBtn" type="primary" size="{{primarySize}}" loading="{{loading}}" plain="{{plain}}" disabled="{{disabled}}" bindtap="login">{{content.login_bindUser}}</button>
-    </view>
   </view>
 </view>
+<view class='row'>
+  <view class='info'>
+    <input class='info-input1' bindinput="handleInputPhone" placeholder="{{content.login_pleaseuserName}}" />
+  </view>
+  <button class='button' bindtap='doGetCode' disabled='{{disabled}}' style="background-color:{{color}}">{{text}}</button>
+</view>
+<view class='row'>
+  <view class='info'>
+    <input class='info-input' bindinput="handleVerificationCode" placeholder="{{content.register_pleasecode}}" />
+  </view>
+</view>
+<button class='submit' bindtap='submit'>{{content.login_bindUser}}</button>
+<button class='submit' bindtap='register'>{{content.login_creatuser}}</button>

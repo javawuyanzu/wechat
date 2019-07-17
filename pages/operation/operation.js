@@ -43,7 +43,7 @@ Page({
             success(res) {
               deviceList = res.data;
               wx.request({
-                url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+                url: 'http://127.0.0.1:8080/wechat/device/getdecode',
                 data: {
                   deviceNo: deviceNo,
                 },
@@ -72,10 +72,10 @@ Page({
                     }
                   }
                   if (deviceNo.substr(0, 2) === '20') {
-                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type: 2 });
+                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type: 2 });
                     that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
                   } else {
-                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, type: 1 });
+                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, type: 1 });
                   }
                   wx.setStorage({
                     key: 'deviceList',
@@ -144,7 +144,7 @@ Page({
       success: function (res) {
         wx.request({
           //获取openid接口  
-          url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+          url: 'http://127.0.0.1:8080/wechat/device/getopenid',
           data: {
             js_code: res.code,
           },
@@ -156,13 +156,13 @@ Page({
             })
             wx.request({
               //获取openid接口   
-              url: 'https://app.weixin.sdcsoft.cn/employee/getwx',
+              url: 'http://127.0.0.1:8080/wechat/employee/getwx',
               data: {
                 openid: that.data.openid,
               },
               method: 'GET',
               success: function (res) {
-                if (res.data.code == 0) {
+                if (res.data.code == 1) {
                   that.tologin();
                 }
               }
@@ -200,7 +200,7 @@ Page({
            
             var deviceNo = formData.deviceNo
             wx.request({
-              url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+              url: 'http://127.0.0.1:8080/wechat/device/getdecode',
               data: {
                 deviceNo: deviceNo,
               },
@@ -209,7 +209,7 @@ Page({
               },
               method: 'GET',
               success: function (res) {
-                if (res.data.code == 0) {
+                if (res.data.code != 0) {
                   wx.showToast({
                     title: res.data.msg,
                     icon: 'none',
@@ -217,7 +217,8 @@ Page({
                   });
                   return;
                 }
-                deviceNo = res.data.deviceSuffix
+                deviceNo = res.data.data.deviceSuffix
+               
                 for (var i = 0; i < deviceList.length; i++) {
                   if (deviceList[i].deviceNo == deviceNo) {
                     wx.showToast({
@@ -229,10 +230,10 @@ Page({
                   }
                 }
                 if (deviceNo.substr(0, 2) === '20') {
-                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type:2 });
+                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type:2 });
                   that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
                 }else{
-                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.deviceType, imgstyle: 0,type:1 });
+                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0,type:1 });
                 }
                   wx.setStorage({
                     key: 'deviceList',

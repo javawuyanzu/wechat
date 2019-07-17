@@ -169,7 +169,7 @@ Page({
     else {
       if (app.globalData.lang === 'zh-cn') {
         wx.request({
-          url: 'https://app.weixin.sdcsoft.cn/getSsm',
+          url: 'http://127.0.0.1:8080/wechat/user/reg/sms/zh',
           method: "GET",
           data: {
             number: that.data.phone
@@ -178,9 +178,9 @@ Page({
             'content-type': 'application/x-www-form-urlencoded'
           },
           success: function (res) {
-            console.log(res.data)
+            console.log(res)
             that.setData({
-              verificationCode: res.data.validate
+              verificationCode: res.data.data
             })
             wx.showToast({
               title: that.data.content.register_sendmsg,
@@ -212,7 +212,7 @@ Page({
         var phone = that.data.quhao + that.data.phone
         console.log(phone)
         wx.request({
-          url: 'https://app.weixin.sdcsoft.cn/getGuoWaimsg',
+          url: 'http://127.0.0.1:8080/wechat/user/reg/sms/en',
           method: "GET",
           data: {
             number: phone
@@ -221,9 +221,8 @@ Page({
             'content-type': 'application/x-www-form-urlencoded'
           },
           success: function (res) {
-            console.log(res.data)
             that.setData({
-              verificationCode: res.data.validate
+              verificationCode: res.data.data
             })
             wx.showToast({
               title: that.data.content.register_sendmsg,
@@ -318,7 +317,7 @@ Page({
       var that = this
       var phone = that.data.phone;
       wx.request({
-        url: 'https://app.weixin.sdcsoft.cn/saveEmployee',
+        url: 'http://127.0.0.1:8080/wechat/user//saveEmployee',
         method: "GET",
         data: {
           validate: that.data.code,
@@ -330,14 +329,15 @@ Page({
         },
         header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
         success: function (res) {
-          if (res.data=="该用户已存在"){
+          console.log(res.data.code)
+          if (res.data.code==1){
             wx.showToast({
               icon: 'none',
               title: that.data.content.register_existuser,
               duration: 2000
             })
           }
-          if (res.data == "注册成功") {
+          if (res.data.code == 0) {
             wx.showToast({
               title: that.data.content.register_zhucesuccess,
               duration: 2000,

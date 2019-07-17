@@ -29,7 +29,7 @@ Page({
           success(res) {
             deviceList = res.data;
             wx.request({
-              url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+              url: 'http://127.0.0.1:8080/wechat/device/getdecode',
               data: {
                 deviceNo: deviceNo,
               },
@@ -38,6 +38,7 @@ Page({
               },
               method: 'GET',
               success: function (res) {
+               
                 if (res.data.code == 0) {
                   wx.showToast({
                     title: res.data.msg,
@@ -89,7 +90,7 @@ Page({
 
           var deviceNo = formData.deviceNo
           wx.request({
-            url: 'https://app.weixin.sdcsoft.cn/device/getdecode',
+            url: 'http://127.0.0.1:8080/wechat/device/getsuffix',
             data: {
               deviceNo: deviceNo,
             },
@@ -98,7 +99,8 @@ Page({
             },
             method: 'GET',
             success: function (res) {
-              if (res.data.code == 0) {
+              console.log(res)
+              if (res.data.code == 1) {
                 wx.showToast({
                   title: res.data.msg,
                   icon: 'none',
@@ -106,7 +108,7 @@ Page({
                 });
                 return;
               }
-              deviceNo = res.data.deviceSuffix
+              deviceNo = res.data.data.deviceSuffix
               wx.navigateTo({
                 url: "/pages/salesChange/salesChange?deviceNo=" + deviceNo,
               })

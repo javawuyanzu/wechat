@@ -144,14 +144,15 @@ Page({
         success: function (res) {
           wx.request({
             //获取openid接口  
-            url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+            url: 'http://127.0.0.1:8080/wechat/device/getopenid',
             data: {
               js_code: res.code,
             },
             method: 'GET',
             success: function (res) {
+              console.log(res)
               wx.request({
-                url: 'https://app.weixin.sdcsoft.cn/device/sendcmd',
+                url: 'http://127.0.0.1:8080/wechat/device/sendcmd',
                 method: "GET",
                 data: {
                   command: str,
@@ -233,20 +234,22 @@ Page({
       success: function(res) {
         wx.request({
           //获取openid接口  
-          url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+          url: 'http://127.0.0.1:8080/wechat/device/getopenid',
           data: {
             js_code: res.code,
           },
           method: 'GET',
           success: function(res) {
+            console.log()
             wx.request({
               //获取openid接口   
-              url: 'https://app.weixin.sdcsoft.cn/devicecontrol/getdevicecontrolList',
+              url: 'http://127.0.0.1:8080/wechat/device/getdevicecontrolList',
               data: {
                 openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
               },
               method: 'GET',
               success: function(res) {
+                console.log(res)
                 for (var index in res.data.data) {
                   if (res.data.data[index].deviceNo == options.deviceNo) {
                     that.setData({
@@ -401,7 +404,7 @@ Page({
     if (deviceNo.substr(0, 2) != '20') {
       wx.request({
         //获取openid接口    
-        url: 'https://app.weixin.sdcsoft.cn/device/getdata',
+        url: 'http://127.0.0.1:8080/wechat/device/getdata',
         data: {
           deviceNo: deviceNo,
         },
@@ -411,11 +414,9 @@ Page({
         },
         responseType: 'arraybuffer',
         success: function(res) {
-
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang, that.data.deviceType, new Uint8Array(res.data))
           var clist = data.getCommands().map
-          console.log(clist)
           if (JSON.stringify(clist) != '{}') {
             that.setData({
               controlList: clist,
@@ -442,8 +443,7 @@ Page({
               break;
             }
           }
-          console.log(data)
-          console.log()
+       
           that.setData({
             src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
             bengAnimationList: data.getBeng(),

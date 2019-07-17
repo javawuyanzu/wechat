@@ -39,7 +39,7 @@ Page({
       success: function (res) {
         wx.request({
           //获取openid接口  
-          url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+          url: 'http://127.0.0.1:8080/wechat/device/getopenid',
           data: {
             js_code: res.code,
           },
@@ -49,23 +49,22 @@ Page({
             that.setData({
               openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             })
-            // wx.request({
-            //   //获取openid接口   
-            //   url: 'http://127.0.0.1:8080/employee/getwx',
-            //   data: {
-            //     openid: that.data.openid,
-            //   },
-            //   method: 'GET',
-            //   success: function (res) {
-            //     if (res.data.code == 0) {
-            //       that.tologin();
-            //     } else if (res.data.code == 2) {
-            //       that.setData({
-            //         sole: true
-            //       })
-            //     }
-            //   }
-            // })
+            wx.request({
+              //获取openid接口   
+              url: 'http://127.0.0.1:8080/wechat/employee/getSoldPermissions',
+              data: {
+                openid: that.data.openid,
+              },
+              method: 'GET',
+              success: function (res) {
+                console.log(res)
+                if (res.data == 0) {
+                  that.setData({
+                    sole: true
+                  })
+                } 
+              }
+            })
           }
         })
       }

@@ -1,74 +1,67 @@
-page{ 
- height: 100%; 
-} 
-  
-.container { 
- height: 100%; 
- display: flex; 
- flex-direction: column; 
- padding: 0; 
- box-sizing: border-box; 
- background-color: #f2f2f2
-} 
-  
-/*登录图片*/
-.login-icon{ 
- flex: none; 
-} 
-.login-img{ 
- width: 750rpx; 
-} 
-  
-/*表单内容*/
-.login-from { 
- margin-top: 20px; 
- flex: auto; 
- height:100%; 
-} 
-  
-.inputView { 
- background-color: #fff; 
- line-height: 44px; 
-} 
-/*输入框*/
-.nameImage, .keyImage { 
- margin-left: 22px; 
- width: 14px; 
- height: 14px
-} 
-  
-.loginLab { 
- margin: 15px 15px 15px 10px; 
- color: #545454; 
- font-size: 14px
-} 
-.inputText { 
- flex: block; 
- float: right; 
- text-align: right; 
- margin-right: 22px; 
- margin-top: 11px; 
- color: #cccccc; 
- font-size: 14px
-} 
-  
-.line { 
- width: 100%; 
- height: 1px; 
- background-color: #cccccc; 
- margin-top: 1px; 
-} 
-/*按钮*/
-.loginBtnView { 
- width: 100%; 
- height: auto; 
- background-color: #f2f2f2; 
- margin-top: 0px; 
- margin-bottom: 0px; 
- padding-bottom: 0px; 
-} 
-  
-.loginBtn { 
- width: 80%; 
- margin-top: 35px; 
+page{
+   background: #F0F0F0 ;
+}
+.row{
+  margin-top: 20rpx;
+  overflow: hidden;
+  line-height: 100rpx;
+  border-bottom: 1rpx solid #ccc;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  color: #777;
+  background: #fff;
+ 
+}
+.info-input{
+  height: 100rpx;
+  margin-left: 50rpx;
+  color: #777;
+    /* float: left; */
+}
+.info-input1{
+  height: 100rpx;
+  margin-left: 50rpx;
+  color: #777;
+    float: left;
+    width: 420rpx;
+}
+.button{
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 28rpx;
+  background: #1AAD19;
+  float: left;
+  margin-left: 10rpx;
+  margin-top: 15rpx;
+  color: #FFFFFF;
+}
+.submit{
+  margin-top: 50rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  background: #1AAD19;
+   color: #FFFFFF;
+}
+.success{
+  background: #ffffff;
+ 
+}
+.cheer{
+  text-align: center;
+  line-height: 400rpx;
+  font-size: 60rpx;
+  position: relative;
+}
+.return{
+  margin: 20rpx;
+ 
+}
+.itemview {
+ overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding:0rpx 40rpx;
+  border-top:1px solid #b1b1b1;
+  background-color:white;
 }
