@@ -24,6 +24,8 @@ var Map_CTL_RT_T2_RYZQ_4JBS = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi, 17, 2, "蒸汽压力", "MPa", 100), "mo_zhengqiyali");
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu", 45, 2, "压力变送器断路", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu1", 45, 2, "压力变送器短路", 1));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警(变送器)", 2), "ex_chaoyabaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警(控制器)", 13), "ex_chaoyabaojing_kongzhiqi");
         return _this;
     }
     return Map_CTL_RT_T2_RYZQ_4JBS;

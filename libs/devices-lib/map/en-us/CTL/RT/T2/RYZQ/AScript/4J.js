@@ -32,7 +32,6 @@ var Map_CTL_RT_T2_RYZQ_4J = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweidianji", 5, 2, "High Water Level Electrode", 4, EN_US_1.Map_EN_US.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweibaojingdianji", 5, 2, "High Water Level Alarm Electrode", 5, EN_US_1.Map_EN_US.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_queshuidianji2", 5, 2, "Water deficiency electrode 2", 7, EN_US_1.Map_EN_US.coms_open_close));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "Overpressure alarm", 2));
         _this.addPoint(new meta_1.ExceptionField("ex_ranqiyaligaobaojing", 45, 2, "High Gas Pressure Alarm", 15));
         _this.addPoint(new meta_1.ExceptionField("ex_ranqixieloubaojing", 47, 2, "Gas Leakage Alarm", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhang", 47, 2, "Burner Failure", 1));

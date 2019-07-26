@@ -197,7 +197,6 @@ Page({
           key: 'deviceList',
           success(res) {
             deviceList = res.data;
-           
             var deviceNo = formData.deviceNo
             wx.request({
               url: 'http://127.0.0.1:8080/wechat/device/getdecode',
@@ -209,6 +208,7 @@ Page({
               },
               method: 'GET',
               success: function (res) {
+                console.log(res)
                 if (res.data.code != 0) {
                   wx.showToast({
                     title: res.data.msg,

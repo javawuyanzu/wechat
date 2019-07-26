@@ -53,7 +53,7 @@ var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_bianpinqiguzhangbaojing", 5, 2, "变频器故障报警", 6, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 5, 2, "超压报警", 9, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close), "oc_chaoyabaojing");
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqiguzhang", 5, 2, "燃烧器故障", 10, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
-        _this.addPoint(new meta_1.OpenCloseField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 5, 2, "燃气泄漏报警", 11, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close), "oc_ranqixieloubaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 5, 2, "燃气泄漏报警", 11), "oc_ranqixieloubaojing");
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyalidibaojing", 5, 2, "燃气压力低报警", 12, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyaligaobaojing", 5, 2, "燃气压力高报警", 13, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_Add_SHUI_BENG_1, 9, 2, "给水泵控制（主）", 3, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));

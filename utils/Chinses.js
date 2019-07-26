@@ -24,7 +24,7 @@ var Chinese = {
   detail_pl2: "之间的数值",
   detail_zhixing: "执行成功",
   detail_loading: "正在加载...",
-  detail_navbar: ['运行信息', '报警信息', '统计报表'],
+  detail_navbar: ['运行信息', '报警信息'],
   detail_cnavbar: ['运行信息', '报警信息', '统计报表', '管理控制'],
   detail_nochuli: "未处理",
   detail_treated: "已处理",

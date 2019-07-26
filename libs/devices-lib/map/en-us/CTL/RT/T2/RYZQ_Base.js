@@ -20,6 +20,7 @@ var CountField_1 = require("../../../../../meta/CountField");
 var RT_1 = require("../../../../../devices/CTL/RT/RT");
 var SdcSoftDevice_1 = require("../../../../../devices/SdcSoftDevice");
 var T2_1 = require("../AScript/T2");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var comms_1 = require("@sdcsoft/comms");
 var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_Ts, _super);
@@ -52,7 +53,7 @@ var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_bianpinqiguzhangbaojing", 5, 2, "Frequency Converter Fault Alarm", 6, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_chaoyabaojing", 5, 2, "Overpressure alarm", 9, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqiguzhang", 5, 2, "Burner failure", 10, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
-        _this.addPoint(new meta_1.OpenCloseField("oc_ranqixieloubaojing", 5, 2, "Gas Leakage Alarm", 11, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 5, 2, "Gas Leakage Alarm", 11), "oc_ranqixieloubaojing");
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyalidibaojing", 5, 2, "Low Gas Pressure Alarm", 12, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyaligaobaojing", 5, 2, "High Gas Pressure Alarm", 13, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_Add_SHUI_BENG_1, 9, 2, "Feed pump control (main)", 3, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
@@ -62,7 +63,7 @@ var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
         //this.addPoint(new MockField("mo_lengningqiyanwen", 13, 2, "冷凝器烟温", "℃"))
         //this.addPoint(new MockField("mo_jishuiwendu", 15, 2, "给水温度", "℃"))
         //this.addPoint(new MockField("mo_shuiweixinhao", 19, 2, "水位信号", "%"))
-        _this.addPoint(new meta_1.MockField("mo_paiyanwendu", 21, 2, "Exhaust gas temperature", "℃"));
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu, 21, 2, "Exhaust gas temperature", "℃"), "mo_paiyanwendu");
         //this.addPoint(new MockField("mo_jienengqiyanwen", 23, 2, "节能器烟温", "℃"))
         _this.addPoint(new meta_1.DeviceField("de_jishuibeng_zhu/bei_", 49, 2, "Feed water pump", 0, Map_CTL_RT_T2_RYZQ_Ts.coms_master));
         _this.addPoint(new meta_1.DeviceField("de_jishuibeng_shoudong/zidong_", 49, 2, "Feed water pump", 1, Map_CTL_RT_T2_RYZQ_Ts.coms_auto));
@@ -71,11 +72,11 @@ var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweichuanganqiduanlu", 45, 2, "Short Circuit of Water Level Sensor", 4));
         _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibaojing_dianliu_", 45, 2, "Limit Low Water Level Alarm (Current)", 5));
         _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing_dianliu_", 45, 2, "High Water Level Alarm (Current)", 6));
-        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "High Discharged Flue Gas Temperature Alarm", 7));
-        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibaojing", 45, 2, "Extreme Low Water Level Alarm", 8));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 45, 2, "High Discharged Flue Gas Temperature Alarm", 7), "ex_paiyanwendugaobaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, "Extreme Low Water Level Alarm", 8), "ex_jixiandishuiweibaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweidianjiluojicuo", 45, 2, "Water-level Electrode Logic Error", 9));
         _this.addPoint(new meta_1.ExceptionField("ex_dishuiweibaojing", 45, 2, "Low Water Level Alarm", 10));
-        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "High Water Level Alarm", 11));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 45, 2, "High Water Level Alarm", 11), "ex_gaoshuiweibaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_bianpinqiguzhang", 45, 2, "Frequency Converter Failure", 12));
         _this.addPoint(new meta_1.ExceptionField("ex_ranqiyalidibaojing", 45, 2, "Low Gas Pressure Alarm", 14));
         //缺少

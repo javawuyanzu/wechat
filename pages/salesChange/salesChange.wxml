@@ -21,6 +21,18 @@
             销售状态：{{statesarray[status]}}
           </view>
         </picker>
+         <view class="section__title"></view>
+        <picker bindchange="bindPickerChange_power" value="{{power}}" range="{{powerarray}}">
+          <view class="picker">
+            燃料：{{powerarray[power]}}
+          </view>
+        </picker>
+         <view class="section__title"></view>
+        <picker bindchange="bindPickerChange_media" value="{{media}}" range="{{mediaarray}}">
+          <view class="picker">
+            介质：{{mediaarray[media]}}
+          </view>
+        </picker>
       </view>
       <view class="btn-area">
         <view class="button-wrapper">

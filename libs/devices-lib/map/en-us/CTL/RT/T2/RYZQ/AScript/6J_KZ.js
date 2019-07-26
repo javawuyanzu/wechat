@@ -19,6 +19,7 @@ var _6J_1 = require("./6J");
 var CountShowField_1 = require("../../../../../../../meta/CountShowField");
 var _6J_KZ_1 = require("../../../../../../../devices/CTL/RT/T2/RYZQ/AScript/6J_KZ");
 var comms_1 = require("@sdcsoft/comms");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var Map_CTL_RT_T2_RYZQ_6JKZ = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_6JKZ, _super);
     function Map_CTL_RT_T2_RYZQ_6JKZ() {
@@ -29,6 +30,7 @@ var Map_CTL_RT_T2_RYZQ_6JKZ = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_qitingkongzhi", 5, 2, "Start stop control", 8, EN_US_1.Map_EN_US.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_dishuiweibaojingdianji_6dianjiteyou_", 5, 2, "Low Water Level Alarm Electrode (6 Electrodes Specific)", 1, EN_US_1.Map_EN_US.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_zhongshuiweidianji_6dianjiteyou_", 5, 2, "Medium Water Level Electrode (6 Electrode Specific)", 3, EN_US_1.Map_EN_US.coms_open_close));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "Overpressure alarm(controller)", 13), "ex_chaoyabaojing_kongzhiqi");
         return _this;
     }
     //6电极压力控制器2端火

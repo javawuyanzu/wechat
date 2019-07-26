@@ -17,6 +17,7 @@ var meta_1 = require("../../../../../../../meta/RT/meta");
 var _6J_1 = require("./6J");
 var CountShowField_1 = require("../../../../../../../meta/CountShowField");
 var comms_1 = require("@sdcsoft/comms");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var Map_CTL_RT_T2_RYZQ_6JKZ = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_6JKZ, _super);
     function Map_CTL_RT_T2_RYZQ_6JKZ() {
@@ -27,6 +28,7 @@ var Map_CTL_RT_T2_RYZQ_6JKZ = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_qitingkongzhi", 5, 2, "启停控制", 8, Map_CTL_RT_T2_RYZQ_6JKZ.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_dishuiweibaojingdianji_6dianjiteyou_", 5, 2, "低水位报警电极（6电极特有）", 1, Map_CTL_RT_T2_RYZQ_6JKZ.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_zhongshuiweidianji_6dianjiteyou_", 5, 2, "中水位电极（6 电极特有）", 3, Map_CTL_RT_T2_RYZQ_6JKZ.coms_open_close));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警(控制器)", 13), "ex_chaoyabaojing_kongzhiqi");
         return _this;
     }
     //6电极压力控制器2端火

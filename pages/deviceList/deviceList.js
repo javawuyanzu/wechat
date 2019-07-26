@@ -514,7 +514,7 @@ Page({
   }, 
   getDeviceFromBytes(deviceNo,deviceType,data){
     var that = this;
-    let d = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang, deviceType, new Uint8Array(data))
+    let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
     map.set(deviceNo,d)
     return d
   },

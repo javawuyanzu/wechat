@@ -24,7 +24,7 @@ var English = {
   detail_pl2: "",
   detail_zhixing: "Execute successfully",
   detail_loading: "loading...",
-  detail_navbar: ['Run information', 'Alarm information', 'Statistical reports'],
+  detail_navbar: ['Run information', 'Alarm information'],
   detail_cnavbar: ['Run information', 'Alarm information', 'Statistical reports', 'Management control'],
   detail_nochuli: "untreated",
   detail_treated: "treated",

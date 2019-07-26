@@ -150,7 +150,6 @@ Page({
             },
             method: 'GET',
             success: function (res) {
-              console.log(res)
               wx.request({
                 url: 'http://127.0.0.1:8080/wechat/device/sendcmd',
                 method: "GET",
@@ -256,12 +255,31 @@ Page({
                       control: true,
                       navbar: that.data.content.detail_cnavbar,
                     })
+                    return
                   }
                 }
               }
             })
           }
         })
+      }
+    })
+    wx.request({
+      url: 'http://127.0.0.1:8080/wechat/device/getdecode',
+      data: {
+        deviceNo: options.deviceNo,
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      method: 'GET',
+      success: function (res) {
+        if (res.data.data.media== 0) {
+          that.setData({
+            control: true,
+            navbar: that.data.content.detail_cnavbar,
+          })
+        }
       }
     })
     that.setData({
@@ -284,7 +302,7 @@ Page({
         console.log(mqttname)
         if (mqttname == t) {
           // console.log('详情页收到数据：' + t + ':=' + m);
-          let data = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang, that.data.deviceType, new Uint8Array(m))
+          let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(m))
           console.log(data)
           that.dataparse(data, options.deviceNo)
         }
@@ -395,10 +413,10 @@ Page({
     var type = that.data.deviceType
     if (type === "PLC_DianReShui" || type === "PLC_DianZhengQi" || type === "PLC_RanMeiZhengQi" || type === "PLC_RanYouDaoReYou" || type === "PLC_RanYouReShui" || type === "PLC_RanYouZhengQi" || type === "PLC_RanYouZhenKong" || type === "PLC_YuReZhengQi") {
       that.getreportdatabyday(that.data.tian)
-      that.setData({
-        report: true,
-        navbar: that.data.content.detail_navbar1,
-      })
+      // that.setData({
+      //   report: true,
+      //   navbar: that.data.content.detail_navbar1,
+      // })
     }
     var deviceNo = that.data.deviceNo
     if (deviceNo.substr(0, 2) != '20') {
@@ -415,7 +433,7 @@ Page({
         responseType: 'arraybuffer',
         success: function(res) {
           var errorList = []
-          let data = app.globalData.deviceAdapter.getSdcSoftDevice(app.globalData.lang, that.data.deviceType, new Uint8Array(res.data))
+          let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
           var clist = data.getCommands().map
           if (JSON.stringify(clist) != '{}') {
             that.setData({
@@ -659,36 +677,36 @@ Page({
     var that = this
     var beginDate = that.getDateStr(null, tian)
     var endDate = that.getDateStr(beginDate, 1)
-    wx.request({
-      url: 'https://report.sdcsoft.com.cn/wechat/device',
-      data: {
-        deviceType: that.data.deviceType,
-        begintime: beginDate,
-        endtime: endDate,
-        deviceNo: that.data.deviceNo
-      },
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-      },
-      method: 'GET',
-      success: function(res) {
-        if (res.data.err_code==200) {
-          if (tian == -1) {
-            that.setData({
-              zuotianList: res.data.data,
-            })
-          } else if (tian == -2) {
-            that.setData({
-              qiantianList: res.data.data,
-            })
-          } else if (tian == -3) {
-            that.setData({
-              daqiantianList: res.data.data,
-            })
-          }
-        }
-      }
-    })
+    // wx.request({
+    //   url: 'https://report.sdcsoft.com.cn/wechat/device',
+    //   data: {
+    //     deviceType: that.data.deviceType,
+    //     begintime: beginDate,
+    //     endtime: endDate,
+    //     deviceNo: that.data.deviceNo
+    //   },
+    //   header: {
+    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    //   },
+    //   method: 'GET',
+    //   success: function(res) {
+    //     if (res.data.err_code==200) {
+    //       if (tian == -1) {
+    //         that.setData({
+    //           zuotianList: res.data.data,
+    //         })
+    //       } else if (tian == -2) {
+    //         that.setData({
+    //           qiantianList: res.data.data,
+    //         })
+    //       } else if (tian == -3) {
+    //         that.setData({
+    //           daqiantianList: res.data.data,
+    //         })
+    //       }
+    //     }
+    //   }
+    // })
     // wx.request({
     //   url: 'http://app.weixin.sdcsoft.cn/deviceinfo/find' + that.data.deviceType,
     //   data: {

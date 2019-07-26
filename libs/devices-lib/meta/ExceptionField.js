@@ -39,6 +39,7 @@ var ExceptionField = /** @class */ (function (_super) {
         fieldForUI.setName(this.getName());
         fieldForUI.setTitle(this.getTitle());
         fieldForUI.setExcptionLevel(this.level);
+        fieldForUI.setValue(this.value);
         return fieldForUI;
     };
     ExceptionField.Exception_NULL = -1;

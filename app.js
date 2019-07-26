@@ -1,26 +1,12 @@
 const app = getApp();
 var openid='';
+var deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn');
 
-//
 import {
-  DeviceAdapterUtil
+  Wechat_DeviceAdapter
 } from '/libs/devices-lib/index.js'
 import mqtt from '/libs/mqtt/mqtt.min.js'
-function createDevice(type) {
-  let strs = type.split('_')
-  let path = '/libs/devices-lib/devices/' + strs.join('/');
-  let deviceType = require(path);
-  let d = new deviceType();
-  return d;
-}
 
-function createMap(lang,type) {
-  let strs = type.split('_')
-  let path = '/libs/devices-lib/map/' + lang + '/' + strs.join('/');
-  let mapType = require(path);
-  let d = new mapType();
-  return d;
-}
 App({
   data: {},
   onShow: function () {
@@ -97,9 +83,11 @@ App({
       success: function (res) {
         if (res.language === 'zh') {
           that.globalData.lang = 'zh-cn'
+          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn')
         }
         if (res.language === 'en') {
           that.globalData.lang = 'en-us'
+          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn')
         }
       }
     })
@@ -129,10 +117,10 @@ App({
         }
       }
     })
-    DeviceAdapterUtil.InjectFunc(createDevice, createMap)
   },
+ 
   globalData: {
-    deviceAdapter: DeviceAdapterUtil,
+    deviceAdapter: deviceAdapter,
     lang: 'zh-cn',
     client: null,
     callBack: [null, null],

@@ -15,14 +15,17 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var meta_1 = require("../../../../../../../meta/RT/meta");
 var _6J_1 = require("./6J");
+var gfrm_1 = require("@sdcsoft/gfrm");
 var Map_CTL_RT_T2_RYZQ_6JBS = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_6JBS, _super);
     //6电极压力变送器2段火
     function Map_CTL_RT_T2_RYZQ_6JBS() {
         var _this = _super.call(this) || this;
-        _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 17, 2, "Steam pressure", "MPa", 100));
+        _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi, 17, 2, "Steam pressure", "MPa", 100), "mo_zhengqiyali");
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu", 45, 2, "Breaking of Pressure Transmitter", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu1", 45, 2, "Short Circuit of Pressure Transmitter", 1));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "Overpressure alarm", 2), "ex_chaoyabaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "Overpressure alarm(controller)", 13), "ex_chaoyabaojing_kongzhiqi");
         return _this;
     }
     return Map_CTL_RT_T2_RYZQ_6JBS;

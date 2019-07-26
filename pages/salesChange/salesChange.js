@@ -12,12 +12,14 @@ Page({
     statesarray: [],
     status: 0,
     typearray: [],
-    type:""
+    type:"",
+    powerarray: [],
+    power: 0,
+    mediaarray: [],
+    media: 0,
   },
   formSubmit: function (e) {
     var that= this
-    console.log(that.data.type)
-    console.log(that.data.status)
     
     wx.request({
       url: 'http://127.0.0.1:8080/wechat/device/modifydevice',
@@ -26,6 +28,8 @@ Page({
         status: that.data.status,
         prefix: that.data.prefix,
         deviceType: that.data.type,
+        power: that.data.power,
+        media: that.data.media,
       },
       header: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -43,22 +47,31 @@ Page({
             })
           }
         });
-
       }
     })
   },
   bindPickerChange_prefix: function (e) {
     var that = this
-    console.log(e.detail.value)
     that.setData({
       prefix: e.detail.value,
     })
   },
   bindPickerChange_status: function (e) {
     var that = this
-    console.log(e.detail.value)
     that.setData({
       status:e.detail.value,
+    })
+  },
+  bindPickerChange_power: function (e) {
+    var that = this
+    that.setData({
+      power: e.detail.value,
+    })
+  },
+  bindPickerChange_media: function (e) {
+    var that = this
+    that.setData({
+      media: e.detail.value,
     })
   },
   bindPickerChange_deviceType: function (e) {
@@ -73,7 +86,6 @@ Page({
    */
   onLoad: function (options) {
     var that=this
-    
     wx.request({
       url: 'http://127.0.0.1:8080/wechat/device/gettypelist',
       data: {
@@ -106,8 +118,12 @@ Page({
               deviceType: that.data.typearray.indexOf(res.data.data.deviceType),
               prefix: res.data.data.devicePrefix,
               status: res.data.data.status,
+              power: res.data.data.power,
+              media: res.data.data.media,
               statesarray: ["未销售", "已销售"],
               prefixarray: ["","控制器", "PLC"],
+              powerarray: ["油气", "电", "煤", "生物质"],
+              mediaarray: ["热水", "蒸汽", "导热油", "热风", "真空"],
             })
           }
         })

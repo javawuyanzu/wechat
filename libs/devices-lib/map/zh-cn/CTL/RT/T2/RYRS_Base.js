@@ -42,7 +42,7 @@ var Map_CTL_RT_T2_RYRS_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweibaojingdianji", 5, 2, "高水位报警电极", 3, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_dianjiedianyalibiaodizhen", 5, 2, "电接点压力表低针", 4, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_dianjiedianyalibiaogaozhen", 5, 2, "电接点压力表高针", 5, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
-        _this.addPoint(new meta_1.OpenCloseField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 5, 2, "超压报警", 9, Map_CTL_RT_T2_RYRS_Ts.coms_open_close), "oc_chaoyabaojingxinhao");
+        _this.addPoint(new meta_1.OpenCloseField("oc_chaoyabaojingxinhao", 5, 2, "超压报警", 9, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqiguzhangxinhao", 5, 2, "燃烧器故障信号", 10, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyalidibaojingxinhao", 5, 2, "燃气压力低报警信号", 12, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqixieloubaojingxinhao", 5, 2, "燃气泄漏报警信号", 11, Map_CTL_RT_T2_RYRS_Ts.coms_open_close));
