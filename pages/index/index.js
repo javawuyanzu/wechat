@@ -39,7 +39,7 @@ Page({
       success: function (res) {
         wx.request({
           //获取openid接口  
-          url: 'http://127.0.0.1:8080/wechat/device/getopenid',
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
           data: {
             js_code: res.code,
           },
@@ -51,7 +51,7 @@ Page({
             })
             wx.request({
               //获取openid接口   
-              url: 'http://127.0.0.1:8080/wechat/employee/getSoldPermissions',
+              url: 'https://apis.sdcsoft.com.cn/wechat/employee/getSoldPermissions',
               data: {
                 openid: that.data.openid,
               },

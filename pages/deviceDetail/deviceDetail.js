@@ -144,14 +144,14 @@ Page({
         success: function (res) {
           wx.request({
             //获取openid接口  
-            url: 'http://127.0.0.1:8080/wechat/device/getopenid',
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
             data: {
               js_code: res.code,
             },
             method: 'GET',
             success: function (res) {
               wx.request({
-                url: 'http://127.0.0.1:8080/wechat/device/sendcmd',
+                url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
                 method: "GET",
                 data: {
                   command: str,
@@ -233,7 +233,7 @@ Page({
       success: function(res) {
         wx.request({
           //获取openid接口  
-          url: 'http://127.0.0.1:8080/wechat/device/getopenid',
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
           data: {
             js_code: res.code,
           },
@@ -242,7 +242,7 @@ Page({
             console.log()
             wx.request({
               //获取openid接口   
-              url: 'http://127.0.0.1:8080/wechat/device/getdevicecontrolList',
+              url: 'https://apis.sdcsoft.com.cn/wechat/device/getdevicecontrolList',
               data: {
                 openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
               },
@@ -265,7 +265,7 @@ Page({
       }
     })
     wx.request({
-      url: 'http://127.0.0.1:8080/wechat/device/getdecode',
+      url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
       data: {
         deviceNo: options.deviceNo,
       },
@@ -422,7 +422,7 @@ Page({
     if (deviceNo.substr(0, 2) != '20') {
       wx.request({
         //获取openid接口    
-        url: 'http://127.0.0.1:8080/wechat/device/getdata',
+        url: 'https://apis.sdcsoft.com.cn/wechat/device/getdata',
         data: {
           deviceNo: deviceNo,
         },

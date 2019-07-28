@@ -29,7 +29,7 @@ Page({
           success(res) {
             deviceList = res.data;
             wx.request({
-              url: 'http://127.0.0.1:8080/wechat/device/getdecode',
+              url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
               data: {
                 deviceNo: deviceNo,
               },
@@ -90,7 +90,7 @@ Page({
 
           var deviceNo = formData.deviceNo
           wx.request({
-            url: 'http://127.0.0.1:8080/wechat/device/getsuffix',
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
             data: {
               deviceNo: deviceNo,
             },

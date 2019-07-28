@@ -561,7 +561,7 @@ Page({
             }
           }
           wx.request({
-            url: 'http://127.0.0.1:8080/wechat/device/getdata',
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getdata',
             data: {
               deviceNo: deviceno,
             },

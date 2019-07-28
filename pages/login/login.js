@@ -113,7 +113,7 @@ Page({
       success: function (res) {
         wx.request({
           //获取openid接口 
-          url: 'http://127.0.0.1:8080/wechat/device/getopenid',
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
           data: {
             js_code: res.code,
           },
@@ -163,7 +163,7 @@ Page({
     else {
       if (app.globalData.lang === 'zh-cn') {
         wx.request({
-          url: 'http://127.0.0.1:8080/wechat/user/bind/sms/zh',
+          url: 'https://apis.sdcsoft.com.cn/wechat/user/bind/sms/zh',
           method: "GET",
           data: {
             mobileNumber: that.data.phone
@@ -215,7 +215,7 @@ Page({
         var phone = that.data.quhao + that.data.phone
         console.log(phone)
         wx.request({
-          url: 'http://127.0.0.1:8080/wechat/user/bind/sms/en',
+          url: 'https://apis.sdcsoft.com.cn/wechat/user/bind/sms/en',
           method: "GET",
           data: {
             mobileNumber: phone
@@ -297,7 +297,7 @@ Page({
       var that = this
       var phone = that.data.phone;
       wx.request({
-        url: 'http://127.0.0.1:8080/wechat/user/bind/wechat',
+        url: 'https://apis.sdcsoft.com.cn/wechat/user/bind/wechat',
         method: "GET",
         data: {
           mobileNumber: that.data.phone,

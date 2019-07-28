@@ -169,7 +169,7 @@ Page({
     else {
       if (app.globalData.lang === 'zh-cn') {
         wx.request({
-          url: 'http://127.0.0.1:8080/wechat/user/reg/sms/zh',
+          url: 'https://apis.sdcsoft.com.cn/wechat/user/reg/sms/zh',
           method: "GET",
           data: {
             number: that.data.phone
@@ -212,7 +212,7 @@ Page({
         var phone = that.data.quhao + that.data.phone
         console.log(phone)
         wx.request({
-          url: 'http://127.0.0.1:8080/wechat/user/reg/sms/en',
+          url: 'https://apis.sdcsoft.com.cn/wechat/user/reg/sms/en',
           method: "GET",
           data: {
             number: phone
@@ -317,7 +317,7 @@ Page({
       var that = this
       var phone = that.data.phone;
       wx.request({
-        url: 'http://127.0.0.1:8080/wechat/user//saveEmployee',
+        url: 'https://apis.sdcsoft.com.cn/wechat/user//saveEmployee',
         method: "GET",
         data: {
           validate: that.data.code,

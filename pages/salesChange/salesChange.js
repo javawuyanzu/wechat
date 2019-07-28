@@ -22,7 +22,7 @@ Page({
     var that= this
     
     wx.request({
-      url: 'http://127.0.0.1:8080/wechat/device/modifydevice',
+      url: 'https://apis.sdcsoft.com.cn/wechat/device/modifydevice',
       data: {
         deviceNo: that.data.deviceNo,
         status: that.data.status,
@@ -87,7 +87,7 @@ Page({
   onLoad: function (options) {
     var that=this
     wx.request({
-      url: 'http://127.0.0.1:8080/wechat/device/gettypelist',
+      url: 'https://apis.sdcsoft.com.cn/wechat/device/gettypelist',
       data: {
       },
       header: {
@@ -103,7 +103,7 @@ Page({
           typearray: list
         })
         wx.request({
-          url: 'http://127.0.0.1:8080/wechat/device/getsuffix',
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
           data: {
             deviceNo: options.deviceNo
           },
