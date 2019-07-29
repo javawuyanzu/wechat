@@ -20,7 +20,6 @@ Page({
   },
   formSubmit: function (e) {
     var that= this
-    
     wx.request({
       url: 'https://apis.sdcsoft.com.cn/wechat/device/modifydevice',
       data: {
@@ -43,7 +42,7 @@ Page({
           duration: 2000,
           success(res) {
             wx.navigateTo({
-              url: '../soldUpdate/soldUpdate'
+              url: '../index/index'
             })
           }
         });
@@ -112,6 +111,7 @@ Page({
           },
           method: 'GET',
           success: function (res) {
+            console.log(res)
             that.setData({
               deviceNo: options.deviceNo,
               type: res.data.data.deviceType,
@@ -130,8 +130,4 @@ Page({
       }
     })
   },
- 
-
-
-
 })

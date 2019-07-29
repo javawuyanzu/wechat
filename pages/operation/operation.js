@@ -52,7 +52,8 @@ Page({
                 },
                 method: 'GET',
                 success: function (res) {
-                  if (res.data.code == 0) {
+                  console.log(res)
+                  if (res.data.code != 0) {
                     wx.showToast({
                       title: res.data.msg,
                       icon: 'none',
@@ -60,7 +61,7 @@ Page({
                     });
                     return;
                   }
-                  deviceNo = res.data.deviceSuffix
+                  deviceNo = res.data.data.deviceSuffix
                   for (var i = 0; i < deviceList.length; i++) {
                     if (deviceList[i].deviceNo == deviceNo) {
                       wx.showToast({

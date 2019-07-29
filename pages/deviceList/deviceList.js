@@ -634,7 +634,6 @@ Page({
                         hour = data.getDeviceFocusFields()[index].valueString
                       }
                     }
-
                     for (var index in data.getMockFields().map) {
                       if (mock11 === "") {
                         mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString

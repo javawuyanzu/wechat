@@ -265,7 +265,7 @@ Page({
       }
     })
     wx.request({
-      url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
+      url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
       data: {
         deviceNo: options.deviceNo,
       },
@@ -274,6 +274,7 @@ Page({
       },
       method: 'GET',
       success: function (res) {
+        console.log(res)
         if (res.data.data.media== 0) {
           that.setData({
             control: true,
