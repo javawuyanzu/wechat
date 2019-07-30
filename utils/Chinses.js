@@ -68,7 +68,7 @@ var Chinese = {
   login_pleasepassword: "请输入密码",
   login_creatuser: "创建一个账户",
   login_forgetPW: "忘记密码",
-  login_bindUser: "绑定账户",
+  login_bindUser: "绑定已有账户",
   login_sccess: "登陆成功",
   login_nouser: "用户名密码不能为空",
   register_title: "注册用户",

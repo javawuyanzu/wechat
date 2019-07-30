@@ -35,6 +35,7 @@ Page({
   },
   onLoad: function () {
     var that = this;
+    
     wx.login({
       success: function (res) {
         wx.request({

@@ -38,22 +38,57 @@ Page({
     wx.getStorage({
       key: 'deviceList',
       success(res) { 
+        var httplist = res.data
         if (res.data.length == 0) {
           // wx.showToast({
           //   title: that.data.content.list_listnull,
           //   icon: 'none',
           //   duration: 2000
           // })
-          return;
-        }
-        var httplist = res.data
-        var imglist = []
-        for (var i = 0; i < httplist.length; i++) {
-          if (httplist[i].type == 2) {
-            httplist.splice(i, 1);
+          wx.login({
+            success: function (res) {
+              wx.request({
+                //获取openid接口  
+                url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+                data: {
+                  js_code: res.code,
+                },
+                method: 'GET',
+                success: function (res) {
+                  var openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+                  wx.request({
+                    //获取openid接口   
+                    url: 'http://127.0.0.1:8080/webapi/wechat/store/list',
+                    data: {
+                      openId: openid,
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                      if (res.data.data.length==0){
+                        return;
+                      }else{
+                        httplist = res.data.data
+                        for (var i = 0; i < httplist.length; i++) {
+                          if (httplist[i].type == 2) {
+                            httplist.splice(i, 1);
+                          }
+                        }
+                        that.getdata(httplist, 0);
+                      }
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }else{
+          for (var i = 0; i < httplist.length; i++) {
+            if (httplist[i].type == 2) {
+              httplist.splice(i, 1);
+            }
           }
+          that.getdata(httplist, 0);
         }
-        that.getdata(httplist, 0);
       }
     })
     that.errorLing();
@@ -149,6 +184,19 @@ Page({
         wx.setStorage({
           key: 'deviceList',
           data: deviceList,
+        })
+        
+        wx.request({
+          //获取openid接口   
+          url: 'http://127.0.0.1:8080/webapi/wechat/store/delete',
+          data: {
+            openId: app.globalData.openid,
+            deviceNo: that.data.deviceNo
+          },
+          method: 'GET',
+          success: function (res) {
+            console.log(res)
+          }
         })
         wx.showToast({
           title: that.data.content.list_deletesuccess,
@@ -385,7 +433,7 @@ Page({
       }
     })
     that.timer(); 
-    that.httptimer()
+    //that.httptimer()
     app.globalData.callBack[0] = function (t, m) {
       console.log('列表页收到数据：' + t + ':=' + m);
       that.getmqttdata(t, m)
@@ -511,9 +559,13 @@ Page({
     that.setData({
       timerStates: true
     })
+  
   }, 
   getDeviceFromBytes(deviceNo,deviceType,data){
+    
+    //console.log(app.globalData.deviceAdapter)
     var that = this;
+
     let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
     map.set(deviceNo,d)
     return d
@@ -540,11 +592,11 @@ Page({
     var deviceno = deviceNos[index].deviceNo
     if (deviceNos[index].type==1) {
       var title1 = ''
-      var deviceType = ''
+      var deviceType = deviceNos[index].deviceType
       var runstate1 = ''
       var src1 = ''
       var errcount1 = 0
-      if (deviceNos[index].deviceName == '') {
+      if (deviceNos[index].deviceName == '' || deviceNos[index].deviceName == null) {
         title1 = deviceNos[index].deviceNo
       } else {
         title1 = deviceNos[index].deviceName
@@ -555,10 +607,10 @@ Page({
         success(res) {
           var deviceList = res.data
           for (var i = 0; i < deviceList.length; i++) {
-            if (deviceList[i].deviceNo === deviceno) {
-              deviceType = deviceList[i].deviceType
-              break;
-            }
+            // if (deviceList[i].deviceNo === deviceno) {
+            //   deviceType = deviceList[i].deviceType
+            //   break;
+            // }
           }
           wx.request({
             url: 'https://apis.sdcsoft.com.cn/wechat/device/getdata',
@@ -571,6 +623,7 @@ Page({
             },
             responseType: 'arraybuffer',
             success: function (res) {
+              console.log(res)
               if (res.data.byteLength == 0) {
                 var ilist = that.data.imgList
                 if (that.finddevice(ilist, deviceno)) {
@@ -599,6 +652,7 @@ Page({
               }
               else {
                 try { 
+                  // console.log(res.data)
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
                   console.log(data)
                   if (data.getTypeName() == deviceType) {

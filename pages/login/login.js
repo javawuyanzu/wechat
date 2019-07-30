@@ -334,12 +334,7 @@ Page({
     }
   },
  
-  register: function (e) {
-    var that = this
-    wx.navigateTo({
-      url: "/pages/register/register?openid=" + that.data.openid,
-    })
-  },
+ 
   tolist: function () {
     wx.switchTab({
       url: '/pages/operation/operation'

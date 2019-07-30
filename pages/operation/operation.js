@@ -75,9 +75,40 @@ Page({
                   if (deviceNo.substr(0, 2) === '20') {
                     deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type: 2 });
                     that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                    wx.request({
+                      //获取openid接口   
+                      url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
+                      data: {
+                        openId: that.data.openid,
+                        deviceNo: deviceNo,
+                        deviceType: res.data.data.deviceType,
+                        mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5),
+                        type:2,
+                      },
+                      method: 'GET',
+                      success: function (res) {
+                        console.log(res)
+                      }
+                    })
                   } else {
                     deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, type: 1 });
+                    wx.request({
+                      //获取openid接口   
+                      url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
+                      data: {
+                        openId: that.data.openid,
+                        deviceNo: deviceNo,
+                        deviceType: res.data.data.deviceType,
+                        mqttName: "0",
+                        type: 1,
+                      },
+                      method: 'GET',
+                      success: function (res) {
+                        console.log(res)
+                      }
+                    })
                   }
+                  
                   wx.setStorage({
                     key: 'deviceList',
                     data: deviceList,
@@ -163,6 +194,7 @@ Page({
               },
               method: 'GET',
               success: function (res) {
+                console.log(res)
                 if (res.data.code == 1) {
                   that.tologin();
                 }
@@ -175,7 +207,7 @@ Page({
   },
   tologin: function () {
     wx.redirectTo({
-      url: '../login/login'
+      url: '../loginChoose/loginChoose'
     })
   },
 /**
@@ -209,7 +241,6 @@ Page({
               },
               method: 'GET',
               success: function (res) {
-                console.log(res)
                 if (res.data.code != 0) {
                   wx.showToast({
                     title: res.data.msg,
@@ -233,8 +264,37 @@ Page({
                 if (deviceNo.substr(0, 2) === '20') {
                   deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type:2 });
                   that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                  wx.request({
+                    //获取openid接口   
+                    url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
+                    data: {
+                      openId: that.data.openid,
+                      deviceNo: deviceNo,
+                      deviceType: res.data.data.deviceType,
+                      mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5),
+                      type: 2,
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                      console.log(res)
+                    }
+                  })
                 }else{
                   deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0,type:1 });
+                  wx.request({
+                    //获取openid接口   
+                    url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
+                    data: {
+                      openId: that.data.openid,
+                      deviceNo: deviceNo,
+                      deviceType: res.data.data.deviceType,
+                      mqttName: "0",
+                      type: 1,
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                    }
+                  })
                 }
                   wx.setStorage({
                     key: 'deviceList',

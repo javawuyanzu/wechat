@@ -9,7 +9,7 @@ Page({
   onShow: function () {
     var that = this
     wx.setNavigationBarTitle({
-      title: "设备出售"
+      title: "设备管理"
     })
   },
   scanCode: function (e) {

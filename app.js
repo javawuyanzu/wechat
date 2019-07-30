@@ -33,7 +33,6 @@ App({
             method: 'GET',
             success: function (res) {
               openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
-              console.log(openid + '---------------')
               var options = {
                 keepalive: 60,
                 clientId: openid,
@@ -89,6 +88,22 @@ App({
           that.globalData.lang = 'en-us'
           that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn')
         }
+      }
+    })
+    wx.login({
+      success: function (res) {
+        wx.request({
+          //获取openid接口  
+          url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+          data: {
+            js_code: res.code,
+          },
+          method: 'GET',
+          success: function (res) {
+            openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+            that.globalData.openid = openid
+          }
+        })
       }
     })
     wx.getStorageInfo({
