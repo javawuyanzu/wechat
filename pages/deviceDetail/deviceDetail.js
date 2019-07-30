@@ -144,22 +144,19 @@ Page({
         success: function (res) {
           wx.request({
             //获取openid接口  
-            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+            url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
             data: {
               js_code: res.code,
             },
             method: 'GET',
             success: function (res) {
               wx.request({
-                url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
+                url: 'http://127.0.0.1:8080/wechat/device/sendcmd',
                 method: "GET",
                 data: {
-                  command: str,
-                },
-                header: {
-                  'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-                  'DeviceSuffix': that.data.deviceNo,
-                  'UserId': res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
+                  command: "01100077000204000042c6059f",
+                  deviceSuffix: that.data.deviceNo,
+                  userId: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
                 },
                 success: function (res) {
                   if (res.statusCode) {
@@ -173,6 +170,37 @@ Page({
               })
             }
           })
+          // wx.request({
+          //   //获取openid接口  
+          //   url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+          //   data: {
+          //     js_code: res.code,
+          //   },
+          //   method: 'GET',
+          //   success: function (res) {
+          //     wx.request({
+          //       url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
+          //       method: "GET",
+          //       data: {
+          //         command: str,
+          //       },
+          //       header: {
+          //         'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          //         'DeviceSuffix': that.data.deviceNo,
+          //         'UserId': res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
+          //       },
+          //       success: function (res) {
+          //         if (res.statusCode) {
+          //           wx.showToast({
+          //             title: that.data.content.detail_zhixing,
+          //             icon: 'success',
+          //             duration: 2000
+          //           });
+          //         }
+          //       }
+          //     })
+          //   }
+          // })
         }
       })
     }
