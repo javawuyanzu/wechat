@@ -21,7 +21,7 @@ Page({
   formSubmit: function (e) {
     var that= this
     wx.request({
-      url: 'https://apis.sdcsoft.com.cn/wechat/device/modifydevice',
+      url: 'https://apis.sdcsoft.com.cn/wechat/device/modify',
       data: {
         deviceNo: that.data.deviceNo,
         status: that.data.status,
@@ -86,7 +86,7 @@ Page({
   onLoad: function (options) {
     var that=this
     wx.request({
-      url: 'https://apis.sdcsoft.com.cn/wechat/device/gettypelist',
+      url: 'https://apis.sdcsoft.com.cn/wechat/device/type/list',
       data: {
       },
       header: {

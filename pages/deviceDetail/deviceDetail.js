@@ -144,17 +144,17 @@ Page({
         success: function (res) {
           wx.request({
             //获取openid接口  
-            url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
             data: {
               js_code: res.code,
             },
             method: 'GET',
             success: function (res) {
               wx.request({
-                url: 'http://127.0.0.1:8080/wechat/device/sendcmd',
+                url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
                 method: "GET",
                 data: {
-                  command: "01100077000204000042c6059f",
+                  command: str,
                   deviceSuffix: that.data.deviceNo,
                   userId: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
                 },
@@ -270,7 +270,7 @@ Page({
             console.log()
             wx.request({
               //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/wechat/device/getdevicecontrolList',
+              url: 'https://apis.sdcsoft.com.cn/wechat/device/control/List',
               data: {
                 openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
               },

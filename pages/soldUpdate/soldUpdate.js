@@ -29,7 +29,7 @@ Page({
           success(res) {
             deviceList = res.data;
             wx.request({
-              url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
+              url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
               data: {
                 deviceNo: deviceNo,
               },

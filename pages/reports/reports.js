@@ -8,7 +8,16 @@ Page({
    */
   data: {
    list:[],
-  
+  },
+  startdebug: function () {
+    wx.setEnableDebug({
+      enableDebug: true
+    })
+  },
+  enddebug: function () {
+    wx.setEnableDebug({
+      enableDebug: false
+    })
   },
   /**
    * 生命周期函数--监听页面加载

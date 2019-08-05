@@ -37,19 +37,17 @@ Page({
     var that=this
     wx.getStorage({
       key: 'deviceList',
-      success(res) { 
+      success(res) {
         var httplist = res.data
         if (res.data.length == 0) {
-          // wx.showToast({
-          //   title: that.data.content.list_listnull,
-          //   icon: 'none',
-          //   duration: 2000
-          // })
+          wx.showLoading({
+            title: 'Loading',
+          })
           wx.login({
             success: function (res) {
               wx.request({
                 //获取openid接口  
-                url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+                url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
                 data: {
                   js_code: res.code,
                 },
@@ -58,22 +56,28 @@ Page({
                   var openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
                   wx.request({
                     //获取openid接口   
-                    url: 'http://127.0.0.1:8080/webapi/wechat/store/list',
+                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/list',
                     data: {
                       openId: openid,
                     },
                     method: 'GET',
                     success: function (res) {
+                      wx.hideLoading();
                       if (res.data.data.length==0){
                         return;
                       }else{
-                        httplist = res.data.data
-                        for (var i = 0; i < httplist.length; i++) {
-                          if (httplist[i].type == 2) {
-                            httplist.splice(i, 1);
+                        var templist = res.data.data
+                        for (var i = 0; i < templist.length; i++) {
+                          if (templist[i].mqttName!=null) {
+                            templist.splice(i, 1);
+                            continue
                           }
+                          httplist.push({ deviceNo: templist[i].deviceNo, deviceName: templist[i].deviceName, deviceType: templist[i].deviceType, imgStyle: templist[i].imgStyle});
                         }
+                        
                         that.getdata(httplist, 0);
+                        wx.setStorageSync('deviceList', httplist)
+                        wx.hideLoading();
                       }
                     }
                   })
@@ -83,7 +87,7 @@ Page({
           })
         }else{
           for (var i = 0; i < httplist.length; i++) {
-            if (httplist[i].type == 2) {
+            if (typeof (httplist[i].mqttName) != "undefined") {
               httplist.splice(i, 1);
             }
           }
@@ -185,17 +189,15 @@ Page({
           key: 'deviceList',
           data: deviceList,
         })
-        
         wx.request({
           //获取openid接口   
-          url: 'http://127.0.0.1:8080/webapi/wechat/store/delete',
+          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/remove',
           data: {
             openId: app.globalData.openid,
             deviceNo: that.data.deviceNo
           },
           method: 'GET',
           success: function (res) {
-            console.log(res)
           }
         })
         wx.showToast({
@@ -227,21 +229,39 @@ Page({
   renameconfirm: function (e) {
     var that = this
     var deviceList = []
-    
     wx.getStorage({
       key: 'deviceList',
       success(res) {
+        var imglist = that.data.imgList
+        for (var i = 0; i < imglist.length; i++) {
+          if (imglist[i].deviceNo === that.data.deviceNo) {
+            imglist[i].title=that.data.deviceTitle
+            break
+          }
+        }
+        that.setData({
+          imgList: imglist
+        })
         deviceList = res.data
         for (var i = 0; i < deviceList.length; i++) {
           if (deviceList[i].deviceNo === that.data.deviceNo) {
-            deviceList.push({
-              deviceNo: deviceList[i].deviceNo,
-              deviceName: that.data.deviceTitle,
-              deviceType: deviceList[i].deviceType,
-              imgstyle: deviceList[i].imgstyle
+            deviceList[i].deviceName=that.data.deviceTitle
+            wx.request({
+              //获取openid接口   
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/modify',
+              data: {
+                openId: app.globalData.openid,
+                deviceNo: that.data.deviceNo,
+                deviceType: deviceList[i].deviceType,
+                mqttName: deviceList[i].mqttName,
+                deviceName: that.data.deviceTitle,
+                imgStyle: deviceList[i].imgStyle
+              },
+              method: 'GET',
+              success: function (res) {
+              }
             })
-            deviceList.splice(i, 1);
-            break;
+            break
           }
         }
         wx.setStorage({
@@ -252,7 +272,7 @@ Page({
               ifrename: false,
               lock: false,
             })
-            that.onLoad();
+            //that.onLoad();
           }
         })
         wx.showToast({
@@ -267,7 +287,6 @@ Page({
         });
       }
     })
-
   },
   listyle: function (e) {
     var that = this
@@ -278,22 +297,23 @@ Page({
     wx.getStorage({
       key: 'deviceList',
       success(res) {
-        deviceList = res.data
-
-        wx.hideLoading()
-        for (var i = 0; i < deviceList.length; i++) {
-          if (deviceList[i].deviceNo === that.data.deviceNo) {
-            deviceList.push({
-              deviceNo: deviceList[i].deviceNo,
-              deviceName: deviceList[i].deviceName,
-              deviceType: deviceList[i].deviceType,
-              imgstyle: 1
-            });
-            deviceList.splice(i, 1);
-            break;
+        var imglist = that.data.imgList
+        for (var i = 0; i < imglist.length; i++) {
+          if (imglist[i].deviceNo === that.data.deviceNo) {
+            imglist[i].imgstyle = 1
+            imglist[i].src = imglist[i].src.substr(0, 67)+"1"+ '.gif'
+            var ilist = that.data.imgList
           }
         }
-
+        that.setData({
+          imgList: imglist
+        })
+        deviceList = res.data
+        for (var i = 0; i < deviceList.length; i++) {
+          if (deviceList[i].deviceNo === that.data.deviceNo) {
+            deviceList[i].imgstyle =1
+          }
+        }
         wx.setStorage({
           key: 'deviceList',
           data: deviceList,
@@ -315,26 +335,28 @@ Page({
   wostyle: function (e) {
     var that = this
     var deviceList = []
-    wx.showLoading({
-      title: that.data.content.list_refresh,
-    })
+    
     wx.getStorage({
       key: 'deviceList',
       success(res) {
-        deviceList = res.data
-        wx.hideLoading()
-        for (var i = 0; i < deviceList.length; i++) {
-          if (deviceList[i].deviceNo === that.data.deviceNo) {
-            deviceList.push({
-              deviceNo: deviceList[i].deviceNo,
-              deviceName: deviceList[i].deviceName,
-              deviceType: deviceList[i].deviceType,
-              imgstyle: 0
-            });
-            deviceList.splice(i, 1);
-            break;
+        var imglist = that.data.imgList
+        for (var i = 0; i < imglist.length; i++) {
+          if (imglist[i].deviceNo === that.data.deviceNo) {
+            imglist[i].imgstyle = 0
+            imglist[i].src = imglist[i].src.substr(0, 67) + "0" + '.gif'
           }
         }
+        that.setData({
+          imgList: imglist
+        })
+
+        deviceList = res.data
+        for (var i = 0; i < deviceList.length; i++) {
+          if (deviceList[i].deviceNo === that.data.deviceNo) {
+            deviceList[i].imgstyle = 0
+          }
+        }
+      
         wx.setStorage({
           key: 'deviceList',
           data: deviceList,
@@ -360,9 +382,61 @@ Page({
       lock: false,
     })
   },
-
+  updateDevice: function (e) {
+    var that = this;
+    wx.login({
+      success: function (res) {
+        wx.request({
+          //获取openid接口  
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+          data: {
+            js_code: res.code,
+          },
+          method: 'GET',
+          success: function (res) {
+            var openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+            wx.getStorage({
+              key: 'cachedVersion',
+              fail(res) {
+                wx.getStorage({
+                  key: 'deviceList',
+                  success(res) {
+                    console.log(res)
+                    var list = res.data
+                    for (var i = 0; i < list.length; i++) {
+                      list[i].openId = app.globalData.openid
+                    }
+                    if (list.length > 0) {
+                      wx.request({
+                        //获取openid接口   
+                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create/many',
+                        data: {
+                          storeList: JSON.stringify(list).replace(/imgstyle/g, "imgStyle"),
+                        },
+                        method: 'POST',
+                        header: {
+                          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                        },
+                        success: function (res) {
+                            wx.setStorageSync('deviceList', [])
+                            wx.setStorageSync('cachedVersion', 1.0)
+                            that.httptimer()
+                        }
+                      })
+                    }
+                  }
+                })
+              },
+            })
+          }
+        })
+      }
+    })
+  },
   onLoad: function (options) {
     var that = this;
+    that.updateDevice();
+   
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({
@@ -421,7 +495,7 @@ Page({
         var imglist = []
         var ifmqtt=false
         for (var i = 0; i < httplist.length; i++) {
-          if (httplist[i].type==2){
+          if (typeof (httplist[i].mqttName) != "undefined" || httplist[i].mqttName != null) {
             ifmqtt=true
           }
           imglist.push({ title: httplist[i].deviceNo, runstate: that.data.content.list_runstate, deviceNo: httplist[i].deviceNo, imgstyle: 0, errcount: 0, src: '', runday: '', type: '', lang: app.globalData.lang, jiarezu: 0 })
@@ -445,7 +519,7 @@ Page({
           success(res) {
             var mqttlist = res.data
             for (var i = 0; i < mqttlist.length; i++) {
-              if (mqttlist[i].type == 2) {
+              if (typeof (mqttlist[i].mqttName) != "undefined" || mqttlist[i].mqttName != null) {
                 that.subTopic(mqttlist[i].mqttName)
               }
             }
@@ -590,7 +664,7 @@ Page({
     var type = ''
     var lang = ''
     var deviceno = deviceNos[index].deviceNo
-    if (deviceNos[index].type==1) {
+    if (typeof (deviceNos[index].mqttName) == "undefined" || deviceNos[index].mqttName == null) {
       var title1 = ''
       var deviceType = deviceNos[index].deviceType
       var runstate1 = ''
@@ -601,7 +675,8 @@ Page({
       } else {
         title1 = deviceNos[index].deviceName
       }
-      var imgstyle1 = deviceNos[index].imgstyle
+      var imgstyle1 = deviceNos[index].imgStyle
+     
       wx.getStorage({
         key: 'deviceList',
         success(res) {
@@ -623,7 +698,6 @@ Page({
             },
             responseType: 'arraybuffer',
             success: function (res) {
-              console.log(res)
               if (res.data.byteLength == 0) {
                 var ilist = that.data.imgList
                 if (that.finddevice(ilist, deviceno)) {
@@ -654,8 +728,21 @@ Page({
                 try { 
                   // console.log(res.data)
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
-                  console.log(data)
-                  if (data.getTypeName() == deviceType) {
+                  if (data.getTypeName() != deviceType) {
+                    wx.request({
+                      //获取openid接口   
+                      url: 'https://apis.sdcsoft.com.cn/wechat/device/modify/type',
+                      data: {
+                        suffix: deviceno,
+                        deviceType: deviceType,
+                        subType: data.getTypeName(),
+                      },
+                      method: 'GET',
+                      success: function (res) {
+                        deviceType = data.getTypeName()
+                      }
+                    })
+                  }
                     var errorList = []
                     for (var index in data.getExceptionFields().map) {
                       errorList.push({
@@ -728,7 +815,7 @@ Page({
                         imgList: ilist
                       })
                     }
-                  }
+                  
                   
                 } catch (e) {
                   console.log(e)
@@ -866,6 +953,7 @@ Page({
             }
             errcount1 = errorList.length,
               src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
+          
           }
           var ilist = that.data.imgList
           if (that.finddevice(ilist, deviceNo)) {

@@ -73,42 +73,41 @@ Page({
                     }
                   }
                   if (deviceNo.substr(0, 2) === '20') {
-                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type: 2 });
+                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgStyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)});
                     that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
                     wx.request({
                       //获取openid接口   
-                      url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
-                      data: {
-                        openId: that.data.openid,
-                        deviceNo: deviceNo,
-                        deviceType: res.data.data.deviceType,
-                        mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5),
-                        type:2,
-                      },
-                      method: 'GET',
-                      success: function (res) {
-                        console.log(res)
-                      }
-                    })
-                  } else {
-                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, type: 1 });
-                    wx.request({
-                      //获取openid接口   
-                      url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
+                      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
                       data: {
                         openId: that.data.openid,
                         deviceNo: deviceNo,
                         deviceType: res.data.data.deviceType,
                         mqttName: "0",
-                        type: 1,
+                        deviceName: deviceNo,
+                        imgStyle: 0
                       },
-                      method: 'GET',
+                      method: 'POST',
                       success: function (res) {
-                        console.log(res)
+                      }
+                    })
+                  } else {
+                    deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgStyle: 0});
+                    wx.request({
+                      //获取openid接口   
+                      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
+                      data: {
+                        openId: that.data.openid,
+                        deviceNo: deviceNo,
+                        deviceType: res.data.data.deviceType,
+                        mqttName: "0",
+                        deviceName: deviceNo,
+                        imgStyle: 0
+                      },
+                      method: 'POST',
+                      success: function (res) {
                       }
                     })
                   }
-                  
                   wx.setStorage({
                     key: 'deviceList',
                     data: deviceList,
@@ -120,7 +119,6 @@ Page({
                       });
                     }
                   })
-
                   wx.switchTab({
                     url: '../deviceList/deviceList'
                   })
@@ -182,6 +180,7 @@ Page({
           },
           method: 'GET',
           success: function (res) {
+            console.log(res)
             var openid = res.data.openid;//获取到的openid  
             that.setData({
               openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
@@ -262,36 +261,35 @@ Page({
                   }
                 }
                 if (deviceNo.substr(0, 2) === '20') {
-                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5), type:2 });
+                  deviceList.push({ deviceNo: deviceNo, deviceName: deviceNo, deviceType: res.data.data.deviceType, imgStyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
                   that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
                   wx.request({
                     //获取openid接口   
-                    url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
+                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
                     data: {
                       openId: that.data.openid,
                       deviceNo: deviceNo,
                       deviceType: res.data.data.deviceType,
-                      mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5),
-                      type: 2,
+                      deviceName: deviceNo,
+                      imgStyle: 0
                     },
-                    method: 'GET',
+                    method: 'POST',
                     success: function (res) {
-                      console.log(res)
                     }
                   })
                 }else{
-                  deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: res.data.data.deviceType, imgstyle: 0,type:1 });
+                  deviceList.push({ deviceNo: deviceNo, deviceName: deviceNo, deviceType: res.data.data.deviceType, imgStyle: 0 });
                   wx.request({
                     //获取openid接口   
-                    url: 'http://127.0.0.1:8080/webapi/wechat/store/add',
+                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
                     data: {
                       openId: that.data.openid,
                       deviceNo: deviceNo,
                       deviceType: res.data.data.deviceType,
-                      mqttName: "0",
-                      type: 1,
+                      deviceName: deviceNo,
+                      imgStyle:0
                     },
-                    method: 'GET',
+                    method: 'POST',
                     success: function (res) {
                     }
                   })

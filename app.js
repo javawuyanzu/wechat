@@ -26,7 +26,7 @@ App({
         success: function (res) {
           wx.request({
             //获取openid接口  
-            url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
             data: {
               js_code: res.code,
             },
@@ -78,6 +78,15 @@ App({
   },
   onLaunch: function () {
     var that = this
+    const storage = wx.getStorageInfoSync()
+    if (storage.keys.length == 0) {
+      wx.setStorageSync('deviceList', [])
+      wx.setStorageSync('errorList', [])
+      wx.setStorageSync('time', 30)
+      wx.setStorageSync('warningType', 1)
+      wx.setStorageSync('wxEnterpriseName', '')
+      wx.setStorageSync('cachedVersion', 1.0)
+    }
     wx.getSystemInfo({
       success: function (res) {
         if (res.language === 'zh') {
@@ -86,7 +95,7 @@ App({
         }
         if (res.language === 'en') {
           that.globalData.lang = 'en-us'
-          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn')
+          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('en-us')
         }
       }
     })
@@ -94,7 +103,7 @@ App({
       success: function (res) {
         wx.request({
           //获取openid接口  
-          url: 'https://app.weixin.sdcsoft.cn/device/getopenid',
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
           data: {
             js_code: res.code,
           },
@@ -102,38 +111,14 @@ App({
           success: function (res) {
             openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             that.globalData.openid = openid
+            
           }
         })
       }
     })
-    wx.getStorageInfo({
-      success(res) {
-        if (res.keys.length == 0) {
-          wx.setStorage({
-            key: 'deviceList',
-            data: []
-          })
-          wx.setStorage({
-            key: 'errorList',
-            data: []
-          })
-          wx.setStorage({
-            key: 'time',
-            data: 30
-          })
-          wx.setStorage({
-            key: 'warningType',
-            data: 1
-          })
-          wx.setStorage({
-            key: 'wxEnterpriseName',
-            data: ""
-          })
-        }
-      }
-    })
+    
   },
- 
+  
   globalData: {
     deviceAdapter: deviceAdapter,
     lang: 'zh-cn',
