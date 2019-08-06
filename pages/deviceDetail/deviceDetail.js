@@ -464,13 +464,14 @@ Page({
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
           var clist = data.getCommands().map
+          console.log(clist)
           if (JSON.stringify(clist) != '{}') {
             that.setData({
               controlList: clist,
               control: true
             })
           }
-          var myDate = new Date();
+          var myDate = new Date();0
           for (var index in data.getExceptionFields().map) {
             errorList.push({
               deviceNo: deviceNo,

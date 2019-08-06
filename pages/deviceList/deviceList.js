@@ -62,6 +62,7 @@ Page({
                     },
                     method: 'GET',
                     success: function (res) {
+                      console.log(res)
                       wx.hideLoading();
                       if (res.data.data.length==0){
                         return;
@@ -74,9 +75,9 @@ Page({
                           }
                           httplist.push({ deviceNo: templist[i].deviceNo, deviceName: templist[i].deviceName, deviceType: templist[i].deviceType, imgStyle: templist[i].imgStyle});
                         }
-                        
                         that.getdata(httplist, 0);
                         wx.setStorageSync('deviceList', httplist)
+                        wx.setStorageSync('cachedVersion', 1.0)
                         wx.hideLoading();
                       }
                     }
@@ -96,8 +97,6 @@ Page({
       }
     })
     that.errorLing();
-  },
-  onHide: function () {
   },
   longTap: function (e) {
     var that = this;
@@ -257,8 +256,9 @@ Page({
                 deviceName: that.data.deviceTitle,
                 imgStyle: deviceList[i].imgStyle
               },
-              method: 'GET',
+              method: 'POST',
               success: function (res) {
+                console.log(res)
               }
             })
             break
@@ -404,7 +404,8 @@ Page({
                     console.log(res)
                     var list = res.data
                     for (var i = 0; i < list.length; i++) {
-                      list[i].openId = app.globalData.openid
+                      list[i].openId =openid
+                      list[i].deviceName = null
                     }
                     if (list.length > 0) {
                       wx.request({

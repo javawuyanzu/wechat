@@ -60,6 +60,7 @@ var English = {
   operation_addsuccess: "Add  success",
   operation_pleasedeviceno: "Please enter the device number",
   operation_devicenoexist: "The device does not exist",
+  operation_connfail: "The current network signal is abnormal, please add again",
   operation_devicesucces: "Add  success",
   login_title: "User Login",
   login_userName: "Username",

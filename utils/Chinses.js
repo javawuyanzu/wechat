@@ -57,6 +57,7 @@ var Chinese = {
   operation_add: "添加",
   operation_scanadd: "扫一扫添加",
   operation_deviceexist: "该设备已存在",
+  operation_connfail: "当前网络信号异常，请重新添加",
   operation_addsuccess: "添加成功",
   operation_pleasedeviceno: "请输入设备编号",
   operation_devicenoexist: "该设备不存在",
