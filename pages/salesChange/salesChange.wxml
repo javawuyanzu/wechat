@@ -9,7 +9,7 @@
             设备类别：{{prefixarray[prefix]}}
           </view>
         </picker>
-         <view class="section__title"></view>
+        <view class="section__title"></view>
         <picker bindchange="bindPickerChange_deviceType" value="{{deviceType}}" range="{{typearray}}">
           <view class="picker">
             设备类型：{{typearray[deviceType]}}
@@ -21,18 +21,29 @@
             销售状态：{{statesarray[status]}}
           </view>
         </picker>
-         <view class="section__title"></view>
+        <view class="section__title"></view>
         <picker bindchange="bindPickerChange_power" value="{{power}}" range="{{powerarray}}">
           <view class="picker">
             燃料：{{powerarray[power]}}
           </view>
         </picker>
-         <view class="section__title"></view>
+        <view class="section__title"></view>
         <picker bindchange="bindPickerChange_media" value="{{media}}" range="{{mediaarray}}">
           <view class="picker">
             介质：{{mediaarray[media]}}
           </view>
         </picker>
+        <view class="section__title"></view>
+        <picker bindchange="bindPickerChange_comm" value="{{comm}}" range="{{commarray}}">
+          <view class="picker">
+            通讯方式：{{commarray[comm]}}
+          </view>
+        </picker>
+        <view class="section__title"></view>
+        <view class="section__title" wx:if="{{comm ==0}}">
+        Sim卡号：<input bindinput="bindsim"value="{{sim}}" style='padding:15rpx 25rpx;margin-top: 20rpx;border: 1px solid #EEE;' />
+        </view>
+       
       </view>
       <view class="btn-area">
         <view class="button-wrapper">

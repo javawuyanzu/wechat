@@ -109,24 +109,7 @@ Page({
   },
   onLoad: function (options) {
     var that = this
-    wx.login({
-      success: function (res) {
-        wx.request({
-          //获取openid接口 
-          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-          data: {
-            js_code: res.code,
-          },
-          method: 'GET',
-          success: function (res) {
-            var openid = res.data.openid;//获取到的openid 
-            that.setData({
-              openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
-            })
-          }
-        })
-      }
-    })
+  
   },
   /**
     * 获取验证码
@@ -301,7 +284,8 @@ Page({
         method: "GET",
         data: {
           mobileNumber: that.data.phone,
-          openId: that.data.openid,
+          openId: app.globalData.openid,
+          unionId: app.globalData.unionId
         },
         header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
         success: function (res) {

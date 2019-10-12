@@ -29,7 +29,7 @@ var CTL_RT_T2_RYZQ_6J = /** @class */ (function (_super) {
         var b1 = map.getItem('oc_zhongshuiweidianji_6dianjiteyou_').getValue();
         var c = map.getItem('oc_gaoshuiweidianji').getValue();
         var d = map.getItem('oc_gaoshuiweibaojingdianji').getValue();
-        var x = a | a1 | b | b1 | c | d;
+        var x = a + a1 + b + b1 + c + d;
         f.setValue(x);
         list.push(f);
     };

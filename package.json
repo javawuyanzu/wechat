@@ -11,6 +11,7 @@
   "dependencies": {
     "@sdcsoft/comms": "^1.0.1",
     "@sdcsoft/gfrm": "^1.0.0",
+    "@tomcat008/devices-lib": "^2.0.2",
     "events": "^3.0.0",
     "xtend": "^4.0.1"
   }

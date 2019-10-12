@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ByteField_1 = require("./ByteField");
 var Collections_1 = require("../entities/Collections");
-//namespace DevicesLib.meta {
 var CountShowField = /** @class */ (function (_super) {
     __extends(CountShowField, _super);
     //protected valueMap: NumberHashMap<string>|null=null
@@ -45,8 +44,12 @@ var CountShowField = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             bytes[_i] = arguments[_i];
         }
-        //this.value = bytes[0]
         return true;
+    };
+    CountShowField.prototype.getValueString = function () {
+        if (null != this.valueMap)
+            return this.valueMap.getItem(this.value);
+        return _super.prototype.getValueString.call(this);
     };
     CountShowField.prototype.setDeviceFieldForUIKey = function (fieldForUI) {
         fieldForUI.setKey(this.groupKey);
@@ -54,4 +57,3 @@ var CountShowField = /** @class */ (function (_super) {
     return CountShowField;
 }(ByteField_1.ByteField));
 exports.CountShowField = CountShowField;
-//}

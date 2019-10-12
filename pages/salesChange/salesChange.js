@@ -17,9 +17,29 @@ Page({
     power: 0,
     mediaarray: [],
     media: 0,
+    sim:"",
+    commarray: ["DTU","Wifi"],
+    comm:0,
+    ctlTypeList:[],
+    plcTypeList:[],
+  },
+  bindsim: function (e) {
+    this.setData({
+      sim: e.detail.value
+    })
   },
   formSubmit: function (e) {
     var that= this
+    if (that.data.comm==0){
+      if (typeof (that.data.sim) == "undefined" || that.data.sim == '898607B61518900') {
+        wx.showToast({
+          title: "请补全Sim卡号",
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+    }
     wx.request({
       url: 'https://apis.sdcsoft.com.cn/wechat/device/modify',
       data: {
@@ -29,6 +49,7 @@ Page({
         deviceType: that.data.type,
         power: that.data.power,
         media: that.data.media,
+        iMEI: that.data.sim,
       },
       header: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -49,11 +70,28 @@ Page({
       }
     })
   },
+  bindPickerChange_comm: function (e) {
+    var that = this
+    console.log(e.detail.value)
+    that.setData({
+      comm: e.detail.value,
+    })
+  },
   bindPickerChange_prefix: function (e) {
     var that = this
     that.setData({
       prefix: e.detail.value,
     })
+    if (e.detail.value==1) {
+      that.setData({
+        typearray: that.data.ctlTypeList,
+      })
+    }
+    if (e.detail.value == 2) {
+      that.setData({
+        typearray: that.data.plcTypeList,
+      })
+    }
   },
   bindPickerChange_status: function (e) {
     var that = this
@@ -98,9 +136,7 @@ Page({
         for (var i in res.data.data){
           list.push(res.data.data[i].deviceType)
         }
-        that.setData({
-          typearray: list
-        })
+       
         wx.request({
           url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
           data: {
@@ -111,11 +147,42 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-            console.log(res)
+            var simtemp=""
+            if (res.data.data.iMEI == null || res.data.data.iMEI =='null'){
+              simtemp ="898607B61518900"
+            }else{res.data.data.iMEI
+              simtemp = res.data.data.iMEI
+            }
+
+            var plcTypeList=[]
+            var ctlTypeList = []
+            for (var i in list) {
+              if (list[i].substr(0, 3) == 'PLC') {
+                plcTypeList.push(list[i])
+              }
+              if (list[i].substr(0, 3) == 'CTL') {
+                ctlTypeList.push(list[i])
+              }
+            }
+            var deviceType=0
+            if (res.data.data.devicePrefix==1){
+              deviceType= ctlTypeList.indexOf(res.data.data.deviceType)
+              that.setData({
+                typearray: ctlTypeList
+              })
+            }
+            if (res.data.data.devicePrefix == 2) {
+              deviceType = plcTypeList.indexOf(res.data.data.deviceType)
+              that.setData({
+                typearray: plcTypeList
+              })
+            }
             that.setData({
+              plcTypeList: plcTypeList,
+              ctlTypeList: ctlTypeList,
               deviceNo: options.deviceNo,
               type: res.data.data.deviceType,
-              deviceType: that.data.typearray.indexOf(res.data.data.deviceType),
+              deviceType: deviceType,
               prefix: res.data.data.devicePrefix,
               status: res.data.data.status,
               power: res.data.data.power,
@@ -124,6 +191,7 @@ Page({
               prefixarray: ["","控制器", "PLC"],
               powerarray: ["油气", "电", "煤", "生物质"],
               mediaarray: ["热水", "蒸汽", "导热油", "热风", "真空"],
+              sim: simtemp
             })
           }
         })

@@ -18,11 +18,17 @@ Page({
     devices: map,
     mqttif: false,
   },
+  onHide: function () {
+    var that=this
+    that.setData({
+      timerStates:false
+    })
+  },
   timer: function () {
     var that = this
     wx.getStorage({
       key: 'time',
-      success(res) {
+      success(res) { 
         that.setData({
           timer: setInterval(function () {
             if (that.data.timerStates) {
@@ -52,8 +58,11 @@ Page({
                   js_code: res.code,
                 },
                 method: 'GET',
+                header: {
+                  'content-type': 'application/x-www-form-urlencoded'
+                },
                 success: function (res) {
-                  var openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+                  var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
                   wx.request({
                     //获取openid接口   
                     url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/list',
@@ -126,6 +135,7 @@ Page({
     var control = e.currentTarget.dataset.control
     var title = e.currentTarget.dataset.title
     var type = e.currentTarget.dataset.type
+    var jiarezu = e.currentTarget.dataset.jiarezu
     var device = map.get(deviceNo)
     //var device = this.data.devices.get(deviceNo)
     app.globalData.device = device
@@ -134,7 +144,7 @@ Page({
       return;
     } else {
       wx.navigateTo({
-        url: "/pages/deviceDetail/deviceDetail?deviceNo=" + deviceNo + "&imgstyle=" + imgstyle + "&control=" + control + "&title=" + title + "&type=" + type,
+        url: "/pages/deviceDetail/deviceDetail?deviceNo=" + deviceNo + "&imgstyle=" + imgstyle + "&control=" + control + "&title=" + title + "&type=" + type + "&jiarezu=" + jiarezu,
       })
     }
   },
@@ -168,7 +178,10 @@ Page({
         deviceList = res.data
         for (var i = 0; i < deviceList.length; i++) {
           if (deviceList[i].deviceNo === that.data.deviceNo) {
-            // that.unSubTopic(deviceList[i].mqttName)
+            if (deviceList[i].deviceNo.substr(0, 2) === '20') {
+              that.unSubTopic(deviceList[i].mqttName)
+            }
+            
             deviceList.splice(i, 1);
             break;
           }
@@ -183,7 +196,8 @@ Page({
           imgList: that.data.imgList,
           lock: false,
         });
-
+        
+      
         wx.setStorage({
           key: 'deviceList',
           data: deviceList,
@@ -207,7 +221,6 @@ Page({
             that.setData({
               ifdelete: false,
             })
-
           }
         });
       }
@@ -394,7 +407,7 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-            var openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+            var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             wx.getStorage({
               key: 'cachedVersion',
               fail(res) {
@@ -434,10 +447,33 @@ Page({
       }
     })
   },
+ 
   onLoad: function (options) {
     var that = this;
-    that.updateDevice();
+    // getApp().conmqtt().then(function () {
+    //   //that.subTopic("ABC/01")
+    //   app.globalData.client.publish("ABC/01", "123", function (err) {
+    //     //console.log(err)
+    //     if (!err) {
+    //       wx.showToast({
+    //         title: '发布成功',
+    //         icon: 'success',
+    //         duration: 1000,
+    //         mask: true
+    //       })
+    //     }
+    //     else {
+    //       wx.showToast({
+    //         title: '发布失败',
+    //         icon: 'error',
+    //         duration: 1000,
+    //         mask: true
+    //       })
+    //     }
+    //   })
+    // })
    
+    that.updateDevice();
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({
@@ -494,41 +530,38 @@ Page({
       success(res) {
         var httplist = res.data
         var imglist = []
-        var ifmqtt=false
         for (var i = 0; i < httplist.length; i++) {
-          if (typeof (httplist[i].mqttName) != "undefined" || httplist[i].mqttName != null) {
-            ifmqtt=true
+          if (typeof (httplist[i].mqttName) != "undefined") {
+            getApp().conmqtt().then(function () {
+              wx.getStorage({
+                key: 'deviceList',
+                success(res) {
+                  var mqttlist = res.data
+                  for (var i = 0; i < mqttlist.length; i++) {
+                  
+                    if (typeof (mqttlist[i].mqttName) != "undefined") {
+                      that.subTopic(mqttlist[i].mqttName)
+                    }
+                  }
+                }
+              })
+            })
           }
-          imglist.push({ title: httplist[i].deviceNo, runstate: that.data.content.list_runstate, deviceNo: httplist[i].deviceNo, imgstyle: 0, errcount: 0, src: '', runday: '', type: '', lang: app.globalData.lang, jiarezu: 0 })
         }
-        that.setData({
-          imgList: imglist,
-          mqttif: ifmqtt
-        })
       }
     })
     that.timer(); 
-    //that.httptimer()
     app.globalData.callBack[0] = function (t, m) {
       console.log('列表页收到数据：' + t + ':=' + m);
-      that.getmqttdata(t, m)
-    }
-    if(that.data.mqttif){
-      getApp().conmqtt().then(function () {
-        wx.getStorage({
-          key: 'deviceList',
-          success(res) {
-            var mqttlist = res.data
-            for (var i = 0; i < mqttlist.length; i++) {
-              if (typeof (mqttlist[i].mqttName) != "undefined" || mqttlist[i].mqttName != null) {
-                that.subTopic(mqttlist[i].mqttName)
-              }
-            }
-          }
-        })
-      })
+        that.getmqttdata(t, m)
     }
   },
+  tologin: function () {
+    wx.redirectTo({
+      url: '../loginChoose/loginChoose'
+    })
+  },
+
   subTopic: function (topic) {
     var client = app.globalData.client;
     if (client.connected != null & client.connected) {
@@ -637,11 +670,9 @@ Page({
   
   }, 
   getDeviceFromBytes(deviceNo,deviceType,data){
-    
-    //console.log(app.globalData.deviceAdapter)
     var that = this;
-
-    let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
+      let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
+      //console.log(d)
     map.set(deviceNo,d)
     return d
   },
@@ -726,9 +757,11 @@ Page({
                 }
               }
               else {
-                try { 
-                  // console.log(res.data)
+                try {
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
+                  
+                  //console.log(data)
+                  //data.setModbusNo 设置Modbus站号 默认1 1-255
                   if (data.getTypeName() != deviceType) {
                     wx.request({
                       //获取openid接口   
@@ -759,21 +792,21 @@ Page({
                     var jiarezu1 = ''
                     var mock11 = ''
                     var mock22 = ''
+                  for (var index in data.getDeviceFocusFields()) {
+                    if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
+                      jiarezu1 = data.getDeviceFocusFields()[index].value
+                    }
+                    if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
+                      day = data.getDeviceFocusFields()[index].valueString
+                    }
+                    if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
+                      hour = data.getDeviceFocusFields()[index].valueString
+                    }
+                  }
                     for (var index in data.getBaseInfoFields().map) {
                       if (data.getBaseInfoFields().map[index].name === "o_system_status") {
                         runstate1 = data.getBaseInfoFields().map[index].valueString
-                      }
-                    }
-
-                    for (var index in data.getDeviceFocusFields()) {
-                      if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
-                        jiarezu1 = data.getDeviceFocusFields()[index].valueString
-                      }
-                      if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
-                        day = data.getDeviceFocusFields()[index].valueString
-                      }
-                      if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
-                        hour = data.getDeviceFocusFields()[index].valueString
+                        //console.log(data.getBaseInfoFields().map[index].valueString)
                       }
                     }
                     for (var index in data.getMockFields().map) {
@@ -784,7 +817,7 @@ Page({
                       if (mock22 === "") {
                         mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
                         break;
-                      }
+                      } 
                     }
                     errcount1 = errorList.length,
                       src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
@@ -882,7 +915,6 @@ Page({
         for (var i = 0; i < deviceList.length; i++) {
           if (deviceList[i].mqttName === deviceNo) {
             deviceType = deviceList[i].deviceType
-            imgstyle1 = deviceList[i].imgstyle
             deviceNo = deviceList[i].deviceNo
             if (deviceList[i].deviceName === '') {
               title1 = deviceList[i].deviceNo
@@ -894,8 +926,8 @@ Page({
         }
         try{
           var databyte = new Uint8Array(byte)
-          let data = that.getDeviceFromBytes(deviceNo, deviceType, databyte)
-          console.log(data);
+          let data = that.getDeviceFromBytes(deviceNo, deviceType, databyte);
+          
           // data.getMockFields().each((key, value) => {
           //   console.log('title:=' + value.getTitle() + ' value:=' + value.getValueString());
           // });
@@ -907,6 +939,14 @@ Page({
               errcount1 = 0,
               src1 = '',
               mock1 = ''
+            if (byte.length>5){
+                wx.showToast({
+                  title: deviceNo + '号设备，数据异常',
+                  icon: 'none',
+                  duration: 2000
+                })
+              }
+            
           }
           else {
             var errorList = []
@@ -929,10 +969,10 @@ Page({
                 runstate1 = data.getBaseInfoFields().map[index].valueString
               }
             }
-
+            
             for (var index in data.getDeviceFocusFields()) {
               if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
-                jiarezu1 = data.getDeviceFocusFields()[index].valueString
+                jiarezu1 = data.getDeviceFocusFields()[index].value
               }
               if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
                 day = data.getDeviceFocusFields()[index].valueString

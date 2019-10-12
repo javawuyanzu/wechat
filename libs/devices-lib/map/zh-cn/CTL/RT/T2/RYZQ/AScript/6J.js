@@ -17,12 +17,13 @@ var meta_1 = require("../../../../../../../meta/RT/meta");
 var _4J_1 = require("./4J");
 var CountShowField_1 = require("../../../../../../../meta/CountShowField");
 var comms_1 = require("@sdcsoft/comms");
+var _6J_1 = require("../../../../../../../devices/CTL/RT/T2/RYZQ/AScript/6J");
 var Map_CTL_RT_T2_RYZQ_6J = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_T2_RYZQ_6J, _super);
     //4电极压力变送器内置比调
     function Map_CTL_RT_T2_RYZQ_6J() {
         var _this = _super.call(this) || this;
-        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, Map_CTL_RT_T2_RYZQ_6J.KEY_POINT_SHUI_WEI_STATUS, "水位", '', false, Map_CTL_RT_T2_RYZQ_6J.ShuiWeiStatus));
+        _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, _6J_1.CTL_RT_T2_RYZQ_6J.KEY_POINT_SHUI_WEI_STATUS, "水位", '', false, Map_CTL_RT_T2_RYZQ_6J.ShuiWeiStatus));
         _this.addPoint(new meta_1.OpenCloseField("oc_dishuiweibaojingdianji_6dianjiteyou_", 5, 2, "低水位报警电极", 1, Map_CTL_RT_T2_RYZQ_6J.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_zhongshuiweidianji_6dianjiteyou_", 5, 2, "中水位电极", 3, Map_CTL_RT_T2_RYZQ_6J.coms_open_close));
         return _this;

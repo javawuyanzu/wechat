@@ -32,6 +32,11 @@ var PLC = /** @class */ (function (_super) {
                     this.addField(field);
                 }
                 break;
+            case 1:
+                if (field.haveValue(bytes[field.getStartIndex()])) {
+                    this.addField(field);
+                }
+                break;
             case 4:
                 if (field.haveValue(bytes[field.getStartIndex()], bytes[field.getStartIndex() + 1], bytes[field.getStartIndex() + 2], bytes[field.getStartIndex() + 3])) {
                     this.addField(field);

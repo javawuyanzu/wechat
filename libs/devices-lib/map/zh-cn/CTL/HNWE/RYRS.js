@@ -38,10 +38,7 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.OpenCloseField('oc_fa1', 4, 1, '阀1', 1, Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.OpenCloseField('oc_fa2', 4, 1, '阀2', 2, Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.OpenCloseField('oc_APS', 4, 1, 'APS', 3, Map_CTL_HNWR_485.coms_open_close));
-            _this.addPoint(new meta_1.OpenCloseField('oc_fengji', 4, 1, '风机', 4, Map_CTL_HNWR_485.coms_open_close));
-            _this.addPoint(new meta_1.OpenCloseField('oc_shuibeng', 4, 1, '水泵', 5, Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.OpenCloseField('oc_suoding', 5, 1, '错误标志', 1, Map_CTL_HNWR_485.coms_biaozhi));
-            //
             _this.addPoint(new meta_1.ExceptionField('ex_OEMcuowuhao', 6, 1, '报警', Map_CTL_HNWR_485.coms_ExceptionField));
             //
             _this.addPoint(new meta_1.DemandField('mo_jiarexuqiu', 19, 1, '加热需求', '', Map_CTL_HNWR_485.coms_xuqiu));
@@ -49,7 +46,6 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.MockField('mo_CHgongshuiwendu', 29, 2, 'CH供水温度', '℃', 10));
             _this.addPoint(new meta_1.MockField('mo_CHhuishuiwendu', 31, 2, 'CH回水温度', '℃'));
             _this.addPoint(new meta_1.MockField('de_yanwen', 35, 2, '烟温', '℃'));
-            _this.addPoint(new meta_1.DeviceField('de_yanwenchuanganqi', 35, 2, '烟温传感器', Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.MockField('mo_OTCwendu', 37, 2, 'OTC温度', '℃'));
             _this.addPoint(new meta_1.MockField('mo_huoyandianliu', 41, 2, '火焰电流', 'uA'));
             _this.addPoint(new meta_1.MockField('mo_diaojieshuiping', 43, 2, '调节水平'));
@@ -61,6 +57,9 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.OpenCloseField('oc_huoyan', 12, 1, '火焰', 4, Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.OpenCloseField('oc_CHbeng', 12, 1, 'CH泵', 5, Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.OpenCloseField('oc_jilianbeng', 12, 1, '级联泵', 7, Map_CTL_HNWR_485.coms_open_close));
+            // this.addPoint(new ByteDeviceField('oc_yanwenchuanganqi', 35, 2, '烟温传感器', Map_CTL_HNWR_485.coms_open_close))
+            _this.addPoint(new meta_1.DeviceField('oc_fengji', 4, 1, '风机', 4, Map_CTL_HNWR_485.coms_open_close));
+            _this.addPoint(new meta_1.DeviceField('oc_shuibeng', 4, 1, '水泵', 5, Map_CTL_HNWR_485.coms_open_close));
             return _this;
         }
         return Map_CTL_HNWR_485;

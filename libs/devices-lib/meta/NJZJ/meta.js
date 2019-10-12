@@ -17,6 +17,7 @@ var BaseInfoField_1 = require("../BaseInfoField");
 var DeviceField_1 = require("../DeviceField");
 var Collections_1 = require("../../entities/Collections");
 var comms_1 = require("@sdcsoft/comms");
+var Command_1 = require("../../command/Command");
 var BaseInfoField = /** @class */ (function (_super) {
     __extends(BaseInfoField, _super);
     function BaseInfoField(name, startIndex, bytesLength, title, unit, valueMap) {
@@ -36,8 +37,7 @@ var BaseInfoField = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             bytes[_i] = arguments[_i];
         }
-        this.value = bytes[1] & 0xFF;
-        return 0xFF != this.value;
+        return false;
     };
     BaseInfoField.prototype.getValueString = function () {
         if (this.valueMap)
@@ -59,6 +59,8 @@ var DeviceField = /** @class */ (function (_super) {
         _this.valueMap = new Collections_1.NumberHashMap(valueMap);
         return _this;
     }
+    DeviceField.prototype.chanageValue = function (bytes) {
+    };
     DeviceField.prototype.haveValue = function () {
         var bytes = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -86,15 +88,25 @@ var DeviceField = /** @class */ (function (_super) {
             }
             this.sb += '/';
             v = (bytes[0] & 0xFF) | 0xF0;
+            // if (0x0F == (v & 0x0F)) {
+            //     this.sb += this.valueMap.getItem(0x0F)
+            //     this.value = (bytes[1] | 0x80) & 0xFF//最高位补1，表示设备为运行状态
+            // } else {
+            //     this.sb += this.valueMap.getItem(0xF0)
+            //     this.value = bytes[1] & 0xFF
+            // }
             if (0x0F == (v & 0x0F)) {
                 this.sb += this.valueMap.getItem(0x0F);
-                this.value = (bytes[1] | 0x80) & 0xFF; //最高位补1，表示设备为运行状态
+                //console.log("设备信息："+this.title+":"+this.sb)
+                this.value = 1; //bytes[1]
             }
             else {
                 this.sb += this.valueMap.getItem(0xF0);
-                this.value = bytes[1] & 0xFF;
+                this.value = 0; //bytes[1]
+                //console.log("设备信息："+this.title+":"+this.sb)
             }
         }
+        this.chanageValue(bytes);
         return true;
     };
     DeviceField.prototype.getValueString = function () {
@@ -103,6 +115,47 @@ var DeviceField = /** @class */ (function (_super) {
     return DeviceField;
 }(DeviceField_1.DeviceField));
 exports.DeviceField = DeviceField;
+var RanShaoQiField = /** @class */ (function (_super) {
+    __extends(RanShaoQiField, _super);
+    function RanShaoQiField() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RanShaoQiField.prototype.haveValue = function () {
+        var bytes = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            bytes[_i] = arguments[_i];
+        }
+        this.value = bytes[1] & 0xFF | (bytes[0] & 0xFF) << 8;
+        if (0x7FFF != this.value) {
+            if ((bytes[0] & 0x0F) == 0) {
+                this.value = 0;
+            }
+            else {
+                this.value = bytes[1] > 50 ? 2 : 1;
+            }
+            return true;
+        }
+        return false;
+    };
+    RanShaoQiField.prototype.getValueString = function () {
+        if (this.valueMap)
+            return this.valueMap.getItem(this.value);
+        return _super.prototype.getValueString.call(this);
+    };
+    return RanShaoQiField;
+}(DeviceField));
+exports.RanShaoQiField = RanShaoQiField;
+var JieReZuField = /** @class */ (function (_super) {
+    __extends(JieReZuField, _super);
+    function JieReZuField() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    JieReZuField.prototype.chanageValue = function (bytes) {
+        this.value = bytes[1];
+    };
+    return JieReZuField;
+}(DeviceField));
+exports.JieReZuField = JieReZuField;
 var ExceptionField_1 = require("../ExceptionField");
 var ExceptionField = /** @class */ (function (_super) {
     __extends(ExceptionField, _super);
@@ -121,8 +174,7 @@ var ExceptionField = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             bytes[_i] = arguments[_i];
         }
-        this.value = bytes[1];
-        return this.value == 0xff ? false : (this.value > 0);
+        return false;
     };
     return ExceptionField;
 }(ExceptionField_1.ExceptionField));
@@ -163,47 +215,6 @@ var MockField = /** @class */ (function (_super) {
     return MockField;
 }(MockField_1.MockField));
 exports.MockField = MockField;
-var RanShaoQiField = /** @class */ (function (_super) {
-    __extends(RanShaoQiField, _super);
-    function RanShaoQiField() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    RanShaoQiField.prototype.haveValue = function () {
-        var bytes = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            bytes[_i] = arguments[_i];
-        }
-        this.value = bytes[1] & 0xFF | (bytes[0] & 0xFF) << 8;
-        if (0x7FFF != this.value) {
-            this.value = bytes[1] & 0xFF;
-            return true;
-        }
-        return false;
-    };
-    RanShaoQiField.prototype.getValueString = function () {
-        if (this.valueMap)
-            return this.valueMap.getItem(this.value);
-        return _super.prototype.getValueString.call(this);
-    };
-    return RanShaoQiField;
-}(DeviceField));
-exports.RanShaoQiField = RanShaoQiField;
-var RunDaysField = /** @class */ (function (_super) {
-    __extends(RunDaysField, _super);
-    function RunDaysField(name, startIndex, bytesLength, title, unit) {
-        return _super.call(this, name, startIndex, bytesLength, title, unit) || this;
-    }
-    RunDaysField.prototype.haveValue = function () {
-        var bytes = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            bytes[_i] = arguments[_i];
-        }
-        this.value = bytes[1] | (bytes[0] << 8);
-        return true;
-    };
-    return RunDaysField;
-}(BaseInfoField));
-exports.RunDaysField = RunDaysField;
 var SettingField = /** @class */ (function (_super) {
     __extends(SettingField, _super);
     function SettingField(name, startIndex, bytesLength, title, unit, baseNumber, cmdGroupKey, address, minValue, maxValue) {
@@ -232,16 +243,27 @@ var SettingField = /** @class */ (function (_super) {
     return SettingField;
 }(MockField));
 exports.SettingField = SettingField;
-var StartStopField_1 = require("../StartStopField");
-var Command_1 = require("../../command/Command");
+var StartStopField_1 = require("../../meta/StartStopField");
 var StartStopField = /** @class */ (function (_super) {
     __extends(StartStopField, _super);
-    function StartStopField(name, startIndex, bytesLength, title) {
+    function StartStopField(name, startIndex, bytesLength, title, cmdGroupKey, address, minValue, maxValue) {
         var _this = _super.call(this) || this;
         _this.name = name;
         _this.startIndex = startIndex;
         _this.bytesLength = bytesLength;
         _this.title = title;
+        if (cmdGroupKey) {
+            _this.commandGroupKey = cmdGroupKey;
+            if (address) {
+                _this.address = address;
+            }
+            if (minValue) {
+                _this.minValue = minValue;
+            }
+            if (maxValue) {
+                _this.maxValue = maxValue;
+            }
+        }
         return _this;
     }
     StartStopField.prototype.haveValue = function () {
@@ -249,8 +271,7 @@ var StartStopField = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             bytes[_i] = arguments[_i];
         }
-        this.value = bytes[1] | (bytes[0] << 8);
-        return 0x7FFF != this.value;
+        return false;
     };
     StartStopField.prototype.getValueString = function () {
         var h = (this.value / 60).toString();
@@ -262,13 +283,44 @@ var StartStopField = /** @class */ (function (_super) {
         return h + ':' + m;
     };
     StartStopField.prototype.getCommand = function () {
-        var cmd = new Command_1.TimeCommand(this.title, this.address);
-        cmd.setMaxValue(this.maxValue);
-        cmd.setMinValue(this.minValue);
-        cmd.initValue(this.value / 60, this.value % 60);
-        cmd.setTitle(this.getTitle());
-        return cmd;
+        if (this.address) {
+            var cmd = new Command_1.TimeCommand(this.title, this.address);
+            cmd.setMaxValue(this.maxValue);
+            cmd.setMinValue(this.minValue);
+            cmd.initValue(this.value / 60, this.value % 60);
+            cmd.setTitle(this.getTitle());
+            return cmd;
+        }
+        return null;
     };
     return StartStopField;
 }(StartStopField_1.StartStopField));
 exports.StartStopField = StartStopField;
+var SystemStatusField = /** @class */ (function (_super) {
+    __extends(SystemStatusField, _super);
+    function SystemStatusField(name, startIndex, bytesLength, title, valueMap, cmdGroupKey, address, minValue, maxValue) {
+        var _this = _super.call(this, name, startIndex, bytesLength, title, '') || this;
+        _this.valueMap = new Collections_1.NumberHashMap(valueMap);
+        _this.commandGroupKey = cmdGroupKey;
+        _this.address = address;
+        _this.minValue = minValue;
+        _this.maxValue = maxValue;
+        return _this;
+    }
+    SystemStatusField.prototype.haveValue = function () {
+        var bytes = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            bytes[_i] = arguments[_i];
+        }
+        this.value = bytes[1] & 0xFF;
+        return true;
+    };
+    SystemStatusField.prototype.getCommand = function () {
+        var cmd = new Command_1.SystemCommand(this.title, this.address, this.maxValue, this.minValue);
+        cmd.initValue(this.value);
+        cmd.setTitle(this.getTitle());
+        return cmd;
+    };
+    return SystemStatusField;
+}(BaseInfoField));
+exports.SystemStatusField = SystemStatusField;

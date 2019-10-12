@@ -14,7 +14,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseInfoField_1 = require("../BaseInfoField");
-var DeviceField_1 = require("../DeviceField");
 var Collections_1 = require("../../entities/Collections");
 var BaseInfoField = /** @class */ (function (_super) {
     __extends(BaseInfoField, _super);
@@ -57,51 +56,17 @@ var DemandField = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             bytes[_i] = arguments[_i];
         }
-        if (0x7F == bytes[0]) {
-            this.value = 1;
+        if (0xFF == bytes[0]) {
+            this.value = 0;
         }
         else {
-            this.value = 0;
+            this.value = 1;
         }
         return true;
     };
     return DemandField;
 }(BaseInfoField));
 exports.DemandField = DemandField;
-var DeviceField = /** @class */ (function (_super) {
-    __extends(DeviceField, _super);
-    function DeviceField(name, startIndex, bytesLength, title, valueMap) {
-        var _this = _super.call(this) || this;
-        _this.sb = '';
-        _this.name = name;
-        _this.startIndex = startIndex;
-        _this.bytesLength = bytesLength;
-        _this.title = title;
-        _this.valueMap = new Collections_1.NumberHashMap(valueMap);
-        return _this;
-    }
-    DeviceField.prototype.haveValue = function () {
-        var bytes = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            bytes[_i] = arguments[_i];
-        }
-        this.value = bytes[1] & 0xFF | (bytes[0] & 0xFF) << 8;
-        if (0x7FFF == this.value) {
-            this.value = 1;
-        }
-        if (0x0000 == this.value) {
-            this.value = 0;
-        }
-        return true;
-    };
-    DeviceField.prototype.getValueString = function () {
-        if (this.valueMap)
-            return this.valueMap.getItem(this.value);
-        return _super.prototype.getValueString.call(this);
-    };
-    return DeviceField;
-}(DeviceField_1.DeviceField));
-exports.DeviceField = DeviceField;
 var ExceptionField_1 = require("../ExceptionField");
 var ExceptionField = /** @class */ (function (_super) {
     __extends(ExceptionField, _super);
@@ -126,6 +91,11 @@ var ExceptionField = /** @class */ (function (_super) {
         }
         else
             return false;
+    };
+    ExceptionField.prototype.getValueString = function () {
+        if (this.valueMap)
+            return this.valueMap.getItem(this.value);
+        return _super.prototype.getValueString.call(this);
     };
     return ExceptionField;
 }(ExceptionField_1.ExceptionField));
@@ -199,6 +169,41 @@ var OpenCloseField = /** @class */ (function (_super) {
     return OpenCloseField;
 }(OpenCloseField_1.OpenCloseField));
 exports.OpenCloseField = OpenCloseField;
+var DeviceField = /** @class */ (function (_super) {
+    __extends(DeviceField, _super);
+    function DeviceField() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeviceField.prototype.setDeviceFieldForUIKey = function (fieldForUI) {
+        fieldForUI.setKey(comms_1.GroupKeys.KEY_DEVICE);
+    };
+    return DeviceField;
+}(OpenCloseField));
+exports.DeviceField = DeviceField;
+var ByteDeviceField = /** @class */ (function (_super) {
+    __extends(ByteDeviceField, _super);
+    function ByteDeviceField(name, startIndex, bytesLength, title, valueMap) {
+        return _super.call(this, name, startIndex, bytesLength, title, 0, valueMap) || this;
+    }
+    ByteDeviceField.prototype.haveValue = function () {
+        var bytes = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            bytes[_i] = arguments[_i];
+        }
+        this.value = bytes[1] & 0xFF | (bytes[0] & 0xFF) << 8;
+        if (0x7FFF == this.value) {
+            this.value = 1;
+        }
+        if (0x0000 == this.value) {
+            this.value = 0;
+        }
+        console.log('----------------------------');
+        console.log(this.value);
+        return true;
+    };
+    return ByteDeviceField;
+}(DeviceField));
+exports.ByteDeviceField = ByteDeviceField;
 var comms_1 = require("@sdcsoft/comms");
 var SettingField = /** @class */ (function (_super) {
     __extends(SettingField, _super);

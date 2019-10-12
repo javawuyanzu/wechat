@@ -45,6 +45,9 @@ var SdcSoftDevice = /** @class */ (function () {
         this.fieldMap.addItem(comms_2.GroupKeys.KEY_OPEN_CLOSE, new comms_1.StringHashMap());
         this.fieldMap.addItem(map_1.map.KEY_Count_Fields, new comms_1.StringHashMap());
     }
+    SdcSoftDevice.prototype.setModbusNo = function (no) {
+        this.modbusNo = no;
+    };
     SdcSoftDevice.prototype.initCommandsMapKeys = function (map) {
         this.commandMap = map;
     };
@@ -140,7 +143,7 @@ var SdcSoftDevice = /** @class */ (function () {
         return element;
     };
     SdcSoftDevice.prototype.validateFalse = function (bytesLength) {
-        return this.BYTE_ARRAY_LENGTH > bytesLength;
+        return this.BYTE_ARRAY_LENGTH != bytesLength;
     };
     SdcSoftDevice.prototype.getCommands = function () {
         var _this = this;

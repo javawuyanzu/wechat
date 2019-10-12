@@ -1,12 +1,12 @@
 const app = getApp();
 var openid='';
-var deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn');
-
 import {
   Wechat_DeviceAdapter
 } from '/libs/devices-lib/index.js'
-import mqtt from '/libs/mqtt/mqtt.min.js'
+var deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn');
 
+
+import mqtt from '/libs/mqtt/mqtt.js'
 App({
   data: {},
   onShow: function () {
@@ -17,7 +17,46 @@ App({
   onHide: function () {
     console.log("离开小程序...")
     this.globalData.endTime = new Date()
-    console.log(this.globalData.endTime)
+    var total =  (this.globalData.endTime - this.globalData.startTime) / 1000
+    var day = parseInt(total / (24 * 60 * 60));
+    var afterDay = total - day * 24 * 60 * 60;//取得算出天数后剩余的秒数
+    var hour = parseInt(afterDay / (60 * 60));
+    var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60;//取得算出小时数后剩余的秒数
+    var min = parseInt(afterHour / 60);
+    
+    if (min>3){
+      var beginDatetime = new Date(this.globalData.startTime)
+      beginDatetime = beginDatetime.getFullYear() + '-' + (beginDatetime.getMonth() + 1) + '-' + beginDatetime.getDate() + ' ' + beginDatetime.getHours() + ':' + beginDatetime.getMinutes() + ':' + beginDatetime.getSeconds()
+      var endDatetime = new Date(this.globalData.endTime)
+      endDatetime = endDatetime.getFullYear() + '-' + (endDatetime.getMonth() + 1) + '-' + endDatetime.getDate() + ' ' + endDatetime.getHours() + ':' + endDatetime.getMinutes() + ':' + endDatetime.getSeconds()
+      wx.request({
+        //获取openid接口  
+        url: 'https://apis.sdcsoft.com.cn/wechat/employee/getwx',
+        data: {
+          openId: openid,
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        method: 'post',
+        success: function (res) {
+          wx.request({
+            //获取openid接口  
+            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/onlineRecord/create',
+            data: {
+              minutes: min,
+              beginDatetime: beginDatetime,
+              endDatetime: endDatetime,
+              mobileNo: res.data.data.mobile
+            },
+            method: 'post',
+            success: function (res) {
+              console.log(res)
+            }
+          })
+        }
+      })
+    }
   },
   conmqtt: function () {
     var that = this
@@ -32,23 +71,21 @@ App({
             },
             method: 'GET',
             success: function (res) {
-              openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+              openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
               var options = {
-                keepalive: 60,
+                keepalive: 30,
                 clientId: openid,
                 protocolId: 'MQTT',
                 protocolVersion: 4,
                 clean: true,
                 reconnectPeriod: 1000,
                 connectTimeout: 30 * 1000,
-                username: 'test1',
-                password: 'test1',
                 rejectUnauthorized: false
               }
-              var client = mqtt.connect('wxs://mqtt.sdcsoft.com.cn:8084/mqtt', options);
+              var client = mqtt.connect('wxs://rancher.sdcsoft.com.cn:443/mqtt', options);
+             
               that.globalData.client = client
               console.log(that.globalData.client)
-            
               client.on('error', function (err) {
                 console.log(err)
                 client.end()
@@ -56,6 +93,9 @@ App({
               client.on('connect', function () {
                 console.log('client connected:' + options.clientId)
                 resolve("200")
+              })
+              client.on('packetsend', function (packet) {
+                //console.log(packet)
               })
               client.on('close', function (e) {
                 console.log(e)
@@ -91,7 +131,7 @@ App({
       success: function (res) {
         if (res.language === 'zh') {
           that.globalData.lang = 'zh-cn'
-          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn')
+          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang("zh-cn");
         }
         if (res.language === 'en') {
           that.globalData.lang = 'en-us'
@@ -99,6 +139,8 @@ App({
         }
       }
     })
+   
+   
     wx.login({
       success: function (res) {
         wx.request({
@@ -109,16 +151,13 @@ App({
           },
           method: 'GET',
           success: function (res) {
-            openid = res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+            openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             that.globalData.openid = openid
-            
           }
         })
       }
     })
-    
   },
-  
   globalData: {
     deviceAdapter: deviceAdapter,
     lang: 'zh-cn',
@@ -126,6 +165,7 @@ App({
     callBack: [null, null],
     userInfo: null,
     openid: null,
+    unionId:null,
     startTime: null,
     endTime: null,
     bytedata:[],

@@ -44,6 +44,9 @@ var Map_PLC = /** @class */ (function (_super) {
         1: '运行',
         2: '大火'
     };
+    Map_PLC.coms_fix_value = {
+        0: '不支持',
+    };
     return Map_PLC;
 }(ZH_CN_1.Map_ZH_CN));
 exports.Map_PLC = Map_PLC;

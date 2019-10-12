@@ -40,11 +40,16 @@ var IP = /** @class */ (function (_super) {
     };
     IP.prototype.getDeviceFocusFields = function () {
         var map = this.getBaseInfoFields();
+        //先将所有设备的加入组数移除
+        var jiarezucount = map.getItem(IP.KEY_POINT_JIA_RE_ZU);
         var list = new Collections_1.List();
         list.push(map.getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS));
         list.push(map.getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS));
         if (this.power == SdcSoftDevice_1.Power.Dian) {
-            list.push(this.getDeviceFields().getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_JIA_RE_ZU));
+            var f = this.getDeviceFields().getItem('de_jiarezu');
+            jiarezucount.setValue(f.getValue() & 0x7F);
+            //计算投入的加入组数，并为电炉添加该点位
+            list.push(jiarezucount);
             if (this.media == SdcSoftDevice_1.Media.ReShui) {
                 var map2 = this.getMockFields();
                 map2.each(function (k, v) {
@@ -79,6 +84,7 @@ var IP = /** @class */ (function (_super) {
             }
         }
         else if (this.power == SdcSoftDevice_1.Power.Mei) {
+            map.remove(IP.KEY_POINT_JIA_RE_ZU);
             if (this.media == SdcSoftDevice_1.Media.ReShui) {
                 var map2 = this.getMockFields();
                 list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
@@ -141,6 +147,7 @@ var IP = /** @class */ (function (_super) {
             }
         }
         else if (this.power == SdcSoftDevice_1.Power.ShengWuZhi) {
+            map.remove(IP.KEY_POINT_JIA_RE_ZU);
             if (this.media == SdcSoftDevice_1.Media.ReShui) {
             }
             else if (this.media == SdcSoftDevice_1.Media.DaoReYou) {
@@ -153,6 +160,7 @@ var IP = /** @class */ (function (_super) {
             }
         }
         else if (this.power == SdcSoftDevice_1.Power.YouQi) {
+            map.remove(IP.KEY_POINT_JIA_RE_ZU);
             var map2 = this.getMockFields();
             if (this.media == SdcSoftDevice_1.Media.ReShui) {
                 list.push(map2.getItem(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu));
@@ -235,15 +243,18 @@ var IP = /** @class */ (function (_super) {
     };
     IP.prototype.getPowerInfo = function () {
         if (this.power == SdcSoftDevice_1.Power.Dian) {
-            return this.getDeviceFields().getItem(IP.KEY_POINT_JIA_RE_ZU).getValue() > 0 ? 1 : 0;
+            return this.getDeviceFields().getItem('de_jiarezu').getValue() > 0 ? 1 : 0;
         }
         else if (this.power == SdcSoftDevice_1.Power.Mei) {
-            return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0;
+            // return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0
+            return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0 ? 1 : 0;
         }
         else if (this.power == SdcSoftDevice_1.Power.ShengWuZhi) {
-            return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0;
+            // return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0
+            return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0 ? 1 : 0;
         }
-        return this.getDeviceFields().getItem(IP.KEY_POINT_RAN_SHAO_QI).getValue() > 0x7F ? 1 : 0;
+        var v = this.getDeviceFields().getItem(IP.KEY_POINT_RAN_SHAO_QI).getValue(); // > 0x7F ? 1 : 0
+        return v;
     };
     IP.prototype.getBeng = function () {
         return this.getElements(IP.Device_Suffix_Beng, Element_1.Element.Prefix_Beng, Element_1.Element.Index_Beng_Count);
@@ -258,13 +269,13 @@ var IP = /** @class */ (function (_super) {
                 var element = new Element_1.Element();
                 element.setTitle(value.getTitle());
                 element.setPrefix(elementPrefix);
-                var v = value.getValue() & 0x80;
-                if (0x80 == v) {
-                    element.SetValues(valueIndex, 1, 1);
-                }
-                else {
-                    element.SetValues(valueIndex, 1, 0);
-                }
+                // let v = value.getValue() & 0x80
+                // if (0x80 == v) {
+                //     element.SetValues(valueIndex, 1, 1)
+                // } else {
+                //     element.SetValues(valueIndex, 1, 0)
+                // }
+                element.SetValues(valueIndex, 1, value.getValue());
                 list.push(element);
             }
         });

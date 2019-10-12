@@ -4,11 +4,13 @@
     <open-data type="userAvatarUrl" style="width:120rpx;height:120rpx;border-radius:20rpx;overflow: hidden;"></open-data>
     <view style='flex-direction:column '>
       <view style='height:50rpx;color:white;'>
-        <open-data type="userNickName" lang="zh_CN" style="margin-left:50rpx;"></open-data>
+        <open-data type="userNickName" lang="zh_CN" style="margin-left:50rpx;" bindtap="error"></open-data>
       </view>
-      <view style='height:50rpx;margin-left:50rpx;margin-top:20rpx;color:white;'  bindtap="error">{{wxEnterpriseName}}</view>
+      <button wx:if="{{canIUse}}" open-type="getUserInfo"  bindgetuserinfo="bindGetUserInfo" style="margin-left: 50rpx;zoom: 0.7;margin-top: 13rpx;">{{content.list_shouquan}}</button>
     </view>
   </view>
+
+
 
   <view class="user-list">
     <!-- <navigator url="../monitoring/monitoring" hover-class="none">

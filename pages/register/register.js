@@ -317,7 +317,7 @@ Page({
       var that = this
       var phone = that.data.phone;
       wx.request({
-        url: 'https://apis.sdcsoft.com.cn/wechat/user//saveEmployee',
+        url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',
         method: "GET",
         data: {
           validate: that.data.code,
@@ -325,7 +325,7 @@ Page({
           realName: that.data.realName,
           mobile: that.data.phone,
           openid: that.data.openid, 
-          wxEnterpriseName: that.data.handleEName
+          unionId: app.globalData.unionId
         },
         header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
         success: function (res) {

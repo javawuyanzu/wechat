@@ -13,10 +13,10 @@
 </view>
 <view class='row'>
   <view class='info'>
-    如您是第一次使用此小程序，且注册过简洁锅炉管理系统，则选“绑定已有账号”。
-    如您没有注册过简洁锅炉管理系统，则选“创建一个账号””。
+    如您是第一次使用此小程序，且注册过简洁锅炉管理系统，点击下方微信授权，页面提示授权成功后，再点击“绑定已有账号”。
+    如您没有注册过简洁锅炉管理系统，点击下方微信授权，页面提示授权成功后，再点击“创建一个账号”。
   </view>
 </view>
-
+<button open-type="getUserInfo" class='submit' bindgetuserinfo="bindGetUserInfo">{{content.list_shouquan}}</button>
 <button class='submit' bindtap='submit'>{{content.login_bindUser}}</button>
 <button class='submit' bindtap='register'>{{content.login_creatuser}}</button>

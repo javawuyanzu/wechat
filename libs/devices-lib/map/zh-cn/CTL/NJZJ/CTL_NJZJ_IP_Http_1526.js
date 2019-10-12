@@ -121,8 +121,8 @@ var Map_CTL_NJZJ_IP_Http_1526 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField('mo_huanjingwendu', 1062, 2, '环境温度'));
         _this.addPoint(new meta_1.MockField('mo_jiezhiyali', 1064, 2, '介质压力'));
         //扩展设置
-        _this.addPoint(new meta_1.SettingField('se_touqieshijian_jiarezuyong_', 631, 2, '投切时间（加热组用）', 's'));
-        _this.addPoint(new meta_1.SettingField('se_diaojieshijian_jiarezuyong_', 633, 2, '调节时间（加热组用）', 'm'));
+        _this.addPoint(new meta_1.SettingField('se_touqieshijian_jiarezuyong_', 631, 2, '投切时间（加热组用）', 's', 0, Map_CTL_NJZJ_IP_Http_1526.Commands_Key_Parameters_Setting, '0547', 1, 10));
+        _this.addPoint(new meta_1.SettingField('se_diaojieshijian_jiarezuyong_', 633, 2, '调节时间（加热组用）', 'm', 0, Map_CTL_NJZJ_IP_Http_1526.Commands_Key_Parameters_Setting, '0548', 1, 10));
         _this.addPoint(new meta_1.SettingField('se_chukouchaoyabaojing', 635, 2, '出口超压报警', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_jinkouchaoyabaojing', 637, 2, '进口超压报警', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_cainuanbaojingwendu', 639, 2, '采暖报警温度', '℃'));
@@ -279,6 +279,8 @@ var Map_CTL_NJZJ_IP_Http_1526 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_shuixiangbaojingwendu', 1328, 2, '水箱报警温度', '℃'));
         return _this;
     }
+    Map_CTL_NJZJ_IP_Http_1526.Commands_Key_Parameters_Setting = '参数设置';
+    Map_CTL_NJZJ_IP_Http_1526.Commands_Key_System_Ctl = '系统控制';
     return Map_CTL_NJZJ_IP_Http_1526;
 }(CTL_NJZJ_IP_Http_1.Map_CTL_NJZJ_IP_Http));
 exports.Map_CTL_NJZJ_IP_Http_1526 = Map_CTL_NJZJ_IP_Http_1526;

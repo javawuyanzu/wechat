@@ -32,7 +32,7 @@ var Command = /** @class */ (function () {
         this.minValue = 0;
         this.script = '';
         this.title = title;
-        this.title = address;
+        this.address = address;
         this.minValue = minValue;
         this.maxValue = maxValue;
     }

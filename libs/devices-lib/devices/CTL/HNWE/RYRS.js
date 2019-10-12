@@ -62,32 +62,32 @@ module.exports = /** @class */ (function (_super) {
     };
     CTL_HNWE_485.prototype.getBeng = function () {
         var list = [];
-        var value = this.getOpenCloseFields().getItem('oc_shuibeng');
+        var value = this.getDeviceFields().getItem('oc_shuibeng');
         var element = new Element_1.Element();
         element.setTitle(value.getTitle());
         element.setPrefix(Element_1.Element.Prefix_Beng);
         var v = value.getValue();
         if (1 == v) {
-            element.SetValues(1, 1, 1);
+            element.SetValues(0, 1, 1);
         }
         else {
-            element.SetValues(1, 1, 0);
+            element.SetValues(0, 1, 0);
         }
         list.push(element);
         return list;
     };
     CTL_HNWE_485.prototype.getFan = function () {
         var list = [];
-        var value = this.getOpenCloseFields().getItem('oc_fengji');
+        var value = this.getDeviceFields().getItem('oc_fengji');
         var element = new Element_1.Element();
         element.setTitle(value.getTitle());
         element.setPrefix(Element_1.Element.Prefix_Fan);
         var v = value.getValue();
         if (1 == v) {
-            element.SetValues(1, 1, 1);
+            element.SetValues(0, 1, 1);
         }
         else {
-            element.SetValues(1, 1, 0);
+            element.SetValues(0, 1, 0);
         }
         list.push(element);
         return list;

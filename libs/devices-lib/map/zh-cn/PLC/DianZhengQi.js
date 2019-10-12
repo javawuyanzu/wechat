@@ -16,7 +16,6 @@ var BaseMap_1 = require("./BaseMap");
 var BaseDevice_1 = require("../../../devices/PLC/BaseDevice");
 var CountField_1 = require("../../../meta/CountField");
 var meta_1 = require("../../../meta/PLC/meta");
-var _485_1 = require("../../../meta/NJZJ/485");
 var FixedValueField_1 = require("../../../meta/FixedValueField");
 var SdcSoftDevice_1 = require("../../../devices/SdcSoftDevice");
 var CountShowField_1 = require("../../../meta/CountShowField");
@@ -31,14 +30,14 @@ module.exports = /** @class */ (function (_super) {
          * 计算属性（不显示）
          */
         _this.addPoint(new CountField_1.CountField(BaseDevice_1.PLC.KEY_POINT_Add_SHUI_BENG, '补水泵'));
-        _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, 9, 2, '运行小时数', '时'));
-        _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, 11, 2, '运行天数', '天'));
-        _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 13, 2, '系统状态', '', BaseMap_1.Map_PLC.coms_status));
+        _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, 9, 2, '运行小时数', '时'));
+        _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, 11, 2, '运行天数', '天'));
+        _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 13, 2, '系统状态', '', BaseMap_1.Map_PLC.coms_status));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, '燃料', 1, Map_PLC_DianZhengQi.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, '介质', 1, Map_PLC_DianZhengQi.coms_media));
         _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_JIA_RE_ZU, '投入加热组', ''));
-        _this.addPoint(new _485_1.BaseInfoField('ba_shuiweizhuangtai', 19, 2, '水位状态', '', Map_PLC_DianZhengQi.coms_level));
-        _this.addPoint(new _485_1.BaseInfoField('ba_ranshaoqizhuangtai', 21, 2, '燃烧器状态', '', BaseMap_1.Map_PLC.coms_ranshaoqi_status));
+        _this.addPoint(new meta_1.BaseInfoField('ba_shuiweizhuangtai', 19, 2, '水位状态', '', Map_PLC_DianZhengQi.coms_level));
+        _this.addPoint(new meta_1.BaseInfoField('ba_ranshaoqizhuangtai', 21, 2, '燃烧器状态', '', BaseMap_1.Map_PLC.coms_ranshaoqi_status));
         _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ZhengQiYaLi, 35, 4, '蒸汽压力', 'MPa'));
         _this.addPoint(new meta_1.MockField('mo_zhengqiwendu', 39, 4, '蒸汽温度', '℃'));
         _this.addPoint(new meta_1.MockField('mo_guolushuiwei', 43, 4, '锅炉水位', 'mm'));

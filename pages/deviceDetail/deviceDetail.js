@@ -54,11 +54,11 @@ Page({
     daqiantianList: [],
     content: null,
     lang: '',
-
+    jiarezu:null,
+    mqttname:""
   },
   switchChange: function(e) {
     var that = this
-
     var state = -1;
     if (e.detail.value) {
       state = 2
@@ -109,7 +109,7 @@ Page({
     } else {
       let cList = []
       cList = that.data.controlList
-      console.log(cList)
+      //console.log(cList)
       let temp = cList[that.data.index][that.data.index1];
   
       temp.setValue(parseFloat(that.data.inputvalue))
@@ -128,89 +128,113 @@ Page({
       date: e.detail.value
     })
   },
+  str2ab: function (str) {
+    var buf=new ArrayBuffer(str.length*2)
+    var bufView=new Uint16Array(buf)
+    for (let i = 0; i < str.length; i++) {
+      bufView[i] = str.charCodeAt(i)
+    }
+    return bufView;
+  },
   //提交
   formSubmit: function(e) {
     var that = this
-    console.log(that.data.controlList)
     let str = ''
     for (var i in that.data.controlList) {
       for (var commmd in that.data.controlList[i]) {
-      
         str += that.data.controlList[i][commmd].getCommandString();
       }
     }
+    
     if (str!=''){
-      wx.login({
-        success: function (res) {
-          wx.request({
-            //获取openid接口  
-            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-            data: {
-              js_code: res.code,
-            },
-            method: 'GET',
-            success: function (res) {
-              wx.request({
-                url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
-                method: "GET",
-                data: {
-                  command: str,
-                  deviceSuffix: that.data.deviceNo,
-                  userId: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
-                },
-                success: function (res) {
-                  if (res.statusCode) {
-                    wx.showToast({
-                      title: that.data.content.detail_zhixing,
-                      icon: 'success',
-                      duration: 2000
-                    });
-                  }
-                }
+      if (that.data.deviceNo.substr(0, 2) == '20') {
+        var strlist = []; 
+        var n = 2; 
+        for (var i = 0, l = str.length; i < l / n; i++) { 
+          var a = str.slice(n * i, n * (i + 1)); 
+          strlist.push(a)
+        }
+
+        var strarray = new Uint8Array(strlist.length);
+        for (let i = 0; i < strlist.length; i++) {
+          strarray[i]=parseInt(strlist[i], 16)
+        }
+        
+        var client = app.globalData.client;
+        if (client.connected != null & client.connected) {
+          var cmdName = "/CTL/"+that.data.mqttname.substr(5, 16)
+          client.publish(cmdName, strarray.buffer, function (err) {
+            //console.log(err)
+            if (!err) {
+              wx.showToast({
+                title: '发布成功',
+                icon: 'success',
+                duration: 1000,
+                mask: true
+              })
+            }
+            else {
+              wx.showToast({
+                title: '发布失败',
+                icon: 'error',
+                duration: 1000,
+                mask: true
               })
             }
           })
-          // wx.request({
-          //   //获取openid接口  
-          //   url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-          //   data: {
-          //     js_code: res.code,
-          //   },
-          //   method: 'GET',
-          //   success: function (res) {
-          //     wx.request({
-          //       url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
-          //       method: "GET",
-          //       data: {
-          //         command: str,
-          //       },
-          //       header: {
-          //         'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-          //         'DeviceSuffix': that.data.deviceNo,
-          //         'UserId': res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
-          //       },
-          //       success: function (res) {
-          //         if (res.statusCode) {
-          //           wx.showToast({
-          //             title: that.data.content.detail_zhixing,
-          //             icon: 'success',
-          //             duration: 2000
-          //           });
-          //         }
-          //       }
-          //     })
-          //   }
-          // })
+        } else {
+          wx.showToast({
+            title: '连接失败，请稍后再试',
+            icon: 'none',
+            duration: 1000,
+            mask: true
+          })
         }
+      }else{
+        wx.login({
+          success: function (res) {
+            wx.request({
+              //获取openid接口  
+              url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+              data: {
+                js_code: res.code,
+              },
+              method: 'GET',
+              success: function (res) {
+                wx.request({
+                  url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
+                  method: "GET",
+                  data: {
+                    command: str,
+                    deviceSuffix: that.data.deviceNo,
+                    userId: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
+                  },
+                  success: function (res) {
+                    if (res.statusCode) {
+                      wx.showToast({
+                        title: that.data.content.detail_zhixing,
+                        icon: 'success',
+                        duration: 2000
+                      });
+                    }
+                  }
+                })
+              }
+            })
+
+          }
+        })
+      }
+      that.setData({
+        currentTab: 0,
+        timerStates: true,
       })
+     
     }
-    console.log(that.data.controlList)
+    //console.log(that.data.controlList)
     console.log(str)
   },
-  //重置
-  formReset: function() {
-    console.log('form发生了reset事件')
-  },
+  
   navbarTap: function(e) {
     var that = this
     that.setData({
@@ -219,6 +243,16 @@ Page({
     if (e.currentTarget.dataset.idx == 2 & that.data.report) {
       var type = that.data.deviceType
       that.getreportdatabykey(that.data.mock1)
+    }
+    if (e.currentTarget.dataset.idx == 3) {
+      that.setData({
+        timerStates: false,
+      })
+    }
+    if (e.currentTarget.dataset.idx == 0) {
+      that.setData({
+        timerStates: true,
+      })
     }
   },
   onHide: function() {
@@ -272,7 +306,7 @@ Page({
               //获取openid接口   
               url: 'https://apis.sdcsoft.com.cn/wechat/device/control/List',
               data: {
-                openid: res.data.openid.substr(0, 10) + '********' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
+                openid: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
               },
               method: 'GET',
               success: function(res) {
@@ -292,28 +326,10 @@ Page({
         })
       }
     })
-    wx.request({
-      url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
-      data: {
-        deviceNo: options.deviceNo,
-      },
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log(res)
-        if (res.data.data.media== 0) {
-          that.setData({
-            control: true,
-            navbar: that.data.content.detail_cnavbar,
-          })
-        }
-      }
-    })
     that.setData({
         deviceNo: options.deviceNo,
         imgstyle: options.imgstyle,
+        jiarezu: options.jiarezu,
         deviceType: options.type,
         zuotian: that.getDateStr(null, -1),
         qiantian: that.getDateStr(null, -2),
@@ -325,29 +341,62 @@ Page({
     if (options.deviceNo.substr(0, 2) != '20') {
       that.timer();
     } else {
+      that.setData({
+        mqttname: "/RPT/" + options.deviceNo.substr(0, 2) + "/" + options.deviceNo.substr(2, 3) + "/" + options.deviceNo.substr(5, 5)
+      })
       that.dataparse(app.globalData.device)
       app.globalData.callBack[1] = function(t, m) {
-        var mqttname = "/RPT/" + options.deviceNo.substr(0, 2) + "/" + options.deviceNo.substr(2, 3) + "/" + options.deviceNo.substr(5, 5)
-        console.log(mqttname)
-        if (mqttname == t) {
+        console.log(that.data.mqttname)
+        if (that.data.mqttname == t) {
           // console.log('详情页收到数据：' + t + ':=' + m);
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(m))
           console.log(data)
           that.dataparse(data, options.deviceNo)
+
         }
 
       }
     }
 
   },
+  subTopic: function (topic) {
+    var client = app.globalData.client;
+    if (client.connected != null & client.connected) {
+      client.subscribe(topic, null, function (err, granted) {
+        if (!err) {
+          console.log('订阅成功' + topic)
+        } else {
+          console.log('订阅失败')
+        }
+      })
+    } else {
+      wx.showToast({
+        title: '连接失败，请稍后再试',
+        icon: 'none',
+        duration: 1000,
+        mask: true
+      })
+    }
+  },
   dataparse: function (data, deviceNo) {
     var that = this
     var errorList = []
     var clist = data.getCommands().map
+    var media = -1
+    for (var index in data.getBaseInfoFields().map) {
+      if (data.getBaseInfoFields().map[index].name === "o_media") {
+        media = data.getBaseInfoFields().map[index].value
+      }
+    }
+    if (media == 0) {
+      that.setData({
+        control: true,
+        navbar: that.data.content.detail_cnavbar,
+      })
+    }
     if (JSON.stringify(clist) != '{}') {
       that.setData({
         controlList: clist,
-        control: true
       })
     }
 
@@ -430,13 +479,7 @@ Page({
       })
     }
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {},
-  /**
-   * 生命周期函数--监听页面显示
-   */
+  
   onShow: function() {
     var that = this;
     var type = that.data.deviceType
@@ -463,15 +506,27 @@ Page({
         success: function(res) {
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
+          console.log(data)
           var clist = data.getCommands().map
-          console.log(clist)
+          data.getDeviceFocusFields()
+          var media=-1
+          for (var index in data.getBaseInfoFields().map) {
+            if (data.getBaseInfoFields().map[index].name === "o_media") {
+              media = data.getBaseInfoFields().map[index].value
+            }
+          }
+          if (media == 0) {
+            that.setData({
+              control: true,
+              navbar: that.data.content.detail_cnavbar,
+            })
+          }
           if (JSON.stringify(clist) != '{}') {
             that.setData({
               controlList: clist,
-              control: true
             })
           }
-          var myDate = new Date();0
+          var myDate = new Date();
           for (var index in data.getExceptionFields().map) {
             errorList.push({
               deviceNo: deviceNo,
@@ -491,7 +546,6 @@ Page({
               break;
             }
           }
-       
           that.setData({
             src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
             bengAnimationList: data.getBeng(),
@@ -534,6 +588,7 @@ Page({
         that.setData({
           timer: setInterval(function() {
             if (that.data.timerStates) {
+              console.log("timerStates")
               that.onShow()
             }
           }, res.data * 1000)

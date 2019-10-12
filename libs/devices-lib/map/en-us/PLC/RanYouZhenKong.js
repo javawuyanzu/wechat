@@ -16,7 +16,7 @@ var BaseMap_1 = require("./BaseMap");
 var BaseDevice_1 = require("../../../devices/PLC/BaseDevice");
 var CountField_1 = require("../../../meta/CountField");
 var meta_1 = require("../../../meta/PLC/meta");
-var _485_1 = require("../../../meta/NJZJ/485");
+var meta_2 = require("../../../meta/NJZJ/485/meta");
 var SdcSoftDevice_1 = require("../../../devices/SdcSoftDevice");
 var FixedValueField_1 = require("../../../meta/FixedValueField");
 module.exports = /** @class */ (function (_super) {
@@ -26,13 +26,13 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new CountField_1.CountField(BaseDevice_1.PLC.KEY_POINT_Add_SHUI_BENG, "Feed water pump"));
         _this.addPoint(new CountField_1.CountField(BaseDevice_1.PLC.KEY_POINT_XUN_HUAN_BENG, "Circulating Pump"));
         _this.addPoint(new CountField_1.CountField(BaseDevice_1.PLC.KEY_POINT_ZHEN_KONG_BENG, "Vacuum pump"));
-        _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, 9, 2, "Running Hours", "Hours"));
-        _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, 11, 2, "Running Days", "Day"));
-        _this.addPoint(new _485_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 13, 2, "System State", '', BaseMap_1.Map_PLC.coms_status));
+        _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, 9, 2, "Running Hours", "Hours"));
+        _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, 11, 2, "Running Days", "Day"));
+        _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 13, 2, "System State", '', BaseMap_1.Map_PLC.coms_status));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "Fuel", 0, Map_PLC_RanYouZhenKong.coms_power));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "Medium", 4, Map_PLC_RanYouZhenKong.coms_media));
-        _this.addPoint(new _485_1.BaseInfoField("ba_shuiweizhuangtai", 19, 2, "Water Level State", '', Map_PLC_RanYouZhenKong.coms_level));
-        _this.addPoint(new _485_1.BaseInfoField("ba_ranshaoqizhuangtai", 21, 2, "Burner State", '', BaseMap_1.Map_PLC.coms_ranshaoqi_status));
+        _this.addPoint(new meta_2.BaseInfoField("ba_shuiweizhuangtai", 19, 2, "Water Level State", '', Map_PLC_RanYouZhenKong.coms_level));
+        _this.addPoint(new meta_2.BaseInfoField("ba_ranshaoqizhuangtai", 21, 2, "Burner State", '', BaseMap_1.Map_PLC.coms_ranshaoqi_status));
         _this.addPoint(new meta_1.MockField("mo_remeishuiwendu", 35, 4, "Hot Medium Water Temperature", "℃"));
         _this.addPoint(new meta_1.MockField("mo_zhenkongyali", 39, 4, "Vacuum Pressure", "Kpa"));
         _this.addPoint(new meta_1.MockField("mo_jinyanwendu", 43, 4, "Inlet Flue Gas Temperature", "℃"));

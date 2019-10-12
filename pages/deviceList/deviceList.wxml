@@ -21,9 +21,10 @@
                 <image src="" style="width: 140px; height: 70px;" mode="aspectFit"></image>
               </view>
             </view>
-            <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgstyle}}'   data-control='{{item.control}}' data-title='{{item.title}}'   data-type='{{item.type}}' data-device='{{item.device}}' bindlongtap="longTap">
+            <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgstyle}}'   data-control='{{item.control}}' data-title='{{item.title}}' data-type='{{item.type}}' data-device='{{item.device}}' data-jiarezu='{{item.jiarezu}}' bindlongtap="longTap">
               <view class="title">
                 <text>{{item.title}}——{{item.runstate}}</text>
+
                 <view style='float:right;' wx:if="{{item.errcount >0}}">
                   <text style='height:25px;padding:0 2%;padding-top:10px;font-size:16px;color:red'>{{item.errcount}}</text>
                 </view>
@@ -45,10 +46,8 @@
                   <text class='enmock'>{{item.mock2}}</text>
                 </view>
               </view>
-
-              
               <view class="start" style='color:white'>
-                <text>{{content.list_runtime}}：{{item.runday}}</text>
+                <text>{{content.list_runtime}}:{{item.runday}}</text>
               </view>
               <view class="image">
                 <view style=' position: absolute;right:110rpx;top:70rpx;' wx:if="{{item.jiarezu !=''}}">
@@ -72,10 +71,8 @@
     </view> -->
      <!-- <image style="width: 45rpx; height: 45rpx;vertical-align: middle;float:right;right:5px;top:5px" src="../../images/close.png"  catchtap='closeTap' ></image> -->
     <view class='toast-main'>
-     
       <view class='toast-input' style='border:0px solid #ddd;'>
-        <button catchtap='rename' style=' background-color: white;'>{{content.list_rename}}
-</button>
+        <button catchtap='rename' style=' background-color: white;'>{{content.list_rename}}</button>
         <button catchtap='deleteDevice' style=' background-color: white;'>{{content.list_delete}}</button>
         <button catchtap='imgstyle' style=' background-color: white;'>{{content.list_chooseimg}}</button>
       </view>
@@ -86,6 +83,21 @@
 
   </view>
 </view>
+
+<!-- <view class='toast-box' wx:if="{{canIUse}}">
+  <view class='toastbg'></view>
+  <view class='showToast'>
+    <view class='toast-main'>
+      <view class='toast-input' style='border:0px solid #ddd;'>
+        <button catchtap='deleteDevice' style=' background-color: white;'>欢迎使用</button>
+        <button catchtap='imgstyle' style=' background-color: white;'>简洁锅炉监控小程序</button>
+      </view>
+      <view style='border-top:1px solid #eee;width:100%'>
+      <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" style=' background-color: white;'>微信授权</button>
+      </view>
+    </view>
+  </view>
+</view> -->
 <view class='toast-box' hidden='{{!ifstyle}}'>
   <view class='toastbg'></view>
   <view class='showToast'>
@@ -143,4 +155,3 @@
     </view>
   </view>
 </view>
-
