@@ -672,7 +672,7 @@ Page({
   getDeviceFromBytes(deviceNo,deviceType,data){
     var that = this;
       let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
-      //console.log(d)
+    console.log(data)
     map.set(deviceNo,d)
     return d
   },
@@ -730,6 +730,7 @@ Page({
             },
             responseType: 'arraybuffer',
             success: function (res) {
+              //console.log(res.data.byteLength)
               if (res.data.byteLength == 0) {
                 var ilist = that.data.imgList
                 if (that.finddevice(ilist, deviceno)) {
@@ -760,7 +761,7 @@ Page({
                 try {
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
                   
-                  //console.log(data)
+                  console.log()
                   //data.setModbusNo 设置Modbus站号 默认1 1-255
                   if (data.getTypeName() != deviceType) {
                     wx.request({

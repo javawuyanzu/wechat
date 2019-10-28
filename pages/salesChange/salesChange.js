@@ -147,6 +147,7 @@ Page({
           },
           method: 'GET',
           success: function (res) {
+            console.log(res)
             var simtemp=""
             if (res.data.data.iMEI == null || res.data.data.iMEI =='null'){
               simtemp ="898607B61518900"
@@ -166,14 +167,14 @@ Page({
             }
             var deviceType=0
             if (res.data.data.devicePrefix==1){
-              deviceType= ctlTypeList.indexOf(res.data.data.deviceType)
               that.setData({
+                deviceType: ctlTypeList.indexOf(res.data.data.deviceType),
                 typearray: ctlTypeList
               })
             }
             if (res.data.data.devicePrefix == 2) {
-              deviceType = plcTypeList.indexOf(res.data.data.deviceType)
               that.setData({
+                deviceType: ctlTypeList.indexOf(res.data.data.deviceType),
                 typearray: plcTypeList
               })
             }
@@ -182,7 +183,6 @@ Page({
               ctlTypeList: ctlTypeList,
               deviceNo: options.deviceNo,
               type: res.data.data.deviceType,
-              deviceType: deviceType,
               prefix: res.data.data.devicePrefix,
               status: res.data.data.status,
               power: res.data.data.power,
