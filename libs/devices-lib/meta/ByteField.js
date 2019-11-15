@@ -25,6 +25,7 @@ var ByteField = /** @class */ (function (_super) {
         _this.bytesLength = 0;
         _this.baseNumber = 0;
         _this.bit = 0;
+        _this.canCustomer = false; //是否可以自定义
         _this.needFormat = false;
         _this.value = 0;
         //传递valueMap到UI
@@ -97,6 +98,7 @@ var ByteField = /** @class */ (function (_super) {
             fieldForUI = new DeviceFieldForUI_1.DeviceFieldForUI();
         }
         this.setDeviceFieldForUIKey(fieldForUI);
+        fieldForUI.setCanCustomer(this.canCustomer);
         fieldForUI.setName(this.getName());
         fieldForUI.setTitle(this.getTitle());
         fieldForUI.setValueString(this.getValueString());

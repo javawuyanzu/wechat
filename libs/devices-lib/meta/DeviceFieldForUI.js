@@ -11,11 +11,18 @@ var DeviceFieldForUI = /** @class */ (function () {
         this.valueString = null;
         this.exceptionLevel = null;
         this.valueMap = null;
+        this.canCustomer = false;
         this.unit = '';
         if (valueMap) {
             this.valueMap = valueMap;
         }
     }
+    DeviceFieldForUI.prototype.getCanCustomer = function () {
+        return this.canCustomer;
+    };
+    DeviceFieldForUI.prototype.setCanCustomer = function (flag) {
+        this.canCustomer = flag;
+    };
     DeviceFieldForUI.prototype.getValueMap = function () {
         return this.valueMap;
     };

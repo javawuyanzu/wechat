@@ -26,7 +26,7 @@
     <view class="li" data-index="0" bindtap='changeToggle'>
       <view class="left">
         <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/jiben.png"></image>
-        {{content.detail_base}}</view>
+        {{detail_base}}</view>
       <view class="right">
         <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
       </view>
@@ -42,7 +42,7 @@
     <view class="li" data-index="1" bindtap='changeToggle'>
       <view class="left">
         <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/moniliang.png"></image>
-        {{content.detail_mock}}</view>
+        {{detail_mock}}</view>
       <view class="right">
         <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
       </view>
@@ -59,7 +59,7 @@
     <view class="li" data-index="2" bindtap='changeToggle'>
       <view class="left">
         <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/baojing.png"></image>
-        {{content.detail_ex}}</view>
+        {{detail_ex}}</view>
       <view class="right red">
         <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
       </view>
@@ -75,7 +75,7 @@
     <view class="li" data-index="3" bindtap='changeToggle'>
       <view class="left">
         <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shebei.png"></image>
-        {{content.detail_deviceinfo}} </view>
+        {{detail_deviceinfo}} </view>
       <view class="right ">
         <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
       </view>
@@ -92,7 +92,7 @@
     <view class="li" data-index="4" bindtap='changeToggle'>
       <view class="left">
         <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
-         {{content.detail_deviceparameters}}</view>
+         {{detail_deviceparameters}}</view>
       <view class="right ">
       <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
       </view>
@@ -106,6 +106,63 @@
         </view>
       </block>
     </view>
+    
+
+     <!-- <view class="li" data-index="5" bindtap='changeToggle'>
+      <view class="left">
+        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
+         {{detail_weeksetting}}</view>
+      <view class="right ">
+      <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
+      </view>
+    </view>
+    <view hidden="{{!selectedFlag[5]}}">
+      <block wx:for="{{weeksettingMap}}"  wx:key="weeksettingMap" wx:for-item="item"  wx:for-index="index">
+        <view class="{{lang==='zh-cn'?'bg-gray-zh':'bg-gray-en'}}">
+          <view>
+                <text decode="{{true}}"  style="">{{item.title}}{{item.valueString}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+   <view class="li" data-index="6" bindtap='changeToggle'>
+      <view class="left">
+        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
+         {{detail_startstoptime}}</view>
+      <view class="right ">
+      <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
+      </view>
+    </view>
+    <view hidden="{{!selectedFlag[6]}}">
+      <block wx:for="{{startstoptimeMap}}"  wx:key="startstoptimeMap" wx:for-item="item"  wx:for-index="index">
+        <view class="{{lang==='zh-cn'?'bg-gray-zh':'bg-gray-en'}}">
+          <view>
+                <text decode="{{true}}"  style="">{{item.title}}{{item.valueString}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+     <view class="li" data-index="5" bindtap='changeToggle'>
+      <view class="left">
+        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
+         {{detail_weeksetting}}</view>
+      <view class="right ">
+      <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
+      </view>
+    </view>
+    <view hidden="{{!selectedFlag[5]}}">
+      <block wx:for="{{weeksettingMap}}"  wx:key="settingInfoMap" wx:for-item="item"  wx:for-index="index">
+        <view class="{{lang==='zh-cn'?'bg-gray-zh':'bg-gray-en'}}">
+          <view>
+                <text decode="{{true}}"  style="">{{item.title}}{{item.valueString}}</text>
+          </view>
+        </view>
+      </block>
+    </view> -->
+
+
   </view>
 </view>
 <!--搜索-->
@@ -136,7 +193,7 @@
     <view class="section section_gap">
       <view class="section__title">{{content.detail_plziduan}}：</view>
       <radio-group bindchange="radiochange">
-        <label class="checkbox" wx:for="{{mockInfoMap}}" wx:key="mockInfoMap" >
+        <label class="checkbox" wx:for="{{runInfoMoList}}" wx:key="runInfoMoList" >
           <view style='margin:30rpx'>
             <radio value="{{item.name}}"checked="{{mock1==item.name ? 'true' : ''}}" data-name="{{item.title}}" />{{item.title}}</view>
         </label>

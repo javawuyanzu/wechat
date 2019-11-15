@@ -45,6 +45,14 @@ var Map_CTL_NJZJ = /** @class */ (function (_super) {
         0x0F: '启',
         0xF0: '停',
     };
+    Map_CTL_NJZJ.coms_moshi = {
+        0: "日常模式",
+        1: "特殊模式"
+    };
+    Map_CTL_NJZJ.coms_valid = {
+        0: "无效",
+        1: "有效"
+    };
     return Map_CTL_NJZJ;
 }(ZH_CN_1.Map_ZH_CN));
 exports.Map_CTL_NJZJ = Map_CTL_NJZJ;

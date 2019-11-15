@@ -147,7 +147,7 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-            console.log(res)
+           
             var simtemp=""
             if (res.data.data.iMEI == null || res.data.data.iMEI =='null'){
               simtemp ="898607B61518900"
@@ -174,7 +174,7 @@ Page({
             }
             if (res.data.data.devicePrefix == 2) {
               that.setData({
-                deviceType: ctlTypeList.indexOf(res.data.data.deviceType),
+                deviceType: plcTypeList.indexOf(res.data.data.deviceType),
                 typearray: plcTypeList
               })
             }

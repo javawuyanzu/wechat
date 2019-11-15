@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var meta_1 = require("../meta");
+var comms_1 = require("@sdcsoft/comms");
 var BaseInfoField = /** @class */ (function (_super) {
     __extends(BaseInfoField, _super);
     function BaseInfoField() {
@@ -30,6 +31,17 @@ var BaseInfoField = /** @class */ (function (_super) {
     return BaseInfoField;
 }(meta_1.BaseInfoField));
 exports.BaseInfoField = BaseInfoField;
+var WeekField = /** @class */ (function (_super) {
+    __extends(WeekField, _super);
+    function WeekField() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    WeekField.prototype.setDeviceFieldForUIKey = function (fieldForUI) {
+        fieldForUI.setKey(comms_1.GroupKeys.KEY_WEEK);
+    };
+    return WeekField;
+}(meta_1.BaseInfoField));
+exports.WeekField = WeekField;
 var ExceptionField = /** @class */ (function (_super) {
     __extends(ExceptionField, _super);
     function ExceptionField() {
@@ -73,7 +85,8 @@ var StartStopField = /** @class */ (function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             bytes[_i] = arguments[_i];
         }
-        this.value = bytes[1] << 8 | bytes[0];
+        this.value = bytes[0] << 8 | bytes[1];
+        //console.log(this.value)
         return 0x7FFF != this.value;
     };
     return StartStopField;

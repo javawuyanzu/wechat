@@ -31,29 +31,16 @@ App({
       endDatetime = endDatetime.getFullYear() + '-' + (endDatetime.getMonth() + 1) + '-' + endDatetime.getDate() + ' ' + endDatetime.getHours() + ':' + endDatetime.getMinutes() + ':' + endDatetime.getSeconds()
       wx.request({
         //获取openid接口  
-        url: 'https://apis.sdcsoft.com.cn/wechat/employee/getwx',
+        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/onlineRecord/create',
         data: {
-          openId: openid,
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
+          minutes: min,
+          beginDatetime: beginDatetime,
+          endDatetime: endDatetime,
+          openId: openid
         },
         method: 'post',
         success: function (res) {
-          wx.request({
-            //获取openid接口  
-            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/onlineRecord/create',
-            data: {
-              minutes: min,
-              beginDatetime: beginDatetime,
-              endDatetime: endDatetime,
-              mobileNo: res.data.data.mobile
-            },
-            method: 'post',
-            success: function (res) {
-              console.log(res)
-            }
-          })
+          console.log(res)
         }
       })
     }

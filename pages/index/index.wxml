@@ -6,7 +6,6 @@
       <view style='height:50rpx;color:white;'>
         <open-data type="userNickName" lang="zh_CN" style="margin-left:50rpx;" bindtap="error"></open-data>
       </view>
-      <button wx:if="{{canIUse}}" open-type="getUserInfo"  bindgetuserinfo="bindGetUserInfo" style="margin-left: 50rpx;zoom: 0.7;margin-top: 13rpx;">{{content.list_shouquan}}</button>
     </view>
   </view>
 

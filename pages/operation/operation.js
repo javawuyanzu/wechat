@@ -7,33 +7,71 @@ Page({
     openid:'',
     content: null,
     inputValue:'',
+    empower:false,
   },
- 
+   
+  refusedEmpower: function () {
+    var that =this;
+    that.setData({
+      empower:false
+    })
+  },
+  bindGetUserInfo: function (e) {
+    var that = this
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          wx.login({
+            success: function (res) {
+              var code = res.code;
+              if (code) {
+                wx.getUserInfo({
+                  success: function (res) {
+                    wx.request({
+                      url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',
+                      method: "GET",
+                      data: {
+                        realName: res.userInfo.nickName,
+                        openid: app.globalData.openid,
+                      },
+                      header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                      success: function (res) {
+                       that.setData({
+                         empower:false
+                       })
+                      }
+                    })
+                  },
+                  fail: function () {
+                    console.log('获取用户信息失败')
+                  }
+                })
+              } else {
+                console.log('获取用户登录态失败！' + r.errMsg)
+              }
+            },
+            fail: function () {
+              console.log('登陆失败')
+            }
+          })
+        } else {
+          console.log('获取用户信息失败')
+        }
+      }
+    })
+  },
   addDeviceRecord: function (deviceNo) {
     var that=this
     wx.request({
       //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/wechat/employee/getwx',
+      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/userAddDeviceHistory/create',
       data: {
-        openId: app.globalData.openid,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
+        deviceNo: deviceNo,
+        openId: app.globalData.openid
       },
       method: 'post',
       success: function (res) {
-        wx.request({
-          //获取openid接口  
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/userAddDeviceHistory/create',
-          data: {
-            deviceNo: deviceNo,
-            mobileNo: res.data.data.mobile
-          },
-          method: 'post',
-          success: function (res) {
-            console.log(res)
-          }
-        })
+        console.log(res)
       }
     })
   },
@@ -92,16 +130,6 @@ Page({
                     return;
                   }
                   deviceNo = res.data.data.deviceSuffix
-                  for (var i = 0; i < deviceList.length; i++) {
-                    if (deviceList[i].deviceNo == deviceNo) {
-                      wx.showToast({
-                        title: that.data.content.operation_deviceexist,
-                        icon: 'none',
-                        duration: 2000
-                      });
-                      return;
-                    }
-                  }
                   var deviceType = res.data.data.deviceType;
                   wx.request({
                     //获取openid接口   
@@ -114,88 +142,102 @@ Page({
                     },
                     method: 'POST',
                     success: function (res) {
-                      console.log(res)
                       if (res.data.code == 2) {
-                        that.tologin()
-                      } else {
-                        if (deviceNo.substr(0, 2) === '20') {
-                          wx.request({
-                            //获取openid接口   
-                            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
-                            data: {
-                              openId: that.data.openid,
-                              deviceNo: deviceNo,
-                              deviceType: deviceType,
-                              mqttName: "0",
-                              deviceName: null,
-                              imgStyle: 0
-                            },
-                            method: 'POST',
-                            success: function (res) {
-                              deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: deviceType, imgStyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
-                              that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
-                              wx.switchTab({
-                                url: '../deviceList/deviceList'
-                              })
-                              that.setData({
-                                inputValue: ""
-                              })
-                            },
-                            fail: function (res) {
-                              wx.showToast({
-                                title: that.data.content.operation_connfail,
-                                icon: 'none',
-                                duration: 2000
-                              });
-                            }
-                          })
-                        } else {
-
-                          wx.request({
-                            //获取openid接口   
-                            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
-                            data: {
-                              openId: that.data.openid,
-                              deviceNo: deviceNo,
-                              deviceType: deviceType,
-                              mqttName: "0",
-                              deviceName: null,
-                              imgStyle: 0
-                            },
-                            method: 'POST',
-                            success: function (res) {
-                              deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: deviceType, imgStyle: 0 });
-                              wx.setStorage({
-                                key: 'deviceList',
-                                data: deviceList,
-                                success: function (res) {
-                                  wx.showToast({
-                                    title: that.data.content.operation_addsuccess,
-                                    icon: 'success',
-                                    duration: 2000
-                                  });
-                                }
-                              })
-                              wx.switchTab({
-                                url: '../deviceList/deviceList'
-                              })
-                              that.setData({
-                                inputValue: ""
-                              })
-                            },
-                            fail: function (res) {
-                              wx.showToast({
-                                title: that.data.content.operation_connfail,
-                                icon: 'none',
-                                duration: 2000
-                              });
-                            }
-                          })
+                        that.setData({
+                          empower: true
+                        })
+                        return
+                      }
+                      
+                      for (var i = 0; i < deviceList.length; i++) {
+                        if (deviceList[i].deviceNo == deviceNo) {
+                          wx.showToast({
+                            title: that.data.content.operation_deviceexist,
+                            icon: 'none',
+                            duration: 2000
+                          });
+                          return;
                         }
                       }
+                      
+                      if (deviceNo.substr(0, 2) === '20') {
+                        wx.request({
+                          //获取openid接口   
+                          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/create',
+                          data: {
+                            openId: app.globalData.openid,
+                            deviceNo: deviceNo,
+                            deviceType: deviceType,
+                            mqttName: "0",
+                            deviceName: null,
+                            imgStyle: 0
+                          },
+                          method: 'POST',
+                          success: function (res) {
+                            deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: deviceType, imgStyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
+                            that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                            wx.switchTab({
+                              url: '../deviceList/deviceList'
+                            })
+                            that.setData({
+                              inputValue: ""
+                            })
+                          },
+                          fail: function (res) {
+                            wx.showToast({
+                              title: that.data.content.operation_connfail,
+                              icon: 'none',
+                              duration: 2000
+                            });
+                          }
+                        })
+                      } else {
+                        wx.request({
+                          //获取openid接口   
+                          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/create',
+                          data: {
+                            openId: app.globalData.openid,
+                            deviceNo: deviceNo,
+                            deviceType: deviceType,
+                            mqttName: "0",
+                            deviceName: null,
+                            imgStyle: 0
+                          },
+                          method: 'POST',
+                          success: function (res) {
+                            console.log(res)
+                            deviceList.push({ deviceNo: deviceNo, deviceName: '', deviceType: deviceType, imgStyle: 0 });
+                            wx.setStorage({
+                              key: 'deviceList',
+                              data: deviceList,
+                              success: function (res) {
+                                wx.showToast({
+                                  title: that.data.content.operation_addsuccess,
+                                  icon: 'success',
+                                  duration: 2000
+                                });
+                              }
+                            })
+                            wx.switchTab({
+                              url: '../deviceList/deviceList'
+                            })
+                            that.setData({
+                              inputValue: ""
+                            })
+                          },
+                          fail: function (res) {
+                            wx.showToast({
+                              title: that.data.content.operation_connfail,
+                              icon: 'none',
+                              duration: 2000
+                            });
+                          }
+                        })
+                      }
+                      that.addDeviceRecord(deviceNo)
                     }
-                  })
-                  
+                  }) 
+                 
                 }
               })
             }
@@ -279,7 +321,6 @@ Page({
               },
               method: 'GET',
               success: function (res) {
-                console.log(res)
                 if (res.data.code != 0) {
                   wx.showToast({
                     title: res.data.msg,
@@ -289,118 +330,122 @@ Page({
                   return;
                 }
                 deviceNo = res.data.data.deviceSuffix
-                for (var i = 0; i < deviceList.length; i++) {
-                  if (deviceList[i].deviceNo == deviceNo) {
-                    wx.showToast({
-                      title: that.data.content.operation_deviceexist,
-                      icon: 'none',
-                      duration: 2000
-                    });
-                    return;
-                  }
-                }
                 var deviceType = res.data.data.deviceType;
-                  wx.request({
-                    //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/wechat/check/openId',
-                    data: {
-                      openId: app.globalData.openid
-                    },
-                    header: {
-                      'content-type': 'application/x-www-form-urlencoded'
-                    },
-                    method: 'POST',
-                    success: function (res) {
-                      if (res.data.code == 2) {
-                        that.tologin()
-                      }else{
-                        if (deviceNo.substr(0, 2) === '20') {
-                          wx.request({
-                            //获取openid接口   
-                            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
-                            data: {
-                              openId: that.data.openid,
-                              deviceNo: deviceNo,
-                              deviceType: deviceType,
-                              deviceName: null,
-                              imgStyle: 0
-                            },
-                            method: 'POST',
-                            success: function (res) {
-                              console.log(res)
-                              deviceList.push({ deviceNo: deviceNo, deviceName: "", deviceType: deviceType, imgStyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
-                              that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
-                              wx.setStorage({
-                                key: 'deviceList',
-                                data: deviceList,
-                                success: function (res) {
-                                  wx.showToast({
-                                    title: that.data.content.operation_addsuccess,
-                                    icon: 'success',
-                                    duration: 2000
-                                  });
-                                }
-                              })
-                              wx.switchTab({
-                                url: '../deviceList/deviceList'
-                              })
-                              that.setData({
-                                inputValue: ""
-                              })
-                            },
-                            fail: function (res) {
-                              wx.showToast({
-                                title: that.data.content.operation_connfail,
-                                icon: 'none',
-                                duration: 2000
-                              });
-                            }
-                          })
-                        } else {
-                          wx.request({
-                            //获取openid接口   
-                            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/store/create',
-                            data: {
-                              openId: that.data.openid,
-                              deviceNo: deviceNo,
-                              deviceType: deviceType,
-                              deviceName: null,
-                              imgStyle: 0
-                            },
-                            method: 'POST',
-                            success: function (res) {
-                              deviceList.push({ deviceNo: deviceNo, deviceName: "", deviceType: deviceType, imgStyle: 0 });
-                              wx.setStorage({
-                                key: 'deviceList',
-                                data: deviceList,
-                                success: function (res) {
-                                  wx.showToast({
-                                    title: that.data.content.operation_addsuccess,
-                                    icon: 'success',
-                                    duration: 2000
-                                  });
-                                }
-                              })
-                              wx.switchTab({
-                                url: '../deviceList/deviceList'
-                              })
-                              that.setData({
-                                inputValue: ""
-                              })
-                            },
-                            fail: function (res) {
-                              wx.showToast({
-                                title: that.data.content.operation_connfail,
-                                icon: 'none',
-                                duration: 2000
-                              });
-                            }
-                          })
-                        }
-                        that.addDeviceRecord(deviceNo)
+                wx.request({
+                  //获取openid接口   
+                  url: 'https://apis.sdcsoft.com.cn/wechat/check/openId',
+                  data: {
+                    openId: app.globalData.openid
+                  },
+                  header: {
+                    'content-type': 'application/x-www-form-urlencoded'
+                  },
+                  method: 'POST',
+                  success: function (res) {
+                    if (res.data.code == 2) {
+                      that.setData({
+                        empower: true
+                      })
+                      return 
+                    }
+                  
+                    for (var i = 0; i < deviceList.length; i++) {
+                      if (deviceList[i].deviceNo == deviceNo) {
+                        wx.showToast({
+                          title: that.data.content.operation_deviceexist,
+                          icon: 'none',
+                          duration: 2000
+                        });
+                        return;
                       }
                     }
-                  })
+                    if (deviceNo.substr(0, 2) === '20') {
+                      wx.request({
+                        //获取openid接口   
+                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/create',
+                        data: {
+                          openId: app.globalData.openid,
+                          deviceNo: deviceNo,
+                          deviceType: deviceType,
+                          deviceName: null,
+                          imgStyle: 0
+                        },
+                        method: 'POST',
+                        success: function (res) {
+                          console.log(res)
+                          deviceList.push({ deviceNo: deviceNo, deviceName: "", deviceType: deviceType, imgStyle: 0, mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5) });
+                          that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                          wx.setStorage({
+                            key: 'deviceList',
+                            data: deviceList,
+                            success: function (res) {
+                              wx.showToast({
+                                title: that.data.content.operation_addsuccess,
+                                icon: 'success',
+                                duration: 2000
+                              });
+                            }
+                          })
+                          wx.switchTab({
+                            url: '../deviceList/deviceList'
+                          })
+                          that.setData({
+                            inputValue: ""
+                          })
+                        },
+                        fail: function (res) {
+                          wx.showToast({
+                            title: that.data.content.operation_connfail,
+                            icon: 'none',
+                            duration: 2000
+                          });
+                        }
+                      })
+                    } else {
+                      wx.request({
+                        //获取openid接口   
+                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/create',
+                        data: {
+                          openId: app.globalData.openid,
+                          deviceNo: deviceNo,
+                          deviceType: deviceType,
+                          deviceName: null,
+                          imgStyle: 0
+                        },
+                        method: 'POST',
+                        success: function (res) {
+                          deviceList.push({ deviceNo: deviceNo, deviceName: "", deviceType: deviceType, imgStyle: 0 });
+                          wx.setStorage({
+                            key: 'deviceList',
+                            data: deviceList,
+                            success: function (res) {
+                              wx.showToast({
+                                title: that.data.content.operation_addsuccess,
+                                icon: 'success',
+                                duration: 2000
+                              });
+                            }
+                          })
+                          wx.switchTab({
+                            url: '../deviceList/deviceList'
+                          })
+                          that.setData({
+                            inputValue: ""
+                          })
+                        },
+                        fail: function (res) {
+                          wx.showToast({
+                            title: that.data.content.operation_connfail,
+                            icon: 'none',
+                            duration: 2000
+                          });
+                        }
+                      })
+                    }
+                    that.addDeviceRecord(deviceNo)
+                  }
+                }) 
+               
               }
             })
           }

@@ -2,6 +2,14 @@ const app = getApp();
 var wxCharts = require('../../utils/wxcharts.js');
 var lineChart = null;
 var startPos = null;
+import {
+  DateUtil
+} from '@sdcsoft/utils'
+
+import {
+  GroupKeys
+} from '@sdcsoft/comms'
+var gfrm = require('@sdcsoft/gfrm');
 Page({
   /**
    * 页面的初始数据
@@ -14,17 +22,21 @@ Page({
     errorList: [],
     baseInfoMap: [],
     mockInfoMap: [],
-    exceptionInfoMap: [],
+    exceptionInfoMap: [], 
     deviceInfoMap: [],
     settingInfoMap: [],
+    weeksettingMap: [],
+    startstoptimeMap: [],
+    switchquantityMap: [],
     bengAnimationList: [],
     fanAnimationList: [],
     bengList: [],
     fanList: [],
+    runInfoMoList:[],
     timer: '',
     timerStates: true,
     // 展开折叠
-    selectedFlag: [false, false, false, false, false],
+    selectedFlag: [false, false, false, false, false, false, false, false],
     navbar: [],
     currentTab: 0,
     control: false,
@@ -240,10 +252,7 @@ Page({
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
-    if (e.currentTarget.dataset.idx == 2 & that.data.report) {
-      var type = that.data.deviceType
-      that.getreportdatabykey(that.data.mock1)
-    }
+    
     if (e.currentTarget.dataset.idx == 3) {
       that.setData({
         timerStates: false,
@@ -279,7 +288,7 @@ Page({
       var chinese = require("../../utils/Chinses.js")
       that.setData({
         content: chinese.Content,
-        navbar: chinese.Content.detail_navbar,
+        navbar: chinese.Content.detail_navbar1,
         lang: 'zh-cn'
       })
     }
@@ -287,7 +296,7 @@ Page({
       var english = require("../../utils/English.js")
       that.setData({
         content: english.Content,
-        navbar: chinese.Content.detail_navbar,
+        navbar: chinese.Content.detail_navbar1,
         lang: 'en-us'
       })
     }
@@ -326,7 +335,18 @@ Page({
         })
       }
     })
+
+    var keylist = GroupKeys.getKeys();
+  
     that.setData({
+      detail_base: GroupKeys.getTitle(keylist[0]),
+      detail_mock: GroupKeys.getTitle(keylist[1]),
+      detail_ex: GroupKeys.getTitle(keylist[2]),
+      detail_deviceinfo: GroupKeys.getTitle(keylist[3]),
+      detail_deviceparameters: GroupKeys.getTitle(keylist[4]),
+      detail_weeksetting: GroupKeys.getTitle(keylist[5]),
+      detail_startstoptime: GroupKeys.getTitle(keylist[6]),
+      detail_switchquantity: GroupKeys.getTitle(keylist[7]),
         deviceNo: options.deviceNo,
         imgstyle: options.imgstyle,
         jiarezu: options.jiarezu,
@@ -411,6 +431,7 @@ Page({
     }
     that.getException(errorList);
     var imgstyle1 = that.data.imgstyle
+    var keylist = GroupKeys.getKeys();
     that.setData({
       src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
       bengAnimationList: data.getBeng(),
@@ -420,17 +441,12 @@ Page({
       mockInfoMap: data.getMockFields().map,
       settingInfoMap: data.getSettingFields().map,
       deviceInfoMap: data.getDeviceFields().map,
+      weeksettingMap: data.getFieldsMap(keylist[5]),
+      startstoptimeMap: data.getFieldsMap(keylist[6]),
+      switchquantityMap: data.getFieldsMap(keylist[7]),
     })
     wx.hideLoading()
-    for (var index in data.getMockFields().map) {
-      if (that.data.mock1 == null) {
-        that.setData({
-          mock1: data.getMockFields().map[index].name,
-          mock1Name: data.getMockFields().map[index].title
-        })
-        break;
-      }
-    }
+   
     for (var i = 0; i < that.data.bengAnimationList.length; i++) {
       console.log()
       var src = 'bengList[' + i + '].src'
@@ -453,6 +469,7 @@ Page({
   },
   // 展开折叠选择  
   changeToggle: function(e) {
+  
     var index = e.currentTarget.dataset.index;
     if (this.data.selectedFlag[index]) {
       this.data.selectedFlag[index] = false;
@@ -462,6 +479,7 @@ Page({
     this.setData({
       selectedFlag: this.data.selectedFlag,
     })
+   
   },
   bindChange: function(e) {
     var that = this;
@@ -483,13 +501,8 @@ Page({
   onShow: function() {
     var that = this;
     var type = that.data.deviceType
-    if (type === "PLC_DianReShui" || type === "PLC_DianZhengQi" || type === "PLC_RanMeiZhengQi" || type === "PLC_RanYouDaoReYou" || type === "PLC_RanYouReShui" || type === "PLC_RanYouZhengQi" || type === "PLC_RanYouZhenKong" || type === "PLC_YuReZhengQi") {
-      that.getreportdatabyday(that.data.tian)
-      // that.setData({
-      //   report: true,
-      //   navbar: that.data.content.detail_navbar1,
-      // })
-    }
+  
+    
     var deviceNo = that.data.deviceNo
     if (deviceNo.substr(0, 2) != '20') {
       wx.request({
@@ -507,6 +520,7 @@ Page({
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
           console.log(data)
+         
           var clist = data.getCommands().map
           data.getDeviceFocusFields()
           var media=-1
@@ -537,15 +551,32 @@ Page({
           }
           that.getException(errorList);
           var imgstyle1 = that.data.imgstyle
-          for (var index in data.getMockFields().map) {
-            if (that.data.mock1 == null) {
-              that.setData({
-                mock1: data.getMockFields().map[index].name,
-                mock1Name: data.getMockFields().map[index].title
-              })
-              break;
+
+          if (that.data.mock1 == null){
+            var gf = new gfrm.GroupFieldsRelationalMapping;
+            var moMap = gf.groupMap.getItem("mockInfo")["map"]["map"]
+            var runInfoMoList = []
+            for (var index in data.getMockFields().map) {
+              for (var mo in moMap) {
+                if (moMap[mo] == data.getMockFields().map[index].name) {
+                  runInfoMoList.push({ name: moMap[mo], title: data.getMockFields().map[index].title })
+                }
+              }
             }
+            if (runInfoMoList.length > 0) {
+              that.setData({
+                report:true,
+                runInfoMoList: runInfoMoList,
+                mock1: runInfoMoList[0].name,
+                mock1Name: runInfoMoList[0].title
+              })
+            }
+            that.getreportdatabykey(that.data.mock1)
+
           }
+         
+
+          var keylist = GroupKeys.getKeys();
           that.setData({
             src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
             bengAnimationList: data.getBeng(),
@@ -555,7 +586,11 @@ Page({
             mockInfoMap: data.getMockFields().map,
             settingInfoMap: data.getSettingFields().map,
             deviceInfoMap: data.getDeviceFields().map,
+            weeksettingMap: data.getFieldsMap(keylist[5]),
+            startstoptimeMap: data.getFieldsMap(keylist[6]),
+            switchquantityMap: data.getFieldsMap(keylist[7]),
           })
+          console.log(data.getFieldsMap(keylist[6]))
           wx.hideLoading()
           for (var i = 0; i < that.data.bengAnimationList.length; i++) {
             var src = 'bengList[' + i + '].src'
@@ -758,152 +793,97 @@ Page({
     return true;
   },
   //wxchart
-  getreportdatabyday: function(tian) {
-    var that = this
-    var beginDate = that.getDateStr(null, tian)
-    var endDate = that.getDateStr(beginDate, 1)
-    // wx.request({
-    //   url: 'https://report.sdcsoft.com.cn/wechat/device',
-    //   data: {
-    //     deviceType: that.data.deviceType,
-    //     begintime: beginDate,
-    //     endtime: endDate,
-    //     deviceNo: that.data.deviceNo
-    //   },
-    //   header: {
-    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    //   },
-    //   method: 'GET',
-    //   success: function(res) {
-    //     if (res.data.err_code==200) {
-    //       if (tian == -1) {
-    //         that.setData({
-    //           zuotianList: res.data.data,
-    //         })
-    //       } else if (tian == -2) {
-    //         that.setData({
-    //           qiantianList: res.data.data,
-    //         })
-    //       } else if (tian == -3) {
-    //         that.setData({
-    //           daqiantianList: res.data.data,
-    //         })
-    //       }
-    //     }
-    //   }
-    // })
-    // wx.request({
-    //   url: 'http://app.weixin.sdcsoft.cn/deviceinfo/find' + that.data.deviceType,
-    //   data: {
-    //     beginDate: beginDate,
-    //     endDate: endDate,
-    //     deviceNo: that.data.deviceNo
-    //   },
-    //   header: {
-    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    //   },
-    //   method: 'GET',
-    //   success: function(res) {
-
-    //     if (res.data.length > 0) {
-    //       if (tian == -1) {
-    //         that.setData({
-    //           zuotianList: res.data,
-    //         })
-    //       } else if (tian == -2) {
-    //         that.setData({
-    //           qiantianList: res.data,
-    //         })
-    //       } else if (tian == -3) {
-    //         that.setData({
-    //           daqiantianList: res.data,
-    //         })
-    //       }
-    //     } else {
-         
-    //       // wx.showToast({
-    //       //   title: "此设备在" + beginDate + "未开机",
-    //       //   icon: 'none',
-    //       //   duration: 5000
-    //       // });
-    //     }
-    //   },
-    // })
-  },
   getreportdatabykey: function(key) {
     var that = this
-    var tian = that.data.tian
-    var systemStateCategories = []
-    var systemStateData = []
-    if (tian == -1) {
-      for (var index in that.data.zuotianList) {
-        systemStateCategories.push(that.getDatefmt(that.data.zuotianList[index]["createDate"]))
-        systemStateData.push(that.data.zuotianList[index][key]);
-      }
+    if (that.data.tian == -1) {
+      var beginDate = that.getDateStr(null, -1)
     }
-
-    if (tian == -2) {
-      for (var index in that.data.qiantianList) {
-        systemStateCategories.push(that.getDatefmt(that.data.qiantianList[index]["createDate"]))
-        systemStateData.push(that.data.qiantianList[index][key]);
-      }
+    if (that.data.tian==-2){
+      var beginDate = that.getDateStr(null,-2)
     }
-    if (tian == -3) {
-      for (var index in that.data.daqiantianList) {
-        systemStateCategories.push(that.getDatefmt(that.data.daqiantianList[index]["createDate"]))
-        systemStateData.push(that.data.daqiantianList[index][key]);
-      }
+    if (that.data.tian == -3) {
+      var beginDate = that.getDateStr(null, -3)
     }
-
- 
-    if (systemStateData.length > 0) {
-      var windowWidth = 320;
-      try {
-        var res = wx.getSystemInfoSync();
-        windowWidth = res.windowWidth;
-      } catch (e) {
-        console.error('getSystemInfoSync failed!');
-      }
-
-      lineChart = new wxCharts({
-        canvasId: 'mockLine',
-        type: 'line',
-        categories: systemStateCategories,
-        animation: false,
-        series: [{
-          name: that.data.mock1Name,
-          data: systemStateData,
-          format: function(val, name) {
-            var fomatFloat = parseFloat(val);
-            return fomatFloat.toFixed(2);
+    var endDate = that.getDateStr(beginDate, 1)
+    wx.request({
+      url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
+      data: {
+        key: key,
+        begintime: beginDate,
+        endtime: endDate,
+        deviceNo: that.data.deviceNo
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      method: 'GET',
+      success: function(res) {
+        if (res.data.code==0) {
+          var systemStateCategories = []
+          var systemStateData = res.data.data.data[0]
+          var detelist = res.data.data.date
+          for (var d in detelist){
+            systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
           }
-        }],
-        xAxis: {
-          disableGrid: false
-        },
-        yAxis: {
-          title: that.data.content.detail_y,
-          format: function(val) {
-            return val.toFixed(2);
-          },
-          min: 0
-        },
-        width: windowWidth,
-        height: 200,
-        dataLabel: true,
-        dataPointShape: true,
-        enableScroll: true,
-        extra: {
-          lineStyle: 'curve'
-        }
-      });
-    }else{
-      that.setData({
-        report: false,
-      })
-    }
+         
+          if (systemStateData.length > 0) {
+            var windowWidth = 320;
+            try {
+              var res = wx.getSystemInfoSync();
+              windowWidth = res.windowWidth;
+            } catch (e) {
+              console.error('getSystemInfoSync failed!');
+            }
 
+            lineChart = new wxCharts({
+              canvasId: 'mockLine',
+              type: 'line',
+              categories: systemStateCategories,
+              animation: false,
+              series: [{
+                name: that.data.mock1Name,
+                data: systemStateData,
+                format: function (val, name) {
+                  var fomatFloat = parseFloat(val);
+                  return fomatFloat.toFixed(2);
+                }
+              }],
+              xAxis: {
+                disableGrid: false
+              },
+              yAxis: {
+                title: that.data.content.detail_y,
+                format: function (val) {
+                  return val.toFixed(2);
+                },
+                min: 0
+              },
+              width: windowWidth,
+              height: 200,
+              dataLabel: true,
+              dataPointShape: true,
+              enableScroll: true,
+              extra: {
+                lineStyle: 'curve'
+              }
+            });
+          } else {
+            wx.showToast({
+              title: "此设备在" + beginDate + "未开机",
+              icon: 'none',
+              duration: 5000
+            });
+            that.setData({
+              report: false,
+            })
+          }
+        }
+      }
+    })
+         
+  
   },
+ 
   radiochange: function(res) {
     var that = this
     that.setData({
@@ -943,6 +923,7 @@ Page({
       dd = new Date();
     }
     dd.setDate(dd.getDate() + addDayCount); //获取AddDayCount天后的日期
+   
     var y = dd.getFullYear();
     var m = dd.getMonth() + 1; //获取当前月份的日期 
     var d = dd.getDate();
@@ -959,16 +940,7 @@ Page({
     that.setData({
       tian: e.currentTarget.dataset.tian,
     })
-    if (e.currentTarget.dataset.tian == -2) {
-      if (!that.data.qiantianList.length > 0) {
-        that.getreportdatabyday(-2);
-      }
-    }
-    if (e.currentTarget.dataset.tian == -3) {
-      if (!that.data.daqiantianList.length > 0) {
-        that.getreportdatabyday(-3);
-      }
-    }
+    
   },
   //wxchart  方法 
   touchHandler: function(e) {

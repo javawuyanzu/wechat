@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var comms_1 = require("@sdcsoft/comms");
 var DeviceFieldForUI_1 = require("../meta/DeviceFieldForUI");
 var Element_1 = require("../entities/Element");
-var comms_2 = require("@sdcsoft/comms");
+var comms_1 = require("@sdcsoft/comms");
 var ByteField_1 = require("../meta/ByteField");
 var map_1 = require("../map/map");
 var Media;
@@ -36,13 +35,14 @@ var SdcSoftDevice = /** @class */ (function () {
          * 设置设备类型信息
          */
         this.typeName = '';
-        this.fieldMap.addItem(comms_2.GroupKeys.KEY_BASE, new comms_1.StringHashMap());
-        this.fieldMap.addItem(comms_2.GroupKeys.KEY_EXCEPTION, new comms_1.StringHashMap());
-        this.fieldMap.addItem(comms_2.GroupKeys.KEY_MOCK, new comms_1.StringHashMap());
-        this.fieldMap.addItem(comms_2.GroupKeys.KEY_SETTING, new comms_1.StringHashMap());
-        this.fieldMap.addItem(comms_2.GroupKeys.KEY_DEVICE, new comms_1.StringHashMap());
-        this.fieldMap.addItem(comms_2.GroupKeys.KEY_START_STOP, new comms_1.StringHashMap());
-        this.fieldMap.addItem(comms_2.GroupKeys.KEY_OPEN_CLOSE, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_BASE, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_EXCEPTION, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_MOCK, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_SETTING, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_DEVICE, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_WEEK, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_START_STOP, new comms_1.StringHashMap());
+        this.fieldMap.addItem(comms_1.GroupKeys.KEY_OPEN_CLOSE, new comms_1.StringHashMap());
         this.fieldMap.addItem(map_1.map.KEY_Count_Fields, new comms_1.StringHashMap());
     }
     SdcSoftDevice.prototype.setModbusNo = function (no) {
@@ -64,25 +64,25 @@ var SdcSoftDevice = /** @class */ (function () {
         return this.fieldMap.getItem(groupKey);
     };
     SdcSoftDevice.prototype.getBaseInfoFields = function () {
-        return this.getFieldsMap(comms_2.GroupKeys.KEY_BASE);
+        return this.getFieldsMap(comms_1.GroupKeys.KEY_BASE);
     };
     SdcSoftDevice.prototype.getDeviceFields = function () {
-        return this.getFieldsMap(comms_2.GroupKeys.KEY_DEVICE);
+        return this.getFieldsMap(comms_1.GroupKeys.KEY_DEVICE);
     };
     SdcSoftDevice.prototype.getExceptionFields = function () {
-        return this.getFieldsMap(comms_2.GroupKeys.KEY_EXCEPTION);
+        return this.getFieldsMap(comms_1.GroupKeys.KEY_EXCEPTION);
     };
     SdcSoftDevice.prototype.getMockFields = function () {
-        return this.getFieldsMap(comms_2.GroupKeys.KEY_MOCK);
+        return this.getFieldsMap(comms_1.GroupKeys.KEY_MOCK);
     };
     SdcSoftDevice.prototype.getSettingFields = function () {
-        return this.getFieldsMap(comms_2.GroupKeys.KEY_SETTING);
+        return this.getFieldsMap(comms_1.GroupKeys.KEY_SETTING);
     };
     SdcSoftDevice.prototype.getStartStopFields = function () {
-        return this.getFieldsMap(comms_2.GroupKeys.KEY_START_STOP);
+        return this.getFieldsMap(comms_1.GroupKeys.KEY_START_STOP);
     };
     SdcSoftDevice.prototype.getOpenCloseFields = function () {
-        return this.getFieldsMap(comms_2.GroupKeys.KEY_OPEN_CLOSE);
+        return this.getFieldsMap(comms_1.GroupKeys.KEY_OPEN_CLOSE);
     };
     SdcSoftDevice.prototype.getCountFields = function () {
         return this.getFieldsMap(map_1.map.KEY_Count_Fields);

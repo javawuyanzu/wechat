@@ -274,10 +274,13 @@ var StartStopField = /** @class */ (function (_super) {
         return false;
     };
     StartStopField.prototype.getValueString = function () {
-        var h = (this.value / 60).toString();
+        //console.log(this.value)
+        var h = (Math.floor(this.value / 60)).toString();
+        //console.log("h:"+h)
         if (2 > h.length)
             h = '0' + h;
         var m = (this.value % 60).toString();
+        //console.log("m"+m)
         if (2 > m.length)
             m = '0' + m;
         return h + ':' + m;
