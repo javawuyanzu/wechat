@@ -13,8 +13,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var RT_1 = require("../RT");
 var meta_1 = require("../../../../../meta/RT/meta");
+var X_1 = require("../X");
 var Map_CTL_RT_X1_Ts = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_X1_Ts, _super);
     function Map_CTL_RT_X1_Ts() {
@@ -31,12 +31,6 @@ var Map_CTL_RT_X1_Ts = /** @class */ (function (_super) {
         // this.subTypes.addItem('燃油气蒸汽电接点', 'CTL_RT_X1_RYZQDJD')
         // this.subTypes.addItem('燃油气蒸汽负荷调节', 'CTL_RT_X1_RYZQFHTJ')
     }
-    Map_CTL_RT_X1_Ts.coms_status = {
-        0: '待命',
-        1: '报警',
-        2: '运行',
-        3: '关机'
-    };
     return Map_CTL_RT_X1_Ts;
-}(RT_1.Map_CTL_RT));
+}(X_1.Map_CTL_RT_X));
 exports.Map_CTL_RT_X1_Ts = Map_CTL_RT_X1_Ts;

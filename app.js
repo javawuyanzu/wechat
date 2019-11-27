@@ -10,12 +10,10 @@ import mqtt from '/libs/mqtt/mqtt.js'
 App({
   data: {},
   onShow: function () {
-    console.log("进入小程序...")
     this.globalData.startTime = new Date()
     console.log(this.globalData.startTime)
   },
   onHide: function () {
-    console.log("离开小程序...")
     this.globalData.endTime = new Date()
     var total =  (this.globalData.endTime - this.globalData.startTime) / 1000
     var day = parseInt(total / (24 * 60 * 60));
@@ -23,7 +21,6 @@ App({
     var hour = parseInt(afterDay / (60 * 60));
     var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60;//取得算出小时数后剩余的秒数
     var min = parseInt(afterHour / 60);
-    
     if (min>3){
       var beginDatetime = new Date(this.globalData.startTime)
       beginDatetime = beginDatetime.getFullYear() + '-' + (beginDatetime.getMonth() + 1) + '-' + beginDatetime.getDate() + ' ' + beginDatetime.getHours() + ':' + beginDatetime.getMinutes() + ':' + beginDatetime.getSeconds()

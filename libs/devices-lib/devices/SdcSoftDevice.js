@@ -143,6 +143,7 @@ var SdcSoftDevice = /** @class */ (function () {
         return element;
     };
     SdcSoftDevice.prototype.validateFalse = function (bytesLength) {
+        //console.log(''+this.BYTE_ARRAY_LENGTH+'-'+bytesLength)
         return this.BYTE_ARRAY_LENGTH != bytesLength;
     };
     SdcSoftDevice.prototype.getCommands = function () {

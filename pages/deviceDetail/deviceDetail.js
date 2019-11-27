@@ -40,6 +40,7 @@ Page({
     navbar: [],
     currentTab: 0,
     control: false,
+    havedata: true,
     report: false,
     ifedit: false,
     placeholder: '',
@@ -263,6 +264,9 @@ Page({
         timerStates: true,
       })
     }
+    if (e.currentTarget.dataset.idx == 2) {
+      that.getreportdatabyday(that.data.mock1)
+    }
   },
   onHide: function() {
     app.globalData.callBack[1] = null
@@ -432,6 +436,7 @@ Page({
     that.getException(errorList);
     var imgstyle1 = that.data.imgstyle
     var keylist = GroupKeys.getKeys();
+   
     that.setData({
       src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
       bengAnimationList: data.getBeng(),
@@ -497,12 +502,9 @@ Page({
       })
     }
   },
-  
   onShow: function() {
     var that = this;
     var type = that.data.deviceType
-  
-    
     var deviceNo = that.data.deviceNo
     if (deviceNo.substr(0, 2) != '20') {
       wx.request({
@@ -522,6 +524,7 @@ Page({
           console.log(data)
          
           var clist = data.getCommands().map
+          console.log(data.getCommands().map)
           data.getDeviceFocusFields()
           var media=-1
           for (var index in data.getBaseInfoFields().map) {
@@ -571,7 +574,6 @@ Page({
                 mock1Name: runInfoMoList[0].title
               })
             }
-            that.getreportdatabykey(that.data.mock1)
 
           }
          
@@ -586,11 +588,10 @@ Page({
             mockInfoMap: data.getMockFields().map,
             settingInfoMap: data.getSettingFields().map,
             deviceInfoMap: data.getDeviceFields().map,
-            weeksettingMap: data.getFieldsMap(keylist[5]),
-            startstoptimeMap: data.getFieldsMap(keylist[6]),
-            switchquantityMap: data.getFieldsMap(keylist[7]),
+            weeksettingMap: data.getFieldsMap(keylist[5]).map,
+            startstoptimeMap: data.getFieldsMap(keylist[6]).map,
+            switchquantityMap: data.getFieldsMap(keylist[7]).map,
           })
-          console.log(data.getFieldsMap(keylist[6]))
           wx.hideLoading()
           for (var i = 0; i < that.data.bengAnimationList.length; i++) {
             var src = 'bengList[' + i + '].src'
@@ -793,13 +794,13 @@ Page({
     return true;
   },
   //wxchart
-  getreportdatabykey: function(key) {
+  getreportdatabykey: function (key) {
     var that = this
     if (that.data.tian == -1) {
       var beginDate = that.getDateStr(null, -1)
     }
-    if (that.data.tian==-2){
-      var beginDate = that.getDateStr(null,-2)
+    if (that.data.tian == -2) {
+      var beginDate = that.getDateStr(null, -2)
     }
     if (that.data.tian == -3) {
       var beginDate = that.getDateStr(null, -3)
@@ -817,15 +818,18 @@ Page({
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
       },
       method: 'GET',
-      success: function(res) {
-        if (res.data.code==0) {
+      success: function (res) {
+        if (res.data.code == 0) {
+          that.setData({
+            havedata: true
+          })
           var systemStateCategories = []
           var systemStateData = res.data.data.data[0]
           var detelist = res.data.data.date
-          for (var d in detelist){
+          for (var d in detelist) {
             systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
           }
-         
+
           if (systemStateData.length > 0) {
             var windowWidth = 320;
             try {
@@ -867,23 +871,115 @@ Page({
                 lineStyle: 'curve'
               }
             });
-          } else {
-            wx.showToast({
-              title: "此设备在" + beginDate + "未开机",
-              icon: 'none',
-              duration: 5000
-            });
-            that.setData({
-              report: false,
-            })
           }
+        } else {
+          wx.showToast({
+            title: "未查询到符合条件的数据",
+            icon: 'none',
+            duration: 5000
+          });
+          // that.setData({
+          //   havedata: false
+          // })
         }
       }
     })
-         
-  
+
+
   },
- 
+  getreportdatabyday: function (key) {
+    var that = this
+    if (that.data.tian == -1) {
+      var beginDate = that.getDateStr(null, -1)
+    }
+    if (that.data.tian == -2) {
+      var beginDate = that.getDateStr(null, -2)
+    }
+    if (that.data.tian == -3) {
+      var beginDate = that.getDateStr(null, -3)
+    }
+    var endDate = that.getDateStr(beginDate, 1)
+    wx.request({
+      url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
+      data: {
+        key: key,
+        begintime: beginDate,
+        endtime: endDate,
+        deviceNo: that.data.deviceNo
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      method: 'GET',
+      success: function (res) {
+        if (res.data.code == 0) {
+          that.setData({
+            havedata: true
+          })
+          var systemStateCategories = []
+          var systemStateData = res.data.data.data[0]
+          var detelist = res.data.data.date
+          for (var d in detelist) {
+            systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
+          }
+
+          if (systemStateData.length > 0) {
+            var windowWidth = 320;
+            try {
+              var res = wx.getSystemInfoSync();
+              windowWidth = res.windowWidth;
+            } catch (e) {
+              console.error('getSystemInfoSync failed!');
+            }
+
+            lineChart = new wxCharts({
+              canvasId: 'mockLine',
+              type: 'line',
+              categories: systemStateCategories,
+              animation: false,
+              series: [{
+                name: that.data.mock1Name,
+                data: systemStateData,
+                format: function (val, name) {
+                  var fomatFloat = parseFloat(val);
+                  return fomatFloat.toFixed(2);
+                }
+              }],
+              xAxis: {
+                disableGrid: false
+              },
+              yAxis: {
+                title: that.data.content.detail_y,
+                format: function (val) {
+                  return val.toFixed(2);
+                },
+                min: 0
+              },
+              width: windowWidth,
+              height: 200,
+              dataLabel: true,
+              dataPointShape: true,
+              enableScroll: true,
+              extra: {
+                lineStyle: 'curve'
+              }
+            });
+          }
+        } else {
+          wx.showToast({
+            title: "此设备在" + beginDate + "未开机",
+            icon: 'none',
+            duration: 5000
+          });
+          that.setData({
+            havedata: false
+          })
+        }
+      }
+    })
+
+
+  },
   radiochange: function(res) {
     var that = this
     that.setData({
@@ -940,7 +1036,7 @@ Page({
     that.setData({
       tian: e.currentTarget.dataset.tian,
     })
-    
+    that.getreportdatabyday(that.data.mock1)
   },
   //wxchart  方法 
   touchHandler: function(e) {

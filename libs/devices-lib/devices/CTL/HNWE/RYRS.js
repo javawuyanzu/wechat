@@ -18,7 +18,9 @@ var Element_1 = require("../../../entities/Element");
 module.exports = /** @class */ (function (_super) {
     __extends(CTL_HNWE_485, _super);
     function CTL_HNWE_485() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super.call(this) || this;
+        _this.BYTE_ARRAY_LENGTH = 58;
+        return _this;
     }
     CTL_HNWE_485.prototype.handleByteField = function (field, bytes) {
         //let view = new DataView(bytes)

@@ -290,8 +290,8 @@ var Map_CTL_NJZJ_IP_Http = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_qiluyali', 489, 2, '启炉压力', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_zhuanhuohuichayali', 491, 2, '转火回差压力', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_qiluhuichayali', 493, 2, '启炉回差压力', 'MPa', 100));
-        _this.addPoint(new meta_1.SettingField('se_qianyanshi', 495, 2, '前延时', 'S'));
-        _this.addPoint(new meta_1.SettingField('se_houyanshimiao', 497, 2, '后延时秒', 'S'));
+        _this.addPoint(new meta_1.SettingField('se_qianyanshi', 495, 2, '前延时', 'S', 0, Map_CTL_NJZJ_IP_Http.Commands_Key_Parameters_Setting, '050F', 1, 60));
+        _this.addPoint(new meta_1.SettingField('se_houyanshimiao', 497, 2, '后延时秒', 'S', 0, Map_CTL_NJZJ_IP_Http.Commands_Key_Parameters_Setting, '0510', 1, 60));
         _this.addPoint(new meta_1.SettingField('se_qianchuisao', 499, 2, '前吹扫', 'S'));
         _this.addPoint(new meta_1.SettingField('se_houchuisao', 501, 2, '后吹扫', 'S'));
         _this.addPoint(new meta_1.SettingField('se_lubibaojingwendu', 503, 2, '炉壁报警温度', '℃'));

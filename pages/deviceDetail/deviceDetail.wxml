@@ -108,9 +108,9 @@
     </view>
     
 
-     <!-- <view class="li" data-index="5" bindtap='changeToggle'>
+     <view class="li" data-index="5" bindtap='changeToggle'>
       <view class="left">
-        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
+        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/weeksetting.png"></image>
          {{detail_weeksetting}}</view>
       <view class="right ">
       <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
@@ -128,7 +128,7 @@
 
    <view class="li" data-index="6" bindtap='changeToggle'>
       <view class="left">
-        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
+        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/switchquantity.png"></image>
          {{detail_startstoptime}}</view>
       <view class="right ">
       <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
@@ -144,23 +144,24 @@
       </block>
     </view>
 
-     <view class="li" data-index="5" bindtap='changeToggle'>
+
+     <view class="li" data-index="7" bindtap='changeToggle'>
       <view class="left">
-        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
-         {{detail_weeksetting}}</view>
+        <image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/startstop.png"></image>
+         {{detail_switchquantity}}</view>
       <view class="right ">
       <text class="iconfont {{selectedFlag[0]?'icon-shangla':'icon-shangla1'}}"> </text>
       </view>
     </view>
-    <view hidden="{{!selectedFlag[5]}}">
-      <block wx:for="{{weeksettingMap}}"  wx:key="settingInfoMap" wx:for-item="item"  wx:for-index="index">
+    <view hidden="{{!selectedFlag[7]}}">
+      <block wx:for="{{switchquantityMap}}"  wx:key="switchquantityMap" wx:for-item="item"  wx:for-index="index">
         <view class="{{lang==='zh-cn'?'bg-gray-zh':'bg-gray-en'}}">
           <view>
                 <text decode="{{true}}"  style="">{{item.title}}{{item.valueString}}</text>
           </view>
         </view>
       </block>
-    </view> -->
+    </view>
 
 
   </view>
@@ -187,10 +188,10 @@
       <view style='width:33.3%;text-align:center;' class="{{tian==-2 ? 'active1' : ''}}" data-tian="-2" data-date="{{qiantian}}" bindtap='choosedata'>{{qiantian}}</view>
       <view style='width:33.3%;text-align:center;' class="{{tian==-1 ? 'active1' : ''}}" data-tian="-1" data-date="{{zuotian}}" bindtap='choosedata'>{{zuotian}}</view>
     </view>
-    <view class="container_wxchart">
+    <view class="container_wxchart" wx:if="{{havedata}}">
       <canvas canvas-id="mockLine" disable-scroll="true" class="canvas" bindtouchstart="touchHandler" bindtouchmove="moveHandler" bindtouchend="touchEndHandler"></canvas>
     </view>
-    <view class="section section_gap">
+    <view class="section section_gap" wx:if="{{havedata}}"> 
       <view class="section__title">{{content.detail_plziduan}}：</view>
       <radio-group bindchange="radiochange">
         <label class="checkbox" wx:for="{{runInfoMoList}}" wx:key="runInfoMoList" >
