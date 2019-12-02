@@ -11,7 +11,6 @@ App({
   data: {},
   onShow: function () {
     this.globalData.startTime = new Date()
-    console.log(this.globalData.startTime)
   },
   onHide: function () {
     this.globalData.endTime = new Date()
@@ -102,6 +101,35 @@ App({
   },
   onLaunch: function () {
     var that = this
+    wx.login({
+      success: function (res) {
+        wx.request({
+          //获取openid接口  
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+          data: {
+            js_code: res.code,
+          },
+          method: 'GET',
+          success: function (res) {
+            openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+            that.globalData.openid = openid
+            wx.request({
+              //获取openid接口  
+              url: 'http://127.0.0.1:8080/webapi/wechat/RoleResource/list',
+              data: {
+                openId: openid,
+              },
+              method: 'GET',
+              success: function (res) {
+                if(res.data.code==0&res.data.data.length>0){
+                  console.log(res)
+                }
+              }
+            })
+          }
+        })
+      }
+    })
     const storage = wx.getStorageInfoSync()
     if (storage.keys.length == 0) {
       wx.setStorageSync('deviceList', [])
@@ -124,23 +152,6 @@ App({
       }
     })
    
-   
-    wx.login({
-      success: function (res) {
-        wx.request({
-          //获取openid接口  
-          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-          data: {
-            js_code: res.code,
-          },
-          method: 'GET',
-          success: function (res) {
-            openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
-            that.globalData.openid = openid
-          }
-        })
-      }
-    })
   },
   globalData: {
     deviceAdapter: deviceAdapter,
@@ -154,5 +165,6 @@ App({
     endTime: null,
     bytedata:[],
     device:null,
+    
   },
 })

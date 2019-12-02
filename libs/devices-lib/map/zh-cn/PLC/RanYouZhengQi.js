@@ -75,6 +75,10 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField('mo_zhaoqishunshiliuliang', 187, 4, '沼气瞬时流量', 'm³/h'));
         _this.addPoint(new meta_1.MockField('mo_zhaoqileijiliuliang', 191, 4, '沼气累计流量', 'm³/h'));
         _this.addPoint(new meta_1.MockField('mo_zhaoqifengjipinlvfankui', 195, 4, '沼气风机频率反馈', 'Hz'));
+        //2019.11.30河南仁泰临时新增
+        _this.addPoint(new meta_1.MockField('mo_chuyangqibushuifafankui', 199, 4, '除氧器补水阀反馈频率', '%'));
+        _this.addPoint(new meta_1.MockField('mo_chuyangqijiarefafankui', 203, 4, '除氧器加热阀反馈频率', '%'));
+        //
         _this.addPoint(new meta_1.SettingField('se_qiluyalisheding', 248, 4, '启炉压力设定', 'MPa'));
         _this.addPoint(new meta_1.SettingField('se_mubiaoyalisheding', 252, 4, '目标压力设定', 'MPa'));
         _this.addPoint(new meta_1.SettingField('se_tingluyalisheding', 256, 4, '停炉压力设定', 'MPa'));
@@ -91,6 +95,11 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_chuyangqijidibaojingsheding', 300, 4, '除氧器极低报警设定', 'mm'));
         _this.addPoint(new meta_1.SettingField('se_chuyangqibushuishoudonggeisu', 304, 4, '除氧器补水手动给速', 'Hz'));
         _this.addPoint(new meta_1.SettingField('se_zhaoqiyalimubiaosheding', 308, 4, '沼气压力目标设定', 'KPa'));
+        //2019.11.30河南仁泰临时新增
+        _this.addPoint(new meta_1.SettingField('se_chuyangqibushuifasheding', 312, 4, '除氧器补水阀手动设定', '%'));
+        _this.addPoint(new meta_1.SettingField('se_chuyangqijiarefasheding', 316, 4, '除氧器加热阀手动设定', '%'));
+        _this.addPoint(new meta_1.SettingField('se_chuyangqijiarefamubiaosheding', 320, 4, '除氧器加热阀目标设定', '%'));
+        //
         _this.addPoint(new meta_1.DeviceField('de_1_addshuibeng_auto', 368, 2, '1#补水泵', BaseMap_1.Map_PLC.coms_atuo));
         _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_Add_SHUI_BENG_1, 370, 2, '1#补水泵', Map_PLC_RanYouZhengQi.coms_start_stop));
         _this.addPoint(new meta_1.DeviceField('de_2_addshuibeng_auto', 372, 2, '2#补水泵', BaseMap_1.Map_PLC.coms_atuo));
@@ -107,7 +116,13 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField('de_1_zhaoqifengji_auto', 394, 2, '1#沼气风机', BaseMap_1.Map_PLC.coms_atuo));
         _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_ZHAO_QI_FAN_1, 396, 2, '1#沼气风机', Map_PLC_RanYouZhengQi.coms_start_stop));
         _this.addPoint(new meta_1.DeviceField('de_2_zhaoqifengji_auto', 398, 2, '2#沼气风机', BaseMap_1.Map_PLC.coms_atuo));
-        _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_ZHAO_QI_FAN_2, 400, 2, '2#沼气风机启', Map_PLC_RanYouZhengQi.coms_start_stop));
+        _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_ZHAO_QI_FAN_2, 400, 2, '2#沼气风机', Map_PLC_RanYouZhengQi.coms_start_stop));
+        //2019.11.30河南仁泰临时新增
+        _this.addPoint(new meta_1.DeviceField('de_chuyangqibushuifa_auto', 402, 2, '除氧器补水阀', BaseMap_1.Map_PLC.coms_atuo));
+        _this.addPoint(new meta_1.DeviceField('de_chuyangqijiereifa_auto', 404, 2, '除氧器加热阀', BaseMap_1.Map_PLC.coms_atuo));
+        _this.addPoint(new meta_1.DeviceField('de_lianpaidiancifa_auto', 406, 2, '联排电磁阀', BaseMap_1.Map_PLC.coms_atuo));
+        _this.addPoint(new meta_1.DeviceField('de_lianpaidiancifa_start_stop', 408, 2, '联排电磁阀', BaseMap_1.Map_PLC.coms_start_stop));
+        //
         _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 448, 2, '超压报警（压力开关）', 0), 'ex_chaoyabaojingyalikaiguan');
         _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 448, 2, '超压报警（设定值）', 1), 'ex_chaoyabaojingshedingzhi');
         _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 448, 2, '排烟超温报警', 2));

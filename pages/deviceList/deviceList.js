@@ -776,8 +776,8 @@ Page({
               } else {
                 try {
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
-
-                  
+                console.log(data)
+                  console.log(deviceType) 
                   //data.setModbusNo 设置Modbus站号 默认1 1-255
                   if (data.getTypeName() != deviceType) {
                     wx.request({
