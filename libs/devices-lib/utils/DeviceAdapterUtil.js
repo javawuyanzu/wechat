@@ -19,6 +19,7 @@ var Wechat_DeviceAdapter = /** @class */ (function () {
     Wechat_DeviceAdapter.prototype.createMapFunc = function (type) {
         var strs = type.split('_');
         var path = '../map/' + Wechat_DeviceAdapter.lang + '/' + strs.join('/');
+      console.log(path);
         var mapType = require(path);
         var d = new mapType();
         return d;

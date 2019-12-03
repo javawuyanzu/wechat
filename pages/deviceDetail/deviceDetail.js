@@ -524,7 +524,6 @@ Page({
           console.log(data)
          
           var clist = data.getCommands().map
-          console.log(data.getCommands().map)
           data.getDeviceFocusFields()
           var media=-1
           for (var index in data.getBaseInfoFields().map) {
