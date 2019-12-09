@@ -463,6 +463,7 @@ Page({
 
   onLoad: function(options) {
     var that = this;
+   
     // getApp().conmqtt().then(function () {
     //   //that.subTopic("ABC/01")
     //   app.globalData.client.publish("ABC/01", "123", function (err) {
@@ -680,7 +681,12 @@ Page({
     that.setData({
       timerStates: true
     })
-
+    // wx.showToast({
+    //   title: '尊敬的用户，您好！ 我们的小程序即将进入商业收费模式',
+    //   icon: 'none',
+    //   duration: 5000,
+    //   mask: true
+    // })
   },
   getDeviceFromBytes(deviceNo, deviceType, data) {
     var that = this;

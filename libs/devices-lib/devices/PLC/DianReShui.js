@@ -23,6 +23,10 @@ module.exports = /** @class */ (function (_super) {
         _this.BYTE_ARRAY_LENGTH = 245;
         return _this;
     }
+    PLC_DianReShui.prototype.validateFalse = function (bytesLength) {
+        //console.log(''+this.BYTE_ARRAY_LENGTH+'-'+bytesLength)
+        return this.BYTE_ARRAY_LENGTH > bytesLength;
+    };
     PLC_DianReShui.prototype.getDeviceFocusFields = function () {
         var map = this.getBaseInfoFields();
         var list = new Collections_1.List();

@@ -288,6 +288,10 @@ Page({
     wx.showLoading({
       title: "loading...",
     })
+    console.log(app.globalData.exceptionMenu)
+    console.log(app.globalData.reportMenu)
+    console.log(app.globalData.controlMenu)
+    console.log(app.globalData.smsMenu)
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({

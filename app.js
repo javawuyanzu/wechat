@@ -99,6 +99,21 @@ App({
  
     })
   },
+  chooseMenu: function (num) {
+    var that=this;
+    if (num==2){
+      that.globalData.exceptionMenu = true
+    }
+    if (num == 3) {
+      that.globalData.reportMenu = true
+    }
+    if (num == 4) {
+      that.globalData.controlMenu = true
+    }
+    if (num == 5) {
+      that.globalData.smsMenu = true
+    }
+  },
   onLaunch: function () {
     var that = this
     wx.login({
@@ -115,14 +130,22 @@ App({
             that.globalData.openid = openid
             wx.request({
               //获取openid接口  
-              url: 'http://127.0.0.1:8080/webapi/wechat/RoleResource/list',
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
               data: {
                 openId: openid,
               },
               method: 'GET',
               success: function (res) {
                 if(res.data.code==0&res.data.data.length>0){
-                  console.log(res)
+                  var currentTime = new Date();
+                  currentTime = currentTime.getFullYear() + '-' + (currentTime.getMonth() + 1) + '-' + currentTime.getDate() + '-' + currentTime.getHours() + ':' + currentTime.getMinutes() + ':' + currentTime.getSeconds(); 
+                  var list=res.data.data
+
+                  for(var i =0;i<list.length;i++){
+                    if (currentTime < list[i].dueTime){
+                      that.chooseMenu(list[i].resId)
+                    }
+                  }
                 }
               }
             })
@@ -165,6 +188,9 @@ App({
     endTime: null,
     bytedata:[],
     device:null,
-    
+    exceptionMenu:false,
+    reportMenu: false,
+    controlMenu: false,
+    smsMenu: false,
   },
 })
