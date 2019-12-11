@@ -325,7 +325,7 @@ var Map_CTL_NJZJ_IP_Http = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_dianhuochenggongwendu', 559, 2, '点火成功温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_lushuitingluwendu', 561, 2, '炉水停炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_lushuiqiluwendu', 563, 2, '炉水启炉温度', '℃'));
-        _this.addPoint(new meta_1.SettingField('se_meishuibaojingwendu', 565, 2, '媒水报警温度', '℃'));
+        _this.addPoint(new meta_1.SettingField('se_meishuibaojingwendu', 565, 2, '媒水报警温度', '℃', 0, Map_CTL_NJZJ_IP_Http.Commands_Key_Parameters_Setting, '0532', 50, 200));
         _this.addPoint(new meta_1.SettingField('se_meishuitingluwendu', 567, 2, '媒水停炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_meishuiqiluwendu', 569, 2, '媒水启炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_kaibengyali', 571, 2, '开泵压力', 'MPa', 100));

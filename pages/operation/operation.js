@@ -36,6 +36,7 @@ Page({
                       },
                       header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
                       success: function (res) {
+                        console.log(res)
                        that.setData({
                          empower:false
                        })

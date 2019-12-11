@@ -6,18 +6,9 @@ Page({
     wxEnterpriseName:'',
     content:null,
     sole: false,
-    canIUse: false,
+    canIUse: true,
   },
-  pageLifetimes: {
-    show() {
-      if (typeof this.getTabBar === 'function' &&
-        this.getTabBar()) {
-        this.getTabBar().setData({
-          selected: 0
-        })
-      }
-    }
-  },
+  
   error: function () {
     wx.navigateTo({
       url: '../reports/reports'
@@ -36,58 +27,23 @@ Page({
   },
   onLoad: function () {
     var that = this;
-    wx.login({
+    wx.request({
+      //获取openid接口   
+      url: 'https://apis.sdcsoft.com.cn/wechat/employee/getSoldPermissions',
+      data: {
+        openid: app.globalData.openid,
+      },
+      method: 'GET',
       success: function (res) {
-        wx.request({
-          //获取openid接口  
-          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-          data: {
-            js_code: res.code,
-          },
-          method: 'GET',
-          success: function (res) {
-            var openid = res.data.openid;//获取到的openid  
-            that.setData({
-              openid: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
-            })
-            wx.request({
-              //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/wechat/check/openId',
-              data: {
-                openId: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
-              },
-              header: {
-                'content-type': 'application/x-www-form-urlencoded'
-              },
-              method: 'POST',
-              success: function (res) {
-                console.log(res)
-                if (res.data.code == 1 & res.data.code!="5") {
-                  that.setData({
-                    canIUse:true
-                  })
-                }
-              }
-            })
-            wx.request({
-              //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/wechat/employee/getSoldPermissions',
-              data: {
-                openid: that.data.openid,
-              },
-              method: 'GET',
-              success: function (res) {
-                if (res.data == 0) {
-                  that.setData({
-                    sole: true
-                  })
-                } 
-              }
-            })
-          }
-        })
+        if (res.data == 0) {
+          that.setData({
+            sole: true
+          })
+        }
       }
     })
+
+   
     wx.getStorage({
       key: 'wxEnterpriseName',
       success(res) {
@@ -113,5 +69,31 @@ Page({
         content: english.Content
       })
     }
+    wx.request({
+      //获取openid接口   
+      url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
+      data: {
+        openId: app.globalData.openid,
+      },
+      method: 'GET',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        console.log(res)
+        if (res.data.code == 0) {
+          var list = res.data.data
+          if (list.length > 0) {
+            for (var i in list) {
+              if (list[i].unionId != null) {
+                that.setData({
+                  canIUse: false
+                })
+              }
+            }
+          }
+        }
+      }
+    })
   }
 })

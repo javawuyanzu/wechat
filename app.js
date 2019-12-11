@@ -137,6 +137,7 @@ App({
           success: function (res) {
             openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             that.globalData.openid = openid
+            console.log(openid)
           }
         })
       }
