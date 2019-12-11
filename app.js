@@ -175,6 +175,7 @@ App({
       }
     })
    
+
   },
   globalData: {
     deviceAdapter: deviceAdapter,

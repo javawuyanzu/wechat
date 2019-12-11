@@ -416,7 +416,8 @@ Page({
         media = data.getBaseInfoFields().map[index].value
       }
     }
-    if (media == 0) {
+    
+    if (media == 0 || media == 1) {
       that.setData({
         control: true,
         navbar: that.data.content.detail_cnavbar,
@@ -525,10 +526,9 @@ Page({
         success: function(res) {
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
-          console.log(data)
+         
          
           var clist = data.getCommands().map
-          console.log(data.getCommands().map)
           data.getDeviceFocusFields()
           var media=-1
           for (var index in data.getBaseInfoFields().map) {
@@ -536,7 +536,8 @@ Page({
               media = data.getBaseInfoFields().map[index].value
             }
           }
-          if (media == 0) {
+          console.log(media)
+          if (media == 0 || media == 4) {
             that.setData({
               control: true,
               navbar: that.data.content.detail_cnavbar,

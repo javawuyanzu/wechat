@@ -243,16 +243,23 @@ var IP = /** @class */ (function (_super) {
     };
     IP.prototype.getPowerInfo = function () {
         if (this.power == SdcSoftDevice_1.Power.Dian) {
+            // console.log('电')
             return this.getDeviceFields().getItem('de_jiarezu').getValue() > 0 ? 1 : 0;
         }
         else if (this.power == SdcSoftDevice_1.Power.Mei) {
+            // console.log('煤')
             // return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0
             return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0 ? 1 : 0;
         }
         else if (this.power == SdcSoftDevice_1.Power.ShengWuZhi) {
+            // console.log('生')
             // return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0x7F ? 1 : 0
             return this.getDeviceFields().getItem(IP.KEY_POINT_YIN_FENG_JI).getValue() > 0 ? 1 : 0;
         }
+        else if (this.power == 4) { //余热炉
+            return 0;
+        }
+        console.log('油');
         var v = this.getDeviceFields().getItem(IP.KEY_POINT_RAN_SHAO_QI).getValue(); // > 0x7F ? 1 : 0
         return v;
     };

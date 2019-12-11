@@ -20,6 +20,7 @@ Page({
     inputValue: '',
     quhao: '',
     openid:'',
+    empower: true,
     adapterSource: ["Albania", "Andorra", "Austria", "Australia", "	Algeria", "Angola", "Argentina", "Antigua and Barbuda", "Afghanistan", "Azerbaijan", "Alaska(U.S.A)", "Armenia", "Anguilla I.", "Aruba I.", "Ascension", "Belarus", "Bulgaria", "Belgium", "Benin", "Botswana", "Burkina Faso", "Burundi", "Barbados", "Brazil", "Bolivia", "Belize", "Bahrain", "Bhutan", "Bangladesh", "Brunei Darussalam", "Bermuda Is.", "Bosnia And Herzegovina", "	Czech", "Croatia", "Cook Islands", "Cape Verde", "238", "Congo", "Cameroon", "	Comoro", "Chad", "Central Africa", "Commonwealth of The Bahamas", "Colombia", "	Costa Rica", "Cuba", "Canada", "1", "Chile", "Cyprus", "China", "Canaries Is.", "Christmas I.", "Denmark", "Estonia", "Egypt", "France", "Finland", "Germany", "Iraq", "Israel", "India", "Indonesia", "Japan", "Kenya", "Korea(dpr of)", "Kazakhstan", "Korea(republic of)", "Kyrgyzstan", "Kampuchea", "Kuwait", "Libya", "Laos", "Myanmar", "New Zealand", "Portugal", "Paraguay", "Pakistan", "Palestinian", "Philippines", "Sweden", "Switzerland", "South Africa", "Saudi Arabia", "The Democratic Republic of Congo", "Tanzania", "Vietnam"],
     adapterSourcemap: [
       { name: "Albania", code: "355" }, { name: "Andorra", code: "376" }, { name: "Austria", code: "43" },
@@ -303,7 +304,7 @@ Page({
               duration: 2000,
               success(res) {
                 wx.switchTab({
-                  url: "/pages/operation/operation",
+                  url: '/pages/deviceList/deviceList'
                 })
               }
             })
@@ -317,8 +318,65 @@ Page({
 
     }
   },
- 
- 
+  bindGetUserInfo: function (e) {
+    var that = this
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          wx.login({
+            success: function (res) {
+              var code = res.code;//登录凭证
+              if (code) {
+                //2、调用获取用户信息接口
+                wx.getUserInfo({
+                  success: function (res) {
+                    //3.请求自己的服务器，解密用户信息 获取unionId等加密信息
+                    wx.request({
+                      url: 'https://apis.sdcsoft.com.cn/wechat/device/getUnionId',
+                      method: 'get',
+                      header: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                      },
+                      data: { encryptedData: res.encryptedData, iv: res.iv, code: code },
+                      success: function (data) {
+                        var unionId = data.data.data.unionId
+                        app.globalData.unionId = unionId
+                        that.setData({
+                          empower:false
+                          })
+                        console.log(unionId)
+                      },
+                      fail: function () {
+                        console.log('系统错误')
+                      }
+                    })
+                  },
+                  fail: function () {
+                    console.log('获取用户信息失败')
+                  }
+                })
+
+              } else {
+                console.log('获取用户登录态失败！' + r.errMsg)
+              }
+            },
+            fail: function () {
+              console.log('登陆失败')
+            }
+          })
+
+        } else {
+          console.log('获取用户信息失败')
+        }
+
+      }
+    })
+  },
+  refusedEmpower: function () {
+    wx.switchTab({
+      url: '/pages/index/index'
+    })
+  },
   tolist: function () {
     wx.switchTab({
       url: '/pages/operation/operation'

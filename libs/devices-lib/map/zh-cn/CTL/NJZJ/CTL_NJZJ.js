@@ -19,6 +19,13 @@ var Map_CTL_NJZJ = /** @class */ (function (_super) {
     function Map_CTL_NJZJ() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    Map_CTL_NJZJ.coms_power = {
+        0: '油气',
+        1: '电',
+        2: '煤',
+        3: '生物质',
+        4: '余热'
+    };
     Map_CTL_NJZJ.coms_status = {
         0: '关机',
         1: '待机',

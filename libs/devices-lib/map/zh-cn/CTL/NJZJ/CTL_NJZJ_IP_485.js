@@ -433,7 +433,7 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_dianhuochenggongwendu', 1162, 2, '点火成功温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_lushuitingluwendu', 1164, 2, '炉水停炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_lushuiqiluwendu', 1166, 2, '炉水启炉温度', '℃'));
-        _this.addPoint(new meta_1.SettingField('se_meishuibaojingwendu', 1168, 2, '媒水报警温度', '℃'));
+        _this.addPoint(new meta_1.SettingField('se_meishuibaojingwendu', 1168, 2, '媒水报警温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0532', 50, 200));
         _this.addPoint(new meta_1.SettingField('se_meishuitingluwendu', 1170, 2, '媒水停炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_meishuiqiluwendu', 1172, 2, '媒水启炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_kaibengyali_yongyudingyakongzhi_', 1174, 2, '开泵压力（用于定压控制）', 'MPa', 100));
