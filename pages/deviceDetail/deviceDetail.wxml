@@ -1,9 +1,9 @@
 <!--导航条-->
-<view class="navbar">
-  <text wx:for="{{navbar}}" data-idx="{{item}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text>
+<view class="navbar"  >
+  <text wx:for="{{navbar}}" data-idx="{{index}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text>
 </view>
 
-<view hidden="{{currentTab!==0}}">
+<view hidden="{{currentTab!=runinfoMenu}}">
   <view class='view'>
     <image style="width: 300px; height: 140px;" mode="aspectFit" src="{{src}}"></image>
     <view style='position: absolute;right:300rpx;top:220rpx;color:white;'>{{jiarezu}}</view>
@@ -167,7 +167,7 @@
   </view>
 </view>
 <!--搜索-->
-<view hidden="{{currentTab!==1}}">
+<view hidden="{{currentTab!=exceptionMenu}}">
   <view style='width:100%;'>
     <view wx:for="{{errorList}}" wx:for-item="item" wx:key="key" style='width: 100%; height:70px;border-bottom: 1rpx solid #f1f1f1;margin:10px;'>
       <view wx:if="{{item.states ===content.detail_nochuli}}">
@@ -181,7 +181,7 @@
     </view>
   </view>
 </view>
-<view hidden="{{currentTab!==2}}">
+<view hidden="{{currentTab!=reportMenu}}">
   <view wx:if="{{report}}">
     <view style='width:100%;margin-top:20rpx;display:flex;flex-direction:row;height:80rpx;line-height:80rpx;'>
       <view style='width:33.3%;text-align:center;' class="{{tian==-3 ? 'active1' : ''}}" data-tian="-3" data-date="{{daqiantian}} " bindtap='choosedata'>{{daqiantian}}</view>
@@ -203,7 +203,7 @@
   </view>
 
 </view>
-<view hidden="{{currentTab!==3}}">
+<view hidden="{{currentTab!=controlMenu}}">
   <view wx:if="{{control}}">
     <form bindsubmit="formSubmit" bindreset="formReset">
         <block wx:for="{{controlList}}" wx:for-item="item" wx:key="key" wx:for-index="index">
@@ -264,11 +264,11 @@
 
   </view>
 </view>
-<view hidden="{{currentTab!==4}}">
-  123
+<view hidden="{{currentTab!=smsMenu}}">
+  smsMenu
 </view>
-<view hidden="{{currentTab!==5}}">
-  321
+<view hidden="{{currentTab!=payMenu}}">
+  payMenu
 </view>
 
 <view class='toast-box' hidden='{{!ifedit}}'>
