@@ -260,35 +260,35 @@ Page({
 
     if (munu == that.data.content.detail_runinfoMenu){
       that.setData({
-        runinfoMenu:false,
+        currentTab:1,
         timerStates: true,
       })
     }
     if (munu == that.data.content.detail_payMenu) {
       that.setData({
-        payMenu: false
+        currentTab: 1,
       })
     }
     if (munu == that.data.content.detail_exceptionMenu) {
       that.setData({
-        exceptionMenu: false
+        currentTab: 2,
       })
     }
     if (munu == that.data.content.detail_reportMenu) {
       that.setData({
-        reportMenu: false
+        currentTab: 3,
       })
       that.getreportdatabyday(that.data.mock1)
     }
     if (munu == that.data.content.detail_controlMenu) {
       that.setData({
-        controlMenu: false,
+        currentTab:4,
         timerStates: false,
       })
     }
     if (munu == that.data.content.detail_smsMenu) {
       that.setData({
-        smsMenu: false
+        currentTab: 4,
       })
     }
    
