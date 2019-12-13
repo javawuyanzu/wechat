@@ -101,21 +101,41 @@ App({
   },
   chooseMenu: function (num) {
     var that=this;
+    var list = that.globalData.menuList
     if (num==2){
-      that.globalData.exceptionMenu = true
+      list.push(that.globalData.content.detail_exceptionMenu)
     }
     if (num == 3) {
-      that.globalData.reportMenu = true
+      list.push(that.globalData.content.detail_reportMenu)
     }
     if (num == 4) {
-      that.globalData.controlMenu = true
+      list.push(that.globalData.content.detail_controlMenu)
     }
     if (num == 5) {
-      that.globalData.smsMenu = true
+      list.push(that.globalData.content.detail_smsMenu)
     }
+    that.globalData.menuList=list
   },
   onLaunch: function () {
     var that = this
+    wx.getSystemInfo({
+      success: function (res) {
+        if (res.language === 'zh') {
+          that.globalData.lang = 'zh-cn'
+          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang("zh-cn");
+          var chinese = require("./utils/Chinses.js")
+          that.globalData.menuList = chinese.Content.detail_navbar
+          that.globalData.content = chinese.Content
+        }
+        if (res.language === 'en') {
+          that.globalData.lang = 'en-us'
+          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('en-us')
+          var english = require("./utils/English.js")
+          that.globalData.menuList = english.Content.detail_navbar
+          that.globalData.content = english.Content
+        }
+      }
+    })
     wx.login({
       success: function (res) {
         wx.request({
@@ -140,12 +160,13 @@ App({
                   var currentTime = new Date();
                   currentTime = currentTime.getFullYear() + '-' + (currentTime.getMonth() + 1) + '-' + currentTime.getDate() + '-' + currentTime.getHours() + ':' + currentTime.getMinutes() + ':' + currentTime.getSeconds(); 
                   var list=res.data.data
-
+                  console.log(res)
                   for(var i =0;i<list.length;i++){
                     if (currentTime < list[i].dueTime){
                       that.chooseMenu(list[i].resId)
                     }
                   }
+
                 }
               }
             })
@@ -162,18 +183,7 @@ App({
       wx.setStorageSync('wxEnterpriseName', '')
       wx.setStorageSync('cachedVersion', 1.0)
     }
-    wx.getSystemInfo({
-      success: function (res) {
-        if (res.language === 'zh') {
-          that.globalData.lang = 'zh-cn'
-          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang("zh-cn");
-        }
-        if (res.language === 'en') {
-          that.globalData.lang = 'en-us'
-          that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('en-us')
-        }
-      }
-    })
+    
    
 
   },
@@ -189,9 +199,7 @@ App({
     endTime: null,
     bytedata:[],
     device:null,
-    exceptionMenu:false,
-    reportMenu: false,
-    controlMenu: false,
-    smsMenu: false,
+    menuList:[],
+    content: null,
   },
 })

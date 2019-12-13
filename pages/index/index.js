@@ -80,7 +80,6 @@ Page({
         'content-type': 'application/x-www-form-urlencoded'
       },
       success: function (res) {
-        console.log(res)
         if (res.data.code == 0) {
           var list = res.data.data
           if (list.length > 0) {

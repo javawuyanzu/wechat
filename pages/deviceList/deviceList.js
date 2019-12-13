@@ -486,13 +486,14 @@ Page({
     //     }
     //   })
     // })
-
+   
     that.updateDevice();
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({
         content: chinese.Content
       })
+  
       wx.setTabBarItem({
           index: 0,
           text: '设备',

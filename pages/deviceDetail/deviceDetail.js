@@ -68,7 +68,13 @@ Page({
     content: null,
     lang: '',
     jiarezu:null,
-    mqttname:""
+    mqttname:"",
+    runinfoMenu: true,
+    payMenu: true,
+    exceptionMenu: true,
+    reportMenu: true,
+    controlMenu: true,
+    smsMenu: true,
   },
   switchChange: function(e) {
     var that = this
@@ -250,23 +256,42 @@ Page({
   
   navbarTap: function(e) {
     var that = this
-    that.setData({
-      currentTab: e.currentTarget.dataset.idx
-    })
-    
-    if (e.currentTarget.dataset.idx == 3) {
+    var munu = e.currentTarget.dataset.idx
+
+    if (munu == that.data.content.detail_runinfoMenu){
       that.setData({
-        timerStates: false,
-      })
-    }
-    if (e.currentTarget.dataset.idx == 0) {
-      that.setData({
+        runinfoMenu:false,
         timerStates: true,
       })
     }
-    if (e.currentTarget.dataset.idx == 2) {
+    if (munu == that.data.content.detail_payMenu) {
+      that.setData({
+        payMenu: false
+      })
+    }
+    if (munu == that.data.content.detail_exceptionMenu) {
+      that.setData({
+        exceptionMenu: false
+      })
+    }
+    if (munu == that.data.content.detail_reportMenu) {
+      that.setData({
+        reportMenu: false
+      })
       that.getreportdatabyday(that.data.mock1)
     }
+    if (munu == that.data.content.detail_controlMenu) {
+      that.setData({
+        controlMenu: false,
+        timerStates: false,
+      })
+    }
+    if (munu == that.data.content.detail_smsMenu) {
+      that.setData({
+        smsMenu: false
+      })
+    }
+   
   },
   onHide: function() {
     app.globalData.callBack[1] = null
@@ -288,15 +313,12 @@ Page({
     wx.showLoading({
       title: "loading...",
     })
-    console.log(app.globalData.exceptionMenu)
-    console.log(app.globalData.reportMenu)
-    console.log(app.globalData.controlMenu)
-    console.log(app.globalData.smsMenu)
+   
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({
         content: chinese.Content,
-        navbar: chinese.Content.detail_navbar1,
+        navbar: app.globalData.menuList,
         lang: 'zh-cn'
       })
     }
@@ -304,45 +326,45 @@ Page({
       var english = require("../../utils/English.js")
       that.setData({
         content: english.Content,
-        navbar: chinese.Content.detail_navbar1,
+        navbar: app.globalData.menuList,
         lang: 'en-us'
       })
     }
-    wx.login({
-      success: function(res) {
-        wx.request({
-          //获取openid接口  
-          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-          data: {
-            js_code: res.code,
-          },
-          method: 'GET',
-          success: function(res) {
-            console.log()
-            wx.request({
-              //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/wechat/device/control/List',
-              data: {
-                openid: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
-              },
-              method: 'GET',
-              success: function(res) {
-                console.log(res)
-                for (var index in res.data.data) {
-                  if (res.data.data[index].deviceNo == options.deviceNo) {
-                    that.setData({
-                      control: true,
-                      navbar: that.data.content.detail_cnavbar,
-                    })
-                    return
-                  }
-                }
-              }
-            })
-          }
-        })
-      }
-    })
+    // wx.login({
+    //   success: function(res) {
+    //     wx.request({
+    //       //获取openid接口  
+    //       url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+    //       data: {
+    //         js_code: res.code,
+    //       },
+    //       method: 'GET',
+    //       success: function(res) {
+    //         console.log()
+    //         wx.request({
+    //           //获取openid接口   
+    //           url: 'https://apis.sdcsoft.com.cn/wechat/device/control/List',
+    //           data: {
+    //             openid: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
+    //           },
+    //           method: 'GET',
+    //           success: function(res) {
+    //             console.log(res)
+    //             for (var index in res.data.data) {
+    //               if (res.data.data[index].deviceNo == options.deviceNo) {
+    //                 that.setData({
+    //                   control: true,
+    //                   navbar: that.data.content.detail_cnavbar,
+    //                 })
+    //                 return
+    //               }
+    //             }
+    //           }
+    //         })
+    //       }
+    //     })
+    //   }
+    // })
 
     var keylist = GroupKeys.getKeys();
   
@@ -420,7 +442,7 @@ Page({
     if (media == 0 || media == 1) {
       that.setData({
         control: true,
-        navbar: that.data.content.detail_cnavbar,
+        //navbar: that.data.content.detail_cnavbar,
       })
     }
     if (JSON.stringify(clist) != '{}') {
@@ -536,11 +558,10 @@ Page({
               media = data.getBaseInfoFields().map[index].value
             }
           }
-          console.log(media)
           if (media == 0 || media == 4) {
             that.setData({
               control: true,
-              navbar: that.data.content.detail_cnavbar,
+              //navbar: that.data.content.detail_cnavbar,
             })
           }
           if (JSON.stringify(clist) != '{}') {
