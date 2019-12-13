@@ -257,38 +257,38 @@ Page({
   navbarTap: function(e) {
     var that = this
     var munu = e.currentTarget.dataset.idx
-
+    console.log(munu)
     if (munu == that.data.content.detail_runinfoMenu){
       that.setData({
-        currentTab:1,
+        currentTab:0,
         timerStates: true,
       })
     }
     if (munu == that.data.content.detail_payMenu) {
       that.setData({
-        currentTab: 1,
+        currentTab: 4,
       })
     }
     if (munu == that.data.content.detail_exceptionMenu) {
       that.setData({
-        currentTab: 2,
+        currentTab: 1,
       })
     }
     if (munu == that.data.content.detail_reportMenu) {
       that.setData({
-        currentTab: 3,
+        currentTab: 2,
       })
       that.getreportdatabyday(that.data.mock1)
     }
     if (munu == that.data.content.detail_controlMenu) {
       that.setData({
-        currentTab:4,
+        currentTab:3,
         timerStates: false,
       })
     }
     if (munu == that.data.content.detail_smsMenu) {
       that.setData({
-        currentTab: 4,
+        currentTab: 5,
       })
     }
    
@@ -329,6 +329,10 @@ Page({
         navbar: app.globalData.menuList,
         lang: 'en-us'
       })
+    }
+    var munuList = app.globalData.menuList
+    for (var i in munuList){
+      console.log(munuList[i])
     }
     // wx.login({
     //   success: function(res) {
