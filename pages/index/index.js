@@ -8,7 +8,49 @@ Page({
     sole: false,
     canIUse: true,
   },
-  
+  // getPhoneNumber: function (e) {
+  //   wx.login({
+  //     success: function (res) {
+  //       var code = res.code;//登录凭证
+  //       if (code) {
+  //         //2、调用获取用户信息接口
+  //         wx.getUserInfo({
+  //           success: function (res) {
+  //             //3.请求自己的服务器，解密用户信息 获取unionId等加密信息
+  //             wx.request({
+  //               url: 'http://127.0.0.1:8080/wechat/device/getUnionId',
+  //               method: 'get',
+  //               header: {
+  //                 'content-type': 'application/x-www-form-urlencoded'
+  //               },
+  //               data: { encryptedData: e.detail.encryptedData, iv: e.detail.iv, code: code },
+  //               success: function (data) {
+  //                 var unionId = data.data.data.unionId
+  //                 app.globalData.unionId = unionId
+  //                 that.setData({
+  //                   empower: false
+  //                 })
+  //                 console.log(unionId)
+  //               },
+  //               fail: function () {
+  //                 console.log('系统错误')
+  //               }
+  //             })
+  //           },
+  //           fail: function () {
+  //             console.log('获取用户信息失败')
+  //           }
+  //         })
+
+  //       } else {
+  //         console.log('获取用户登录态失败！' + r.errMsg)
+  //       }
+  //     },
+  //     fail: function () {
+  //       console.log('登陆失败')
+  //     }
+  //   })
+  // },
   error: function () {
     wx.navigateTo({
       url: '../reports/reports'

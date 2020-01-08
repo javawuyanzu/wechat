@@ -2,9 +2,11 @@
 <view class="1" style='background-color:#eee;'>
   <view class="userinfo">
     <open-data type="userAvatarUrl" style="width:120rpx;height:120rpx;border-radius:20rpx;overflow: hidden;"></open-data>
+    <!-- <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"> </button> -->
     <view style='flex-direction:column '>
       <view style='height:50rpx;color:white;'>
         <open-data type="userNickName" lang="zh_CN" style="margin-left:50rpx;" bindtap="error"></open-data>
+        
       </view>
     </view>
   </view>
@@ -40,6 +42,19 @@
           <view class="item-left">
             <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
             <text>{{content.index_canIUse}}</text>
+          </view>
+          <view class="item-right">
+            <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
+          </view>
+        </view>
+      </navigator>
+    </view>
+    <view >
+      <navigator url="../payMenu/payMenu" hover-class="none">
+        <view class="user-list-item">
+          <view class="item-left">
+            <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
+            <text>购买服务</text>
           </view>
           <view class="item-right">
             <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>

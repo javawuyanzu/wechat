@@ -11,7 +11,9 @@
     "pages/reports/reports",
     "pages/soldUpdate/soldUpdate",
     "pages/salesChange/salesChange",
-    "pages/loginChoose/loginChoose"
+    "pages/loginChoose/loginChoose",
+    "pages/payMenu/payMenu",
+    "pages/order/order"
   ],
   "window": {
     "backgroundTextStyle": "light",

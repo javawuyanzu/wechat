@@ -682,13 +682,10 @@ Page({
     that.setData({
       timerStates: true
     })
-    // wx.showToast({
-    //   title: '尊敬的用户，您好！ 我们的小程序即将进入商业收费模式',
-    //   icon: 'none',
-    //   duration: 5000,
-    //   mask: true
-    // })
+   
+   
   },
+  
   getDeviceFromBytes(deviceNo, deviceType, data) {
     var that = this;
     let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
@@ -783,8 +780,6 @@ Page({
               } else {
                 try {
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
-                console.log(data)
-                  console.log(deviceType) 
                   //data.setModbusNo 设置Modbus站号 默认1 1-255
                   if (data.getTypeName() != deviceType) {
                     wx.request({

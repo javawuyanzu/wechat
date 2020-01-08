@@ -1,6 +1,6 @@
 <!--导航条-->
 <view class="navbar"  >
-  <text wx:for="{{navbar}}" data-idx="{{index}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text>
+  <text wx:for="{{navbar}}" data-idx="{{index}}" data-name="{{item}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text>
 </view>
 
 <view hidden="{{currentTab!=runinfoMenu}}">
@@ -268,7 +268,6 @@
   smsMenu
 </view>
 <view hidden="{{currentTab!=payMenu}}">
-  payMenu
 </view>
 
 <view class='toast-box' hidden='{{!ifedit}}'>

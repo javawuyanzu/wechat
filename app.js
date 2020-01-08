@@ -99,23 +99,7 @@ App({
  
     })
   },
-  chooseMenu: function (num) {
-    var that=this;
-    var list = that.globalData.menuList
-    if (num==2){
-      list.push(that.globalData.content.detail_exceptionMenu)
-    }
-    if (num == 3) {
-      list.push(that.globalData.content.detail_reportMenu)
-    }
-    if (num == 4) {
-      list.push(that.globalData.content.detail_controlMenu)
-    }
-    if (num == 5) {
-      list.push(that.globalData.content.detail_smsMenu)
-    }
-    that.globalData.menuList=list
-  },
+ 
   onLaunch: function () {
     var that = this
     wx.getSystemInfo({
@@ -156,17 +140,14 @@ App({
               },
               method: 'GET',
               success: function (res) {
-                if(res.data.code==0&res.data.data.length>0){
+                if (res.data.code == 0 & res.data.data.length > 0) {
                   var currentTime = new Date();
-                  currentTime = currentTime.getFullYear() + '-' + (currentTime.getMonth() + 1) + '-' + currentTime.getDate() + '-' + currentTime.getHours() + ':' + currentTime.getMinutes() + ':' + currentTime.getSeconds(); 
-                  var list=res.data.data
-                  console.log(res)
-                  for(var i =0;i<list.length;i++){
-                    if (currentTime < list[i].dueTime){
+                  var list = res.data.data
+                  for (var i = 0; i < list.length; i++) {
+                    if (currentTime < new Date(Date.parse(list[i].dueTime))) {
                       that.chooseMenu(list[i].resId)
                     }
                   }
-
                 }
               }
             })
@@ -182,10 +163,28 @@ App({
       wx.setStorageSync('warningType', 1)
       wx.setStorageSync('wxEnterpriseName', '')
       wx.setStorageSync('cachedVersion', 1.0)
+      wx.setStorageSync('orders', [])
     }
     
    
 
+  },
+  chooseMenu: function (num) {
+    var that = this;
+    var list = that.globalData.menuList
+    if (num == 2) {
+      list.push(that.globalData.content.detail_exceptionMenu)
+    }
+    if (num == 3) {
+      list.push(that.globalData.content.detail_reportMenu)
+    }
+    if (num == 4) {
+      list.push(that.globalData.content.detail_controlMenu)
+    }
+    if (num == 5) {
+      list.push(that.globalData.content.detail_smsMenu)
+    }
+    that.globalData.menuList = list
   },
   globalData: {
     deviceAdapter: deviceAdapter,

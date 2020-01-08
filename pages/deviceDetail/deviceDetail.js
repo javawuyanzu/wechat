@@ -260,18 +260,27 @@ Page({
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
-    if (e.currentTarget.dataset.idx == 3) {
+    var menuName = e.currentTarget.dataset.name
+    if (menuName == that.data.content.detail_controlMenu) {
       that.setData({
         timerStates: false,
       })
     }
-    if (e.currentTarget.dataset.idx == 0) {
+    if (menuName == that.data.content.detail_runinfoMenu) {
       that.setData({
         timerStates: true,
       })
     }
-    if (e.currentTarget.dataset.idx == 2) {
+    if (menuName == that.data.content.detail_reportMenu) {
       that.getreportdatabyday(that.data.mock1)
+    }
+    if (menuName == that.data.content.detail_payMenu) {
+      that.setData({
+        currentTab: e.currentTarget.dataset.idx - 1
+      })
+      wx.navigateTo({
+        url: '../payMenu/payMenu'
+      })
     }
   },
   onHide: function() {
@@ -294,7 +303,6 @@ Page({
     wx.showLoading({
       title: "loading...",
     })
-   
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({
@@ -312,6 +320,7 @@ Page({
       })
     }
     var munuList = app.globalData.menuList
+   
     for (var i in munuList){
       var munu=munuList[i]
       if (munu == that.data.content.detail_runinfoMenu) {
