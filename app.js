@@ -108,53 +108,19 @@ App({
           that.globalData.lang = 'zh-cn'
           that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang("zh-cn");
           var chinese = require("./utils/Chinses.js")
-          that.globalData.menuList = chinese.Content.detail_navbar
+          
           that.globalData.content = chinese.Content
         }
         if (res.language === 'en') {
           that.globalData.lang = 'en-us'
           that.globalData.deviceAdapter = Wechat_DeviceAdapter.setLang('en-us')
           var english = require("./utils/English.js")
-          that.globalData.menuList = english.Content.detail_navbar
+         
           that.globalData.content = english.Content
         }
       }
     })
-    wx.login({
-      success: function (res) {
-        wx.request({
-          //获取openid接口  
-          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-          data: {
-            js_code: res.code,
-          },
-          method: 'GET',
-          success: function (res) {
-            openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
-            that.globalData.openid = openid
-            wx.request({
-              //获取openid接口  
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
-              data: {
-                openId: openid,
-              },
-              method: 'GET',
-              success: function (res) {
-                if (res.data.code == 0 & res.data.data.length > 0) {
-                  var currentTime = new Date();
-                  var list = res.data.data
-                  for (var i = 0; i < list.length; i++) {
-                    if (currentTime < new Date(Date.parse(list[i].dueTime))) {
-                      that.chooseMenu(list[i].resId)
-                    }
-                  }
-                }
-              }
-            })
-          }
-        })
-      }
-    })
+   
     const storage = wx.getStorageInfoSync()
     if (storage.keys.length == 0) {
       wx.setStorageSync('deviceList', [])
@@ -165,27 +131,8 @@ App({
       wx.setStorageSync('cachedVersion', 1.0)
       wx.setStorageSync('orders', [])
     }
-    
-   
-
   },
-  chooseMenu: function (num) {
-    var that = this;
-    var list = that.globalData.menuList
-    if (num == 2) {
-      list.push(that.globalData.content.detail_exceptionMenu)
-    }
-    if (num == 3) {
-      list.push(that.globalData.content.detail_reportMenu)
-    }
-    if (num == 4) {
-      list.push(that.globalData.content.detail_controlMenu)
-    }
-    if (num == 5) {
-      list.push(that.globalData.content.detail_smsMenu)
-    }
-    that.globalData.menuList = list
-  },
+  
   globalData: {
     deviceAdapter: deviceAdapter,
     lang: 'zh-cn',

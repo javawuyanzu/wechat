@@ -49,7 +49,7 @@
         </view>
       </navigator>
     </view>
-    <view >
+    <!-- <view >
       <navigator url="../payMenu/payMenu" hover-class="none">
         <view class="user-list-item">
           <view class="item-left">
@@ -61,7 +61,7 @@
           </view>
         </view>
       </navigator>
-    </view>
+    </view> -->
      <!-- <navigator url="../reports/reports" hover-class="none">
       <view class="user-list-item">
         <view class="item-left">

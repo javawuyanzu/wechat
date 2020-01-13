@@ -66,7 +66,7 @@ Page({
                   var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
                   wx.request({
                     //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/list',
+                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/list',
                     data: {
                       openId: openid,
                     },
@@ -210,7 +210,7 @@ Page({
         })
         wx.request({
           //获取openid接口   
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/remove',
+          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/remove',
           data: {
             openId: app.globalData.openid,
             deviceNo: that.data.deviceNo
@@ -263,9 +263,10 @@ Page({
         for (var i = 0; i < deviceList.length; i++) {
           if (deviceList[i].deviceNo === that.data.deviceNo) {
             deviceList[i].deviceName = that.data.deviceTitle
+            console.log(deviceList[i].imgStyle)
             wx.request({
               //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/modify',
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/modify',
               data: {
                 openId: app.globalData.openid,
                 deviceNo: that.data.deviceNo,
@@ -436,7 +437,7 @@ Page({
                     if (list.length > 0) {
                       wx.request({
                         //获取openid接口   
-                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/create/many',
+                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create/many',
                         data: {
                           storeList: JSON.stringify(list).replace(/imgstyle/g, "imgStyle"),
                         },
@@ -459,11 +460,97 @@ Page({
       }
     })
   },
-  
+  chooseMenu: function (num) {
+    var that = this;
+    var list = that.data.content.detail_navbar
+    if (num == 2) {
+      list.push(that.data.content.detail_exceptionMenu)
+    }
+    if (num == 3) {
+      list.push(that.data.content.detail_reportMenu)
+    }
+    if (num == 4) {
+      list.push(that.data.content.detail_controlMenu)
+    }
+    if (num == 5) {
+      list.push(that.data.content.detail_smsMenu)
+    }
+    app.globalData.menuList = list
+  },
 
   onLoad: function(options) {
     var that = this;
-   
+    wx.login({
+      success: function (res) {
+        wx.request({
+          //获取openid接口  
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+          data: {
+            js_code: res.code,
+          },
+          method: 'GET',
+          success: function (res) {
+            console.log(res)
+           var  openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+            app.globalData.openid = openid
+            wx.request({
+              //获取openid接口 
+              url: 'https://apis.sdcsoft.com.cn/wechat/check/openId',
+              data: {
+                openId: openid
+              },
+              header: {
+                'content-type': 'application/x-www-form-urlencoded'
+              },
+              method: 'POST',
+              success: function (res) {
+                if (res.data.code == 2) {
+                  wx.request({
+                    url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',
+                    method: "GET",
+                    data: {
+                      realName: openid,
+                      openid: openid,
+                    },
+                    header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                    success: function (res) {
+                      console.log(res)
+                    }
+                  })
+                }
+              }
+            }) 
+            
+            wx.request({
+              //获取openid接口  
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
+              data: {
+                openId: openid,
+              },
+              method: 'GET',
+              success: function (res) {
+                console.log(res)
+                if (res.data.code == 0 & res.data.data.length > 0) {
+                  var currentTime = new Date();
+                  var list = res.data.data
+                  for (var i = 0; i < list.length; i++) {
+                    var dt = list[i].dueTime
+                    var format = dt.replace(/-/g, '/')
+                    var dt = new Date(Date.parse(format))
+                    if (currentTime < dt) {
+                      that.chooseMenu(list[i].resId)
+                    }
+                  }
+                }
+              }
+            })
+          }
+        })
+      }
+    })
+
+
+
     // getApp().conmqtt().then(function () {
     //   //that.subTopic("ABC/01")
     //   app.globalData.client.publish("ABC/01", "123", function (err) {
@@ -493,7 +580,7 @@ Page({
       that.setData({
         content: chinese.Content
       })
-  
+      app.globalData.menuList = chinese.Content.detail_navbar
       wx.setTabBarItem({
           index: 0,
           text: '设备',
@@ -518,6 +605,7 @@ Page({
       that.setData({
         content: english.Content
       })
+      app.globalData.menuList = english.Content.detail_navbar
       wx.setTabBarItem({
           index: 0,
           text: 'Devices',

@@ -34,7 +34,8 @@
   flex-direction:row;
   width: 100%;
   z-index: 10;
-  color: black
+  color: black;
+  border-top: 2px solid rgba(254,78,69,.8);
 }
 .cart-item-total{
   padding-left: 30rpx;

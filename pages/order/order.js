@@ -119,7 +119,9 @@ Page({
                           var currentTime = new Date();
                           var list = res.data.data
                           for (var i = 0; i < list.length; i++) {
-                            if (currentTime < new Date(Date.parse(list[i].dueTime))) {
+                            var dt = list[i].dueTime
+                            var format = dt.replace(/-/g, '/')
+                            if (currentTime < new Date(format)) {
                               that.chooseMenu(list[i].resId)
                             }
                           }

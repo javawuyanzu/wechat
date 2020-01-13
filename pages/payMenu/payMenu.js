@@ -178,6 +178,7 @@ Page({
         } else {
           list.push({ name: title, price: dish.price, count: 1, resId: mid, dueTime: time, openId: app.globalData.openid })
         }
+        console.log(list)
         wx.setStorage({
           key: "orders",
           data: list
@@ -255,6 +256,15 @@ Page({
   },
   onLoad: function (options) {
     var that = this;
+    wx.getStorage({
+      key: 'orders',
+      fail: function (res) {
+        wx.setStorage({
+          key: "orders",
+          data: []
+        });
+      },
+    })
     wx.request({
       //获取openid接口  
       url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
