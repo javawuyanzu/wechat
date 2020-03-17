@@ -14,7 +14,66 @@ Page({
     items: [],
     content: null,
   },
+  
+  wxpay: function (param) {
+    let that = this;
+    wx.requestPayment({
+      timeStamp: param.timeStamp,
+      nonceStr: param.nonceStr,
+      package: param.package,
+      signType: param.signType,
+      paySign: param.paySign,
+      success: function (res) {
+       
+        console.log("支付成功")
+       
+        wx.navigateBack({
+          delta: 1, // 回退前 delta(默认为1) 页面
+          success: function (res) {
+            that.createOrderAndItem(1)
+            wx.showToast({
+              title: '支付成功',
+              icon: 'success',
+              duration: 2000
+            })
+          },
+          fail: function () {
+            // fail
 
+          },
+          complete: function () {
+            // complete
+          }
+        })
+      },
+      fail: function (res) {
+        console.log("支付失败")
+        wx.navigateBack({
+          delta: 1, // 回退前 delta(默认为1) 页面
+          success: function (res) {
+            that.createOrderAndItem(0)
+            wx.showToast({
+              title: '支付失败',
+              icon: 'success',
+              duration: 2000
+            })
+          },
+          fail: function () {
+            // fail
+
+          },
+          complete: function () {
+            // complete
+          }
+        })
+      
+        // fail
+      },
+      complete: function () {
+        // complete
+      }
+    })
+  },
   pay: function() {
     let that = this;
     let str = '选中' + that.data.count + '件商品，共' + that.data.discount.paymentAmount + '元，是否要支付？'
@@ -25,9 +84,49 @@ Page({
         // 至少选中一个商品才能支付
         if (that.data.count !== 0) {
           if (res.confirm) {
-            that.createOrderAndItem(1)
+            wx.login({
+              success: function (res) {
+                wx.request({
+                  //获取openid接口  
+                  url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+                  data: {
+                    js_code: res.code,
+                  },
+                  method: 'GET',
+                  header: {
+                    'content-type': 'application/x-www-form-urlencoded'
+                  },
+                  success: function (res) {
+                    wx.request({
+                      url: 'http://127.0.0.1:8080/webapi/wechat/PayOrder/createPayOrder',
+                      method: 'POST',
+                      data: {
+                        money: '1',
+                        openId: res.data.openid
+                      },
+                      header: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                      },
+                      success: function (res) {
+                        var pay = res.data.data
+                        console.log(pay)
+                        //发起支付
+                        var timeStamp = pay.timeStamp;
+                        var packages = pay.package;
+                        var paySign = pay.paySign;
+                        var nonceStr = pay.nonceStr;
+                        var param = { "timeStamp": timeStamp, "package": packages, "paySign": paySign, "signType": "MD5", "nonceStr": nonceStr };
+                        that.wxpay(param)
+                      },
+                    })
+                  
+                  }
+                })
+              }
+            })
+            
+      
           } else if (res.cancel) {
-            that.createOrderAndItem(0)
             console.log('用户点击取消')
           }
         } else {
