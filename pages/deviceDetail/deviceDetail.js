@@ -69,14 +69,13 @@ Page({
     lang: '',
     jiarezu:null,
     mqttname:"",
-    runinfoMenu: -1,
-    payMenu: -1,
-    exceptionMenu: -1,
-    reportMenu: -1,
-    controlMenu: -1,
-    smsMenu: -1,
+    runinfoMenu: true,
+    payMenu: true,
+    exceptionMenu: true,
+    reportMenu: true,
+    controlMenu: true,
+    smsMenu: true,
   },
-
   switchChange: function(e) {
     var that = this
     var state = -1;
@@ -255,22 +254,34 @@ Page({
     console.log(str)
   },
   
-  navbarTap: function (e) {
+  navbarTap: function(e) {
     var that = this
+
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
     var menuName = e.currentTarget.dataset.name
-    if (menuName == that.data.content.detail_controlMenu) {
+    // if (menuName == that.data.content.detail_controlMenu) {
+
+    var munu = e.currentTarget.dataset.idx
+    console.log(munu)
+    if (munu == that.data.content.detail_runinfoMenu){
+
       that.setData({
-        timerStates: false,
-      })
-    }
-    if (menuName == that.data.content.detail_runinfoMenu) {
-      that.setData({
+        currentTab:0,
         timerStates: true,
       })
     }
+
+  
+
+    if (munu == that.data.content.detail_payMenu) {
+
+      that.setData({
+        currentTab: 4,
+      })
+    }
+
     if (menuName == that.data.content.detail_reportMenu) {
       that.getreportdatabyday(that.data.mock1)
     }
@@ -280,6 +291,29 @@ Page({
       })
       wx.navigateTo({
         url: '../payMenu/payMenu'
+      })
+    }
+
+    if (munu == that.data.content.detail_exceptionMenu) {
+      that.setData({
+        currentTab: 1,
+      })
+    }
+    if (munu == that.data.content.detail_reportMenu) {
+      that.setData({
+        currentTab: 2,
+      })
+      that.getreportdatabyday(that.data.mock1)
+    }
+    if (munu == that.data.content.detail_controlMenu) {
+      that.setData({
+        currentTab:3,
+        timerStates: false,
+      })
+    }
+    if (munu == that.data.content.detail_smsMenu) {
+      that.setData({
+        currentTab: 5,
       })
     }
   },
@@ -322,37 +356,7 @@ Page({
     var munuList = app.globalData.menuList
    
     for (var i in munuList){
-      var munu=munuList[i]
-      if (munu == that.data.content.detail_runinfoMenu) {
-        that.setData({
-          runinfoMenu: i,
-        })
-      }
-      if (munu == that.data.content.detail_payMenu) {
-        that.setData({
-          payMenu: i
-        })
-      }
-      if (munu == that.data.content.detail_exceptionMenu) {
-        that.setData({
-          exceptionMenu: i
-        })
-      }
-      if (munu == that.data.content.detail_reportMenu) {
-        that.setData({
-          reportMenu: i
-        })
-      }
-      if (munu == that.data.content.detail_controlMenu) {
-        that.setData({
-          controlMenu: i,
-        })
-      }
-      if (munu == that.data.content.detail_smsMenu) {
-        that.setData({
-          smsMenu: i
-        })
-      }
+      console.log(munuList[i])
     }
     // wx.login({
     //   success: function(res) {
@@ -463,15 +467,15 @@ Page({
       }
     }
     
-    // if (media == 0 || media == 1) {
-    //   that.setData({
-    //     control: true,
-    //   })
-    // }
+    if (media == 0 || media == 1) {
+      that.setData({
+        control: true,
+        //navbar: that.data.content.detail_cnavbar,
+      })
+    }
     if (JSON.stringify(clist) != '{}') {
       that.setData({
         controlList: clist,
-        control: true,
       })
     }
 
@@ -582,15 +586,15 @@ Page({
               media = data.getBaseInfoFields().map[index].value
             }
           }
-          // if (media == 0 || media == 4) {
-          //   that.setData({
-          //     control: true,
-          //   })
-          // }
+          if (media == 0 || media == 4) {
+            that.setData({
+              control: true,
+              //navbar: that.data.content.detail_cnavbar,
+            })
+          }
           if (JSON.stringify(clist) != '{}') {
             that.setData({
               controlList: clist,
-              control: true,
             })
           }
           var myDate = new Date();
