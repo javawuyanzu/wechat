@@ -75,6 +75,7 @@ Page({
     reportMenu: -1,
     controlMenu: -1,
     smsMenu: -1,
+    baseNavbar:[],
   },
 
   switchChange: function(e) {
@@ -294,12 +295,33 @@ Page({
     this.setData({
       timerStates: false
     })
+    
+  },
+  chooseMenu: function (num) {
+    var that = this;
+    var list = that.data.baseNavbar
+    if (num == 2) {
+      list.push(that.data.content.detail_exceptionMenu)
+    }
+    if (num == 3) {
+      list.push(that.data.content.detail_reportMenu)
+    }
+    if (num == 4) {
+      list.push(that.data.content.detail_controlMenu)
+    }
+    if (num == 5) {
+      list.push(that.data.content.detail_smsMenu)
+    }
+    that.setData({
+      navbar:list
+    })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
     var that = this
+    
     wx.showLoading({
       title: "loading...",
     })
@@ -307,53 +329,79 @@ Page({
       var chinese = require("../../utils/Chinses.js")
       that.setData({
         content: chinese.Content,
-        navbar: app.globalData.menuList,
-        lang: 'zh-cn'
+        lang: 'zh-cn',
+        baseNavbar: ['基本', '购买']
       })
     }
     if (app.globalData.lang === 'en-us') {
       var english = require("../../utils/English.js")
       that.setData({
         content: english.Content,
-        navbar: app.globalData.menuList,
-        lang: 'en-us'
+        lang: 'en-us',
+        baseNavbar: ['Run information', 'Purchasing service']
       })
     }
-    var munuList = app.globalData.menuList
-   
-    for (var i in munuList){
-      var munu=munuList[i]
-      if (munu == that.data.content.detail_runinfoMenu) {
-        that.setData({
-          runinfoMenu: i,
-        })
+    wx.request({
+      //获取openid接口  
+      url: 'http://127.0.01:8080/webapi/wechat/RoleResource/list/deviceNo',
+      data: {
+        deviceNo: options.deviceNo,
+      },
+      method: 'GET',
+      success: function (res) {
+        if (res.data.code == 0 & res.data.data.length > 0) {
+          var currentTime = new Date();
+          var list = res.data.data
+          for (var i = 0; i < list.length; i++) {
+            var dt = list[i].dueTime
+            var format = dt.replace(/-/g, '/')
+            var dt = new Date(Date.parse(format))
+            if (currentTime < dt) {
+              that.chooseMenu(list[i].resId)
+            }
+          }
+        }else{
+          that.setData({
+            navbar :that.data.baseNavbar
+          })
+        }
+        var munuList = that.data.navbar
+        for (var i in munuList) {
+          var munu = munuList[i]
+          if (munu == that.data.content.detail_runinfoMenu) {
+            that.setData({
+              runinfoMenu: i,
+            })
+          }
+          if (munu == that.data.content.detail_payMenu) {
+            that.setData({
+              payMenu: i
+            })
+          }
+          if (munu == that.data.content.detail_exceptionMenu) {
+            that.setData({
+              exceptionMenu: i
+            })
+          }
+          if (munu == that.data.content.detail_reportMenu) {
+            that.setData({
+              reportMenu: i
+            })
+          }
+          if (munu == that.data.content.detail_controlMenu) {
+            that.setData({
+              controlMenu: i,
+            })
+          }
+          if (munu == that.data.content.detail_smsMenu) {
+            that.setData({
+              smsMenu: i
+            })
+          }
+        }
       }
-      if (munu == that.data.content.detail_payMenu) {
-        that.setData({
-          payMenu: i
-        })
-      }
-      if (munu == that.data.content.detail_exceptionMenu) {
-        that.setData({
-          exceptionMenu: i
-        })
-      }
-      if (munu == that.data.content.detail_reportMenu) {
-        that.setData({
-          reportMenu: i
-        })
-      }
-      if (munu == that.data.content.detail_controlMenu) {
-        that.setData({
-          controlMenu: i,
-        })
-      }
-      if (munu == that.data.content.detail_smsMenu) {
-        that.setData({
-          smsMenu: i
-        })
-      }
-    }
+    })
+    
     // wx.login({
     //   success: function(res) {
     //     wx.request({
@@ -962,6 +1010,7 @@ Page({
       },
       method: 'GET',
       success: function (res) {
+        console.log(res)
         if (res.data.code == 0) {
           that.setData({
             havedata: true

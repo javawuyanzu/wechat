@@ -1,3 +1,8 @@
+button::after {
+ 
+  border: none;
+ 
+}
 .image{
   width: 100%;
   height: 100%
@@ -36,6 +41,7 @@
   z-index: 10;
   color: black;
   border-top: 2px solid rgba(254,78,69,.8);
+
 }
 .cart-item-total{
   padding-left: 30rpx;
@@ -124,7 +130,7 @@
   height: 1000rpx;
   padding-bottom: 88rpx;
   display:flex;
-  width: 200rpx;
+  width: 160rpx;
   background-color: #FFFFFF;
   flex-direction:column;
 }
@@ -135,6 +141,8 @@
   border-bottom:2px solid rgba(254,78,69,.8);
   padding: 20rpx 0;
   margin-bottom: 6rpx;
+  margin-left: 20rpx;
+
 }
 .right-side{
   width: 100%;
@@ -155,9 +163,11 @@
   width:100%;
   display:flex;
   flex-direction:row;
+  padding-top: 25rpx;
+
 }
 .dish-item-pic{
-  width:158rpx;
+  width:60rpx;
 }
 .dish-item-pic image{
    width: 158rpx;
@@ -165,8 +175,8 @@
    margin: 0 auto
 }
 .dish-item-info{
-  width: 150rpx;
-  padding-left: 16rpx
+  width: 220rpx;
+  padding-left: 100rpx
 }
 .dish-item-name{
   color: #454545;
@@ -190,7 +200,7 @@
   width: 220rpx;
   display: flex;
   font-size: 26rpx;
-  padding: 60rpx 0 0 10rpx;
+  padding: 0rpx 0 0 50rpx;
 }
 .dish-item-tab{
   width: 60rpx;
@@ -212,6 +222,172 @@
   height: 60rpx;
 }
 
+.toast-box {
+ 
+  width: 100%;
+ 
+  height: 100%;
+ 
+  opacity: 1;
+ 
+  position: fixed;
+ 
+  top: 0px;
+ 
+  left: 0px;
+ 
+}
+ 
+
+ 
+.toastbg {
+ 
+  opacity: 0.2;
+ 
+  background-color: black;
+ 
+  position: absolute;
+ 
+  width: 100%;
+ 
+  min-height: 100vh;
+ 
+}
+ 
+
+ 
+.showToast {
+ 
+  position: absolute;
+ 
+  opacity: 1;
+ 
+  width: 85%;
+ 
+  margin-left: 8%;
+ 
+  margin-top: 35%;
+ 
+}
+ 
+
+ 
+.toast-title {
+ 
+  padding-left: 5%;
+ 
+  background-color: white;
+ 
+  padding-top: 2vh;
+ 
+  padding-bottom: 2vh;
+ 
+  border-top-right-radius: 16rpx;
+ 
+  border-top-left-radius: 16rpx;
+ 
+}
+ 
+
+ 
+.toast-main {
+ 
+  padding-top: 2vh;
+ 
+  padding-bottom: 2vh;
+ 
+  background-color: white;
+ 
+  text-align: center;
+ 
+  border-radius: 16rpx;
+ 
+}
+ 
+
+ 
+.toast-main1 {
+ 
+  padding-top: 2vh;
+ 
+  padding-bottom: 2vh;
+ 
+  background-color: white;
+ 
+  text-align: center;
+ 
+}
+ 
+
+ 
+.toast-input {
+ 
+  /* margin-left: 5%;
+ 
+  margin-right: 5%; */
+ 
+  /* border: 1px solid #ddd; */
+ 
+  /* padding-left: 2vh;
+ 
+  padding-right: 2vh; */
+ 
+  padding-top: 1vh;
+ 
+  padding-bottom: 1vh;
+ 
+}
+  
+.toast-button {
+ 
+  display: flex;
+ 
+}
+ 
+
+ 
+.button1 {
+ 
+  width: 50%;
+ 
+}
+ 
+
+ 
+.button2 {
+ 
+  width: 50%;
+ 
+}
+ .button1 button {
+ 
+  width: 100%;
+ 
+  background-color: white;
+ 
+  color: red;
+ 
+  border-radius: 0px;
+ 
+  border-bottom-left-radius: 16rpx;
+ 
+}
+ 
+
+ 
+.button2 button {
+ 
+  width: 100%;
+ 
+  background-color: white;
+ 
+  color: black;
+ 
+  border-radius: 0px;
+ 
+  border-bottom-right-radius: 16rpx;
+ 
+}
 
 
 

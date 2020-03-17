@@ -145,7 +145,6 @@ App({
     endTime: null,
     bytedata:[],
     device:null,
-    menuList:[],
     content: null,
   },
 })

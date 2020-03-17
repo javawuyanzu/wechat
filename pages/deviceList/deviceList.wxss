@@ -371,3 +371,34 @@ open-data[type="userAvatarUrl"]{
   height:35px;
   line-height: 20px;
 }
+@keyframes around {
+  from {
+   margin-left: 100%;
+  }
+  to {
+   /* var接受传入的变量 */
+   margin-left: var(--marqueeWidth--);
+  }
+ }
+ 
+.marquee_container{
+  height: 70rpx;
+  line-height: 84rpx;
+  position: relative;
+  width: 85%;
+  margin-top:0rpx;
+  float: right;
+}
+.marquee_container:hover{
+  /* 不起作用 */
+  animation-play-state: paused;
+}
+.marquee_text{
+  color:#fff;
+  display: inline-block;
+  white-space: nowrap;
+  animation-name: around;
+  animation-duration: 10s;  /*过渡时间*/
+  animation-iteration-count: infinite;
+  animation-timing-function:linear;
+}

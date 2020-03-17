@@ -40,6 +40,7 @@ Page({
       }
     })
   },
+  
   httptimer: function() {
     var that = this
     wx.getStorage({
@@ -64,15 +65,15 @@ Page({
                 },
                 success: function(res) {
                   var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+                 
                   wx.request({
                     //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/list',
+                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/list',
                     data: {
                       openId: openid,
                     },
                     method: 'GET',
                     success: function(res) {
-                      console.log(res)
                       wx.hideLoading();
                       if (res.data.data.length == 0) {
                         return;
@@ -210,7 +211,7 @@ Page({
         })
         wx.request({
           //获取openid接口   
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/remove',
+          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/remove',
           data: {
             openId: app.globalData.openid,
             deviceNo: that.data.deviceNo
@@ -263,10 +264,9 @@ Page({
         for (var i = 0; i < deviceList.length; i++) {
           if (deviceList[i].deviceNo === that.data.deviceNo) {
             deviceList[i].deviceName = that.data.deviceTitle
-            console.log(deviceList[i].imgStyle)
             wx.request({
               //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/modify',
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/modify',
               data: {
                 openId: app.globalData.openid,
                 deviceNo: that.data.deviceNo,
@@ -437,7 +437,7 @@ Page({
                     if (list.length > 0) {
                       wx.request({
                         //获取openid接口   
-                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create/many',
+                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/create/many',
                         data: {
                           storeList: JSON.stringify(list).replace(/imgstyle/g, "imgStyle"),
                         },
@@ -460,61 +460,6 @@ Page({
       }
     })
   },
-  chooseMenu: function (num) {
-    var that = this;
-    var list = that.data.content.detail_navbar
-    if (num == 2) {
-      list.push(that.data.content.detail_exceptionMenu)
-    }
-    if (num == 3) {
-      list.push(that.data.content.detail_reportMenu)
-    }
-    if (num == 4) {
-      list.push(that.data.content.detail_controlMenu)
-    }
-    if (num == 5) {
-      list.push(that.data.content.detail_smsMenu)
-    }
-    app.globalData.menuList = list
-  },
-  pay: function (param) {
-    console.log("支付")
-    wx.requestPayment({
-      timeStamp: param.timeStamp,
-      nonceStr: param.nonceStr,
-      package: param.package,
-      signType: param.signType,
-      paySign: param.paySign,
-      success: function (res) {
-        console.log(res)
-        // success
-        // wx.navigateBack({
-        //   delta: 1, // 回退前 delta(默认为1) 页面
-        //   success: function (res) {
-        //     wx.showToast({
-        //       title: '支付成功',
-        //       icon: 'success',
-        //       duration: 2000
-        //     })
-        //   },
-        //   fail: function () {
-        //     // fail
-
-        //   },
-        //   complete: function () {
-        //     // complete
-        //   }
-        // })
-      },
-      fail: function (res) {
-        console.log(res)
-        // fail
-      },
-      complete: function () {
-        // complete
-      }
-    })
-  },
   onLoad: function(options) {
     var that = this;
     wx.login({
@@ -527,34 +472,12 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-            console.log(res)
            var  openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             app.globalData.openid = openid
-            // wx.request({
-            //   url: 'http://127.0.0.1:8080/webapi/wechat/PayOrder/createPayOrder',
-            //   method: 'POST',
-            //   data: {
-            //     money: '1',
-            //     openId: res.data.openid
-            //   },
-            //   header: {
-            //     'content-type': 'application/x-www-form-urlencoded'
-            //   },
-            //   success: function (res) {
-            //     var pay = res.data.data
-            //     console.log(pay)
-            //     //发起支付
-            //     var timeStamp = pay.timeStamp;
-            //     var packages = pay.package;
-            //     var paySign = pay.paySign;
-            //     var nonceStr = pay.nonceStr;
-            //     var param = { "timeStamp": timeStamp, "package": packages, "paySign": paySign, "signType": "MD5", "nonceStr": nonceStr };
-            //     that.pay(param)
-            //   },
-            // })
+          
             wx.request({
               //获取openid接口 
-              url: 'https://apis.sdcsoft.com.cn/wechat/check/openId',
+              url: 'https://apis.sdcsoft.com.cn/wechat/user/wxShow/check/openId',
               data: {
                 openId: openid
               },
@@ -563,9 +486,9 @@ Page({
               },
               method: 'POST',
               success: function (res) {
-                if (res.data.code == 2) {
+                if (res.data.code == 1) {
                   wx.request({
-                    url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',
+                    url: 'https://apis.sdcsoft.com.cn/wechat/user/wxShow/saveEmployee',
                     method: "GET",
                     data: {
                       realName: openid,
@@ -574,35 +497,16 @@ Page({
                     header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
                     success: function (res) {
                       console.log(res)
+                      that.setData({
+                        empower: false
+                      })
                     }
                   })
                 }
               }
             }) 
+           
             
-            wx.request({
-              //获取openid接口  
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
-              data: {
-                openId: openid,
-              },
-              method: 'GET',
-              success: function (res) {
-                console.log(res)
-                if (res.data.code == 0 & res.data.data.length > 0) {
-                  var currentTime = new Date();
-                  var list = res.data.data
-                  for (var i = 0; i < list.length; i++) {
-                    var dt = list[i].dueTime
-                    var format = dt.replace(/-/g, '/')
-                    var dt = new Date(Date.parse(format))
-                    if (currentTime < dt) {
-                      that.chooseMenu(list[i].resId)
-                    }
-                  }
-                }
-              }
-            })
           }
         })
       }
@@ -639,7 +543,7 @@ Page({
       that.setData({
         content: chinese.Content
       })
-      app.globalData.menuList = chinese.Content.detail_navbar
+      
       wx.setTabBarItem({
           index: 0,
           text: '设备',
@@ -664,7 +568,7 @@ Page({
       that.setData({
         content: english.Content
       })
-      app.globalData.menuList = english.Content.detail_navbar
+     
       wx.setTabBarItem({
           index: 0,
           text: 'Devices',
@@ -869,7 +773,7 @@ Page({
       if (deviceNos[index].deviceName == '' || deviceNos[index].deviceName == null) {
         title1 = deviceNos[index].deviceNo
       } else {
-        title1 = deviceNos[index].deviceName
+        title1 = deviceNos[index].deviceName +"——"+ deviceNos[index].deviceNo
       }
       var imgstyle1 = deviceNos[index].imgStyle
 
@@ -877,12 +781,12 @@ Page({
         key: 'deviceList',
         success(res) {
           var deviceList = res.data
-          for (var i = 0; i < deviceList.length; i++) {
-            // if (deviceList[i].deviceNo === deviceno) {
-            //   deviceType = deviceList[i].deviceType
-            //   break;
-            // }
-          }
+          // for (var i = 0; i < deviceList.length; i++) {
+          //   if (deviceList[i].deviceNo === deviceno) {
+          //     deviceType = deviceList[i].deviceType
+          //     break;
+          //   }
+          // }
           wx.request({
             url: 'https://apis.sdcsoft.com.cn/wechat/device/getdata',
             data: {
@@ -900,7 +804,7 @@ Page({
                   for (var i = 0; i < ilist.length; i++) {
                     if (ilist[i].deviceNo === deviceno) {
                       ilist[i].deviceNo = deviceno
-                      ilist[i].title = deviceno
+                      ilist[i].title = title1
                       ilist[i].runstate = that.data.content.list_runstate
                       ilist[i].imgstyle = imgstyle1
                       ilist[i].errcount = errcount1
@@ -927,7 +831,6 @@ Page({
               } else {
                 try {
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
-                  console.log(data)
                   //data.setModbusNo 设置Modbus站号 默认1 1-255
                   if (data.getTypeName() != deviceType) {
                     wx.request({
@@ -1103,7 +1006,7 @@ Page({
             if (deviceList[i].deviceName === '') {
               title1 = deviceList[i].deviceNo
             } else {
-              title1 = deviceList[i].deviceName
+              title1 = deviceNos[index].deviceName + "——" + deviceNos[index].deviceNo
             }
             break;
           }
@@ -1116,7 +1019,7 @@ Page({
           //   console.log('title:=' + value.getTitle() + ' value:=' + value.getValueString());
           // });
           if (data == null) {
-            title1: deviceNo,
+            title1: title1,
             runstate1 = that.data.content.list_runstate,
             deviceNo = deviceNo,
             imgstyle = 0,
