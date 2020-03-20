@@ -11,7 +11,7 @@
 }
 .order {
     display: flex;
-    margin: 0 20rpx;
+    margin: 0 40rpx;
     padding: 30rpx 0;
 }
 .imag {
@@ -20,7 +20,7 @@
 }
 .text {
    font-size: 30rpx;
-  margin-left: 25rpx;
+  margin-left: 40rpx;
 }
 .text1 {
      font-size: 25rpx;
@@ -29,21 +29,21 @@
 }
 .total {
     display: flex;
-  
+    margin-right: 40rpx;
     justify-content: space-between;
   
    
 }
 .paymentAmount {
     display: flex;
- 
+    margin-right: 40rpx;
     justify-content: space-between;
   
     border-bottom: 2rpx solid #f3f3f3;
 }
 .discount {
     display: flex;
-   
+    margin-right: 40rpx;
     justify-content: space-between;
    
   

@@ -22,7 +22,7 @@
     <view >￥{{item.price}}</view>
     </view>
    </view>
- <button class='btn1' >
+ <!-- <button class='btn1' >
     <view>再下一单</view>
- </button>
+ </button> -->
   </view>

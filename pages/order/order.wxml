@@ -21,7 +21,7 @@
   </view>
   <view class="bottom-bar">
     <view class="count" style="height: 40px;width: 100%;line-height: 40px;">
-      共计{{count}}件，当前{{discount.discount}} 
+      共计{{count}}件，{{discount.discount}} 
     </view>
     <view class="count" style="height: 40px;width: 100%;line-height: 40px;">
         原价 <text class="num">{{discount.total}} 元</text>     

@@ -1,7 +1,6 @@
 //index.js
 //获取应用实例
 var util = require('../../utils/util.js')
-var status = require('../../utils/status.js')
 var app= getApp()
 Page({
   data: {
@@ -13,10 +12,25 @@ Page({
   //     url: '../demo/demo?orderId='+
   //   })
   // },
+  status:function (id) {
+    var statusJson = {};
+    var x = "";
+
+    switch(id) {
+    case 0:
+    x = "待支付";
+    break;
+    case 1:
+    x = "已付款";
+    break;
+  }
+  statusJson.x = x;
+return statusJson;
+},
   onLoad: function () {
     var that = this;
     wx.request({
-      url: 'http://127.0.0.1:8080/webapi/wechat/JinRong_Order/list',
+      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_Order/list',
       method: "GET",
       data: {
         openId: app.globalData.openid,
@@ -33,7 +47,7 @@ Page({
             ['orders[' + i + '].unionId']: res.data.data[i].unionId,
             ['orders[' + i + '].payforDate']: util.formatTime(new Date(res.data.data[i].payforDate)),
             ['orders[' + i + '].createDate']: util.formatTime(new Date(res.data.data[i].createDate)),
-            ['orders[' + i + '].status']: status.status(res.data.data[i].status).x,
+            ['orders[' + i + '].status']: that.status(res.data.data[i].status).x,
           })
         }
        
@@ -51,6 +65,5 @@ Page({
     //   },
     // ]
     // })
-     console.log(app.data.openId)
   }
 })

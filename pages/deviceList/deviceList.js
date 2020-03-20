@@ -488,7 +488,7 @@ Page({
               success: function (res) {
                 if (res.data.code == 1) {
                   wx.request({
-                    url: 'https://apis.sdcsoft.com.cn/wechat/user/wxShow/saveEmployee',
+                    url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',
                     method: "GET",
                     data: {
                       realName: openid,

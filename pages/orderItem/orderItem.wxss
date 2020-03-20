@@ -2,7 +2,9 @@
 .item1 {
   
     border-bottom: 2rpx solid #f3f3f3;
-   
+   margin: 0 40rpx;
+font-size: 30rpx;
+
 }
 .item {
     display: flex;

@@ -7,6 +7,7 @@ Page({
     content:null,
     sole: false,
     canIUse: true,
+    resList:[]
   },
   // getPhoneNumber: function (e) {
   //   wx.login({
@@ -18,7 +19,7 @@ Page({
   //           success: function (res) {
   //             //3.请求自己的服务器，解密用户信息 获取unionId等加密信息
   //             wx.request({
-  //               url: 'http://127.0.0.1:8080/wechat/device/getUnionId',
+  //               url: 'https://apis.sdcsoft.com.cn/wechat/device/getUnionId',
   //               method: 'get',
   //               header: {
   //                 'content-type': 'application/x-www-form-urlencoded'
@@ -84,8 +85,19 @@ Page({
         }
       }
     })
-
-   
+    wx.request({
+      //获取openid接口  
+      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
+      data: {
+        openId: app.globalData.openid,
+      },
+      method: 'GET',
+      success: function (res) {
+        that.setData({
+          resList: res.data.data
+        })
+      }
+    }) 
     wx.getStorage({
       key: 'wxEnterpriseName',
       success(res) {

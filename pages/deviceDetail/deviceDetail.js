@@ -76,8 +76,13 @@ Page({
     controlMenu: -1,
     smsMenu: -1,
     baseNavbar:[],
+    isHidden: false,
   },
-
+  getHidden() {
+    this.setData({
+      isHidden: false
+    })
+  },
   switchChange: function(e) {
     var that = this
     var state = -1;
@@ -343,7 +348,7 @@ Page({
     }
     wx.request({
       //获取openid接口  
-      url: 'http://127.0.01:8080/webapi/wechat/RoleResource/list/deviceNo',
+      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list/deviceNo',
       data: {
         deviceNo: options.deviceNo,
       },
@@ -358,12 +363,30 @@ Page({
             var dt = new Date(Date.parse(format))
             if (currentTime < dt) {
               that.chooseMenu(list[i].resId)
+            }else{
+              wx.request({
+                //获取openid接口  
+                url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/wechat/remove',
+                data: {
+                  id: list[i].id,
+                },
+                method: 'GET',
+                success: function (res) {
+                  console.log(res)
+                }
+              })  
             }
+            
           }
         }else{
           that.setData({
             navbar :that.data.baseNavbar
           })
+          if (that.data.navbar.length == 2) {
+            that.setData({
+              isHidden: true
+            })
+          }
         }
         var munuList = that.data.navbar
         for (var i in munuList) {
@@ -603,6 +626,7 @@ Page({
   },
   onShow: function() {
     var that = this;
+    
     var type = that.data.deviceType
     var deviceNo = that.data.deviceNo
     if (deviceNo.substr(0, 2) != '20') {

@@ -79,9 +79,12 @@
       <block wx:for="{{chooseDeviceList}}"  wx:key="id" wx:for-item="chooseDevice">
            <view class='toast-input'>
               {{chooseDevice.deviceNo}}-{{chooseDevice.title}}
-              <view class="dish-item-count-plus" style="float: right;" bindtap="addCount"
+              <view wx:if="{{chooseDevice.count == 0 }}" class="dish-item-count-plus" style="float: right;" bindtap="addCount"
                data-name="{{chooseDevice.resName}}"  data-range="{{chooseDevice.range}}"  data-rangeType="{{chooseDevice.rangeType}}" data-price="{{chooseDevice.price}}" data-resId="{{chooseDevice.resId}}"data-deviceNo="{{chooseDevice .deviceNo}}"
               >
+                <image class="image" src="../../images/countSelAdd.png" />
+              </view>
+              <view wx:else class="dish-item-count-plus" style="float: right;">
                 <image class="image" src="../../images/countSelAdd.png" />
               </view>
               <view  style="float: right;" class= 'dish-item-count-minus'>
@@ -92,10 +95,7 @@
                     <image class="image" src="../../images/countMinus.png" />
               </view>
           </view>
-          
-          
       </block>
-     
     </view>
     <view class='toast-button'>
       <view class='button2' style="width: 100%;">

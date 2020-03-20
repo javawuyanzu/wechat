@@ -13,8 +13,9 @@ Page({
     orders: true,
     items: [],
     content: null,
+    outTradeNo:null,
   },
-  
+
   wxpay: function (param) {
     let that = this;
     wx.requestPayment({
@@ -24,18 +25,18 @@ Page({
       signType: param.signType,
       paySign: param.paySign,
       success: function (res) {
-       
-        console.log("支付成功")
-       
+
+        console.log(res)
         wx.navigateBack({
-          delta: 1, // 回退前 delta(默认为1) 页面
+          delta:3, // 回退前 delta(默认为1) 页面
           success: function (res) {
-            that.createOrderAndItem(1)
+            that.createOrderAndItem()
             wx.showToast({
               title: '支付成功',
               icon: 'success',
               duration: 2000
             })
+           
           },
           fail: function () {
             // fail
@@ -45,13 +46,17 @@ Page({
             // complete
           }
         })
+       
       },
       fail: function (res) {
         console.log("支付失败")
+        // wx.setStorage({
+        //   key: "orders",
+        //   data: []
+        // });
         wx.navigateBack({
-          delta: 1, // 回退前 delta(默认为1) 页面
+          delta: 2, // 回退前 delta(默认为1) 页面
           success: function (res) {
-            that.createOrderAndItem(0)
             wx.showToast({
               title: '支付失败',
               icon: 'success',
@@ -66,7 +71,7 @@ Page({
             // complete
           }
         })
-      
+
         // fail
       },
       complete: function () {
@@ -74,13 +79,13 @@ Page({
       }
     })
   },
-  pay: function() {
+  pay: function () {
     let that = this;
     let str = '选中' + that.data.count + '件商品，共' + that.data.discount.paymentAmount + '元，是否要支付？'
     wx.showModal({
       title: '提示',
       content: str,
-      success: function(res) {
+      success: function (res) {
         // 至少选中一个商品才能支付
         if (that.data.count !== 0) {
           if (res.confirm) {
@@ -97,35 +102,95 @@ Page({
                     'content-type': 'application/x-www-form-urlencoded'
                   },
                   success: function (res) {
+                    var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+                    var openidmax = res.data.openid
                     wx.request({
-                      url: 'http://127.0.0.1:8080/webapi/wechat/PayOrder/createPayOrder',
-                      method: 'POST',
+                      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_Order/create',
+                      method: "POST",
                       data: {
-                        money: '1',
-                        openId: res.data.openid
-                      },
-                      header: {
-                        'content-type': 'application/x-www-form-urlencoded'
+                        status: 0,
+                        wechatOrderId: "temp",
+                        openId: openid,
+                        discount: that.data.discount.discount,
+                        total: that.data.discount.total,
+                        paymentAmount: that.data.discount.paymentAmount,
                       },
                       success: function (res) {
-                        var pay = res.data.data
-                        console.log(pay)
-                        //发起支付
-                        var timeStamp = pay.timeStamp;
-                        var packages = pay.package;
-                        var paySign = pay.paySign;
-                        var nonceStr = pay.nonceStr;
-                        var param = { "timeStamp": timeStamp, "package": packages, "paySign": paySign, "signType": "MD5", "nonceStr": nonceStr };
-                        that.wxpay(param)
-                      },
+                        console.log(res)
+                        var orderId = res.data.data.id
+                        that.setData({
+                          outTradeNo:res.data.data.outTradeNo
+                        })
+                        wx.getStorage({
+                          key: 'orders',
+                          success: function (res) {
+                            var list = res.data
+                            var itemList = []
+                            for (var i in list) {
+                              itemList.push({
+                                orderId: orderId,
+                                resourceId: list[i].resourceId,
+                                resourceName: list[i].resourceName,
+                                range: list[i].range,
+                                price: list[i].price,
+                                amount: list[i].amount,
+                                deviceNo: list[i].deviceNo,
+                                rangeType: list[i].rangeType,
+                                mobile: "",
+                                marker: ""
+                              })
+                            }
+                            wx.request({
+                              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_OrderItem/wx/create/many',
+                              method: "POST",
+                              data: {
+                                jinRong_OrderItemList: JSON.stringify(itemList)
+                              },
+                              header: {
+                                'content-type': 'application/x-www-form-urlencoded'
+                              },
+                              success: function (res) {
+                                console.log(res.data)
+                                wx.request({
+                                  url: 'https://apis.sdcsoft.com.cn/webapi/wechat/PayOrder/createPayOrder',
+                                  method: 'POST',
+                                  data: {
+                                    money: that.data.discount.paymentAmount*100,
+                                    openId: openidmax,
+                                    orderNo: that.data.outTradeNo
+                                  },
+                                  header: {
+                                    'content-type': 'application/x-www-form-urlencoded'
+                                  },
+                                  success: function (res) {
+                                    var pay = res.data.data
+                                    console.log(pay)
+                                    //发起支付
+                                    var timeStamp = pay.timeStamp;
+                                    var packages = pay.package;
+                                    var paySign = pay.paySign;
+                                    var nonceStr = pay.nonceStr;
+                                    var param = { "timeStamp": timeStamp, "package": packages, "paySign": paySign, "signType": "MD5", "nonceStr": nonceStr };
+                                    that.wxpay(param)
+                                  },
+                                })
+                             
+
+                              }
+                            })
+
+
+                          
+                          },
+                        })
+                      }
                     })
-                  
                   }
                 })
               }
             })
-            
-      
+
+
           } else if (res.cancel) {
             console.log('用户点击取消')
           }
@@ -139,98 +204,49 @@ Page({
       }
     })
   },
-  createOrderAndItem: function (status) {
+  createOrderAndItem: function () {
     let that = this;
-    wx.request({
-      url: 'http://127.0.0.1:8080/webapi/wechat/JinRong_Order/create',
-      method: "POST",
-      data: {
-        status: status,
-        wechatOrderId: "temp",
-        openId: app.globalData.openid,
-        unionId: "temp",
-        discount: that.data.discount.discount,
-        total: that.data.discount.total,
-        paymentAmount: that.data.discount.paymentAmount,
-      },
-
-      success: function(res) {
-        var orderId = res.data.data.id
-        wx.getStorage({
-          key: 'orders',
-          success: function(res) {
-            var list = res.data
-            var itemList = []
-            for (var i in list) {
-              itemList.push({
-                orderId: orderId,
-                resourceId: list[i].resourceId,
-                resourceName: list[i].resourceName,
-                range: list[i].range,
-                price: list[i].price,
-                amount: list[i].amount,
-                deviceNo: list[i].deviceNo,
-                rangeType: list[i].rangeType,
-                mobile:"",
-                marker:""
-              })
-            }
-            wx.request({
-              url: 'http://127.0.0.1:8080/webapi/wechat/JinRong_OrderItem/wx/create/many',
-              method: "POST",
-              data: {
-                jinRong_OrderItemList: JSON.stringify(itemList)
-              },
-              header: {
-                'content-type': 'application/x-www-form-urlencoded'
-              },
-              success: function(res) {
-                console.log(res)
-                if (status==1){
-                  var resList = []
-                  for (var i in list) {
-                    resList.push({
-                      openId: app.globalData.openid,
-                      resId: list[i].resourceId,
-                      deviceNo: list[i].deviceNo,
-                      range: list[i].range,
-                      rangeType: list[i].rangeType,
-                      amount: list[i].amount,
-                    })
-                  }
-                  wx.request({
-                    url: 'http://127.0.0.1:8080/webapi/wechat/RoleResource/create/many',
-                    method: "POST",
-                    data: {
-                      role_ResourceList: JSON.stringify(resList)
-                    },
-                    header: {
-                      'content-type': 'application/x-www-form-urlencoded'
-                    },
-                    success: function (res) {
-
-                      wx.showToast({
-                        title: '购买成功',
-                        icon: 'success',
-                        duration: 2000
-                      })
-                      wx.switchTab({
-                        url: '../deviceList/deviceList'
-                      })
-                    }
-                  })
-                }
-              }
-            })
-
-            
-            wx.setStorage({
-              key: "orders",
-              data: []
-            });
+    wx.getStorage({
+      key: 'orders',
+      success: function (res) {
+        var list = res.data
+        var resList = []
+        for (var i in list) {
+          resList.push({
+            openId: app.globalData.openid,
+            resId: list[i].resourceId,
+            deviceNo: list[i].deviceNo,
+            range: list[i].range,
+            rangeType: list[i].rangeType,
+            amount: list[i].amount,
+          })
+        }
+        wx.request({
+          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/create/many',
+          method: "POST",
+          data: {
+            role_ResourceList: JSON.stringify(resList)
           },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          success: function (res) {
+            wx.showToast({
+              title: '购买成功',
+              icon: 'success',
+              duration: 2000
+            })
+            // wx.setStorage({
+            //   key: "orders",
+            //   data: []
+            // });
+            // wx.switchTab({
+            //   url: '../deviceList/deviceList'
+            // })
+          }
         })
-      }
+
+      },
     })
 
   },
@@ -258,7 +274,7 @@ Page({
     }
     return y + "-" + m + "-" + d + " " + h + ':' + mm;
   },
-  onLoad: function(options) {
+  onLoad: function (options) {
     let that = this;
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
@@ -276,21 +292,21 @@ Page({
     }
     wx.request({
       //获取openid接口  
-      url: 'http://127.0.0.1:8080/webapi/wechat/DiscountStrategy/discount',
+      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/DiscountStrategy/discount',
       data: {
         total: options.money,
       },
       method: 'GET',
-      success: function(res) {
+      success: function (res) {
         console.log(res)
         var celue;
         if (res.data.data.discount != null) {
           celue = res.data.data.discount
-        }else{
-          celue = "不满足优惠条件"
+        } else {
+          celue = " "
         }
         var discount = {
-          
+
           discount: celue,
           total: res.data.data.total,
           paymentAmount: res.data.data.paymentAmount,
@@ -303,7 +319,7 @@ Page({
     // 取出订单传过来的数据
     wx.getStorage({
       key: 'orders',
-      success: function(res) {
+      success: function (res) {
         that.setData({
           items: res.data
         });

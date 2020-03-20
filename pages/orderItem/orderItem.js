@@ -1,14 +1,28 @@
-var range = require('../../utils/range.js')
+
 Page({
   data: {
-    logs:'1235468',
     orderItem:[]
   },
+  range:function(id) {
+    var rangeJson = {}; 
+    var x = "";
+
+    switch(id) {
+    case 1:
+    x = "天";
+    break;
+    case 2:
+    x = "个月";
+    break;
+  }
+  rangeJson.x = x;
+  return rangeJson;
+},
    onLoad: function (options) {
      var that=this;
      var orderId = options.orderId
      wx.request({
-       url: 'http://127.0.0.1:8080/webapi/wechat/JinRong_OrderItem/list',
+       url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_OrderItem/list',
        method: "GET",
        data: {
          OrderId: orderId,
@@ -25,7 +39,7 @@ Page({
              ['orderItem[' + i + '].deviceNo']:res.data.data[i].deviceNo,
              ['orderItem[' + i + '].marker']: res.data.data[i].marker,
              ['orderItem[' + i + '].mobile']: res.data.data[i].mobile,
-             ['orderItem[' + i + '].rangeType']: range.range(res.data.data[i].rangeType).x,
+             ['orderItem[' + i + '].rangeType']: that.range(res.data.data[i].rangeType).x,
            })
          }
        }
