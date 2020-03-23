@@ -263,17 +263,16 @@ Page({
       that.setData({
         timerStates: false,
       })
-      if (e.currentTarget.dataset.idx == 0) {
-          that.setData({
-            timerStates: true,
-          })
-      }
-      if (e.currentTarget.dataset.idx == 2) {
-       
-          that.getreportdatabyday(that.data.mock1)
-        }
+      
     }
-    
+    if (e.currentTarget.dataset.idx == 0) {
+      that.setData({
+        timerStates: true,
+      })
+    }
+    if (e.currentTarget.dataset.idx == 2) {
+      that.getreportdatabyday(that.data.mock1)
+    }
   },
   onHide: function() {
     app.globalData.callBack[1] = null

@@ -533,7 +533,7 @@ Page({
            
             wx.request({
               //获取openid接口 
-              url: 'https://apis.sdcsoft.com.cn/wechat/user/check/openId',
+              url: 'https://apis.sdcsoft.com.cn/wechat/user/wxShow/check/openId',
               data: {
                 openId: openid
               },
@@ -542,7 +542,8 @@ Page({
               },
               method: 'POST',
               success: function (res) {
-                if (res.data.code == 2) {
+                console.log(res)
+                if (res.data.code == 1) {
                   wx.request({
                     url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',
                     method: "GET",
@@ -553,6 +554,9 @@ Page({
                     header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
                     success: function (res) {
                       console.log(res)
+                      that.setData({
+                        empower: false
+                      })
                     }
                   })
                 }
