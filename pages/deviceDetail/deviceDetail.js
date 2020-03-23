@@ -256,66 +256,24 @@ Page({
   
   navbarTap: function(e) {
     var that = this
-
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
-    var menuName = e.currentTarget.dataset.name
-    // if (menuName == that.data.content.detail_controlMenu) {
-
-    var munu = e.currentTarget.dataset.idx
-    console.log(munu)
-    if (munu == that.data.content.detail_runinfoMenu){
-
+    if (e.currentTarget.dataset.idx == 3) {
       that.setData({
-        currentTab:0,
-        timerStates: true,
-      })
-    }
-
-  
-
-    if (munu == that.data.content.detail_payMenu) {
-
-      that.setData({
-        currentTab: 4,
-      })
-    }
-
-    if (menuName == that.data.content.detail_reportMenu) {
-      that.getreportdatabyday(that.data.mock1)
-    }
-    if (menuName == that.data.content.detail_payMenu) {
-      that.setData({
-        currentTab: e.currentTarget.dataset.idx - 1
-      })
-      wx.navigateTo({
-        url: '../payMenu/payMenu'
-      })
-    }
-
-    if (munu == that.data.content.detail_exceptionMenu) {
-      that.setData({
-        currentTab: 1,
-      })
-    }
-    if (munu == that.data.content.detail_reportMenu) {
-      that.setData({
-        currentTab: 2,
-      })
-      that.getreportdatabyday(that.data.mock1)
-    }
-    if (munu == that.data.content.detail_controlMenu) {
-      that.setData({
-        currentTab:3,
         timerStates: false,
       })
+      if (e.currentTarget.dataset.idx == 0) {
+          that.setData({
+            timerStates: true,
+          })
+      }
+      if (e.currentTarget.dataset.idx == 2) {
+       
+          that.getreportdatabyday(that.data.mock1)
+        }
     }
-    if (munu == that.data.content.detail_smsMenu) {
-      that.setData({
-        currentTab: 5,
-      })
-    }
+    
   },
   onHide: function() {
     app.globalData.callBack[1] = null
@@ -341,7 +299,7 @@ Page({
       var chinese = require("../../utils/Chinses.js")
       that.setData({
         content: chinese.Content,
-        navbar: app.globalData.menuList,
+        navbar: chinese.Content.detail_navbar1,
         lang: 'zh-cn'
       })
     }
@@ -349,7 +307,7 @@ Page({
       var english = require("../../utils/English.js")
       that.setData({
         content: english.Content,
-        navbar: app.globalData.menuList,
+        navbar: chinese.Content.detail_navbar1,
         lang: 'en-us'
       })
     }
@@ -466,11 +424,10 @@ Page({
         media = data.getBaseInfoFields().map[index].value
       }
     }
-    
     if (media == 0 || media == 1) {
       that.setData({
         control: true,
-        //navbar: that.data.content.detail_cnavbar,
+        navbar: that.data.content.detail_cnavbar,
       })
     }
     if (JSON.stringify(clist) != '{}') {
@@ -576,7 +533,7 @@ Page({
         success: function(res) {
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
-         
+          console.log(data)
          
           var clist = data.getCommands().map
           data.getDeviceFocusFields()
@@ -586,10 +543,11 @@ Page({
               media = data.getBaseInfoFields().map[index].value
             }
           }
+         
           if (media == 0 || media == 4) {
             that.setData({
               control: true,
-              //navbar: that.data.content.detail_cnavbar,
+              navbar: that.data.content.detail_cnavbar,
             })
           }
           if (JSON.stringify(clist) != '{}') {

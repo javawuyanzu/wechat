@@ -1,10 +1,10 @@
 <!--导航条-->
 
-<!-- <view class="navbar"  >
-  <text wx:for="{{navbar}}" data-idx="{{index}}" data-name="{{item}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text> -->
+<view class="navbar"  >
+  <text wx:for="{{navbar}}" data-idx="{{index}}" data-name="{{item}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text>
 
-<view class="navbar">
-  <text wx:for="{{navbar}}" data-idx="{{item}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text>
+<!-- <view class="navbar">
+  <text wx:for="{{navbar}}" data-idx="{{item}}" class="item {{currentTab==index ? 'active' : ''}}" wx:key="unique" bindtap="navbarTap">{{item}}</text> -->
 
 </view>
 
@@ -273,8 +273,7 @@
   123
 </view>
 
-<view hidden="{{currentTab!=payMenu}}">
-</view>
+
 <view hidden="{{currentTab!==5}}">
 
 </view>

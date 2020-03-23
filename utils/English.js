@@ -56,7 +56,6 @@ var English = {
   detail_yes: "Yes",
   index_exType: "Alarm way",
   index_sold:"Equipment management",
-  index_canIUse: "Binding platform account",
   warningType_title: "Alarm way",
   warningType_exType: "Alarm way",
   warningType_nowChoose: "Current selection",
