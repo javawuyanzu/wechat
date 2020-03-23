@@ -300,14 +300,13 @@ Page({
             wx.request({
               url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
               data: {
-                deviceNo: deviceNo, 
+                deviceNo: deviceNo,
               },
               header: {
                 "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
               },
               method: 'GET',
               success: function (res) {
-                console.log(res)
                 if (res.data.code != 0) {
                   wx.showToast({
                     title: res.data.msg,

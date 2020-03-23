@@ -11,6 +11,7 @@ App({
   data: {},
   onShow: function () {
     this.globalData.startTime = new Date()
+    console.log(this.globalData.startTime)
   },
   onHide: function () {
     this.globalData.endTime = new Date()
@@ -102,6 +103,17 @@ App({
  
   onLaunch: function () {
     var that = this
+
+    const storage = wx.getStorageInfoSync()
+    if (storage.keys.length == 0) {
+      wx.setStorageSync('deviceList', [])
+      wx.setStorageSync('errorList', [])
+      wx.setStorageSync('time', 30)
+      wx.setStorageSync('warningType', 1)
+      wx.setStorageSync('wxEnterpriseName', '')
+      wx.setStorageSync('cachedVersion', 1.0)
+    }
+
     wx.getSystemInfo({
       success: function (res) {
         if (res.language === 'zh') {
@@ -121,16 +133,26 @@ App({
       }
     })
    
-    const storage = wx.getStorageInfoSync()
-    if (storage.keys.length == 0) {
-      wx.setStorageSync('deviceList', [])
-      wx.setStorageSync('errorList', [])
-      wx.setStorageSync('time', 30)
-      wx.setStorageSync('warningType', 1)
-      wx.setStorageSync('wxEnterpriseName', '')
-      wx.setStorageSync('cachedVersion', 1.0)
-      wx.setStorageSync('orders', [])
-    }
+
+
+   
+    wx.login({
+      success: function (res) {
+        wx.request({
+          //获取openid接口  
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+          data: {
+            js_code: res.code,
+          },
+          method: 'GET',
+          success: function (res) {
+            openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+            that.globalData.openid = openid
+          }
+        })
+      }
+    })
+
   },
   
   globalData: {

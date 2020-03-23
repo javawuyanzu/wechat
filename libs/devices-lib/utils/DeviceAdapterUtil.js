@@ -10,6 +10,7 @@ var Wechat_DeviceAdapter = /** @class */ (function () {
         return new Wechat_DeviceAdapter();
     };
     Wechat_DeviceAdapter.prototype.createDeviceFunc = function (type) {
+        console.log(type);
         var strs = type.split('_');
         var path = '../devices/' + strs.join('/');
         // console.log(path)

@@ -14,9 +14,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var _4J_KZ_1 = require("./AScript/4J_KZ");
 module.exports = /** @class */ (function (_super) {
-    __extends(CTL_RT_T2_RYZQ_000, _super);
-    function CTL_RT_T2_RYZQ_000() {
+    __extends(CTL_RT_T2_RYZQ_001, _super);
+    function CTL_RT_T2_RYZQ_001() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return CTL_RT_T2_RYZQ_000;
+    return CTL_RT_T2_RYZQ_001;
 }(_4J_KZ_1.CTL_RT_T2_RYZQ_4JKZ));
