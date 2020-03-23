@@ -33,14 +33,11 @@ Page({
                         realName: res.userInfo.nickName,
                         openid: app.globalData.openid,
                       },
-                      header: {
-                        'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-                      },
-                      success: function(res) {
-                        console.log(res)
-                        that.setData({
-                          empower: false
-                        })
+                      header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                      success: function (res) {
+                       that.setData({
+                         empower:false
+                       })
                       }
                     })
                   },
@@ -121,8 +118,7 @@ Page({
                 "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
               },
               method: 'GET',
-              success: function(res) {
-                console.log(res)
+              success: function (res) {
                 if (res.data.code != 0) {
                   wx.showToast({
                     title: res.data.msg,

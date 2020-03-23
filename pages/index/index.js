@@ -3,8 +3,8 @@ const app = getApp()
 Page({
   data: {
     openid: '',
-    wxEnterpriseName:'',
-    content:null,
+    wxEnterpriseName: '',
+    content: null,
     sole: false,
     canIUse: true,
     resList:[]
@@ -85,19 +85,7 @@ Page({
         }
       }
     })
-    wx.request({
-      //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
-      data: {
-        openId: app.globalData.openid,
-      },
-      method: 'GET',
-      success: function (res) {
-        that.setData({
-          resList: res.data.data
-        })
-      }
-    }) 
+
     wx.getStorage({
       key: 'wxEnterpriseName',
       success(res) {
@@ -106,11 +94,11 @@ Page({
         })
       }
     })
-   
+
   },
 
   onShow: function () {
-    var that =this
+    var that = this
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({

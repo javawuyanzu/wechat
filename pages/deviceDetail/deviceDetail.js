@@ -69,19 +69,12 @@ Page({
     lang: '',
     jiarezu:null,
     mqttname:"",
-    runinfoMenu: -1,
-    payMenu: -1,
-    exceptionMenu: -1,
-    reportMenu: -1,
-    controlMenu: -1,
-    smsMenu: -1,
-    baseNavbar:[],
-    isHidden: false,
-  },
-  getHidden() {
-    this.setData({
-      isHidden: false
-    })
+    runinfoMenu: true,
+    payMenu: true,
+    exceptionMenu: true,
+    reportMenu: true,
+    controlMenu: true,
+    smsMenu: true,
   },
   switchChange: function(e) {
     var that = this
@@ -261,32 +254,24 @@ Page({
     console.log(str)
   },
   
-  navbarTap: function (e) {
+  navbarTap: function(e) {
     var that = this
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
-    var menuName = e.currentTarget.dataset.name
-    if (menuName == that.data.content.detail_controlMenu) {
+    if (e.currentTarget.dataset.idx == 3) {
       that.setData({
         timerStates: false,
       })
+      
     }
-    if (menuName == that.data.content.detail_runinfoMenu) {
+    if (e.currentTarget.dataset.idx == 0) {
       that.setData({
         timerStates: true,
       })
     }
-    if (menuName == that.data.content.detail_reportMenu) {
+    if (e.currentTarget.dataset.idx == 2) {
       that.getreportdatabyday(that.data.mock1)
-    }
-    if (menuName == that.data.content.detail_payMenu) {
-      that.setData({
-        currentTab: e.currentTarget.dataset.idx - 1
-      })
-      wx.navigateTo({
-        url: '../payMenu/payMenu'
-      })
     }
   },
   onHide: function() {
@@ -334,97 +319,23 @@ Page({
       var chinese = require("../../utils/Chinses.js")
       that.setData({
         content: chinese.Content,
-        lang: 'zh-cn',
-        baseNavbar: ['基本', '购买']
+        navbar: chinese.Content.detail_navbar1,
+        lang: 'zh-cn'
       })
     }
     if (app.globalData.lang === 'en-us') {
       var english = require("../../utils/English.js")
       that.setData({
         content: english.Content,
-        lang: 'en-us',
-        baseNavbar: ['Run information', 'Purchasing service']
+        navbar: chinese.Content.detail_navbar1,
+        lang: 'en-us'
       })
     }
-    wx.request({
-      //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list/deviceNo',
-      data: {
-        deviceNo: options.deviceNo,
-      },
-      method: 'GET',
-      success: function (res) {
-        if (res.data.code == 0 & res.data.data.length > 0) {
-          var currentTime = new Date();
-          var list = res.data.data
-          for (var i = 0; i < list.length; i++) {
-            var dt = list[i].dueTime
-            var format = dt.replace(/-/g, '/')
-            var dt = new Date(Date.parse(format))
-            if (currentTime < dt) {
-              that.chooseMenu(list[i].resId)
-            }else{
-              wx.request({
-                //获取openid接口  
-                url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/wechat/remove',
-                data: {
-                  id: list[i].id,
-                },
-                method: 'GET',
-                success: function (res) {
-                  console.log(res)
-                }
-              })  
-            }
-            
-          }
-        }else{
-          that.setData({
-            navbar :that.data.baseNavbar
-          })
-          if (that.data.navbar.length == 2) {
-            that.setData({
-              isHidden: true
-            })
-          }
-        }
-        var munuList = that.data.navbar
-        for (var i in munuList) {
-          var munu = munuList[i]
-          if (munu == that.data.content.detail_runinfoMenu) {
-            that.setData({
-              runinfoMenu: i,
-            })
-          }
-          if (munu == that.data.content.detail_payMenu) {
-            that.setData({
-              payMenu: i
-            })
-          }
-          if (munu == that.data.content.detail_exceptionMenu) {
-            that.setData({
-              exceptionMenu: i
-            })
-          }
-          if (munu == that.data.content.detail_reportMenu) {
-            that.setData({
-              reportMenu: i
-            })
-          }
-          if (munu == that.data.content.detail_controlMenu) {
-            that.setData({
-              controlMenu: i,
-            })
-          }
-          if (munu == that.data.content.detail_smsMenu) {
-            that.setData({
-              smsMenu: i
-            })
-          }
-        }
-      }
-    })
-    
+    var munuList = app.globalData.menuList
+   
+    for (var i in munuList){
+      console.log(munuList[i])
+    }
     // wx.login({
     //   success: function(res) {
     //     wx.request({
@@ -533,16 +444,15 @@ Page({
         media = data.getBaseInfoFields().map[index].value
       }
     }
-    
-    // if (media == 0 || media == 1) {
-    //   that.setData({
-    //     control: true,
-    //   })
-    // }
+    if (media == 0 || media == 1) {
+      that.setData({
+        control: true,
+        navbar: that.data.content.detail_cnavbar,
+      })
+    }
     if (JSON.stringify(clist) != '{}') {
       that.setData({
         controlList: clist,
-        control: true,
       })
     }
 
@@ -644,7 +554,7 @@ Page({
         success: function(res) {
           var errorList = []
           let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
-         
+          console.log(data)
          
           var clist = data.getCommands().map
           data.getDeviceFocusFields()
@@ -654,15 +564,16 @@ Page({
               media = data.getBaseInfoFields().map[index].value
             }
           }
-          // if (media == 0 || media == 4) {
-          //   that.setData({
-          //     control: true,
-          //   })
-          // }
+         
+          if (media == 0 || media == 4) {
+            that.setData({
+              control: true,
+              navbar: that.data.content.detail_cnavbar,
+            })
+          }
           if (JSON.stringify(clist) != '{}') {
             that.setData({
               controlList: clist,
-              control: true,
             })
           }
           var myDate = new Date();

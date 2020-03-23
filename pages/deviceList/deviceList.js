@@ -474,7 +474,6 @@ Page({
           success: function (res) {
            var  openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             app.globalData.openid = openid
-          
             wx.request({
               //获取openid接口 
               url: 'https://apis.sdcsoft.com.cn/wechat/user/wxShow/check/openId',
@@ -486,6 +485,7 @@ Page({
               },
               method: 'POST',
               success: function (res) {
+              console.log(res)
                 if (res.data.code == 1) {
                   wx.request({
                     url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',

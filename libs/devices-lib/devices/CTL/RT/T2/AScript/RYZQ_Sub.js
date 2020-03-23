@@ -29,6 +29,7 @@ var CTL_RT_T2_RYZQ_Sub_Ts = /** @class */ (function (_super) {
         var a = map.getItem('de_shuiweiceliangfangshi').getValue().toString();
         var b = map.getItem('de_ranshaoqikongzhifangshi').getValue().toString();
         var c = map.getItem('de_ranshaoqigongzuofangshi').getValue().toString();
+        console.log('xxx=' + (a + b + c));
         return a + b + c;
     };
     return CTL_RT_T2_RYZQ_Sub_Ts;
