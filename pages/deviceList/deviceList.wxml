@@ -7,8 +7,8 @@
           <view class="li" wx:for="{{imgList}}" wx:key="key" wx:for-item="item">
             <view wx:if="{{item.runstate === '未连接' || item.runstate === 'Not connected'|| item.runstate === 'Error' }}" data-id='{{item.deviceNo}}' bindlongtap="longTap">
               <view class="title">
-                <view class="marquee_container" style="--marqueeWidth--:-8em">
-                  <view class="marquee_text">{{item.title}}——{{item.runstate}}</view>
+                <view >
+                  <view >{{item.title}}——{{item.runstate}}</view>
                 </view>
               </view>
               <view class="info">
@@ -31,8 +31,8 @@
                 <view style='float:right;' wx:if="{{item.errcount >0}}">
                   <image src="../../images/ling.png" style='width: 50rpx; height: 50rpx'></image>
                 </view>
-                <view class="marquee_container" style="--marqueeWidth--:-8em">
-                  <view class="marquee_text">{{item.title}}——{{item.runstate}}</view>
+                <view >
+                  <view>{{item.title}}——{{item.runstate}}</view>
                 </view>
                 
               </view>

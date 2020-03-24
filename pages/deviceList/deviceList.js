@@ -217,13 +217,16 @@ Page({
             deviceNo: that.data.deviceNo
           },
           method: 'GET',
-          success: function(res) {}
+          success: function(res) {
+            console.log(res)
+          }
         })
         wx.showToast({
           title: that.data.content.list_deletesuccess,
           icon: 'success',
           duration: 2000,
           success(res) {
+           
             that.setData({
               ifdelete: false,
             })
