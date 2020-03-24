@@ -68,7 +68,7 @@ Page({
                  
                   wx.request({
                     //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/list',
+                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/list',
                     data: {
                       openId: openid,
                     },
@@ -211,7 +211,7 @@ Page({
         })
         wx.request({
           //获取openid接口   
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/remove',
+          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/remove',
           data: {
             openId: app.globalData.openid,
             deviceNo: that.data.deviceNo
@@ -269,7 +269,7 @@ Page({
             deviceList[i].deviceName = that.data.deviceTitle
             wx.request({
               //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/modify',
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/modify',
               data: {
                 openId: app.globalData.openid,
                 deviceNo: that.data.deviceNo,
@@ -440,7 +440,7 @@ Page({
                     if (list.length > 0) {
                       wx.request({
                         //获取openid接口   
-                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/devicestore/create/many',
+                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create/many',
                         data: {
                           storeList: JSON.stringify(list).replace(/imgstyle/g, "imgStyle"),
                         },
