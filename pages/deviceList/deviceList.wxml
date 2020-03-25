@@ -8,7 +8,7 @@
             <view wx:if="{{item.runstate === '未连接' || item.runstate === 'Not connected'|| item.runstate === 'Error' }}" data-id='{{item.deviceNo}}' bindlongtap="longTap">
               <view class="title">
                 <view >
-                  <view >{{item.title}}——{{item.runstate}}</view>
+                  <view >{{item.title}}-{{item.runstate}}</view>
                 </view>
               </view>
               <view class="info">
@@ -32,7 +32,7 @@
                   <image src="../../images/ling.png" style='width: 50rpx; height: 50rpx'></image>
                 </view>
                 <view >
-                  <view>{{item.title}}——{{item.runstate}}</view>
+                  <view>{{item.title}}-{{item.runstate}}</view>
                 </view>
                 
               </view>

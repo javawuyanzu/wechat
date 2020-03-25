@@ -74,6 +74,7 @@ Page({
                     },
                     method: 'GET',
                     success: function(res) {
+                      console.log(res)
                       wx.hideLoading();
                       if (res.data.data.length == 0) {
                         return;
@@ -243,12 +244,23 @@ Page({
     })
   },
   dName: function(e) {
+    
     this.setData({
       deviceTitle: e.detail.value
     })
   },
   renameconfirm: function(e) {
     var that = this
+    var length = parseInt(that.data.deviceTitle.length);
+    if (length > 10) {
+      wx.showToast({
+          title: '设备昵称不得超过十个字',
+          icon: 'none',
+          duration: 2000,
+          mask: true
+        })
+      return;
+    }
     var deviceList = []
     wx.getStorage({
       key: 'deviceList',
@@ -256,7 +268,7 @@ Page({
         var imglist = that.data.imgList
         for (var i = 0; i < imglist.length; i++) {
           if (imglist[i].deviceNo === that.data.deviceNo) {
-            imglist[i].title = that.data.deviceTitle
+            imglist[i].title = that.data.deviceTitle + "——" + imglist[i].deviceNo
             break
           }
         }
@@ -280,7 +292,6 @@ Page({
               },
               method: 'POST',
               success: function(res) {
-                console.log(res)
               }
             })
             break
@@ -776,7 +787,7 @@ Page({
       if (deviceNos[index].deviceName == '' || deviceNos[index].deviceName == null) {
         title1 = deviceNos[index].deviceNo
       } else {
-        title1 = deviceNos[index].deviceName +"——"+ deviceNos[index].deviceNo
+        title1 = deviceNos[index].deviceName +"-"+ deviceNos[index].deviceNo
       }
       var imgstyle1 = deviceNos[index].imgStyle
 
@@ -784,12 +795,7 @@ Page({
         key: 'deviceList',
         success(res) {
           var deviceList = res.data
-          // for (var i = 0; i < deviceList.length; i++) {
-          //   if (deviceList[i].deviceNo === deviceno) {
-          //     deviceType = deviceList[i].deviceType
-          //     break;
-          //   }
-          // }
+         
           wx.request({
             url: 'https://apis.sdcsoft.com.cn/wechat/device/getdata',
             data: {

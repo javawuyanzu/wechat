@@ -1,136 +1,8 @@
 const app = getApp();
 Page({
   data: {
-    text: "Page main",
-    background: [
-      {
-        color: 'green',
-        sort: 1
-      },
-      {
-        color: 'red',
-        sort: 2
-      },
-      {
-        color: 'yellow',
-        sort: 3
-      }
-    ],
-    indicatorDots: true,
-    vertical: false,
-    autoplay: false,
-    interval: 3000,
-    duration: 1200,
-    toView: 'blue',
+    deviceNo:null,
     'menus': [
-      {
-        id: 1,
-        tag: 'aa',
-        resId: '2',
-        name: '报警信息',
-        icon: '',
-        dishs: [
-          {
-            id: 1,
-            time: 30,
-            price: 0,
-            name: '一个月',
-            sales: 12,
-            pic: 'dish-9.jpg',
-            count: 0
-          },
-          // {
-          //   id: 2,
-          //   time: 365,
-          //   price: 0,
-          //   name: '一年',
-          //   sales: 18,
-          //   pic: 'dish-10.jpg',
-          //   count: 0
-          // }
-        ]
-      },
-      {
-        id: 2,
-        tag: 'bb',
-        resId: '3',
-        name: '统计报表',
-        icon: '',
-        dishs: [
-          {
-            id: 1,
-            time: 30,
-            price: 0,
-            name: '一个月',
-            sales: 39,
-            pic: 'dish-5.jpg',
-            count: 0
-          },
-          // {
-          //   id: 2,
-          //   time: 365,
-          //   price: 0,
-          //   name: '一年',
-          //   sales: 23,
-          //   pic: 'dish-6.jpg',
-          //   count: 0
-          // }
-        ]
-      },
-      {
-        id: 3,
-        tag: 'cc',
-        resId: '4',
-        name: '管理控制',
-        icon: '',
-        dishs: [
-          {
-            id: 1,
-            time: 30,
-            price: 0,
-            name: '一个月',
-            sales: 34,
-            pic: 'dish-3.jpg',
-            count: 0
-          },
-          // {
-          //   id: 2,
-          //   time: 365,
-          //   price: 0,
-          //   name: '一年',
-          //   sales: 38,
-          //   pic: 'dish-4.jpg',
-          //   count: 0
-          // }
-        ]
-      },
-      // {
-      //   id: 4,
-      //   tag: 'dd',
-      //   resId: '5',
-      //   name: '短信报警',
-      //   icon: '',
-      //   dishs: [
-      //     {
-      //       id: 1,
-      //       time: 30,
-      //       price: 16,
-      //       name: '一个月',
-      //       sales: 19,
-      //       pic: 'dish-7.jpg',
-      //       count: 0
-      //     },
-      //     {
-      //       id: 2,
-      //       time: 365,
-      //       price: 10,
-      //       name: '一年',
-      //       sales: 12,
-      //       pic: 'dish-8.jpg',
-      //       count: 0
-      //     }
-      //   ]
-      // }
     ],
     selectedMenuId: 1,
     total: {
@@ -139,78 +11,83 @@ Page({
     },
     chooseDeviceWindow:false,
     deviceList:[],
-    chooseDeviceList:[],
+    chooseProductList:[],
   },
   selectMenu: function (event) {
     let data = event.currentTarget.dataset
     this.setData({
-      toView: data.tag,
       selectedMenuId: data.id
     })
-    // this.data.toView = 'red'
+    
   },
-//   var menuList = that.data.menus
-//     for(var i in menuList){
-//   if (menuList[i].resId == mid) {
-//     menuList[i].deviceList.push({ deviceNo: "0123123123" })
-//   }
-// }
-// that.setData({
-//   menus: menuList
-// })
-  addDevice: function (event) {
+  chooseProduct: function (event) {
     var that = this
     var data = event.currentTarget.dataset
-    var title = data.price + "¥/" + data.name
-    var deviceList=that.data.deviceList
-    var resid = that.data.resid
-    var chooseDeviceList =[]
-    wx.getStorage({
-      key: 'orders',
-      success: function (res) {
-        var list = res.data
-        wx.request({
-          //获取openid接口  
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
-          data: {
-            openId: app.globalData.openid,
-          },
-          method: 'GET',
-          success: function (res) {
-            var resList = res.data.data
-
-            if (list.length > 0) {
-              for (var k in deviceList) {
-                if (that.findResDevice(resList, deviceList[k].deviceNo, data.resid)!=-1){
-                  continue;
-                }
-                var index = that.findDevice(list, data.range, data.rangetype, deviceList[k].deviceNo, data.resid)
-                if (index != -1) {
-                  chooseDeviceList.push({ resId: data.resid, resName: data.resname, range: data.range, rangeType: data.rangetype, deviceNo: deviceList[k].deviceNo, title: title, price: data.price, count: list[index].amount })
-
-                } else {
-                  chooseDeviceList.push({ resId: data.resid, resName: data.resname, range: data.range, rangeType: data.rangetype, deviceNo: deviceList[k].deviceNo, title: title, price: data.price, count: 0 })
-
-                }
-              }
-            } else {
-              for (var k in deviceList) {
-                if (that.findResDevice(resList, deviceList[k].deviceNo, data.resid) != -1) {
-                  continue;
-                }
-                chooseDeviceList.push({ resId: data.resid, resName: data.resname, range: data.range, rangeType: data.rangetype, deviceNo: deviceList[k].deviceNo, title: title, price: data.price, count: 0 })
-              }
-            }
-            that.setData({
-              chooseDeviceWindow: true,
-              chooseDeviceList: chooseDeviceList
-            })
-          }
-        })  
-       
+    var resId = data.resid
+    wx.request({
+      url: 'http://127.0.0.1:8080/webapi/wechat/RoleResource/find/deviceNo/openId/resId',
+      data: {
+        deviceNo: that.data.deviceNo,
+        openId:app.globalData.openid,
+        resId: resId
       },
-    })
+      method: 'GET',
+      success: function (res) {
+        var resList = res.data.data
+        if (resList.length>0){
+          wx.showToast({
+            title: "当前设备该服务未到期，请到期购买",
+            icon: 'none',
+            duration: 2000
+          });
+          return
+        }else{
+          wx.request({
+            //获取openid接口  
+            url: 'http://127.0.0.1:8080/webapi/wechat/Resource_Product/list/resid',
+            data: {
+              resId: resId,
+            },
+            method: 'GET',
+            success: function (res) {
+              console.log(res)
+              var productList = res.data.data
+              var chooseProductList=[]
+              wx.getStorage({
+                key: 'orders',
+                success: function (res) {
+                  var orderList = res.data
+                  for (var i in productList) {
+                    var title;
+                    if (productList[i].rangeType==2){
+                      title = productList[i].price + "元，" + productList[i].range+"个月"
+                    }
+                    if (productList[i].rangeType==1) {
+                      title = productList[i].price + "元，" + productList[i].range + "天"
+                    }
+                    var index = that.findOrder(orderList, productList[i].range, productList[i].rangeType, productList[i].resourceId)
+                    if (index != -1) {
+                      chooseProductList.push({ resId: productList[i].resourceId, resName: productList[i].resourceName, range: productList[i].range, rangeType: productList[i].rangeType, title: title, price: productList[i].price, count: orderList[index].amount })
+                    } else {
+                      chooseProductList.push({ resId: productList[i].resourceId, resName: productList[i].resourceName, range: productList[i].range, rangeType: productList[i].rangeType, title: title, price: productList[i].price, count: 0 })
+                    }
+                  }
+                  that.setData({
+                    chooseDeviceWindow: true,
+                    chooseProductList: chooseProductList
+                  })
+
+                }
+              })
+            }
+          })  
+        }
+      }
+    }) 
+   
+
   },
+
 
   gotoOrder: function () {
     var that=this
@@ -228,7 +105,7 @@ Page({
     var resName = data.name
     var range = data.range
     var rangeType = data.rangetype
-    var deviceNo = data.deviceno
+    var deviceNo = that.data.deviceNo
     var resId = data.resid
     var price = data.price
     if (count==0){
@@ -242,16 +119,16 @@ Page({
 
         if (list.length > 0) {
           
-            if (that.findName(list, range, rangeType, deviceNo, resId)) {
+            if (that.findName(list, range, rangeType, resId)) {
               for (var i in list) {
-                if (range == list[i].range && rangeType == list[i].rangeType && deviceNo == list[i].deviceNo && resId == list[i].resourceId) {
+                if (range == list[i].range && rangeType == list[i].rangeType  && resId == list[i].resourceId) {
                   if (list[i].amount==1){
                     list.splice(i, 1);
-                    that.chooseDeviceListremove(deviceNo);
+                    that.chooseProductListremove(range, rangeType, resId);
                     break;
                   }else{
                     list[i].amount = list[i].amount - 1
-                    that.chooseDeviceListremove(deviceNo);
+                    that.chooseProductListremove(range, rangeType, resId);
                     break;
                   }
                 
@@ -268,13 +145,53 @@ Page({
         });
       },
     })
-    
     total.count -= 1
-    total.money -= price
+ 
+    total.money = that.subtract(total.money, price)
     this.setData({
       'total': total
     })
   },
+   // float浮点数加法运算
+  accAdd:function (arg1, arg2) {
+    var r1, r2, m;
+    try {
+      r1 = arg1.toString().split(".")[1].length;
+    }  
+    catch(e) {
+      r1 = 0;
+    }  
+    try {
+      r2 = arg2.toString().split(".")[1].length;
+    }  
+    catch(e) {
+      r2 = 0;
+    }  
+    m = Math.pow(10, Math.max(r1, r2));
+    return(arg1 * m + arg2 * m) / m;  
+} ,
+  // float浮点数减法运算
+  subtract:function (arg1, arg2) {
+    var r1, r2, m, n;
+    try {
+      r1 = arg1.toString().split(".")[1].length;
+    }  
+    catch(e) {
+      r1 = 0;
+    }  
+    try {
+      r2 = arg2.toString().split(".")[1].length;
+    }  
+    catch(e) {
+      r2 = 0;
+    }  
+    m = Math.pow(10, Math.max(r1, r2));
+    //last modify by deeka  
+    //动态控制精度长度  
+    n = (r1 >= r2) ? r1 : r2;
+    return((arg1 * m - arg2 * m) / m).toFixed(n);  
+},
+
   addCount: function (event) {
     var that = this
     var data = event.currentTarget.dataset
@@ -283,7 +200,7 @@ Page({
     var resName = data.name
     var range = data.range
     var rangeType = data.rangetype
-    var deviceNo = data.deviceno
+    var deviceNo = that.data.deviceNo
     var resId = data.resid
     var price = data.price
 
@@ -293,23 +210,23 @@ Page({
         var list = res.data
         if (list.length > 0) {
 
-          if (that.findName(list, range, rangeType, deviceNo, resId)) {
+          if (that.findName(list, range, rangeType, resId)) {
             for (var i in list) {
-              if (range == list[i].range && rangeType == list[i].rangeType && deviceNo == list[i].deviceNo && resId == list[i].resourceId) {
+              if (range == list[i].range && rangeType == list[i].rangeType  && resId == list[i].resourceId) {
                 list[i].amount = list[i].amount + 1
                 break;
               }
             }
-            that.chooseDeviceListAdd(deviceNo);
+            that.chooseProductListAdd(range, rangeType, resId);
           
       
           } else {
             list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
-            that.chooseDeviceListAdd(deviceNo);
+            that.chooseProductListAdd(range, rangeType, resId);
           }
         } else {
           list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
-          that.chooseDeviceListAdd(deviceNo);
+          that.chooseProductListAdd(range, rangeType, resId);
        
         }
         
@@ -321,26 +238,26 @@ Page({
     })
     
       total.count += 1
-      total.money += price
+    total.money = that.accAdd(price, total.money) 
       this.setData({
         'total': total
       })
     
   },
-  findName: function (list, range, rangeType, deviceNo, resId) {
+  findName: function (list, range, rangeType, resId) {
    
     for (var i in list) {
     
-      if (range == list[i].range && rangeType == list[i].rangeType && deviceNo == list[i].deviceNo && resId == list[i].resourceId) {
+      if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId) {
         return true
         break;
       }
     }
     return false
   },
-  findDevice: function (list, range, rangeType, deviceNo, resId) {
+  findOrder: function (list, range, rangeType, resId) {
     for (var i in list) {
-      if (range == list[i].range && rangeType == list[i].rangeType && deviceNo == list[i].deviceNo && resId == list[i].resourceId) {
+      if (range == list[i].range && rangeType == list[i].rangeType  && resId == list[i].resourceId) {
         return i
         break;
       }
@@ -362,28 +279,30 @@ Page({
       chooseDeviceWindow: false,
     })
   },
-  chooseDeviceListAdd: function (deviceNo) {
+  chooseProductListAdd: function (range, rangeType, resId) {
     var that = this;
-    var chooseDeviceList = that.data.chooseDeviceList
-    for (var i in chooseDeviceList){
-      if (chooseDeviceList[i].deviceNo == deviceNo){
-        chooseDeviceList[i].count = chooseDeviceList[i].count+1
+    var chooseProductList = that.data.chooseProductList
+    for (var i in chooseProductList){
+      if (chooseProductList[i].range == range && chooseProductList[i].rangeType == rangeType && chooseProductList[i].resId == resId){
+        chooseProductList[i].count = chooseProductList[i].count+1
+      }else{
+        chooseProductList[i].count = 0
       }
     }
     that.setData({
-      chooseDeviceList: chooseDeviceList,
+      chooseProductList: chooseProductList,
     })
   },
-  chooseDeviceListremove: function (deviceNo) {
+  chooseProductListremove: function (range, rangeType, resId) {
     var that = this;
-    var chooseDeviceList = that.data.chooseDeviceList
-    for (var i in chooseDeviceList) {
-      if (chooseDeviceList[i].deviceNo == deviceNo) {
-        chooseDeviceList[i].count = chooseDeviceList[i].count -1
+    var chooseProductList = that.data.chooseProductList
+    for (var i in chooseProductList) {
+      if (chooseProductList[i].range == range && chooseProductList[i].rangeType == rangeType && chooseProductList[i].resId == resId) {
+        chooseProductList[i].count = chooseProductList[i].count -1
       }
     }
     that.setData({
-      chooseDeviceList: chooseDeviceList,
+      chooseProductList: chooseProductList,
     })
   },
   
@@ -395,8 +314,11 @@ Page({
     // });
   },
  
-  onLoad: function () {
+  onLoad: function (options) {
     var that = this;
+    that.setData({
+      deviceNo: options.deviceNo
+    })
     wx.setStorage({
       key: "orders",
       data: []
@@ -421,165 +343,25 @@ Page({
     
      wx.request({
       //获取openid接口  
-       url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/list',
+       url: 'http://127.0.0.1:8080/webapi/wechat/Resource_Product/Resource/list',
       method: 'GET',
       success: function (res) {
         var result = res.data.data
-        var munuList=[]
-        var ex = {
-          id: 1,
-          tag: 'aa',
-          resId: '2',
-          name: '报警信息',
-          icon: '',
-          dishs: [],
-          deviceList:[]
-        }
-        var report = {
-          id: 2,
-          tag: 'bb',
-          resId: '3',
-          name: '统计报表',
-          icon: '',
-          dishs: []
-        }
-        var control = {
-          id: 3,
-          tag: 'cc',
-          resId: '4',
-          name: '管理控制',
-          icon: '',
-          dishs: []
-        }
-        var smsex = {
-          id: 4,
-          tag: 'dd',
-          resId: '5',
-          name: '短信报警',
-          icon: '',
-          dishs: []
-        }
+        
         for (var i in result){
-          if (result[i].resourceId==2){
-            var title;
-            if (result[i].rangeType==1){
-              title = result[i].range+"天"
-            }else{
-              title = result[i].range + "个月"
-            }
-            var index=1
-            ex.dishs.push({
-              id: index,
-              range: result[i].range,
-              rangeType: result[i].rangeType,
-              price: result[i].price,
-              name: title,
-              count: 0
-              })
-            index++
+          if (result[i].status==1){
+            result.splice(i,1)
           }
-          if (result[i].resourceId == 3) {
-            var title;
-            if (result[i].rangeType == 1) {
-              title = result[i].range + "天"
-            } else {
-              title = result[i].range + "个月"
-            }
-            var index = 1
-            report.dishs.push({
-              id: index,
-              range: result[i].range,
-              rangeType: result[i].rangeType,
-              price: result[i].price,
-              name: title,
-              count: 0
-            })
-            index++
-          }
-          if (result[i].resourceId == 4) {
-            var title;
-            if (result[i].rangeType == 1) {
-              title = result[i].range + "天"
-            } else {
-              title = result[i].range + "个月"
-            }
-            var index = 1
-            control.dishs.push({
-              id: index,
-              range: result[i].range,
-              rangeType: result[i].rangeType,
-              price: result[i].price,
-              name: title,
-              count: 0
-            })
-            index++
-          }
-          if (result[i].resourceId == 5) {
-            var title;
-            if (result[i].rangeType == 1) {
-              title = result[i].range + "天"
-            } else {
-              title = result[i].range + "个月"
-            }
-            var index = 1
-            smsex.dishs.push({
-              id: index,
-              range: result[i].range,
-              rangeType: result[i].rangeType,
-              price: result[i].price,
-              name: title,
-              count: 0
-            })
-            index++
-          }
+          result[i].productList=[]
         }
-        munuList.push(ex)
-        munuList.push(report)
-        munuList.push(control)
-        munuList.push(smsex)
         that.setData({
-          menus: munuList
+          menus: result
         })
       }
     })
     
-    // wx.request({
-    //   //获取openid接口  
-    //   url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
-    //   data: {
-    //     openId: app.globalData.openid,
-    //   },
-    //   method: 'GET',
-    //   success: function (res) {
-    //     if (res.data.code == 0 & res.data.data.length > 0) {
+   
+  },
+ 
 
-    //       var list = res.data.data
-    //       var menu = that.data.menus
-    //       for (var i = 0; i < list.length; i++) {
-    //         for (var k = 0; k < menu.length; k++) {
-    //           if (list[i].resId == menu[k].resId) {
-    //             menu.splice(k, 1);
-    //           }
-    //         }
-    //       }
-    //       that.setData({
-    //         menus: menu
-    //       })
-    //     }
-    //   }
-    // })
-  },
-  onReady: function () {
-    // 页面渲染完成
-  },
-  onShow: function () {
-    // 页面显示
-  },
-  onHide: function () {
-    // 页面隐藏
-  },
-
-  onScroll: function (e) {
-    console.log(e)
-  }
 })

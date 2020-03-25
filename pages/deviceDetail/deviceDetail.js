@@ -285,7 +285,7 @@ Page({
         currentTab: e.currentTarget.dataset.idx - 1
       })
       wx.navigateTo({
-        url: '../payMenu/payMenu'
+        url: '../payMenu/payMenu?deviceNo=' + that.data.deviceNo
       })
     }
   },
