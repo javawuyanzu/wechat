@@ -24,37 +24,24 @@
                             <image class="image" src="../../images/countSelAdd.png" />    
                         </view> 
                     </view>
-                    <block wx:for="{{menu.dishs}}"  wx:key="id" wx:for-item="dish">
+                    <block wx:for="{{menu.productList}}"  wx:key="id" wx:for-item="order">
                         <view class="dish-item">
                             <view class="dish-item-wrp">
-                                <view class="dish-item-pic">
-                                </view>
+                                
                                 <view class="dish-item-info" style="">
                                     <view>
-                                        <text class="dish-item-name">{{dish.price}}¥/{{dish.name}}</text>
+                                        <text class="dish-item-name"  wx:if="{{order.rangeType==1}}">{{order.price}}元,{{order.range}}天</text>
+                                        <text class="dish-item-name"  wx:if="{{order.rangeType==2}}">{{order.price}}元,{{order.range}}个月</text>
                                     </view>
-                                     <block wx:for="{{menu.deviceList}}"  wx:key="id" wx:for-item="device">
-                                        <view>
-                                            <text class="dish-item-sales">设备编号:{{device.deviceNo}}</text>
-                                        </view>
-                                     </block> 
-                                    
                                 </view>
 
-                                <view class="dish-item-count" style="">
+                                <view class="dish-item-count">
                                     <view class="dish-item-tab">
-                                        <view hidden="{{dish.count == 0}}" class="dish-item-count-minus" data-id="{{dish.id}}"
-                                        data-cid="{{menu.id}}" bindtap="minusCount">
+                                        <view class="dish-item-count-minus"  bindtap="removeOrder"
+                                        data-resid="{{order.resourceId}}"   data-range="{{order.range}}"
+                                        data-rangeType="{{order.rangeType}}" data-price="{{order.price}}">
                                             <image class="image" src="../../images/countMinus.png" />
                                         </view>
-                                    </view>
-                                    <view class="dish-item-count-text dish-item-tab">
-                                        <text hidden="{{dish.count == 0}}">{{dish.count}}</text>
-                                    </view>
-                                   
-                                    <view class="dish-item-count-plus" data-resname="{{menu.name}}"
-                                    data-name="{{dish.name}}"  data-range="{{dish.range}}"  data-rangeType="{{dish.rangeType}}" data-price="{{dish.price}}" data-resId="{{menu.resId}}"  bindtap="addDevice">
-                                        <image class="image" src="../../images/countSelAdd.png" />    
                                     </view>
                                 </view>
                             </view>

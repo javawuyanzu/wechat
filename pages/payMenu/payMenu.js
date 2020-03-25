@@ -124,11 +124,11 @@ Page({
                 if (range == list[i].range && rangeType == list[i].rangeType  && resId == list[i].resourceId) {
                   if (list[i].amount==1){
                     list.splice(i, 1);
-                    that.chooseProductListremove(range, rangeType, resId);
+                    that.chooseProductListremove(range, rangeType, resId, price);
                     break;
                   }else{
                     list[i].amount = list[i].amount - 1
-                    that.chooseProductListremove(range, rangeType, resId);
+                    that.chooseProductListremove(range, rangeType, resId, price);
                     break;
                   }
                 
@@ -139,9 +139,13 @@ Page({
             
           }
         }
+      
         wx.setStorage({
           key: "orders",
-          data: list
+          data: list,
+          success: function (res) {
+            that.updateOrders()
+          }
         });
       },
     })
@@ -217,23 +221,28 @@ Page({
                 break;
               }
             }
-            that.chooseProductListAdd(range, rangeType, resId);
+            that.chooseProductListAdd(range, rangeType, resId, price);
           
       
           } else {
             list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
-            that.chooseProductListAdd(range, rangeType, resId);
+            that.chooseProductListAdd(range, rangeType, resId, price);
           }
         } else {
           list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
-          that.chooseProductListAdd(range, rangeType, resId);
+          that.chooseProductListAdd(range, rangeType, resId, price);
        
         }
         
         wx.setStorage({
           key: "orders",
-          data: list
+          data: list,
+          success: function(res){
+            that.noBuySame(range, rangeType, resId)
+            that.updateOrders()
+          }
         });
+
       },
     })
     
@@ -279,21 +288,76 @@ Page({
       chooseDeviceWindow: false,
     })
   },
-  chooseProductListAdd: function (range, rangeType, resId) {
+  noBuySame: function (range, rangeType, resId) {
     var that = this;
     var chooseProductList = that.data.chooseProductList
     for (var i in chooseProductList){
       if (chooseProductList[i].range == range && chooseProductList[i].rangeType == rangeType && chooseProductList[i].resId == resId){
-        chooseProductList[i].count = chooseProductList[i].count+1
       }else{
-        chooseProductList[i].count = 0
+        if (chooseProductList[i].count != 0){
+          chooseProductList[i].count = 0
+          var range1=chooseProductList[i].range
+          var rangeType1 = chooseProductList[i].rangeType
+          var resId1 = chooseProductList[i].resId
+          wx.getStorage({
+            key: 'orders',
+            success: function (res) {
+              var list = res.data
+              if (list.length > 0) {
+                if (that.findName(list, range1, rangeType1, resId1)) {
+                  for (var i in list) {
+                    if (range1 == list[i].range && rangeType1 == list[i].rangeType && resId1 == list[i].resourceId) {
+                      if (list[i].amount == 1) {
+                        list.splice(i, 1);
+                        break;
+                      } 
+                    }
+                  }
+                }
+              }
+              console.log(list)
+              wx.setStorage({
+                key: "orders",
+                data: list
+              });
+            },
+          })
+         
+          var total = that.data.total
+          total.count -= 1
+          total.money = that.subtract(total.money, chooseProductList[i].price)
+          this.setData({
+            'total': total
+          })
+        }
+       
       }
     }
     that.setData({
       chooseProductList: chooseProductList,
     })
+  }, 
+  chooseProductListAdd: function (range, rangeType, resId, price) {
+    var that = this;
+    var chooseProductList = that.data.chooseProductList
+    for (var i in chooseProductList) {
+      if (chooseProductList[i].range == range && chooseProductList[i].rangeType == rangeType && chooseProductList[i].resId == resId) {
+        chooseProductList[i].count = chooseProductList[i].count + 1
+      } 
+    }
+    var menus = that.data.menus
+    for (var i in menus) {
+      if (menus[i].id == resId) {
+        var order = { resourceId: resId, range: range, rangeType: rangeType, price: price}
+        menus[i].productList.push(order)
+      }
+    }
+    that.setData({
+      menus: menus,
+      chooseProductList: chooseProductList,
+    })
   },
-  chooseProductListremove: function (range, rangeType, resId) {
+  chooseProductListremove: function (range, rangeType, resId, price) {
     var that = this;
     var chooseProductList = that.data.chooseProductList
     for (var i in chooseProductList) {
@@ -301,17 +365,76 @@ Page({
         chooseProductList[i].count = chooseProductList[i].count -1
       }
     }
+    var menus = that.data.menus
+    for (var i in menus) {
+      if (menus[i].id == resId) {
+        var plist = menus[i].productList
+        for (var k in plist){
+          if (plist[i].range == range && plist[i].rangeType == rangeType && plist[i].resourceId == resId && plist[i].price == price) {
+            plist.splice(i,1)
+          }
+        }
+        menus[i].productList = plist
+      }
+    }
     that.setData({
+      menus: menus,
       chooseProductList: chooseProductList,
     })
   },
-  
+  removeOrder: function (event) {
+    var that = this
+    var data = event.currentTarget.dataset
+    console.log(data)
+    var range = data.range
+    var rangeType = data.rangetype
+    var resId = data.resid
+    var price = data.price
+
+
+    var orderList = that.data.orderList
+    for (var i in orderList) {
+      if (orderList[i].range == range && orderList[i].rangeType == rangeType && orderList[i].resourceId == resId && orderList[i].price == price) {
+        orderList.splice(i,1)
+      }
+    }
+    that.setData({
+      orderList: orderList,
+    })
+    wx.setStorage({
+      key: "orders",
+      data: orderList
+    });
+    var total = that.data.total
+    total.count -= 1
+    total.money = that.subtract(total.money,price)
+    this.setData({
+      'total': total
+    })
+  },
   onUnload: function () {
     // console.log("---")
     // wx.setStorage({
     //   key: "orders",
     //   data: []
     // });
+  },
+  updateOrders: function () {
+    var that = this;
+    wx.getStorage({
+      key: 'orders',
+      success(res) {
+        var orderList = res.data
+        var menus = that.data.menus
+        for (var i in orderList){
+
+        }
+
+        that.setData({
+          orderList: res.data
+        })
+      }
+    })
   },
  
   onLoad: function (options) {
@@ -340,7 +463,6 @@ Page({
         })
       }
     })
-    
      wx.request({
       //获取openid接口  
        url: 'http://127.0.0.1:8080/webapi/wechat/Resource_Product/Resource/list',
