@@ -17,7 +17,7 @@
         <scroll-view scroll-y="true" scroll-into-view="{{toView}}" class="right-side">
             <view class="dish-header"></view>
             <block wx:for="{{menus}}"  wx:key="id" wx:for-item="menu">
-                <view>
+                <view class="dish-menus">
                     <view  class="dish-category-title">{{menu.resName}}
                         <view class="dish-item-count-plus"  style="float: right;margin-right: 150rpx;"
                          data-resId="{{menu.id}}"  bindtap="chooseProduct">
@@ -27,15 +27,7 @@
                     <block wx:for="{{menu.productList}}"  wx:key="id" wx:for-item="order">
                         <view class="dish-item">
                             <view class="dish-item-wrp">
-                                
-                                <view class="dish-item-info" style="">
-                                    <view>
-                                        <text class="dish-item-name"  wx:if="{{order.rangeType==1}}">{{order.price}}元,{{order.range}}天</text>
-                                        <text class="dish-item-name"  wx:if="{{order.rangeType==2}}">{{order.price}}元,{{order.range}}个月</text>
-                                    </view>
-                                </view>
-
-                                <view class="dish-item-count">
+                                 <view class="dish-item-count">
                                     <view class="dish-item-tab">
                                         <view class="dish-item-count-minus"  bindtap="removeOrder"
                                         data-resid="{{order.resourceId}}"   data-range="{{order.range}}"
@@ -44,6 +36,14 @@
                                         </view>
                                     </view>
                                 </view>
+                                <view class="dish-item-info" style="">
+                                    <view>
+                                        <text class="dish-item-name"  wx:if="{{order.rangeType==1}}">{{order.price}}元,{{order.range}}天</text>
+                                        <text class="dish-item-name"  wx:if="{{order.rangeType==2}}">{{order.price}}元,{{order.range}}个月</text>
+                                    </view>
+                                </view>
+
+                               
                             </view>
                         </view>                   
                     </block>

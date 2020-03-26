@@ -40,8 +40,9 @@
 }
 .item-content .box .item .price{
   color:red;
-  font-size:15px;
+  font-size:18px;
   margin-bottom:5px;
+  margin-left: 460rpx;
 }
 .item-content .box .item .opera{
   margin-top:-15px;
@@ -86,6 +87,7 @@
 }
 .bottom-bar .count{
     padding-left:10px;
+    display: flex;
 }
 .bottom-bar .num{
     margin-right:10px;
@@ -101,7 +103,8 @@ color: #fff;
 line-height: 40px;
 text-align: center;
 font-size: 16px;
-background: orange;
-float: right;
+background: rgb(17, 85, 4);
+  border-radius: 10px;
+margin-left: 20rpx;
 
 }
