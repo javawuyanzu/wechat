@@ -31,7 +31,7 @@ button::after {
 }
 /*底部浮动*/
 .cart-tab-wrp{
-  height: 100rpx;
+  height: 120rpx;
   position: fixed;
   bottom: 0rpx;
   background: rgba(255, 255, 255, 0.9);
@@ -40,7 +40,7 @@ button::after {
   width: 100%;
   z-index: 10;
   color: black;
-  border-top: 2px solid rgba(254,78,69,.8);
+  border-top: 2px solid #27c79a;
 
 }
 .cart-item-total{
@@ -50,7 +50,7 @@ button::after {
   width: 110rpx;
   height: 90rpx;
   position: absolute;
-  top:6rpx;
+  top:20rpx;
 }
 .cart-item-icon{
   width: 90rpx;
@@ -74,19 +74,18 @@ button::after {
     width: 40rpx;
     height: 40rpx;
     font-size: 36rpx;
-    color: #ed7e05;
-    line-height: 100rpx;
+    color: red;
+    line-height: 120rpx;
     text-align: center;
-    padding-left: 110rpx;
+    padding-left: 260rpx;
 }
 .cart-tab-item-btn{
     width: 160rpx;
     display: block;
-    height: 100rpx;
-      border-radius: 10px;
-    line-height: 100rpx;
+    height: 120rpx;
+    line-height: 120rpx;
     font-size: 28rpx;
-     background:rgb(17, 85, 4);
+     background:#01c754f1;
     color: #fff;
     float: right;
     text-align: center;
@@ -136,9 +135,9 @@ button::after {
 }
 /*右侧菜品*/
 .dish-category-title{
-  font-size: 33rpx;
-  color: #888;
-  border-bottom:2px solid rgba(254,78,69,.8);
+  font-size: 40rpx;
+  color: rgb(17, 9, 2);
+  border-bottom:2px solid #27c79a;
   padding: 20rpx 0;
 
   margin-left: 20rpx;
@@ -378,9 +377,9 @@ padding-bottom: 10rpx;
   width: 150rpx;
   height: 60rpx;
   margin-top: 20rpx;
-margin-left: 440rpx;
+margin-left: 480rpx;
 margin-bottom: 20rpx;
-  background:rgb(17, 85, 4);
+  background:#01c754f1;
   color: white;
   font-size: 30rpx;
    display: flex;

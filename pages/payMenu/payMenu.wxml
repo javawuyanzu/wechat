@@ -21,7 +21,7 @@
                     <view  class="dish-category-title">{{menu.resName}}
                         <view class="dish-item-count-plus"  style="float: right;margin-right: 150rpx;"
                          data-resId="{{menu.id}}"  bindtap="chooseProduct">
-                            <image class="image" src="../../images/countSelAdd.png" />    
+                            <image class="image" src="../../images/countSelAdd1.png" />    
                         </view> 
                     </view>
                     <block wx:for="{{menu.productList}}"  wx:key="id" wx:for-item="order">
@@ -32,7 +32,7 @@
                                         <view class="dish-item-count-minus"  bindtap="removeOrder"
                                         data-resid="{{order.resourceId}}"   data-range="{{order.range}}"
                                         data-rangeType="{{order.rangeType}}" data-price="{{order.price}}">
-                                            <image class="image" src="../../images/countMinus.png" />
+                                            <image class="image" src="../../images/countMinus1.png" />
                                         </view>
                                     </view>
                                 </view>
@@ -58,7 +58,7 @@
   <view class='toastbg'></view>
   <view class='showToast'>
     <view class='toast-title'>
-      <text>请选择设备：</text>
+      <text>请选择服务的价格及数量</text>
     </view>
     <view class='toast-main1'>
       <block wx:for="{{chooseProductList}}"  wx:key="id" wx:for-item="product">
@@ -67,17 +67,17 @@
                 <view wx:if="{{product.count == 0 }}" class="dish-item-count-plus" style="float: right;" bindtap="addCount"
                data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"
               >
-                <image class="image" src="../../images/countSelAdd.png" />
+                <image class="image" src="../../images/countSelAdd1.png" />
               </view>
               <view wx:else class="dish-item-count-plus" style="float: right;">
-                <image class="image" src="../../images/countSelAdd.png" />
+                <image class="image" src="../../images/countSelAdd1.png" />
               </view>
               <view  style="float: right;" class= 'dish-item-count-minus'>
                 {{product.count}}  
               </view>  
               <view  style="float: right;" class= 'dish-item-count-minus' data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"data-count="{{product .count}}"
                bindtap="minusCount">
-                    <image class="image" src="../../images/countMinus.png" />
+                    <image class="image" src="../../images/countMinus1.png" />
               </view>
               </view>
               
