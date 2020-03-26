@@ -80,15 +80,30 @@
                     <image class="image" src="../../images/countMinus.png" />
               </view>
               </view>
-              
-         
           </view>
       </block>
     </view>
     <view class='toast-button'>
       <view class='button2' style="width: 100%;">
-        <button catchtap='confirm'>确定</button>
+        <button catchtap='confirm' data-count="{{chooseProductList}}">确定</button>
       </view>
     </view>
+  </view>
+</view>
+
+<view class='toast-box' hidden='{{!chooseExPhone}}'>
+<view class='toastbg'></view>
+  <view class='showToast'>
+    <view class='toast-main3'>
+      <block wx:for="{{array}}" wx:key="{{index}}">
+      <view class="modal-input">
+            <input placeholder-class="input-holder" type="number" maxlength="11" value='{{inputVal[index]}}' data-idx="{{index}}" bindblur="getInputVal" class="input" placeholder="输入接收短信的手机号"></input>
+        <image data-idx='{{index}}'  bindtap='delList' style="float: right;" class="delimage" src="../../images/countMinus.png" />
+      </view>
+          </block> 
+    </view>
+    <view class="addphone"> <image bindtap='addList' class="addimage" src="../../images/countSelAdd.png"/>
+    <view class="addphone-text" style="float: right;" >再加一个手机号</view></view>
+    <button  bindtap='inputChange' class="sumbutton" >确定</button>
   </view>
 </view>

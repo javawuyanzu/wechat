@@ -10,8 +10,15 @@ Page({
       money: 0
     },
     chooseDeviceWindow:false,
+    chooseExPhone: false,
     deviceList:[],
     chooseProductList:[],
+    array: [0],//默认显示一个
+    inputVal: [],//所有input的内容,
+    smsExResId: null,
+    smsExRange: null,
+    smsExRangeType: null,
+    smsExPrice: null,
   },
   selectMenu: function (event) {
     let data = event.currentTarget.dataset
@@ -65,7 +72,7 @@ Page({
                     if (productList[i].rangeType==1) {
                       title = productList[i].price + "元，" + productList[i].range + "天"
                     }
-                    var index = that.findOrder(orderList, productList[i].range, productList[i].rangeType, productList[i].resourceId)
+                    var index = that.findOrder(orderList, productList[i].range, productList[i].rangeType, productList[i].resourceId, productList[i].price)
                     if (index != -1) {
                       chooseProductList.push({ resId: productList[i].resourceId, resName: productList[i].resourceName, range: productList[i].range, rangeType: productList[i].rangeType, title: title, price: productList[i].price, count: orderList[index].amount })
                     } else {
@@ -131,12 +138,8 @@ Page({
                     that.chooseProductListremove(range, rangeType, resId, price);
                     break;
                   }
-                
                 }
-              
-             
             }
-            
           }
         }
       
@@ -144,7 +147,6 @@ Page({
           key: "orders",
           data: list,
           success: function (res) {
-            that.updateOrders()
           }
         });
       },
@@ -207,7 +209,14 @@ Page({
     var deviceNo = that.data.deviceNo
     var resId = data.resid
     var price = data.price
-
+    if (resId==5){
+      that.setData({
+        smsExResId: resId,
+        smsExRange: range,
+        smsExRangeType: rangeType,
+        smsExPrice: price,
+      })
+    }
     wx.getStorage({
       key: 'orders',
       success: function (res) {
@@ -238,8 +247,7 @@ Page({
           key: "orders",
           data: list,
           success: function(res){
-            that.noBuySame(range, rangeType, resId)
-            that.updateOrders()
+            that.noBuySame(range, rangeType, resId, price)
           }
         });
 
@@ -264,9 +272,9 @@ Page({
     }
     return false
   },
-  findOrder: function (list, range, rangeType, resId) {
+  findOrder: function (list, range, rangeType, resId, price) {
     for (var i in list) {
-      if (range == list[i].range && rangeType == list[i].rangeType  && resId == list[i].resourceId) {
+      if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId && price == list[i].price) {
         return i
         break;
       }
@@ -284,11 +292,17 @@ Page({
   },
   confirm: function (e) {
     var that = this;
+    var reslist = e.currentTarget.dataset.count
+    if (that.data.smsExResId==5){
+      that.setData({
+        chooseExPhone: true,
+      })
+    }
     that.setData({
       chooseDeviceWindow: false,
     })
   },
-  noBuySame: function (range, rangeType, resId) {
+  noBuySame: function (range, rangeType, resId, price) {
     var that = this;
     var chooseProductList = that.data.chooseProductList
     for (var i in chooseProductList){
@@ -315,7 +329,6 @@ Page({
                   }
                 }
               }
-              console.log(list)
               wx.setStorage({
                 key: "orders",
                 data: list
@@ -329,14 +342,29 @@ Page({
           this.setData({
             'total': total
           })
+          var menus = that.data.menus
+          for (var i in menus) {
+            if (menus[i].id == resId) {
+              var plist = menus[i].productList
+              for (var k in plist) {
+                if (plist[i].range == range && plist[i].rangeType == rangeType && plist[i].resourceId == resId && plist[i].price == price) {
+                } else {
+                  plist.splice(i, 1)
+                }
+              }
+              menus[i].productList = plist
+            }
+          }
+          that.setData({
+            menus: menus
+          })
         }
-       
       }
     }
     that.setData({
       chooseProductList: chooseProductList,
     })
-  }, 
+  },
   chooseProductListAdd: function (range, rangeType, resId, price) {
     var that = this;
     var chooseProductList = that.data.chooseProductList
@@ -370,8 +398,8 @@ Page({
       if (menus[i].id == resId) {
         var plist = menus[i].productList
         for (var k in plist){
-          if (plist[i].range == range && plist[i].rangeType == rangeType && plist[i].resourceId == resId && plist[i].price == price) {
-            plist.splice(i,1)
+          if (plist[k].range == range && plist[k].rangeType == rangeType && plist[k].resourceId == resId && plist[k].price == price) {
+            plist.splice(k,1)
           }
         }
         menus[i].productList = plist
@@ -385,26 +413,57 @@ Page({
   removeOrder: function (event) {
     var that = this
     var data = event.currentTarget.dataset
-    console.log(data)
+    
     var range = data.range
     var rangeType = data.rangetype
     var resId = data.resid
     var price = data.price
 
-
-    var orderList = that.data.orderList
-    for (var i in orderList) {
-      if (orderList[i].range == range && orderList[i].rangeType == rangeType && orderList[i].resourceId == resId && orderList[i].price == price) {
-        orderList.splice(i,1)
+    var menus = that.data.menus
+    for (var i in menus) {
+      if (menus[i].id == resId) {
+        var plist = menus[i].productList
+        for (var k in plist) {
+          if (plist[i].range == range && plist[i].rangeType == rangeType && plist[i].resourceId == resId && plist[i].price == price) {
+            plist.splice(i, 1)
+          }
+        }
+        menus[i].productList = plist
       }
     }
     that.setData({
-      orderList: orderList,
+      menus: menus,
     })
-    wx.setStorage({
-      key: "orders",
-      data: orderList
-    });
+    wx.getStorage({
+      key: 'orders',
+      success: function (res) {
+        var list = res.data
+
+        if (list.length > 0) {
+
+          if (that.findName(list, range, rangeType, resId)) {
+            for (var i in list) {
+              if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId) {
+                if (list[i].amount == 1) {
+                  list.splice(i, 1);
+                  that.chooseProductListremove(range, rangeType, resId, price);
+                  break;
+                } else {
+                  list[i].amount = list[i].amount - 1
+                  that.chooseProductListremove(range, rangeType, resId, price);
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        wx.setStorage({
+          key: "orders",
+          data: list,
+        });
+      },
+    })
     var total = that.data.total
     total.count -= 1
     total.money = that.subtract(total.money,price)
@@ -419,23 +478,7 @@ Page({
     //   data: []
     // });
   },
-  updateOrders: function () {
-    var that = this;
-    wx.getStorage({
-      key: 'orders',
-      success(res) {
-        var orderList = res.data
-        var menus = that.data.menus
-        for (var i in orderList){
-
-        }
-
-        that.setData({
-          orderList: res.data
-        })
-      }
-    })
-  },
+  
  
   onLoad: function (options) {
     var that = this;
@@ -484,6 +527,74 @@ Page({
     
    
   },
- 
+getInputVal: function (e) {
+    var nowIdx = e.currentTarget.dataset.idx;//获取当前索引
+    var val = e.detail.value;//获取输入的值
+    var oldVal = this.data.inputVal;
+    var that = this;
+    if (!(/^1[34578]\d{9}$/.test(val))) {
+      wx.showToast({
+        title: '手机号有误',
+        icon: 'success',
+        duration: 2000
+      })
+    }else{
+      oldVal[nowIdx] = val;//修改对应索引值的内容
+      this.setData({
+        inputVal: oldVal
+      })
+    }
+  },
+  addList: function () {
+    var old = this.data.array;
+    old.push(1);//这里不管push什么，只要数组长度增加1就行
+    this.setData({
+      array: old
+    })
+  },
+  delList: function (e) {
+    var nowidx = e.currentTarget.dataset.idx;//当前索引
+    var oldInputVal = this.data.inputVal;//所有的input值
+    var oldarr = this.data.array;//循环内容
+    oldarr.splice(nowidx, 1);    //删除当前索引的内容，这样就能删除view了
+    oldInputVal.splice(nowidx, 1);//view删除了对应的input值也要删掉
+    if (oldarr.length < 1) {
+      oldarr = [0]  //如果循环内容长度为0即删完了，必须要留一个默认的。这里oldarr只要是数组并且长度为1，里面的值随便是什么
+    }
+    this.setData({
+      array: oldarr,
+      inputVal: oldInputVal
+    })
+  },
+  //用户名和密码输入框事件
+    inputChange: function () {
+      var that = this;
+      for (let i = 0; i < that.data.inputVal.length; i++) {
+        if (that.data.inputVal[i] == null) {
+          that.data.inputVal.splice(i, 1);
+        }
+      }
+      wx.getStorage({
+        key: 'orders',
+        success: function (res) {
+          var orderlist = res.data
+          var index = that.findOrder(orderlist, smsExRange, smsExRangeType, smsExResId, smsExPrice)
+          if(index !=-1){
+            orderlist.slice(index,1)
+            
+          }
+
+          for (var i in orderlist){
+            if (orderlist[i].resourceId==5){
+              console.log(orderlist[i])
+            }
+          }
+        },
+      })
+      that.setData({
+        chooseExPhone:false
+      })
+
+    },
 
 })
