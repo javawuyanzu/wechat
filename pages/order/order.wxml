@@ -10,7 +10,7 @@
         <view wx:if="{{item.rangeType == 2 }}">
           <text class="title" >{{item.deviceNo}}-{{item.resourceName}}- {{item.range}}个月   数量：{{item.amount}}</text>
         </view>  
-        <text class="price">￥ {{item.price*item.amount}}元</text>
+        <text class="price">￥{{item.price*item.amount}}元</text>
         <!-- <view class="opera">
           <text class="btn" bindtap="add" data-id="{{item.id}}" data-index="{{index}}">+</text>
           <text class="num">{{item.count}}</text>
@@ -26,7 +26,7 @@
     <view class="count" style="height: 40px;width: 100%;line-height: 40px;">
         原价 <text class="num">{{discount.total}} 元</text>     
         实际支付 <text class="num">{{discount.paymentAmount}} 元</text> 
-         <view class="btn">
+         <view  class="btn">
         <text bindtap='pay'>结账</text>
     </view>
     </view>
