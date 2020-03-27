@@ -100,5 +100,5 @@ color: #fff;
 line-height: 120rpx;
 text-align: center;
 font-size: 16px;
-background: #01c754f1;
+ background-color: rgba(27, 155, 33, 0.767);
 }
