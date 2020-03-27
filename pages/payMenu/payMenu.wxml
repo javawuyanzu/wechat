@@ -58,7 +58,8 @@
   <view class='toastbg'></view>
   <view class='showToast'>
     <view class='toast-title'>
-      <text>请选择价格及数量</text>
+      <text style="padding-top: 2vh;">请选择价格及数量</text>
+       <image style="width:60rpx; height: 60rpx;margin-left: 280rpx;" src="../../images/close1.png" />
     </view>
     <view class='toast-main1'>
       <block wx:for="{{chooseProductList}}"  wx:key="id" wx:for-item="product">

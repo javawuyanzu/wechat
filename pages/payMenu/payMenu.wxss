@@ -269,12 +269,12 @@ padding-bottom: 10rpx;
 
  
 .toast-title {
- 
+ display:flex;
   padding-left: 5%;
  
   background-color: white;
  
-  padding-top: 2vh;
+
  
   padding-bottom: 2vh;
  
