@@ -10,6 +10,7 @@ Page({
       money: 0
     },
     chooseDeviceWindow:false,
+    chooseSmsExWindow: false,
     chooseExPhone: false,
     deviceList:[],
     chooseProductList:[],
@@ -19,7 +20,49 @@ Page({
     smsExRange: null,
     smsExRangeType: null,
     smsExPrice: null,
+    smsExAmount: 0,
   },
+  addExAmount: function (event) {
+    var that = this
+    var data = event.currentTarget.dataset
+    
+    var resName = data.name
+    var range = data.range
+    var rangeType = data.rangetype
+    var deviceNo = that.data.deviceNo
+    var resId = data.resid
+    var price = data.price
+    that.setData({
+      smsExResId: resId,
+      smsExRange: range,
+      smsExRangeType: rangeType,
+      smsExPrice: price,
+      smsExAmount: that.data.smsExAmount+1,
+      smsExResName: resName
+    })
+  },
+  minusExAmount: function (event) {
+    var that = this
+    if (that.data.smsExAmount==0){
+return
+    }
+    var data = event.currentTarget.dataset
+    var resName = data.name
+    var range = data.range
+    var rangeType = data.rangetype
+    var deviceNo = that.data.deviceNo
+    var resId = data.resid
+    var price = data.price
+    that.setData({
+      smsExResId: resId,
+      smsExRange: range,
+      smsExRangeType: rangeType,
+      smsExPrice: price,
+      smsExAmount: that.data.smsExAmount -1,
+      smsExResName: resName
+    })
+  },
+
   selectMenu: function (event) {
     let data = event.currentTarget.dataset
     this.setData({
@@ -41,7 +84,7 @@ Page({
       method: 'GET',
       success: function (res) {
         var resList = res.data.data
-        if (resList.length>0){
+        if (resList.length > 0 && resId!=5){
           wx.showToast({
             title: "当前设备该服务未到期，请到期购买",
             icon: 'none',
@@ -57,7 +100,6 @@ Page({
             },
             method: 'GET',
             success: function (res) {
-              console.log(res)
               var productList = res.data.data
               var chooseProductList=[]
               wx.getStorage({
@@ -79,10 +121,20 @@ Page({
                       chooseProductList.push({ resId: productList[i].resourceId, resName: productList[i].resourceName, range: productList[i].range, rangeType: productList[i].rangeType, title: title, price: productList[i].price, count: 0 })
                     }
                   }
-                  that.setData({
-                    chooseDeviceWindow: true,
-                    chooseProductList: chooseProductList
-                  })
+                  if (resId==5){
+                    that.setData({
+                      chooseSmsExWindow: true,
+                      chooseProductList: chooseProductList
+                    })
+
+                  }else{
+                    that.setData({
+                      chooseDeviceWindow: true,
+                      chooseProductList: chooseProductList
+                    })
+
+                  }
+                
 
                 }
               })
@@ -209,14 +261,7 @@ Page({
     var deviceNo = that.data.deviceNo
     var resId = data.resid
     var price = data.price
-    if (resId==5){
-      that.setData({
-        smsExResId: resId,
-        smsExRange: range,
-        smsExRangeType: rangeType,
-        smsExPrice: price,
-      })
-    }
+    
     wx.getStorage({
       key: 'orders',
       success: function (res) {
@@ -227,19 +272,20 @@ Page({
             for (var i in list) {
               if (range == list[i].range && rangeType == list[i].rangeType  && resId == list[i].resourceId) {
                 list[i].amount = list[i].amount + 1
+                that.chooseProductListAdd(range, rangeType, resId, price, list[i].amount, resName);
                 break;
               }
             }
-            that.chooseProductListAdd(range, rangeType, resId, price);
+          
           
       
           } else {
             list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
-            that.chooseProductListAdd(range, rangeType, resId, price);
+            that.chooseProductListAdd(range, rangeType, resId, price, 1, resName);
           }
         } else {
           list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
-          that.chooseProductListAdd(range, rangeType, resId, price);
+          that.chooseProductListAdd(range, rangeType, resId, price, 1, resName);
        
         }
         
@@ -262,10 +308,17 @@ Page({
     
   },
   findName: function (list, range, rangeType, resId) {
-   
     for (var i in list) {
-    
       if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId) {
+        return true
+        break;
+      }
+    }
+    return false
+  },
+  findPhone: function (list, phone) {
+    for (var i in list) {
+      if (phone == list[i].employeeMobile) {
         return true
         break;
       }
@@ -292,12 +345,34 @@ Page({
   },
   confirm: function (e) {
     var that = this;
-    var reslist = e.currentTarget.dataset.count
-    if (that.data.smsExResId==5){
+    that.setData({
+      chooseDeviceWindow: false,
+    })
+  },
+  exConfirm: function (e) {
+    var that = this;
+    if (that.data.smsExAmount!=0){
       that.setData({
+        chooseSmsExWindow: false,
         chooseExPhone: true,
       })
     }
+   
+  },
+  exDeviceHidden: function (e) {
+    var that = this;
+      that.setData({
+        chooseSmsExWindow: false,
+      })
+  },
+  exPhoneHidden: function (e) {
+    var that = this;
+    that.setData({
+      chooseExPhone: false,
+    })
+  },
+  chooseDevicHidden: function (e) {
+    var that = this;
     that.setData({
       chooseDeviceWindow: false,
     })
@@ -365,7 +440,7 @@ Page({
       chooseProductList: chooseProductList,
     })
   },
-  chooseProductListAdd: function (range, rangeType, resId, price) {
+  chooseProductListAdd: function (range, rangeType, resId, price, amount, resName) {
     var that = this;
     var chooseProductList = that.data.chooseProductList
     for (var i in chooseProductList) {
@@ -376,10 +451,26 @@ Page({
     var menus = that.data.menus
     for (var i in menus) {
       if (menus[i].id == resId) {
-        var order = { resourceId: resId, range: range, rangeType: rangeType, price: price}
-        menus[i].productList.push(order)
+       
+        var list= menus[i].productList
+        if (list.length > 0) {
+          if (that.findName(list, range, rangeType, resId)) {
+            for (var i in list) {
+              if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId) {
+                list[i].amount = list[i].amount + 1
+                break;
+              }
+            }
+          } else {
+            list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
+          }
+        } else {
+          list.push({ resourceId: resId, range: range, rangeType: rangeType, price: price, amount: amount })
+        }
+        menus[i].productList = list
       }
     }
+    
     that.setData({
       menus: menus,
       chooseProductList: chooseProductList,
@@ -387,6 +478,7 @@ Page({
   },
   chooseProductListremove: function (range, rangeType, resId, price) {
     var that = this;
+    
     var chooseProductList = that.data.chooseProductList
     for (var i in chooseProductList) {
       if (chooseProductList[i].range == range && chooseProductList[i].rangeType == rangeType && chooseProductList[i].resId == resId) {
@@ -405,6 +497,7 @@ Page({
         menus[i].productList = plist
       }
     }
+  
     that.setData({
       menus: menus,
       chooseProductList: chooseProductList,
@@ -413,63 +506,106 @@ Page({
   removeOrder: function (event) {
     var that = this
     var data = event.currentTarget.dataset
-    
     var range = data.range
     var rangeType = data.rangetype
     var resId = data.resid
     var price = data.price
-
-    var menus = that.data.menus
-    for (var i in menus) {
-      if (menus[i].id == resId) {
-        var plist = menus[i].productList
-        for (var k in plist) {
-          if (plist[i].range == range && plist[i].rangeType == rangeType && plist[i].resourceId == resId && plist[i].price == price) {
-            plist.splice(i, 1)
+    var employeemobile = data.employeemobile
+    if (resId==5){
+      var menus = that.data.menus
+      for (var i in menus) {
+        if (menus[i].id == resId) {
+          var plist = menus[i].productList
+          for (var k in plist) {
+            if (plist[k].range == range && plist[k].rangeType == rangeType && plist[k].resourceId == resId && plist[k].price == price && plist[k].employeeMobile == employeemobile) {
+              var total = that.data.total
+              total.count -= 1
+              console.log(price * plist[k].amount)
+              console.log(total.money)
+              total.money = that.subtract(total.money,price * plist[k].amount)
+              this.setData({
+                'total': total
+              })
+              plist.splice(k, 1)
+            }
           }
+          menus[i].productList = plist
         }
-        menus[i].productList = plist
       }
-    }
-    that.setData({
-      menus: menus,
-    })
-    wx.getStorage({
-      key: 'orders',
-      success: function (res) {
-        var list = res.data
-
-        if (list.length > 0) {
-
-          if (that.findName(list, range, rangeType, resId)) {
+      that.setData({
+        menus: menus,
+      })
+      wx.getStorage({
+        key: 'orders',
+        success: function (res) {
+          var list = res.data
             for (var i in list) {
-              if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId) {
-                if (list[i].amount == 1) {
+              if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId && list[i].employeeMobile == employeemobile) {
                   list.splice(i, 1);
-                  that.chooseProductListremove(range, rangeType, resId, price);
                   break;
-                } else {
-                  list[i].amount = list[i].amount - 1
-                  that.chooseProductListremove(range, rangeType, resId, price);
-                  break;
+              }
+            }
+          wx.setStorage({
+            key: "orders",
+            data: list,
+          });
+        },
+      })
+      
+    }else{
+      var menus = that.data.menus
+      for (var i in menus) {
+        if (menus[i].id == resId) {
+          var plist = menus[i].productList
+          for (var k in plist) {
+            if (plist[k].range == range && plist[k].rangeType == rangeType && plist[k].resourceId == resId && plist[k].price == price) {
+              plist.splice(k, 1)
+            }
+          }
+          menus[i].productList = plist
+        }
+      }
+      that.setData({
+        menus: menus,
+      })
+      wx.getStorage({
+        key: 'orders',
+        success: function (res) {
+          var list = res.data
+
+          if (list.length > 0) {
+
+            if (that.findName(list, range, rangeType, resId)) {
+              for (var i in list) {
+                if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId) {
+                  if (list[i].amount == 1) {
+                    list.splice(i, 1);
+                    that.chooseProductListremove(range, rangeType, resId, price);
+                    break;
+                  } else {
+                    list[i].amount = list[i].amount - 1
+                    that.chooseProductListremove(range, rangeType, resId, price);
+                    break;
+                  }
                 }
               }
             }
           }
-        }
 
-        wx.setStorage({
-          key: "orders",
-          data: list,
-        });
-      },
-    })
-    var total = that.data.total
-    total.count -= 1
-    total.money = that.subtract(total.money,price)
-    this.setData({
-      'total': total
-    })
+          wx.setStorage({
+            key: "orders",
+            data: list,
+          });
+        },
+      })
+      var total = that.data.total
+      total.count -= 1
+      total.money = that.subtract(total.money, price)
+      this.setData({
+        'total': total
+      })
+    }
+    
   },
   onUnload: function () {
     // console.log("---")
@@ -535,10 +671,20 @@ getInputVal: function (e) {
     if (!(/^1[34578]\d{9}$/.test(val))) {
       wx.showToast({
         title: '手机号有误',
-        icon: 'success',
+        icon: 'none',
         duration: 2000
       })
     }else{
+      // for (var i in oldVal){
+      //   if (oldVal[i] == val){
+      //     wx.showToast({
+      //       title: val+'该手机号已存在',
+      //       icon: 'none',
+      //       duration: 2000
+      //     })
+      //     return
+      //   }
+      // }
       oldVal[nowIdx] = val;//修改对应索引值的内容
       this.setData({
         inputVal: oldVal
@@ -578,23 +724,88 @@ getInputVal: function (e) {
         key: 'orders',
         success: function (res) {
           var orderlist = res.data
-          var index = that.findOrder(orderlist, smsExRange, smsExRangeType, smsExResId, smsExPrice)
-          if(index !=-1){
-            orderlist.slice(index,1)
-            
-          }
-
-          for (var i in orderlist){
-            if (orderlist[i].resourceId==5){
-              console.log(orderlist[i])
+          for (let i = 0; i < that.data.inputVal.length; i++) {
+            if (that.findPhone(orderlist,that.data.inputVal[i])) {
+              wx.showToast({
+                title: that.data.inputVal[i] + '该手机号已存在',
+                icon: 'none',
+                duration: 2000
+              })
+             return
             }
           }
+          var resourceName = that.data.smsExResName;
+          var amount = that.data.smsExAmount;
+          var deviceNo = that.data.deviceNo;
+          var price= that.data.smsExPrice;
+          var range= that.data.smsExRange;
+          var rangeType= that.data.smsExRangeType;
+          var resourceId= that.data.smsExResId;
+          var index = that.findOrder(orderlist, that.data.smsExRange, that.data.smsExRangeType, that.data.smsExResId, that.data.smsExPrice)
+          var phonelist = that.data.inputVal
+          
+          var menus = that.data.menus
+          for (var i in menus) {
+            if (menus[i].id == that.data.smsExResId) {
+              
+              var plist = menus[i].productList
+              for (var k in phonelist) {
+                plist.push({
+                  resourceName: resourceName,
+                  amount: amount,
+                  deviceNo: deviceNo,
+                  price: price,
+                  range: range,
+                  rangeType: rangeType,
+                  resourceId: resourceId,
+                  employeeMobile: phonelist[k],
+                })
+              }
+              menus[i].productList = plist
+              that.setData({
+                menus: menus
+              })
+            }
+          }
+
+          for (var k in phonelist) {
+            orderlist.push({
+              resourceName: resourceName,
+              amount: amount,
+              deviceNo: deviceNo,
+              price: price,
+              range: range,
+              rangeType: rangeType,
+              resourceId: resourceId,
+              employeeMobile: phonelist[k],
+            })
+          
+          }
+          wx.setStorage({
+            key: "orders",
+            data: orderlist,
+            success: function (res) {
+              console.log(orderlist)
+            }
+          });
+          var total = that.data.total
+          total.count += phonelist.length
+          total.money = that.accAdd(phonelist.length * price * amount, total.money)
+          that.setData({
+            'total': total,
+            chooseExPhone: false,
+            inputVal:[],
+            array: [0],
+          })
+        
         },
-      })
-      that.setData({
-        chooseExPhone:false
+
       })
 
+      
+
+      
+      
     },
 
 })
