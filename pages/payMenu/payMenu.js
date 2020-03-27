@@ -520,8 +520,7 @@ return
             if (plist[k].range == range && plist[k].rangeType == rangeType && plist[k].resourceId == resId && plist[k].price == price && plist[k].employeeMobile == employeemobile) {
               var total = that.data.total
               total.count -= 1
-              console.log(price * plist[k].amount)
-              console.log(total.money)
+             
               total.money = that.subtract(total.money,price * plist[k].amount)
               this.setData({
                 'total': total
@@ -675,16 +674,16 @@ getInputVal: function (e) {
         duration: 2000
       })
     }else{
-      // for (var i in oldVal){
-      //   if (oldVal[i] == val){
-      //     wx.showToast({
-      //       title: val+'该手机号已存在',
-      //       icon: 'none',
-      //       duration: 2000
-      //     })
-      //     return
-      //   }
-      // }
+      for (var i in oldVal){
+        if (oldVal[i] == val){
+          wx.showToast({
+            title: val+'该手机号已存在',
+            icon: 'none',
+            duration: 2000
+          })
+          return
+        }
+      }
       oldVal[nowIdx] = val;//修改对应索引值的内容
       this.setData({
         inputVal: oldVal
@@ -725,6 +724,7 @@ getInputVal: function (e) {
         success: function (res) {
           var orderlist = res.data
           for (let i = 0; i < that.data.inputVal.length; i++) {
+            var phone =that.data.inputVal[i]
             if (that.findPhone(orderlist,that.data.inputVal[i])) {
               wx.showToast({
                 title: that.data.inputVal[i] + '该手机号已存在',
@@ -733,70 +733,98 @@ getInputVal: function (e) {
               })
              return
             }
-          }
-          var resourceName = that.data.smsExResName;
-          var amount = that.data.smsExAmount;
-          var deviceNo = that.data.deviceNo;
-          var price= that.data.smsExPrice;
-          var range= that.data.smsExRange;
-          var rangeType= that.data.smsExRangeType;
-          var resourceId= that.data.smsExResId;
-          var index = that.findOrder(orderlist, that.data.smsExRange, that.data.smsExRangeType, that.data.smsExResId, that.data.smsExPrice)
-          var phonelist = that.data.inputVal
-          
-          var menus = that.data.menus
-          for (var i in menus) {
-            if (menus[i].id == that.data.smsExResId) {
-              
-              var plist = menus[i].productList
-              for (var k in phonelist) {
-                plist.push({
-                  resourceName: resourceName,
-                  amount: amount,
-                  deviceNo: deviceNo,
-                  price: price,
-                  range: range,
-                  rangeType: rangeType,
-                  resourceId: resourceId,
-                  employeeMobile: phonelist[k],
+            wx.request({
+              //获取openid接口  
+              url: 'http://127.0.0.1:8080/webapi/wechat/Relation_DeviceSmsMap/find/deviceNo/employeeMobile',
+              method: 'GET',
+              data: {
+                deviceNo: that.data.deviceNo,
+                employeeMobile: phone,
+              },
+              success: function (res) {
+                var list = res.data.data
+                var currentTime = new Date();
+                for (var i = 0; i < list.length; i++) {
+                  var dt = list[i].dueTime
+                  var format = dt.replace(/-/g, '/')
+                  var dt = new Date(Date.parse(format))
+                  if (currentTime < dt) {
+
+                    wx.showToast({
+                      title: phone + "还未过期",
+                      icon: 'none',
+                      duration: 2000
+                    })
+                    return;
+                  } 
+                }
+                var resourceName = that.data.smsExResName;
+                var amount = that.data.smsExAmount;
+                var deviceNo = that.data.deviceNo;
+                var price = that.data.smsExPrice;
+                var range = that.data.smsExRange;
+                var rangeType = that.data.smsExRangeType;
+                var resourceId = that.data.smsExResId;
+                var index = that.findOrder(orderlist, that.data.smsExRange, that.data.smsExRangeType, that.data.smsExResId, that.data.smsExPrice)
+                var phonelist = that.data.inputVal
+
+                var menus = that.data.menus
+                for (var i in menus) {
+                  if (menus[i].id == that.data.smsExResId) {
+
+                    var plist = menus[i].productList
+                    for (var k in phonelist) {
+                      plist.push({
+                        resourceName: resourceName,
+                        amount: amount,
+                        deviceNo: deviceNo,
+                        price: price,
+                        range: range,
+                        rangeType: rangeType,
+                        resourceId: resourceId,
+                        employeeMobile: phonelist[k],
+                      })
+                    }
+                    menus[i].productList = plist
+                    that.setData({
+                      menus: menus
+                    })
+                  }
+                }
+
+                for (var k in phonelist) {
+                  orderlist.push({
+                    resourceName: resourceName,
+                    amount: amount,
+                    deviceNo: deviceNo,
+                    price: price,
+                    range: range,
+                    rangeType: rangeType,
+                    resourceId: resourceId,
+                    employeeMobile: phonelist[k],
+                  })
+
+                }
+                wx.setStorage({
+                  key: "orders",
+                  data: orderlist,
+                  success: function (res) {
+                    console.log(orderlist)
+                  }
+                });
+                var total = that.data.total
+                total.count += phonelist.length
+                total.money = that.accAdd(phonelist.length * price * amount, total.money)
+                that.setData({
+                  'total': total,
+                  chooseExPhone: false,
+                  inputVal: [],
+                  array: [0],
                 })
               }
-              menus[i].productList = plist
-              that.setData({
-                menus: menus
-              })
-            }
-          }
-
-          for (var k in phonelist) {
-            orderlist.push({
-              resourceName: resourceName,
-              amount: amount,
-              deviceNo: deviceNo,
-              price: price,
-              range: range,
-              rangeType: rangeType,
-              resourceId: resourceId,
-              employeeMobile: phonelist[k],
             })
-          
           }
-          wx.setStorage({
-            key: "orders",
-            data: orderlist,
-            success: function (res) {
-              console.log(orderlist)
-            }
-          });
-          var total = that.data.total
-          total.count += phonelist.length
-          total.money = that.accAdd(phonelist.length * price * amount, total.money)
-          that.setData({
-            'total': total,
-            chooseExPhone: false,
-            inputVal:[],
-            array: [0],
-          })
+        
         
         },
 
