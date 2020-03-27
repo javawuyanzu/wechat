@@ -344,6 +344,17 @@ return
     return -1
   },
   confirm: function (e) {
+    var data = e.currentTarget.dataset
+    var list = data.count
+    var length=0;
+    for (var i in list){
+      if (list[i].count==0){
+        length++
+      }
+    }
+    if (length==list.length){
+        return
+    }
     var that = this;
     that.setData({
       chooseDeviceWindow: false,
@@ -462,7 +473,7 @@ return
               }
             }
           } else {
-            list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, deviceNo: deviceNo, price: price, amount: 1 })
+            list.push({ resourceName: resName, resourceId: parseInt(resId), range: range, rangeType: rangeType, price: price, amount: 1 })
           }
         } else {
           list.push({ resourceId: resId, range: range, rangeType: rangeType, price: price, amount: amount })
