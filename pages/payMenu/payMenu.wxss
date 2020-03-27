@@ -388,6 +388,69 @@ margin-bottom: 20rpx;
   justify-content: center;
 }
 
+ .modal-input {
+   margin-top: 60rpx;
+  display: flex;
+  background-color: white;
+  border-radius: 4rpx;
+  font-size: 28rpx;
+margin-bottom: 50rpx;
+}
+ .toast-main3 {
+  border-bottom: 2rpx solid #666;
+
+}
+
+.input {
+  width: 50%;
+  height: 82rpx;
+  font-size: 28rpx;
+  line-height: 28rpx;
+  margin-left: 20rpx;
+  padding: 0 20rpx;
+   border: 2rpx solid #ddd;
+  box-sizing: border-box;
+  color: #333;
+}
+.input-holder {
+  color: #666;
+  font-size: 28rpx;
+}
+.addphone {
+  margin-top: 20rpx;
+  color:#000;
+  font-size: 28rpx;
+}
+ .delimage{
+   margin-top:  15rpx;
+   margin-left: 70rpx;
+   width: 60rpx;
+   height: 60rpx;
+}
+ .addimage{
+   margin-top:  23rpx;
+   margin-left: 30rpx;
+   width: 60rpx;
+   height: 60rpx;
+}
+ .addphone-text{
+   margin-top:  30rpx;
+   margin-right: 380rpx;
+}
+.sumbutton {
+  width: 150rpx;
+  height: 60rpx;
+  margin-top: 20rpx;
+margin-left: 440rpx;
+margin-bottom: 20rpx;
+  background:rgb(17, 85, 4);
+  color: white;
+  font-size: 30rpx;
+   display: flex;
+  flex-direction: row;
+   align-items: center;
+  justify-content: center;
+}
 
 
 
