@@ -234,7 +234,7 @@ Page({
           
         }
         wx.request({
-          url: 'http://127.0.0.1:8080/webapi/wechat/Relation_DeviceSmsMap/create/many',
+          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Relation_DeviceSmsMap/create/many',
           method: "POST",
           data: {
             deviceSmsMapList: JSON.stringify(smsList)
