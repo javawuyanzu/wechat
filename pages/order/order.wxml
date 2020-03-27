@@ -27,7 +27,7 @@
   <view class="bottom-bar">
     <view class="count" style="height: 40px;line-height: 40px;">
         共<text class="num">￥{{discount.total}}元</text>     
-        须支付 <text class="num">￥{{discount.paymentAmount}}元</text> 
+        实付 <text class="num">￥{{discount.paymentAmount}}元</text> 
     </view>
     <view  class="btn">
         <text bindtap='pay'>结账</text>

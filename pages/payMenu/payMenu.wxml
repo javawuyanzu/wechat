@@ -58,30 +58,29 @@
   <view class='toastbg'></view>
   <view class='showToast'>
     <view class='toast-title'>
-      <text>请选择服务的价格及数量</text>
+      <text>请选择价格及数量</text>
     </view>
     <view class='toast-main1'>
       <block wx:for="{{chooseProductList}}"  wx:key="id" wx:for-item="product">
-           <view class='toast-input'>
-              <view style="">{{product.title}}
-                <view wx:if="{{product.count == 0 }}" class="dish-item-count-plus" style="float: right;" bindtap="addCount"
+           <view class='toast-input' style="display:flex;">
+              <view style="width:300rpx">{{product.title}}</view>
+              <view style="display:flex; margin-left:50rpx">
+               <view  class= 'dish-item-count-minus' data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"data-count="{{product .count}}"
+               bindtap="minusCount">
+                    <image class="image" src="../../images/countMinus1.png" />
+              </view>
+               <view  class= 'dish-item-count-minus'>
+                {{product.count}}  
+              </view> 
+              <view wx:if="{{product.count == 0 }}" class="dish-item-count-plus" bindtap="addCount"
                data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"
               >
                 <image class="image" src="../../images/countSelAdd1.png" />
               </view>
-              <view wx:else class="dish-item-count-plus" style="float: right;">
+                <view wx:else class="dish-item-count-plus">
                 <image class="image" src="../../images/countSelAdd1.png" />
               </view>
-              <view  style="float: right;" class= 'dish-item-count-minus'>
-                {{product.count}}  
-              </view>  
-              <view  style="float: right;" class= 'dish-item-count-minus' data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"data-count="{{product .count}}"
-               bindtap="minusCount">
-                    <image class="image" src="../../images/countMinus1.png" />
               </view>
-              </view>
-              
-         
           </view>
       </block>
     </view>
