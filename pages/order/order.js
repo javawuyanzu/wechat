@@ -136,7 +136,7 @@ Page({
                                 amount: list[i].amount,
                                 deviceNo: list[i].deviceNo,
                                 rangeType: list[i].rangeType,
-                                mobile: "",
+                                mobile: list[i].employeeMobile,
                                 marker: ""
                               })
                             }
@@ -211,16 +211,41 @@ Page({
       success: function (res) {
         var list = res.data
         var resList = []
+        var smsList = []
         for (var i in list) {
-          resList.push({
-            openId: app.globalData.openid,
-            resId: list[i].resourceId,
-            deviceNo: list[i].deviceNo,
-            range: list[i].range,
-            rangeType: list[i].rangeType,
-            amount: list[i].amount,
-          })
+          if (list[i].resourceId!=5){
+            resList.push({
+              openId: app.globalData.openid,
+              resId: list[i].resourceId,
+              deviceNo: list[i].deviceNo,
+              range: list[i].range,
+              rangeType: list[i].rangeType,
+              amount: list[i].amount,
+            })
+          }else{
+            smsList.push({
+              employeeMobile: list[i].employeeMobile,
+              deviceNo: list[i].deviceNo,
+              range: list[i].range,
+              rangeType: list[i].rangeType,
+              amount: list[i].amount,
+            })
+          }
+          
         }
+        wx.request({
+          url: 'http://127.0.0.1:8080/webapi/wechat/Relation_DeviceSmsMap/create/many',
+          method: "POST",
+          data: {
+            deviceSmsMapList: JSON.stringify(smsList)
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          success: function (res) {
+            console.log(res)
+          }
+        })
         wx.request({
           url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/create/many',
           method: "POST",
