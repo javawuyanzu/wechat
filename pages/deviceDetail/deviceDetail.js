@@ -348,9 +348,10 @@ Page({
     }
     wx.request({
       //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list/deviceNo',
+      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
       data: {
         deviceNo: options.deviceNo,
+        openId:app.globalData.openid,
       },
       method: 'GET',
       success: function (res) {
