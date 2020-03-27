@@ -41,8 +41,8 @@
                                 </view>
                                 <view class="dish-item-info" style="">
                                     <view>
-                                        <text class="dish-item-name"  wx:if="{{order.rangeType==1}}">{{order.price}}元,{{order.range}}天,数量：{{order.amount}}<text wx:if="{{order.employeeMobile!=null}}"> ,手机号码：{{order.employeeMobile}}</text>  </text>
-                                        <text class="dish-item-name"  wx:if="{{order.rangeType==2}}">{{order.price}}元,{{order.range}}个月,数量：{{order.amount}} <text wx:if="{{order.employeeMobile!=null}}"> ,手机号码：{{order.employeeMobile}}</text> </text>
+                                        <text class="dish-item-name"  wx:if="{{order.rangeType==1}}">{{order.price}}元,{{order.range}}天,数量：{{order.amount}}<text wx:if="{{order.employeeMobile!=null}}"> ,手机：{{order.employeeMobile}}</text>  </text>
+                                        <text class="dish-item-name"  wx:if="{{order.rangeType==2}}">{{order.price}}元,{{order.range}}个月,数量：{{order.amount}} <text wx:if="{{order.employeeMobile!=null}}"> ,手机：{{order.employeeMobile}}</text> </text>
                                     </view>
                                 </view>
                             </view>
@@ -60,7 +60,7 @@
   <view class='showToast'>
     <view class='toast-title'>
       <text style="padding-top: 2vh;">请选择价格及数量</text>
-       <image style="width:60rpx; height: 60rpx;margin-left: 280rpx;" src="../../images/close1.png" />
+       <image bindtap="chooseDevicHidden" style="width:60rpx; height: 60rpx;margin-left: 280rpx;" src="../../images/close1.png" />
     </view>
     <view class='toast-main1'>
       <block wx:for="{{chooseProductList}}"  wx:key="id" wx:for-item="product">
@@ -98,14 +98,17 @@
 <view class='toastbg'></view>
   <view class='showToast'>
     <view class='toast-main3'>
+     <view class='toast-title'>
+       <image bindtap="exPhoneHidden" style="width:60rpx; height: 60rpx;margin-left: 580rpx;" src="../../images/close1.png" />
+    </view>
       <block wx:for="{{array}}" wx:key="{{index}}">
       <view class="modal-input">
             <input placeholder-class="input-holder" type="number" maxlength="11" value='{{inputVal[index]}}' data-idx="{{index}}" bindblur="getInputVal" class="input" placeholder="输入接收短信的手机号"></input>
-        <image data-idx='{{index}}'  bindtap='delList' style="float: right;" class="delimage" src="../../images/countMinus.png" />
+        <image data-idx='{{index}}'  bindtap='delList' style="float: right;" class="delimage" src="../../images/countMinus1.png" />
       </view>
           </block> 
     </view>
-    <view class="addphone"> <image bindtap='addList' class="addimage" src="../../images/countSelAdd.png"/>
+    <view class="addphone"> <image bindtap='addList' class="addimage" src="../../images/countSelAdd1.png"/>
     <view class="addphone-text" style="float: right;" >再加一个手机号</view></view>
     <button  bindtap='inputChange' class="sumbutton" >确定</button>
   </view>
@@ -115,7 +118,8 @@
   <view class='toastbg'></view>
   <view class='showToast'>
     <view class='toast-title'>
-      <text>请选择需要短信报警的设备：</text>
+      <text style="padding-top: 2vh;">请选择价格及数量</text>
+       <image bindtap="exDeviceHidden" style="width:60rpx; height: 60rpx;margin-left: 280rpx;" src="../../images/close1.png" />
     </view>
     <view class='toast-main1'>
       <block wx:for="{{chooseProductList}}"  wx:key="id" wx:for-item="product">
@@ -124,17 +128,17 @@
                 <view wx:if="{{smsExAmount == 0 }}" class="dish-item-count-plus" style="float: right;" bindtap="addExAmount"
                data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"
               >
-                <image class="image" src="../../images/countSelAdd.png" />
+                <image class="image" src="../../images/countSelAdd1.png" />
               </view>
               <view wx:else class="dish-item-count-plus" style="float: right;">
-                <image class="image" src="../../images/countSelAdd.png" />
+                <image class="image" src="../../images/countSelAdd1.png" />
               </view>
               <view  style="float: right;" class= 'dish-item-count-minus'>
                 {{smsExAmount}}  
               </view>  
               <view  style="float: right;" class= 'dish-item-count-minus' data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"data-count="{{smsExAmount}}"
                bindtap="minusExAmount">
-                    <image class="image" src="../../images/countMinus.png" />
+                    <image class="image" src="../../images/countMinus1.png" />
               </view>
               </view>
           </view>

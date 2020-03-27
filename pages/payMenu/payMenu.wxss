@@ -179,7 +179,7 @@ button::after {
    margin: 0 auto
 }
 .dish-item-info{
-  width: 220rpx;
+  width: 100%;
   padding-left: 30rpx;
 padding-bottom: 10rpx;
 }
@@ -389,7 +389,7 @@ margin-bottom: 20rpx;
 }
 
  .modal-input {
-   margin-top: 60rpx;
+   margin-top: 20rpx;
   display: flex;
   background-color: white;
   border-radius: 4rpx;
@@ -397,7 +397,7 @@ margin-bottom: 20rpx;
 margin-bottom: 50rpx;
 }
  .toast-main3 {
-  border-bottom: 2rpx solid #666;
+  border-bottom: 2rpx solid #ddd;
 
 }
 
@@ -443,7 +443,7 @@ margin-bottom: 50rpx;
   margin-top: 20rpx;
 margin-left: 440rpx;
 margin-bottom: 20rpx;
-  background:rgb(17, 85, 4);
+  background:#01c754f1;
   color: white;
   font-size: 30rpx;
    display: flex;

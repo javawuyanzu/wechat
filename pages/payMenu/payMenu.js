@@ -667,7 +667,8 @@ getInputVal: function (e) {
     var val = e.detail.value;//获取输入的值
     var oldVal = this.data.inputVal;
     var that = this;
-    if (!(/^1[34578]\d{9}$/.test(val))) {
+  console.log(val)
+  if (!(/^1[34578]\d{9}$/.test(val))&& !(val == '')) {
       wx.showToast({
         title: '手机号有误',
         icon: 'none',
@@ -675,7 +676,7 @@ getInputVal: function (e) {
       })
     }else{
       for (var i in oldVal){
-        if (oldVal[i] == val){
+        if (oldVal[i] == val && i != nowIdx){
           wx.showToast({
             title: val+'该手机号已存在',
             icon: 'none',
