@@ -680,13 +680,13 @@ getInputVal: function (e) {
     var that = this;
   if (!(/^1[34578]\d{9}$/.test(val))&& !(val == '')) {
       wx.showToast({
-        title: '手机号有误',
+        title: '手机号输入不正确',
         icon: 'none',
         duration: 2000
       })
     }else{
       for (var i in oldVal){
-        if (oldVal[i] == val && i != nowIdx){
+        if (oldVal[i] == val && i != nowIdx&& !(val == '')){
           wx.showToast({
             title: val+'该手机号已存在',
             icon: 'none',
@@ -726,9 +726,19 @@ getInputVal: function (e) {
     inputChange: function () {
       var that = this;
       for (let i = 0; i < that.data.inputVal.length; i++) {
-        if (that.data.inputVal[i] == null) {
+        if (that.data.inputVal[i] == null ) {
           that.data.inputVal.splice(i, 1);
         }
+        if (that.data.inputVal[i] == '') {
+          wx.showToast({
+            title: that.data.inputVal[i] + '该手机号不正确',
+            icon: 'none',
+            duration: 2000
+          })
+          return
+        }
+        
+        
       }
       wx.getStorage({
         key: 'orders',
