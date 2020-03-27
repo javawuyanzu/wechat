@@ -75,7 +75,7 @@ return
     var data = event.currentTarget.dataset
     var resId = data.resid
     wx.request({
-      url: 'http://127.0.0.1:8080/webapi/wechat/RoleResource/find/deviceNo/openId/resId',
+      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId/resId',
       data: {
         deviceNo: that.data.deviceNo,
         openId:app.globalData.openid,
@@ -94,7 +94,7 @@ return
         }else{
           wx.request({
             //获取openid接口  
-            url: 'http://127.0.0.1:8080/webapi/wechat/Resource_Product/list/resid',
+            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/list/resid',
             data: {
               resId: resId,
             },
@@ -643,7 +643,7 @@ return
     })
      wx.request({
       //获取openid接口  
-       url: 'http://127.0.0.1:8080/webapi/wechat/Resource_Product/Resource/list',
+       url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/Resource/list',
       method: 'GET',
       success: function (res) {
         var result = res.data.data
@@ -667,7 +667,6 @@ getInputVal: function (e) {
     var val = e.detail.value;//获取输入的值
     var oldVal = this.data.inputVal;
     var that = this;
-  console.log(val)
   if (!(/^1[34578]\d{9}$/.test(val))&& !(val == '')) {
       wx.showToast({
         title: '手机号有误',
@@ -736,7 +735,7 @@ getInputVal: function (e) {
             }
             wx.request({
               //获取openid接口  
-              url: 'http://127.0.0.1:8080/webapi/wechat/Relation_DeviceSmsMap/find/deviceNo/employeeMobile',
+              url:'https://apis.sdcsoft.com.cn/webapi/wechat/Relation_DeviceSmsMap/find/deviceNo/employeeMobile',
               method: 'GET',
               data: {
                 deviceNo: that.data.deviceNo,
