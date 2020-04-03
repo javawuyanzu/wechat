@@ -528,40 +528,40 @@ Page({
 
 
 
-    getApp().conmqtt().then(function () {
-      //that.subTopic("/Msg/20/000/00001")
-      var strlist = [];
-      var str = "123456789";
-      var n = 2;
-      for (var i = 0, l = str.length; i < l / n; i++) {
-        var a = str.slice(n * i, n * (i + 1));
-        strlist.push(a)
-      }
+    // getApp().conmqtt().then(function () {
+    //   //that.subTopic("/Msg/20/000/00001")
+    //   var strlist = [];
+    //   var str = "123456789";
+    //   var n = 2;
+    //   for (var i = 0, l = str.length; i < l / n; i++) {
+    //     var a = str.slice(n * i, n * (i + 1));
+    //     strlist.push(a)
+    //   }
 
-      var strarray = new Uint8Array(strlist.length);
-      for (let i = 0; i < strlist.length; i++) {
-        strarray[i] = parseInt(strlist[i], 16)
-      }
-      app.globalData.client.publish("/CTL/20/000/00001", strarray.buffer, function (err) {
-        //console.log(err)
-        if (!err) {
-          wx.showToast({
-            title: '发布成功',
-            icon: 'success',
-            duration: 1000,
-            mask: true
-          })
-        }
-        else {
-          wx.showToast({
-            title: '发布失败',
-            icon: 'error',
-            duration: 1000,
-            mask: true
-          })
-        }
-      })
-    })
+    //   var strarray = new Uint8Array(strlist.length);
+    //   for (let i = 0; i < strlist.length; i++) {
+    //     strarray[i] = parseInt(strlist[i], 16)
+    //   }
+    //   app.globalData.client.publish("/CTL/20/000/00001", strarray.buffer, function (err) {
+    //     //console.log(err)
+    //     if (!err) {
+    //       wx.showToast({
+    //         title: '发布成功',
+    //         icon: 'success',
+    //         duration: 1000,
+    //         mask: true
+    //       })
+    //     }
+    //     else {
+    //       wx.showToast({
+    //         title: '发布失败',
+    //         icon: 'error',
+    //         duration: 1000,
+    //         mask: true
+    //       })
+    //     }
+    //   })
+    // })
    
     that.updateDevice();
     if (app.globalData.lang === 'zh-cn') {
@@ -644,7 +644,7 @@ Page({
     })
     that.timer();
     app.globalData.callBack[0] = function(t, m) {
-      console.log('列表页收到数据：' + t + ':=' + m);
+      //console.log('列表页收到数据：' + t + ':=' + m);
       that.getmqttdata(t, m)
     }
   },
@@ -766,7 +766,7 @@ Page({
   getDeviceFromBytes(deviceNo, deviceType, data) {
     var that = this;
     let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
-    console.log(data)
+    console.log(data.length)
     map.set(deviceNo, d)
     return d
   },
@@ -1036,7 +1036,7 @@ Page({
         try {
           var databyte = new Uint8Array(byte)
           let data = that.getDeviceFromBytes(deviceNo, deviceType, databyte);
-
+          //console.log(data)
           // data.getMockFields().each((key, value) => {
           //   console.log('title:=' + value.getTitle() + ' value:=' + value.getValueString());
           // });
@@ -1160,7 +1160,7 @@ Page({
                 })
                 wx.showModal({
                   title: that.data.content.list_prompt,
-                  content: that.data.content.list_error1 + deviceno + that.data.content.list_error2,
+                  content: that.data.content.list_error1 + deviceNo + that.data.content.list_error2,
                   success(res) {}
                 })
                 break;

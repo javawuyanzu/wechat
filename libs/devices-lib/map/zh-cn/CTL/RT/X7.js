@@ -48,7 +48,7 @@ var Map_CTL_RT_X7 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField(X7_1.CTL_RT_X7.KEY_POINT_LENG_NING_BENG_1, 9, 2, "节能泵", 3, Map_CTL_RT_X7.coms_open_close));
         _this.addPoint(new meta_1.DeviceField(X7_1.CTL_RT_X7.KEY_POINT_Add_SHUI_BENG_1, 9, 2, "给水泵", 4, Map_CTL_RT_X7.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_baojingzhuangtaishuchu", 9, 2, "报警状态输出", 5, Map_CTL_RT_X7.coms_open_close));
-        _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 13, 2, "蒸汽压力", "mPa", 100));
+        _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 13, 2, "蒸汽压力", "MPa", 100));
         _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibao", 45, 2, "极限低水位报警", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 1));
         return _this;

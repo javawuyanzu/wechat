@@ -68,7 +68,6 @@ App({
               var client = mqtt.connect('wxs://rancher.sdcsoft.com.cn:443/mqtt', options);
              
               that.globalData.client = client
-              console.log(that.globalData.client)
               client.on('error', function (err) {
                 console.log(err)
                 client.end()
