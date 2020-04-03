@@ -170,9 +170,9 @@ Page({
                         deviceName: '',
                         deviceType: deviceType,
                         imgStyle: 0,
-                        mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
+                        mqttName: "/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
                       });
-                      that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                      that.subTopic("/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
                       wx.request({
                         url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
                         method: 'POST',
@@ -506,9 +506,9 @@ Page({
                       deviceName: "",
                       deviceType: deviceType,
                       imgStyle: 0,
-                      mqttName: "/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
+                      mqttName: "/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
                     });
-                    that.subTopic("/RPT/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                    that.subTopic("/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
                     wx.setStorage({
                       key: 'deviceList',
                       data: deviceList,

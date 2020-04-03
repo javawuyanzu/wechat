@@ -171,7 +171,7 @@ Page({
         str += that.data.controlList[i][commmd].getCommandString();
       }
     }
-    
+
     if (str!=''){
       if (that.data.deviceNo.substr(0, 2) == '20') {
         var strlist = []; 
@@ -187,10 +187,11 @@ Page({
         }
         
         var client = app.globalData.client;
+     
         if (client.connected != null & client.connected) {
           var cmdName = "/CTL/"+that.data.mqttname.substr(5, 16)
           client.publish(cmdName, strarray.buffer, function (err) {
-            //console.log(err)
+            console.log(err)
             if (!err) {
               wx.showToast({
                 title: '发布成功',
@@ -488,7 +489,7 @@ Page({
       that.timer();
     } else {
       that.setData({
-        mqttname: "/RPT/" + options.deviceNo.substr(0, 2) + "/" + options.deviceNo.substr(2, 3) + "/" + options.deviceNo.substr(5, 5)
+        mqttname: "/Msg/" + options.deviceNo.substr(0, 2) + "/" + options.deviceNo.substr(2, 3) + "/" + options.deviceNo.substr(5, 5)
       })
       that.dataparse(app.globalData.device)
       app.globalData.callBack[1] = function(t, m) {

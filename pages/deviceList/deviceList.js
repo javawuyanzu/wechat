@@ -528,28 +528,40 @@ Page({
 
 
 
-    // getApp().conmqtt().then(function () {
-    //   //that.subTopic("ABC/01")
-    //   app.globalData.client.publish("ABC/01", "123", function (err) {
-    //     //console.log(err)
-    //     if (!err) {
-    //       wx.showToast({
-    //         title: '发布成功',
-    //         icon: 'success',
-    //         duration: 1000,
-    //         mask: true
-    //       })
-    //     }
-    //     else {
-    //       wx.showToast({
-    //         title: '发布失败',
-    //         icon: 'error',
-    //         duration: 1000,
-    //         mask: true
-    //       })
-    //     }
-    //   })
-    // })
+    getApp().conmqtt().then(function () {
+      //that.subTopic("/Msg/20/000/00001")
+      var strlist = [];
+      var str = "123456789";
+      var n = 2;
+      for (var i = 0, l = str.length; i < l / n; i++) {
+        var a = str.slice(n * i, n * (i + 1));
+        strlist.push(a)
+      }
+
+      var strarray = new Uint8Array(strlist.length);
+      for (let i = 0; i < strlist.length; i++) {
+        strarray[i] = parseInt(strlist[i], 16)
+      }
+      app.globalData.client.publish("/CTL/20/000/00001", strarray.buffer, function (err) {
+        //console.log(err)
+        if (!err) {
+          wx.showToast({
+            title: '发布成功',
+            icon: 'success',
+            duration: 1000,
+            mask: true
+          })
+        }
+        else {
+          wx.showToast({
+            title: '发布失败',
+            icon: 'error',
+            duration: 1000,
+            mask: true
+          })
+        }
+      })
+    })
    
     that.updateDevice();
     if (app.globalData.lang === 'zh-cn') {
@@ -1012,10 +1024,11 @@ Page({
           if (deviceList[i].mqttName === deviceNo) {
             deviceType = deviceList[i].deviceType
             deviceNo = deviceList[i].deviceNo
+           
             if (deviceList[i].deviceName === '') {
               title1 = deviceList[i].deviceNo
             } else {
-              title1 = deviceNos[index].deviceName + "——" + deviceNos[index].deviceNo
+              title1 = deviceNos[index].deviceName + "-" + deviceNos[index].deviceNo
             }
             break;
           }
@@ -1035,13 +1048,13 @@ Page({
             errcount1 = 0,
             src1 = '',
             mock1 = ''
-            if (byte.length > 5) {
-              wx.showToast({
-                title: deviceNo + '号设备，数据异常',
-                icon: 'none',
-                duration: 2000
-              })
-            }
+            // if (byte.length > 5) {
+            //   wx.showToast({
+            //     title: deviceNo + '号设备，数据异常',
+            //     icon: 'none',
+            //     duration: 2000
+            //   })
+            // }
 
           }
           else {
