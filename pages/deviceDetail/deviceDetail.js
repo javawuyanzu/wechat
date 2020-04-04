@@ -189,7 +189,8 @@ Page({
         var client = app.globalData.client;
         if (client.connected != null & client.connected) {
           var cmdName = "/Ctl/"+that.data.mqttname.substr(5, 16)
-          client.publish(cmdName, strarray.buffer, function (err) {
+          console.log(str)
+          client.publish(cmdName, str, function (err) {
            
             if (!err) {
               wx.showToast({
