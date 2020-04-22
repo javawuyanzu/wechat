@@ -93,8 +93,12 @@ Page({
       },
       method: 'GET',
       success: function (res) {
+        var resList = res.data.data
+        for (var i in resList){
+          resList[i].dueTime = resList[i].dueTime.substr(0, 10)
+        }
         that.setData({
-          resList: res.data.data
+          resList: resList
         })
       }
     }) 

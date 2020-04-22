@@ -18,6 +18,7 @@ Page({
     content: null,
     devices: map,
     mqttif: false,
+    userType:null,
   },
   onHide: function() {
     var that = this
@@ -30,12 +31,13 @@ Page({
     wx.getStorage({
       key: 'time',
       success(res) {
+        
         that.setData({
           timer: setInterval(function() {
             if (that.data.timerStates) {
               that.httptimer()
             }
-          }, res.data * 1000)
+          },5000)
         })
       }
     })
@@ -476,6 +478,7 @@ Page({
   },
   onLoad: function(options) {
     var that = this;
+    
     wx.login({
       success: function (res) {
         wx.request({
@@ -525,24 +528,13 @@ Page({
         })
       }
     })
-
+   
 
 
     // getApp().conmqtt().then(function () {
     //   //that.subTopic("/Msg/20/000/00001")
-    //   var strlist = [];
-    //   var str = "123456789";
-    //   var n = 2;
-    //   for (var i = 0, l = str.length; i < l / n; i++) {
-    //     var a = str.slice(n * i, n * (i + 1));
-    //     strlist.push(a)
-    //   }
-
-    //   var strarray = new Uint8Array(strlist.length);
-    //   for (let i = 0; i < strlist.length; i++) {
-    //     strarray[i] = parseInt(strlist[i], 16)
-    //   }
-    //   app.globalData.client.publish("/CTL/20/000/00001", strarray.buffer, function (err) {
+      
+    //   app.globalData.client.publish("/CTL/20/000/00001", "123123", function (err) {
     //     //console.log(err)
     //     if (!err) {
     //       wx.showToast({
@@ -675,7 +667,7 @@ Page({
   },
   unSubTopic: function(topic) {
     var client = app.globalData.client;
-    if (client.connected) {
+    if (client!=null) {
       client.unsubscribe(topic, function(err) {
         if (!err) {
           console.log('取消订阅成功' + topic)
@@ -754,19 +746,117 @@ Page({
     })
   },
   onShow: function() {
+    wx.getStorage({
+      key: 'userType',
+      fail(res) {
+        wx.setStorageSync('userType', 0)
+        that.setData({
+          userType: 0
+        })
+      },
+      success(res) {
+        that.setData({
+          userType: res.data
+        })
+      }
+    })
     var that = this
     that.httptimer()
     that.setData({
       timerStates: true
     })
-   
+    // wx.getStorage({
+    //   key: 'deviceList',
+    //   success(res) {
+    //     var list = res.data
+    //     that.getSimStatus(list, 0)
+    //   }
+    // })
+
    
   },
+  getSimStatus(deviceNos, index) {
   
+    var that = this;
+    if (index == deviceNos.length) {
+      return;
+    }
+    var deviceNo = deviceNos[index].deviceNo
+  
+
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
+        data: {
+          deviceNo: deviceNo,
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          var iMEI = res.data.data.iMEI
+          if (res.data.data.iMEI != null) {
+            wx.request({
+              url: 'http://127.0.0.1:8080/webapi/wechat/smsPaymentRecords/list/deviceNo',
+              data: {
+                deviceNo: deviceNo,
+              },
+              header: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+              },
+              method: 'GET',
+              success: function (res) {
+                if (res.data.data != null) {
+                  var list= that.data.imgList
+                  for (var i = 0; i < list.length; i++) {
+                    if (list[i].deviceNo == deviceNo) {
+                      list[i].simTitle = "物联卡到期时间:" + res.data.data.dueTime.substr(0,10)
+                    }
+                  }
+                  that.setData({
+                    imgList: list
+                  })
+                } else {
+                  wx.request({
+                    url: 'http://127.0.0.1:8080/webapi/wechat/Sim/iMEI',
+                    data: {
+                      iMEI: iMEI,
+                    },
+                    header: {
+                      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                      var list = that.data.imgList
+
+                      for (var i = 0; i < list.length; i++) {
+                        if (list[i].deviceNo == deviceNo) {
+                          list[i].simTitle = "物联卡余额:" + res.data.result[0].balance
+                        }
+                      }
+                      that.setData({
+                        imgList: list
+                      })
+                    }
+                  })
+                }
+
+              }
+            })
+          }
+        }
+      })
+    
+
+
+    index++
+    that.getSimStatus(deviceNos, index)
+  },
   getDeviceFromBytes(deviceNo, deviceType, data) {
     var that = this;
+    console.log(data)
     let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
-    console.log(data.length)
+    
     map.set(deviceNo, d)
     return d
   },
@@ -789,6 +879,7 @@ Page({
     var control = ''
     var type = ''
     var lang = ''
+    var simTitle = ''
     var deviceno = deviceNos[index].deviceNo
     if (typeof(deviceNos[index].mqttName) == "undefined" || deviceNos[index].mqttName == null) {
       var title1 = ''
@@ -832,6 +923,7 @@ Page({
                       ilist[i].src = src1
                       ilist[i].mock1 = ""
                       ilist[i].mock2 = ""
+                      simTitle: simTitle
                       that.setData({
                         imgList: ilist
                       })
@@ -843,13 +935,15 @@ Page({
                     title: deviceno,
                     runstate: that.data.content.list_runstate,
                     deviceNo: deviceno,
-                    imgstyle: imgstyle1
+                    imgstyle: imgstyle1,
+                    simTitle: simTitle
                   })
                   that.setData({
                     imgList: ilist
                   })
                 }
               } else {
+                
                 try {
                   let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
                   //data.setModbusNo 设置Modbus站号 默认1 1-255
@@ -928,6 +1022,7 @@ Page({
                         ilist[i].type = deviceType
                         ilist[i].lang = app.globalData.lang
                         ilist[i].jiarezu = jiarezu1
+                        simTitle: simTitle
                         that.setData({
                           imgList: ilist
                         })
@@ -947,7 +1042,8 @@ Page({
                       runday: day + hour,
                       type: deviceType,
                       lang: app.globalData.lang,
-                      jiarezu: jiarezu1
+                      jiarezu: jiarezu1,
+                      simTitle: simTitle
                     })
                     that.setData({
                       imgList: ilist
@@ -1183,182 +1279,5 @@ Page({
       }
     })
   },
-  // onShow: function () {
-  //   var that = this
-  //   that.errorLing();
-  //   wx.getStorage({
-  //     key: 'deviceList',
-  //     success(res) {
-  //       if (res.data.length == 0) {
-  //         wx.showToast({
-  //           title: '设备列表为空！请在主页添加设备',
-  //           icon: 'none',
-  //           duration: 2000
-  //         })
-  //         return;
-  //       } else {
-  //         app.connmqtt();
-  //         var deviceList = res.data
-  //         var client = app.globalData.client;
-  //         console.log("555")
-  //         // for (var i = 0; i < deviceList.length; i++) {
-  //         //   that.subTopic(deviceList[i].mqttName)
-  //         // }
-  //         if (client == null) {
-  //           wx.showLoading({
-  //             title: '正在获取...',
-  //           })
-  //           var timeOut = setTimeout(function () {
-  //             for (var i = 0; i < deviceList.length; i++) {
-  //               that.subTopic(deviceList[i].mqttName)
-  //             }
-  //             wx.navigateBack()
-  //             wx.hideLoading()
-  //           }, 8000)
-  //         }
-  //       }
-  //     }
-  //   })
-  //   app.globalData.callBack[0] = function (t, m) {
-  //     console.log('列表页收到数据：' + t + ':=' + m);
-  //     that.getdata(t.substr(5, 2) + t.substr(8, 3) + t.substr(12, 5), m)
-  //   }
-  // },
-  // getdata(deviceNos, index) {
-  //   console.log(deviceNos)
-  //   var that = this;
-  //   if (index == deviceNos.length) {
-  //     return;
-  //   }
-  //   var runstate = 'imgList[' + index + '].runstate'
-  //   var title = 'imgList[' + index + '].title'
-  //   var deviceNo = 'imgList[' + index + '].deviceNo'
-  //   var src = 'imgList[' + index + '].src'
-  //   var mock1 = 'imgList[' + index + '].mock1'
-  //   var mock2 = 'imgList[' + index + '].mock2'
-  //   var mock3 = 'imgList[' + index + '].mock3'
-  //   var errcount = 'imgList[' + index + '].errcount'
-  //   var imgstyle = 'imgList[' + index + '].imgstyle'
-  //   var runday = 'imgList[' + index + '].runday'
-  //   var jiarezu = 'imgList[' + index + '].jiarezu'
-  //   var control = 'imgList[' + index + '].control'
-  //   var type = 'imgList[' + index + '].type'
-  //   var lang = 'imgList[' + index + '].lang'
-  //   var deviceno = deviceNos[index].deviceNo
-  //   if (deviceNos[index].type == 1) {
-  //     var title1 = ''
-  //     var deviceType = ''
-  //     var runstate1 = ''
-  //     var src1 = ''
-  //     var errcount1 = ''
-  //     if (deviceNos[index].deviceName == '') {
-  //       title1 = deviceNos[index].deviceNo
-  //     } else {
-  //       title1 = deviceNos[index].deviceName
-  //     }
-  //     var imgstyle1 = deviceNos[index].imgstyle
-  //     wx.getStorage({
-  //       key: 'deviceList',
-  //       success(res) {
-  //         var deviceList = res.data
-  //         for (var i = 0; i < deviceList.length; i++) {
-  //           if (deviceList[i].deviceNo === deviceno) {
-  //             deviceType = deviceList[i].deviceType
-  //             break;
-  //           }
-  //         }
-  //         wx.request({
-  //           url: 'https://app.weixin.sdcsoft.cn/device/getdata',
-  //           data: {
-  //             deviceNo: deviceno,
-  //           },
-  //           method: 'GET',
-  //           header: {
-  //             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-  //           },
-  //           responseType: 'arraybuffer',
-  //           success: function (res) {
-  //             if (res.data.byteLength == 0) {
-  //               that.setData({
-  //                 [title]: deviceno,
-  //                 [runstate]: that.data.content.list_runstate,
-  //                 [deviceNo]: deviceno,
-  //                 [imgstyle]: imgstyle1,
-  //                 [errcount]: errcount1,
-  //                 [src]: ''
-  //               })
-  //               return
-  //             }
-  //             else {
-  //               let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
-  //               var errorList = []
-  //               for (var index in data.getExceptionFields().map) {
-  //                 errorList.push({
-  //                   deviceNo: deviceNo,
-  //                   title: data.getExceptionFields().map[index].title
-  //                 })
-  //               }
-  //               that.setData({
-  //                 errorNewList: that.data.errorNewList.concat(errorList)
-  //               })
-  //               var day = ''
-  //               var hour = ''
-  //               var jiarezu1 = ''
-  //               var mock11 = ''
-  //               var mock22 = ''
-  //               for (var index in data.getBaseInfoFields().map) {
-  //                 if (data.getBaseInfoFields().map[index].name === "o_system_status") {
-  //                   runstate1 = data.getBaseInfoFields().map[index].valueString
-  //                 }
-  //               }
-
-  //               for (var index in data.getDeviceFocusFields()) {
-  //                 if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
-  //                   jiarezu1 = data.getDeviceFocusFields()[index].valueString
-  //                 }
-  //                 if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
-  //                   day = data.getDeviceFocusFields()[index].valueString
-  //                 }
-  //                 if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
-  //                   hour = data.getDeviceFocusFields()[index].valueString
-  //                 }
-  //               }
-
-  //               for (var index in data.getMockFields().map) {
-  //                 if (mock11 === "") {
-  //                   mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-  //                   continue;
-  //                 }
-  //                 if (mock22 === "") {
-  //                   mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-  //                   break;
-  //                 }
-  //               }
-  //               errcount1 = errorList.length,
-  //                 src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
-  //             }
-
-  //             that.setData({
-  //               [lang]: app.globalData.lang,
-  //               [jiarezu]: jiarezu1,
-  //               [title]: title1,
-  //               [runstate]: runstate1,
-  //               [deviceNo]: deviceno,
-  //               [imgstyle]: imgstyle1,
-  //               [errcount]: errcount1,
-  //               [src]: src1,
-  //               [mock1]: mock11,
-  //               [mock2]: mock22,
-  //               [runday]: day + hour,
-  //               [type]: deviceType
-  //             })
-  //           }
-  //         })
-  //       }
-  //     })
-
-  //   }
-  //   index++
-  //   that.getdata(deviceNos, index)
-  // }, 
+  
 })

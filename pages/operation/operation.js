@@ -159,20 +159,31 @@ Page({
                       openId: app.globalData.openid,
                       deviceNo: deviceNo,
                       deviceType: deviceType,
-                      mqttName: "0",
                       deviceName: null,
                       imgStyle: 0
                     },
                     method: 'POST',
-                    success: function(res) {
+                    success: function (res) {
+                      console.log(res)
                       deviceList.push({
                         deviceNo: deviceNo,
-                        deviceName: '',
+                        deviceName: "",
                         deviceType: deviceType,
                         imgStyle: 0,
                         mqttName: "/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
                       });
                       that.subTopic("/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+                      wx.setStorage({
+                        key: 'deviceList',
+                        data: deviceList,
+                        success: function (res) {
+                          wx.showToast({
+                            title: that.data.content.operation_addsuccess,
+                            icon: 'success',
+                            duration: 2000
+                          });
+                        }
+                      })
                       wx.request({
                         url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
                         method: 'POST',
@@ -198,14 +209,16 @@ Page({
                                 var list = res.data.data
                                 var resList = []
                                 for (var i in list) {
-                                  resList.push({
-                                    openId: app.globalData.openid,
-                                    resId: list[i].id,
-                                    deviceNo: deviceNo,
-                                    range: 1,
-                                    rangeType: 2,
-                                    amount: 1,
-                                  })
+                                  if (list[i].id != 6 & list[i].id != 5) {
+                                    resList.push({
+                                      openId: app.globalData.openid,
+                                      resId: list[i].id,
+                                      deviceNo: deviceNo,
+                                      range: 1,
+                                      rangeType: 2,
+                                      amount: 1,
+                                    })
+                                  }
                                 }
                                 wx.request({
                                   url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
@@ -249,7 +262,7 @@ Page({
                         inputValue: ""
                       })
                     },
-                    fail: function(res) {
+                    fail: function (res) {
                       wx.showToast({
                         title: that.data.content.operation_connfail,
                         icon: 'none',
@@ -314,15 +327,18 @@ Page({
                                 var list = res.data.data
                                 var resList = []
                                 for (var i in list) {
-                                  resList.push({
-                                    openId: app.globalData.openid,
-                                    resId: list[i].id,
-                                    deviceNo: deviceNo,
-                                    range: 1,
-                                    rangeType: 2,
-                                    amount: 1,
-                                  })
+                                  if (list[i].id != 6 & list[i].id != 5){
+                                    resList.push({
+                                      openId: app.globalData.openid,
+                                      resId: list[i].id,
+                                      deviceNo: deviceNo,
+                                      range: 1,
+                                      rangeType: 2,
+                                      amount: 1,
+                                    })
+                                  }
                                 }
+                                
                                 wx.request({
                                   url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
                                   method: "GET",
@@ -545,14 +561,16 @@ Page({
                               var list = res.data.data
                               var resList = []
                               for (var i in list) {
-                                resList.push({
-                                  openId: app.globalData.openid,
-                                  resId: list[i].id,
-                                  deviceNo: deviceNo,
-                                  range: 1,
-                                  rangeType: 2,
-                                  amount: 1,
-                                })
+                                if (list[i].id != 6 & list[i].id != 5) {
+                                  resList.push({
+                                    openId: app.globalData.openid,
+                                    resId: list[i].id,
+                                    deviceNo: deviceNo,
+                                    range: 1,
+                                    rangeType: 2,
+                                    amount: 1,
+                                  })
+                                }
                               }
                               wx.request({
                                 url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
@@ -659,14 +677,16 @@ Page({
                               var list = res.data.data
                               var resList = []
                               for (var i in list) {
-                                resList.push({
-                                  openId: app.globalData.openid,
-                                  resId: list[i].id,
-                                  deviceNo: deviceNo,
-                                  range: 1,
-                                  rangeType: 2,
-                                  amount: 1,
-                                })
+                                if (list[i].id != 6 & list[i].id != 5) {
+                                  resList.push({
+                                    openId: app.globalData.openid,
+                                    resId: list[i].id,
+                                    deviceNo: deviceNo,
+                                    range: 1,
+                                    rangeType: 2,
+                                    amount: 1,
+                                  })
+                                }
                               }
                               wx.request({
                                 url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',

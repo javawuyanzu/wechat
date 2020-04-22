@@ -129,6 +129,7 @@ App({
       wx.setStorageSync('wxEnterpriseName', '')
       wx.setStorageSync('cachedVersion', 1.0)
       wx.setStorageSync('orders', [])
+      wx.setStorageSync('userType', 0)
     }
   },
   

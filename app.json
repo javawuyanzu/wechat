@@ -15,7 +15,8 @@
     "pages/payMenu/payMenu",
     "pages/order/order",
     "pages/myorder/myorder",
-    "pages/orderItem/orderItem"
+    "pages/orderItem/orderItem",
+    "pages/userType/userType"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -777,7 +777,7 @@ Page({
               console.log("timerStates")
               that.onShow()
             }
-          }, res.data * 1000)
+          }, 5* 1000)
         })
       }
     })

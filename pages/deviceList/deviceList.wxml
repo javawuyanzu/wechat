@@ -11,13 +11,14 @@
                   <view >{{item.title}}-{{item.runstate}}</view>
                 </view>
               </view>
-              <view class="info">
+              <view class="info" style="height: 120rpx;">
 
                 <text>{{item.mock1}}</text>
                 <text>{{item.mock2}}</text>
               </view>
               <view class="start" style='color:white'>
                 <!-- <text>运行时间：{{item.runday}}</text> -->
+                 <text style="float: right;margin-right: 30rpx;">{{item.simTitle}}</text>
               </view>
               <view class="image">
                 <image src="" style="width: 140px; height: 70px;" mode="aspectFit"></image>
@@ -52,6 +53,7 @@
               </view>
               <view class="start" style='color:white'>
                 <text>{{content.list_runtime}}:{{item.runday}}</text>
+                <text style="float: right;margin-right: 30rpx;">{{item.simTitle}}</text>
               </view>
               <view class="image">
                 <view style=' position: absolute;right:110rpx;top:70rpx;' wx:if="{{item.jiarezu !=''}}">
@@ -78,6 +80,9 @@
       <view class='toast-input' style='border:0px solid #ddd;'>
         <button catchtap='rename' style=' background-color: white;'>{{content.list_rename}}</button>
         <button catchtap='deleteDevice' style=' background-color: white;'>{{content.list_delete}}</button>
+        <view wx:if="{{userType==1}}" >
+          <button catchtap='imgstyle' style=' background-color: white;'>{{content.list_weibao}}</button>
+        </view>
         <button catchtap='imgstyle' style=' background-color: white;'>{{content.list_chooseimg}}</button>
       </view>
       <view style='border-top:1px solid #eee;width:100%'>

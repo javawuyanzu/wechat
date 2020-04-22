@@ -4,7 +4,7 @@
         <form bindsubmit="formSubmit" bindreset="formReset">
             <view class="section">
                 <view class="section__title">{{content.operation_deviceNo}}：</view>
-                <input  name="deviceNo"  value="{{inputValue}}" style='padding:20rpx 30rpx;background-color:#fff;'/>
+                <input  name="deviceNo"  type="number" value="{{inputValue}}" style='padding:20rpx 30rpx;background-color:#fff;'/>
             </view>
             <view class="btn-area">
                 <view class="button-wrapper">

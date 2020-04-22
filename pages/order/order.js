@@ -213,7 +213,29 @@ Page({
         var resList = []
         var smsList = []
         for (var i in list) {
-          if (list[i].resourceId!=5){
+          if (list[i].resourceId==5){
+            smsList.push({
+              employeeMobile: list[i].employeeMobile,
+              deviceNo: list[i].deviceNo,
+              range: list[i].range,
+              rangeType: list[i].rangeType,
+              amount: list[i].amount,
+            })
+          } else if (list[i].resourceId == 6){
+            wx.request({
+              url: 'http://127.0.0.1:8080/webapi/wechat/smsPaymentRecords/create',
+              method: "POST",
+              data: {
+                openId: app.globalData.openid,
+                deviceNo: list[i].deviceNo,
+                iMEI: list[i].iMEI
+              },
+              success: function (res) {
+                console.log(res)
+              }
+            })
+           
+          }else{
             resList.push({
               openId: app.globalData.openid,
               resId: list[i].resourceId,
@@ -222,17 +244,11 @@ Page({
               rangeType: list[i].rangeType,
               amount: list[i].amount,
             })
-          }else{
-            smsList.push({
-              employeeMobile: list[i].employeeMobile,
-              deviceNo: list[i].deviceNo,
-              range: list[i].range,
-              rangeType: list[i].rangeType,
-              amount: list[i].amount,
-            })
+           
           }
           
         }
+       
         wx.request({
           url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Relation_DeviceSmsMap/create/many',
           method: "POST",

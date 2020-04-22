@@ -278,7 +278,7 @@
     </view>
     <view class='toast-main'>
       <view class='toast-input'>
-        <input placeholder='{{placeholder}}' bindinput="dName" value='{{inputValue}}'></input>
+        <input placeholder='{{placeholder}}'  type="number" bindinput="dName" value='{{inputValue}}'></input>
       </view>
     </view>
     <view class='toast-button'>
