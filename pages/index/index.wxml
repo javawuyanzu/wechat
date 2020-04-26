@@ -23,7 +23,7 @@
         </view>
       </view>
     </navigator>
-     <navigator url="../userType/userType" hover-class="none">
+     <!-- <navigator url="../userType/userType" hover-class="none">
       <view class="user-list-item">
         <view class="item-left">
           <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
@@ -33,7 +33,7 @@
           <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
         </view>
       </view>
-    </navigator>
+    </navigator> -->
     <view wx:if="{{sole}}">
       <navigator url="../soldUpdate/soldUpdate" hover-class="none">
         <view class="user-list-item">
@@ -60,7 +60,7 @@
         </view>
       </navigator>
     </view>
-    <!-- <view wx:if="{{canIUse}}">
+    <view wx:if="{{canIUse}}">
       <navigator url="../login/login" hover-class="none">
         <view class="user-list-item">
           <view class="item-left">
@@ -72,7 +72,7 @@
           </view>
         </view>
       </navigator>
-    </view> -->
+    </view>
     <!-- <view >
       <navigator url="../payMenu/payMenu" hover-class="none">
         <view class="user-list-item">

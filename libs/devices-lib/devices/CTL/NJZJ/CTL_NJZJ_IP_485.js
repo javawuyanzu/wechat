@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var CTL_NJZJ_1 = require("./CTL_NJZJ");
+var SdcSoftDevice_1 = require("../../SdcSoftDevice");
 var IP_485 = /** @class */ (function (_super) {
     __extends(IP_485, _super);
     /**
@@ -42,6 +43,11 @@ var IP_485 = /** @class */ (function (_super) {
         list[0].setValue(i / 24);
         list[1].setValue(i % 24);
         return list;
+    };
+    IP_485.prototype.getSubDeviceType = function () {
+        if (this.bytesLength > this.BYTE_ARRAY_LENGTH)
+            return this.bytesLength.toString();
+        return SdcSoftDevice_1.SdcSoftDevice.NO_SUB_DEVICE_TYPE;
     };
     return IP_485;
 }(CTL_NJZJ_1.IP));

@@ -60,6 +60,15 @@ var Map_CTL_NJZJ = /** @class */ (function (_super) {
         0: "无效",
         1: "有效"
     };
+    Map_CTL_NJZJ.coms_qipao_level = {
+        0: '缺水',
+        1: '低报警',
+        2: '低位',
+        3: '正常',
+        4: '高位',
+        5: '超高位',
+        6: '逻辑错'
+    };
     return Map_CTL_NJZJ;
 }(ZH_CN_1.Map_ZH_CN));
 exports.Map_CTL_NJZJ = Map_CTL_NJZJ;

@@ -81,7 +81,7 @@
         <button catchtap='rename' style=' background-color: white;'>{{content.list_rename}}</button>
         <button catchtap='deleteDevice' style=' background-color: white;'>{{content.list_delete}}</button>
         <view wx:if="{{userType==1}}" >
-          <button catchtap='imgstyle' style=' background-color: white;'>{{content.list_weibao}}</button>
+          <button catchtap='toRepair' style=' background-color: white;'>{{content.list_weibao}}</button>
         </view>
         <button catchtap='imgstyle' style=' background-color: white;'>{{content.list_chooseimg}}</button>
       </view>

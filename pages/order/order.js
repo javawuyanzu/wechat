@@ -223,7 +223,7 @@ Page({
             })
           } else if (list[i].resourceId == 6){
             wx.request({
-              url: 'http://127.0.0.1:8080/webapi/wechat/smsPaymentRecords/create',
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/smsPaymentRecords/create',
               method: "POST",
               data: {
                 openId: app.globalData.openid,

@@ -165,6 +165,14 @@ Page({
       ifName: false,
     })
   },
+  toRepair: function (e) {
+    wx.navigateTo({
+      url: "/pages/repair/repair?deviceNo=" + this.data.deviceNo,
+    })
+    this.setData({
+      ifName: false
+    })
+  },
   deleteDevice: function(e) {
     var that = this;
     that.setData({
@@ -765,13 +773,13 @@ Page({
     that.setData({
       timerStates: true
     })
-    // wx.getStorage({
-    //   key: 'deviceList',
-    //   success(res) {
-    //     var list = res.data
-    //     that.getSimStatus(list, 0)
-    //   }
-    // })
+    wx.getStorage({
+      key: 'deviceList',
+      success(res) {
+        var list = res.data
+        that.getSimStatus(list, 0)
+      }
+    })
 
    
   },
@@ -782,8 +790,6 @@ Page({
       return;
     }
     var deviceNo = deviceNos[index].deviceNo
-  
-
       wx.request({
         url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
         data: {
@@ -795,9 +801,10 @@ Page({
         method: 'GET',
         success: function (res) {
           var iMEI = res.data.data.iMEI
+          console.log()
           if (res.data.data.iMEI != null) {
             wx.request({
-              url: 'http://127.0.0.1:8080/webapi/wechat/smsPaymentRecords/list/deviceNo',
+              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/smsPaymentRecords/list/deviceNo',
               data: {
                 deviceNo: deviceNo,
               },
@@ -818,7 +825,7 @@ Page({
                   })
                 } else {
                   wx.request({
-                    url: 'http://127.0.0.1:8080/webapi/wechat/Sim/iMEI',
+                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Sim/iMEI',
                     data: {
                       iMEI: iMEI,
                     },
@@ -827,6 +834,7 @@ Page({
                     },
                     method: 'GET',
                     success: function (res) {
+                      console.log(res)
                       var list = that.data.imgList
 
                       for (var i = 0; i < list.length; i++) {

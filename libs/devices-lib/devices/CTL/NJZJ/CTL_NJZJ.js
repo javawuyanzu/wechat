@@ -20,8 +20,22 @@ var gfrm_1 = require("@sdcsoft/gfrm");
 var IP = /** @class */ (function (_super) {
     __extends(IP, _super);
     function IP() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        /**
+        * 用于子类型确认的字节长度
+        */
+        _this.bytesLength = 0;
+        return _this;
     }
+    IP.prototype.validateFalse = function (bytesLength) {
+        this.bytesLength = bytesLength;
+        return this.BYTE_ARRAY_LENGTH > bytesLength;
+    };
+    IP.prototype.getSubDeviceType = function () {
+        if (this.bytesLength > this.BYTE_ARRAY_LENGTH)
+            return this.bytesLength.toString();
+        return SdcSoftDevice_1.SdcSoftDevice.NO_SUB_DEVICE_TYPE;
+    };
     IP.prototype.handleByteField = function (field, bytes) {
         switch (field.getBytesLength()) {
             case 0:

@@ -24,57 +24,9 @@ var Wechat_DeviceAdapter = /** @class */ (function () {
         var d = new mapType();
         return d;
     };
-    /**
-     * 获取子类别设备对象
-     */
-    Wechat_DeviceAdapter.prototype.getSubDevice = function (type, sub, data) {
-        var t = type + '_' + sub;
-        var device = this.createDeviceFunc(t);
-        var map = this.createMapFunc(t);
-        if (device.validateFalse(data.byteLength)) {
-            return null;
-        }
-        device.setTypeName(t);
-        map.getPointMap().each(function (key, value) {
-            // console.log(value.getTitle()+' index->'+value.getStartIndex()+' length->'+value.getBytesLength())
-            device.handleByteField(value, data);
-        });
-        device.handleCommandFields(map.getCommandsMap());
-        return device;
-    };
-    Wechat_DeviceAdapter.prototype.getSdcSoftDevice = function (type, data, power, media) {
+    Wechat_DeviceAdapter.prototype.initPowerAndMedia = function (device, map, power, media) {
         if (power === void 0) { power = SdcSoftDevice_1.SdcSoftDevice.POWER_MEDIA_VALUE_NULL; }
         if (media === void 0) { media = SdcSoftDevice_1.SdcSoftDevice.POWER_MEDIA_VALUE_NULL; }
-        var device = this.createDeviceFunc(type);
-        var map = this.createMapFunc(type);
-        if (device.validateFalse(data.byteLength)) {
-            return null;
-        }
-        /*用户确认设备类型时的逻辑
-        *设置设备警告信息
-        device.setWarningMsg(map.getwarningMsg())
-        *设置子类设备信息
-        device.setSubTypes(map.getSubTypes())
-         */
-        map.getPointMap().each(function (key, value) {
-            /*
-            if (key == SdcSoftDevice.KEY_POINT_RUN_DAYS) {
-                console.log('hhhhhhh')
-            }*/
-            //console.log(value.getTitle()+' index->'+value.getStartIndex()+' length->'+value.getBytesLength())
-            device.handleByteField(value, data);
-        });
-        //自动进行子类型确认
-        if (device.getSubDeviceType() != SdcSoftDevice_1.SdcSoftDevice.NO_SUB_DEVICE_TYPE) {
-            var subDevice = this.getSubDevice(type, device.getSubDeviceType(), data);
-            if (null == subDevice)
-                return null;
-            device = subDevice;
-        }
-        else {
-            device.setTypeName(type);
-            device.handleCommandFields(map.getCommandsMap());
-        }
         var powerUI = device.getBaseInfoFields().getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER);
         var mediaUI = device.getBaseInfoFields().getItem(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA);
         if (powerUI && mediaUI) {
@@ -96,6 +48,59 @@ var Wechat_DeviceAdapter = /** @class */ (function () {
         else {
             device.setPower(0);
             device.setMedia(0);
+        }
+    };
+    /**
+     * 获取子类别设备对象
+     */
+    Wechat_DeviceAdapter.prototype.getSubDevice = function (type, sub, data, power, media) {
+        if (power === void 0) { power = SdcSoftDevice_1.SdcSoftDevice.POWER_MEDIA_VALUE_NULL; }
+        if (media === void 0) { media = SdcSoftDevice_1.SdcSoftDevice.POWER_MEDIA_VALUE_NULL; }
+        var t = type + '_' + sub;
+        var device = this.createDeviceFunc(t);
+        var map = this.createMapFunc(t);
+        if (device.validateFalse(data.byteLength)) {
+            return null;
+        }
+        device.setTypeName(t);
+        map.getPointMap().each(function (key, value) {
+            // console.log(value.getTitle()+' index->'+value.getStartIndex()+' length->'+value.getBytesLength())
+            device.handleByteField(value, data);
+        });
+        device.handleCommandFields(map.getCommandsMap());
+        this.initPowerAndMedia(device, map, power, media);
+        return device;
+    };
+    Wechat_DeviceAdapter.prototype.getSdcSoftDevice = function (type, data, power, media) {
+        if (power === void 0) { power = SdcSoftDevice_1.SdcSoftDevice.POWER_MEDIA_VALUE_NULL; }
+        if (media === void 0) { media = SdcSoftDevice_1.SdcSoftDevice.POWER_MEDIA_VALUE_NULL; }
+        var device = this.createDeviceFunc(type);
+        if (device.validateFalse(data.byteLength)) {
+            return null;
+        }
+        //自动进行子类型确认
+        if (device.getSubDeviceType() != SdcSoftDevice_1.SdcSoftDevice.NO_SUB_DEVICE_TYPE) {
+            return this.getSubDevice(type, device.getSubDeviceType(), data, power, media);
+        }
+        else {
+            device.setTypeName(type);
+            var map = this.createMapFunc(type);
+            /*用户确认设备类型时的逻辑
+            *设置设备警告信息
+            device.setWarningMsg(map.getwarningMsg())
+            *设置子类设备信息
+            device.setSubTypes(map.getSubTypes())
+            */
+            map.getPointMap().each(function (key, value) {
+                /*
+                if (key == SdcSoftDevice.KEY_POINT_RUN_DAYS) {
+                    console.log('hhhhhhh')
+                }*/
+                //console.log(value.getTitle()+' index->'+value.getStartIndex()+' length->'+value.getBytesLength())
+                device.handleByteField(value, data);
+            });
+            device.handleCommandFields(map.getCommandsMap());
+            this.initPowerAndMedia(device, map, power, media);
         }
         return device;
     };

@@ -14,10 +14,27 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var X7_1 = require("../X7");
 var meta_1 = require("../../../../../meta/RT/meta");
+var X7_2 = require("../../../../../devices/CTL/RT/X7");
 module.exports = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_X7_1, _super);
     function Map_CTL_RT_X7_1() {
         var _this = _super.call(this) || this;
+        _this.addPoint(new meta_1.DeviceField("de_jishuibeng_shoudong/zidong_", 49, 2, "给水泵", 1, X7_1.Map_CTL_RT_X7.coms_auto));
+        _this.addPoint(new meta_1.DeviceField("de_jishuibeng_zhu/bei_", 49, 2, "给水泵", 0, X7_1.Map_CTL_RT_X7.coms_master));
+        _this.addPoint(new meta_1.DeviceField("de_jienengbeng_zidong/shoudong_", 49, 2, "节能泵", 3, X7_1.Map_CTL_RT_X7.coms_auto));
+        _this.addPoint(new meta_1.DeviceField("de_jienengbeng_zhu/bei_", 49, 2, "节能泵", 2, X7_1.Map_CTL_RT_X7.coms_master));
+        _this.addPoint(new meta_1.OpenCloseField("oc_jixiandishuiwei", 5, 2, "极限低水位", 0, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.OpenCloseField("oc_chaoyabaojing", 5, 2, "超压报警", 6, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqiguzhang", 5, 2, "燃烧器故障", 7, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.DeviceField(X7_2.CTL_RT_X7.KEY_POINT_RAN_SHAO_QI_KONGZHI, 9, 2, "燃烧器", 0, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqidahuo", 9, 2, "燃烧器大火", 1, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.DeviceField(X7_2.CTL_RT_X7.KEY_POINT_PAI_WU_FA_1, 9, 2, "排污阀", 2, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.DeviceField(X7_2.CTL_RT_X7.KEY_POINT_LENG_NING_BENG_1, 9, 2, "节能泵", 3, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.DeviceField(X7_2.CTL_RT_X7.KEY_POINT_Add_SHUI_BENG_1, 9, 2, "给水泵", 4, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.OpenCloseField("oc_baojingzhuangtaishuchu", 9, 2, "报警状态输出", 5, X7_1.Map_CTL_RT_X7.coms_open_close));
+        _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 13, 2, "蒸汽压力", "mPa", 100));
+        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibao", 45, 2, "极限低水位报警", 0));
+        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 1));
         _this.addPoint(new meta_1.OpenCloseField("oc_dishuiwei", 5, 2, "低水位", 1, Map_CTL_RT_X7_1.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiwei", 5, 2, "高水位", 2, Map_CTL_RT_X7_1.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweibaojing", 5, 2, "高水位报警", 3, Map_CTL_RT_X7_1.coms_open_close));

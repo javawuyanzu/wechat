@@ -189,6 +189,17 @@ var SdcSoftDevice = /** @class */ (function () {
     SdcSoftDevice.KEY_POINT_JIA_RE_ZU = 'jia_re_zu_count';
     SdcSoftDevice.Style_Horizontal = 0;
     SdcSoftDevice.Style_Vertical = 1;
+    SdcSoftDevice.PointGroupNameList = {
+        unit: {
+            yali: ['MPa', 'KPa'],
+            wendu: ['℃'],
+            shijian: ['S', 's'],
+            liuliang: ['t/h']
+        },
+        spilt: {
+            shijian: [':']
+        }
+    };
     /*
     设备类型由用户确认时执行的逻辑
      子类型映射map

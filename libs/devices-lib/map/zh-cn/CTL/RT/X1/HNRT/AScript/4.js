@@ -24,7 +24,7 @@ var Map_CTL_RT_X1_HNRT_DRS_4 = /** @class */ (function (_super) {
     __extends(Map_CTL_RT_X1_HNRT_DRS_4, _super);
     function Map_CTL_RT_X1_HNRT_DRS_4() {
         var _this = _super.call(this) || this;
-        _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_RAN_SHAO_QI, "加热组"));
+        _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_JIA_RE_ZU, "加热组"));
         _this.addPoint(new CountField_1.CountField(RT_1.CTL_RT.KEY_POINT_LENG_NING_BENG, "热水泵"));
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, "燃料类型", 1, Map_CTL_RT_X1_HNRT_DRS_4.coms_power));
         _this.addPoint(new meta_1.DeviceField("oc_jiarezu1kongzhi", 9, 2, "加热组1", 0, Map_CTL_RT_X1_HNRT_DRS_4.coms_open_close));

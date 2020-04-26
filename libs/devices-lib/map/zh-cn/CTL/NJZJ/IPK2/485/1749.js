@@ -12,11 +12,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var _4J_BS_BT_1 = require("./AScript/4J_BS_BT");
+var CTL_NJZJ_IP_485_1749_1 = require("../../CTL_NJZJ_IP_485_1749");
+var meta_1 = require("../../../../../../meta/NJZJ/meta");
 module.exports = /** @class */ (function (_super) {
-    __extends(CTL_RT_T2_RYZQ_010, _super);
-    function CTL_RT_T2_RYZQ_010() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    __extends(Map_CTL_NJZJ_IPK2_485_1749, _super);
+    function Map_CTL_NJZJ_IPK2_485_1749() {
+        var _this = _super.call(this) || this;
+        _this.addPoint(new meta_1.SettingField('se_jiarezushu', 1114, 2, '加热组数', '组', 0, CTL_NJZJ_IP_485_1749_1.Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0517', 1, 15));
+        return _this;
     }
-    return CTL_RT_T2_RYZQ_010;
-}(_4J_BS_BT_1.CTL_RT_T2_RYZQ_4JBSBT));
+    return Map_CTL_NJZJ_IPK2_485_1749;
+}(CTL_NJZJ_IP_485_1749_1.Map_CTL_NJZJ_IP_485_1749));

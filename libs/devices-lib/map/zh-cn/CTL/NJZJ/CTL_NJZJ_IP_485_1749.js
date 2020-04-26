@@ -21,26 +21,26 @@ var gfrm_1 = require("@sdcsoft/gfrm");
 var CountShowField_1 = require("../../../../meta/CountShowField");
 var comms_1 = require("@sdcsoft/comms");
 var CTL_NJZJ_2 = require("../../../../devices/CTL/NJZJ/CTL_NJZJ");
-var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
-    __extends(Map_CTL_NJZJ_IP_485, _super);
-    function Map_CTL_NJZJ_IP_485() {
+var Map_CTL_NJZJ_IP_485_1749 = /** @class */ (function (_super) {
+    __extends(Map_CTL_NJZJ_IP_485_1749, _super);
+    function Map_CTL_NJZJ_IP_485_1749() {
         var _this = _super.call(this) || this;
         // this.addCommandGroup(Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting)
         // this.addCommandGroup(Map_CTL_NJZJ_IP_485.Commands_Key_System_Ctl)
-        _this.addPoint(new meta_1.SystemStatusField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 7, 2, '系统状态', CTL_NJZJ_1.Map_CTL_NJZJ.coms_status, Map_CTL_NJZJ_IP_485.Commands_Key_System_Ctl, '0602', 1, 2));
+        _this.addPoint(new meta_1.SystemStatusField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 7, 2, '系统状态', CTL_NJZJ_1.Map_CTL_NJZJ.coms_status, Map_CTL_NJZJ_IP_485_1749.Commands_Key_System_Ctl, '0602', 1, 2));
         _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_DAYS, 51, 2, '工作天数', '天'));
         _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_HOURS, 53, 2, '工作小时数', '时'));
-        _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, 3, 2, '燃料类型', '', Map_CTL_NJZJ_IP_485.coms_power));
-        _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, 5, 2, '介质类型', '', Map_CTL_NJZJ_IP_485.coms_media));
-        _this.addPoint(new meta_2.BaseInfoField('ba_guolushuiweizhuangtai', 25, 2, '锅炉液位状态', '', Map_CTL_NJZJ_IP_485.coms_level));
-        _this.addPoint(new meta_2.BaseInfoField('ba_shuixiangshuiweizhuangtai', 27, 2, '水箱液位状态', '', Map_CTL_NJZJ_IP_485.coms_level));
+        _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_POWER, 3, 2, '燃料类型', '', Map_CTL_NJZJ_IP_485_1749.coms_power));
+        _this.addPoint(new meta_2.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, 5, 2, '介质类型', '', Map_CTL_NJZJ_IP_485_1749.coms_media));
+        _this.addPoint(new meta_2.BaseInfoField('ba_guolushuiweizhuangtai', 25, 2, '锅炉液位状态', '', Map_CTL_NJZJ_IP_485_1749.coms_level));
+        _this.addPoint(new meta_2.BaseInfoField('ba_shuixiangshuiweizhuangtai', 27, 2, '水箱液位状态', '', Map_CTL_NJZJ_IP_485_1749.coms_level));
         _this.addPoint(new meta_2.BaseInfoField('ba_guoluyalizhuangtai', 29, 2, '锅炉压力状态', '', CTL_NJZJ_1.Map_CTL_NJZJ.coms_yalistatus));
         _this.addPoint(new CountShowField_1.CountShowField(comms_1.GroupKeys.KEY_BASE, SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_JIA_RE_ZU, '投入加热组', ''));
         //this.addPoint(new BaseInfoField('ba_leijijiaretianshu', 51, 2, '累计加热', '天'))
         //this.addPoint(new BaseInfoField('ba_leijijiarexiaoshi', 53, 2, '累计加热', '时'))
         _this.addPoint(new meta_2.BaseInfoField('ba_dahuoshijian', 55, 2, '大火工作时间', '时'));
         _this.addPoint(new meta_2.BaseInfoField('ba_xiaohuoshijian', 57, 2, '小火工作时间', '时'));
-        _this.addPoint(new meta_2.BaseInfoField('ba_fangdongkaiguan', 61, 2, '防冻开关', '', Map_CTL_NJZJ_IP_485.coms_open_close));
+        _this.addPoint(new meta_2.BaseInfoField('ba_fangdongkaiguan', 61, 2, '防冻开关', '', Map_CTL_NJZJ_IP_485_1749.coms_open_close));
         //
         _this.addPoint(new meta_2.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 88, 2, '排烟温度高报警'));
         _this.addPoint(new meta_2.ExceptionField('ex_lushuiwendugaobaojing', 90, 2, '炉水温度高报警'));
@@ -384,30 +384,30 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField('mo_huanjingwendu', 1027, 2, '环境温度', '℃'));
         _this.addPoint(new meta_1.MockField('mo_jiezhiyali', 1029, 2, '介质压力', 'KPa'));
         //
-        _this.addPoint(new meta_1.SettingField('se_paiyanbaojingwendu', 1068, 2, '排烟报警温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0500', 50, 300));
-        _this.addPoint(new meta_1.SettingField('se_baojingwendu', 1070, 2, '报警温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0501', 0, 200));
-        _this.addPoint(new meta_1.SettingField('se_tingluwendu', 1072, 2, '停炉温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0502', 30, 200));
-        _this.addPoint(new meta_1.SettingField('se_mubiaowendu', 1074, 2, '目标温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0503', 30, 200));
-        _this.addPoint(new meta_1.SettingField('se_qiluwendu', 1076, 2, '启炉温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0504', 0, 200));
+        _this.addPoint(new meta_1.SettingField('se_paiyanbaojingwendu', 1068, 2, '排烟报警温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0500', 50, 300));
+        _this.addPoint(new meta_1.SettingField('se_baojingwendu', 1070, 2, '报警温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0501', 0, 200));
+        _this.addPoint(new meta_1.SettingField('se_tingluwendu', 1072, 2, '停炉温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0502', 30, 200));
+        _this.addPoint(new meta_1.SettingField('se_mubiaowendu', 1074, 2, '目标温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0503', 30, 200));
+        _this.addPoint(new meta_1.SettingField('se_qiluwendu', 1076, 2, '启炉温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0504', 0, 200));
         _this.addPoint(new meta_1.SettingField('se_zhuanhuohuicha', 1078, 2, '转火回差', '℃'));
-        _this.addPoint(new meta_1.SettingField('se_qiluhuicha', 1080, 2, '启炉回差', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0506', 1, 100));
-        _this.addPoint(new meta_1.SettingField('se_kaibengwendu', 1082, 2, '开泵温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0507', 0, 200));
-        _this.addPoint(new meta_1.SettingField('se_guanbengwendu', 1084, 2, '关泵温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0508', 0, 200));
+        _this.addPoint(new meta_1.SettingField('se_qiluhuicha', 1080, 2, '启炉回差', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0506', 1, 100));
+        _this.addPoint(new meta_1.SettingField('se_kaibengwendu', 1082, 2, '开泵温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0507', 0, 200));
+        _this.addPoint(new meta_1.SettingField('se_guanbengwendu', 1084, 2, '关泵温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0508', 0, 200));
         _this.addPoint(new meta_1.SettingField('se_baojingyali', 1086, 2, '报警压力', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_tingluyali', 1088, 2, '停炉压力', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_mubiaoyali', 1090, 2, '目标压力', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_qiluyali', 1092, 2, '启炉压力', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_zhuanhuohuicha_yali_', 1094, 2, '转火回差（压力）', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_qiluhuicha_yali_', 1096, 2, '启炉回差（压力）', 'MPa', 100));
-        _this.addPoint(new meta_1.SettingField('se_qianyanshi', 1098, 2, '前延时', 's', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '050F', 1, 60));
-        _this.addPoint(new meta_1.SettingField('se_houyanshi', 1100, 2, '后延时', 's', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0510', 1, 60));
+        _this.addPoint(new meta_1.SettingField('se_qianyanshi', 1098, 2, '前延时', 's', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '050F', 1, 60));
+        _this.addPoint(new meta_1.SettingField('se_houyanshi', 1100, 2, '后延时', 's', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0510', 1, 60));
         _this.addPoint(new meta_1.SettingField('se_qianchuisao', 1102, 2, '前吹扫', 's'));
         _this.addPoint(new meta_1.SettingField('se_houchuisao', 1104, 2, '后吹扫', 's'));
         _this.addPoint(new meta_1.SettingField('se_lubibaojingwendu', 1106, 2, '炉壁报警温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_lutangchukouwendu', 1108, 2, '炉膛出口温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_baohuwendu', 1110, 2, '保护温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_bentipaiyanwendu', 1112, 2, '本体排烟温度', '℃'));
-        _this.addPoint(new meta_1.SettingField('se_jiarezushu', 1114, 2, '加热组数', '组', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0517', 1, 100));
+        _this.addPoint(new meta_1.SettingField('se_jiarezushu', 1114, 2, '加热组数', '组', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0517', 1, 100));
         _this.addPoint(new meta_1.SettingField('se_jianceyalishijian', 1116, 2, '检测压力时间', 's'));
         _this.addPoint(new meta_1.SettingField('se_houyanshi', 1118, 2, '后延时', 'm'));
         _this.addPoint(new meta_1.SettingField('se_shedingwendu', 1120, 2, '设定温度', '℃'));
@@ -434,7 +434,7 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_dianhuochenggongwendu', 1162, 2, '点火成功温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_lushuitingluwendu', 1164, 2, '炉水停炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_lushuiqiluwendu', 1166, 2, '炉水启炉温度', '℃'));
-        _this.addPoint(new meta_1.SettingField('se_meishuibaojingwendu', 1168, 2, '媒水报警温度', '℃', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0532', 50, 200));
+        _this.addPoint(new meta_1.SettingField('se_meishuibaojingwendu', 1168, 2, '媒水报警温度', '℃', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0532', 50, 200));
         _this.addPoint(new meta_1.SettingField('se_meishuitingluwendu', 1170, 2, '媒水停炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_meishuiqiluwendu', 1172, 2, '媒水启炉温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_kaibengyali_yongyudingyakongzhi_', 1174, 2, '开泵压力（用于定压控制）', 'MPa', 100));
@@ -455,8 +455,8 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_huilu5baojingwendu', 1204, 2, '回路5报警温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_huilu5kaibengwendu', 1206, 2, '回路5开泵温度', '℃'));
         _this.addPoint(new meta_1.SettingField('se_huilu5guanbengwendu', 1208, 2, '回路5关泵温度', '℃'));
-        _this.addPoint(new meta_1.SettingField('se_touqieshijian_jiarezuyong_', 1210, 2, '投切时间（加热组用）', 's', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0547', 1, 10));
-        _this.addPoint(new meta_1.SettingField('se_diaojieshijian_jiarezuyong_', 1212, 2, '调节时间（加热组用）', 'm', 0, Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting, '0548', 1, 10));
+        _this.addPoint(new meta_1.SettingField('se_touqieshijian_jiarezuyong_', 1210, 2, '投切时间（加热组用）', 's', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0547', 1, 10));
+        _this.addPoint(new meta_1.SettingField('se_diaojieshijian_jiarezuyong_', 1212, 2, '调节时间（加热组用）', 'm', 0, Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting, '0548', 1, 10));
         _this.addPoint(new meta_1.SettingField('se_chukouchaoyabaojing', 1214, 2, '出口超压报警', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_jinkouchaoyabaojing', 1216, 2, '进口超压报警', 'MPa', 100));
         _this.addPoint(new meta_1.SettingField('se_cainuanbaojingwendu', 1218, 2, '采暖报警温度', '℃'));
@@ -524,7 +524,7 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         _this.addPoint(new meta_2.StartStopField('st_qidongshijian6_shifen_', 1578, 2, '启动时间6（时 分）'));
         _this.addPoint(new meta_2.StartStopField('st_tingzhishijian6_shifen_', 1580, 2, '停止时间6（时 分）'));
         //
-        _this.addPoint(new meta_1.RanShaoQiField('de_ranshaoqi', 1587, 2, '燃烧器', Map_CTL_NJZJ_IP_485.coms_ranshaoqi_status));
+        _this.addPoint(new meta_1.RanShaoQiField('de_ranshaoqi', 1587, 2, '燃烧器', Map_CTL_NJZJ_IP_485_1749.coms_ranshaoqi_status));
         //this.addPoint(new DeviceField('de_ranshaoqi', 1587, 2, '燃烧器', Map_CTL_NJZJ.coms_device))
         _this.addPoint(new meta_1.JieReZuField('de_jiarezu', 1589, 2, '加热组', CTL_NJZJ_1.Map_CTL_NJZJ.coms_device));
         // this.addPoint(new DeviceField('de_jiarezu', 1589, 2, '加热组', Map_CTL_NJZJ.coms_device))
@@ -567,8 +567,8 @@ var Map_CTL_NJZJ_IP_485 = /** @class */ (function (_super) {
         return _this;
     }
     //IP.KEY_POINT_DEVICE_LUPAI
-    Map_CTL_NJZJ_IP_485.Commands_Key_Parameters_Setting = '参数设置';
-    Map_CTL_NJZJ_IP_485.Commands_Key_System_Ctl = '系统控制';
-    return Map_CTL_NJZJ_IP_485;
+    Map_CTL_NJZJ_IP_485_1749.Commands_Key_Parameters_Setting = '参数设置';
+    Map_CTL_NJZJ_IP_485_1749.Commands_Key_System_Ctl = '系统控制';
+    return Map_CTL_NJZJ_IP_485_1749;
 }(CTL_NJZJ_1.Map_CTL_NJZJ));
-exports.Map_CTL_NJZJ_IP_485 = Map_CTL_NJZJ_IP_485;
+exports.Map_CTL_NJZJ_IP_485_1749 = Map_CTL_NJZJ_IP_485_1749;

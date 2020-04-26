@@ -278,7 +278,6 @@ Page({
                       openId: app.globalData.openid,
                       deviceNo: deviceNo,
                       deviceType: deviceType,
-                      mqttName: "0",
                       deviceName: null,
                       imgStyle: 0
                     },

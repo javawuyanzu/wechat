@@ -12,11 +12,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var _4J_BS_BT_1 = require("./AScript/4J_BS_BT");
+var CTL_NJZJ_IP_485_1 = require("../../CTL_NJZJ_IP_485");
 module.exports = /** @class */ (function (_super) {
-    __extends(CTL_RT_T2_RYZQ_010, _super);
-    function CTL_RT_T2_RYZQ_010() {
+    __extends(CTL_NJZJ_IPK2_485_1749, _super);
+    function CTL_NJZJ_IPK2_485_1749() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return CTL_RT_T2_RYZQ_010;
-}(_4J_BS_BT_1.CTL_RT_T2_RYZQ_4JBSBT));
+    return CTL_NJZJ_IPK2_485_1749;
+}(CTL_NJZJ_IP_485_1.IP_485));

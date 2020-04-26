@@ -1,0 +1,44 @@
+<!--release wxml / 发布编辑页-->
+<form id="" bindsubmit="formsubmit">
+ <view class="top">
+  <view class="title">
+    <!-- <input type="text" maxlength="15" name="title" placeholder="取一个标题吧，记得多带一些关键字" class="input-title" placeholder-class="placeholder-title" bindinput="inputTitle" value="{{title}}">
+    </input> -->
+    <!-- <view class="input-limit"><text style="color:{{limit[0].beyondStyle}};">{{limit[0].current}}/{{limit[0].maxlength}}       </text></view> -->
+  </view>
+  <view class="description">
+   
+    <textarea maxlength="200" name="description" placeholder="请输入设备维保的详细信息" class="textarea-description" placeholder-class="placeholder-description" bindinput="inputDescription" value="{{description}}"></textarea>
+     <view class="textarea-limit"><text style="color:{{limit[1].beyondStyle}};">{{limit[1].current}}/{{limit[1].maxlength}}       </text></view>
+  <!--  -->
+
+   
+  </view>
+    <view class=''>
+    <button class="yuyinBtn {{recordState == true ? 'yuyinBtnBg':''}}" bindtouchstart="touchStart" bindtouchend="touchEnd">
+      <text wx:if="{{recordState == false}}">按住 说话</text>
+      <text wx:else>松开 结束</text>
+    </button>
+  </view>
+  <!-- 开始语音 弹出语音图标表示正在录音 -->
+  <cover-view class="startYuyinImage" wx:if="{{recordState == true}}">
+    <cover-image src="../resource/image/yuyin-min.png"></cover-image>
+    <cover-view>开始语音</cover-view>
+  </cover-view>
+  <view class="image">
+    <imgupload
+      id = "imgupload"
+    >
+    </imgupload>
+    
+  </view>
+ </view>
+<!-- <view class="yuyinWrap">
+  
+</view> -->
+
+
+  <view class="conbtn">
+    <button id="submit" form-type="submit" class="btn" style="background:{{btncolor}};">发布</button>
+  </view>
+</form>

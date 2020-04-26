@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var CTL_NJZJ_IP_485_1 = require("../NJZJ/CTL_NJZJ_IP_485");
+var CTL_NJZJ_IP_485_1749_1 = require("../NJZJ/CTL_NJZJ_IP_485_1749");
 var meta_1 = require("../../../../meta/NJZJ/485/meta");
 var meta_2 = require("../../../../meta/NJZJ/meta");
 module.exports = /** @class */ (function (_super) {
@@ -164,4 +164,4 @@ module.exports = /** @class */ (function (_super) {
         // this.addPoint(new SettingField("se_gonggongcanshu20", 1980, 2, "公共参数20"));
     }
     return Map_CTL_BJKN_IP;
-}(CTL_NJZJ_IP_485_1.Map_CTL_NJZJ_IP_485));
+}(CTL_NJZJ_IP_485_1749_1.Map_CTL_NJZJ_IP_485_1749));
