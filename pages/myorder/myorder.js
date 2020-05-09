@@ -30,7 +30,7 @@ return statusJson;
   onLoad: function () {
     var that = this;
     wx.request({
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_Order/list',
+      url: 'https://apis.sdcsoft.com.cn/wechat/JinRong_Order/list',
       method: "GET",
       data: {
         openId: app.globalData.openid,

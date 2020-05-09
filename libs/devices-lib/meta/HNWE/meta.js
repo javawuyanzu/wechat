@@ -70,12 +70,14 @@ exports.DemandField = DemandField;
 var ExceptionField_1 = require("../ExceptionField");
 var ExceptionField = /** @class */ (function (_super) {
     __extends(ExceptionField, _super);
-    function ExceptionField(name, startIndex, bytesLength, title, valueMap) {
+    function ExceptionField(name, startIndex, bytesLength, title, valueMap, level) {
+        if (level === void 0) { level = ExceptionField.Exception_Waring; }
         var _this = _super.call(this) || this;
         _this.name = name;
         _this.startIndex = startIndex;
         _this.bytesLength = bytesLength;
         _this.title = title;
+        _this.level = level;
         _this.valueMap = new Collections_1.NumberHashMap(valueMap);
         return _this;
     }

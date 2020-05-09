@@ -53,7 +53,7 @@ var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_bianpinqiguzhangbaojing", 5, 2, "变频器故障报警", 6, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 5, 2, "超压报警", 9, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close), "oc_chaoyabaojing");
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqiguzhang", 5, 2, "燃烧器故障", 10, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 5, 2, "燃气泄漏报警", 11), "oc_ranqixieloubaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 5, 2, "燃气泄漏报警", 11, meta_1.ExceptionField.Exception_Error), "oc_ranqixieloubaojing");
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyalidibaojing", 5, 2, "燃气压力低报警", 12, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_ranqiyaligaobaojing", 5, 2, "燃气压力高报警", 13, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_Add_SHUI_BENG_1, 9, 2, "给水泵控制（主）", 3, Map_CTL_RT_T2_RYZQ_Ts.coms_open_close));
@@ -70,15 +70,15 @@ var Map_CTL_RT_T2_RYZQ_Ts = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField("de_lengningxunhuanbeng_zidong/shoudong_", 49, 2, "循环泵", 3, Map_CTL_RT_T2_RYZQ_Ts.coms_auto));
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweichuanganqiduanlu1", 45, 2, "水位传感器断路", 3));
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweichuanganqiduanlu", 45, 2, "水位传感器短路", 4));
-        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibaojing_dianliu_", 45, 2, "极限低水位报警（电流）", 5));
-        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing_dianliu_", 45, 2, "高水位报警（电流）", 6));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 45, 2, "排烟温度高报警", 7), "ex_paiyanwendugaobaojing");
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, "极限低水位报警", 8), "ex_jixiandishuiweibaojing");
+        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibaojing_dianliu_", 45, 2, "极限低水位报警（电流）", 5, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing_dianliu_", 45, 2, "高水位报警（电流）", 6, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 45, 2, "排烟温度高报警", 7, meta_1.ExceptionField.Exception_Error), "ex_paiyanwendugaobaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, "极限低水位报警", 8, meta_1.ExceptionField.Exception_Error), "ex_jixiandishuiweibaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweidianjiluojicuo", 45, 2, "水位电极逻辑错", 9));
         _this.addPoint(new meta_1.ExceptionField("ex_dishuiweibaojing", 45, 2, "低水位报警", 10));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 45, 2, "高水位报警", 11), "ex_gaoshuiweibaojing");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 45, 2, "高水位报警", 11, meta_1.ExceptionField.Exception_Error), "ex_gaoshuiweibaojing");
         _this.addPoint(new meta_1.ExceptionField("ex_bianpinqiguzhang", 45, 2, "变频器故障", 12));
-        _this.addPoint(new meta_1.ExceptionField("ex_ranqiyalidibaojing", 45, 2, "燃气压力低报警", 14));
+        _this.addPoint(new meta_1.ExceptionField("ex_ranqiyalidibaojing", 45, 2, "燃气压力低报警", 14, meta_1.ExceptionField.Exception_Error));
         //缺少
         //水位测试 4电极/6电极/4-20mA 
         //燃烧器控制方式 压力控制器/压力变送器选择信息

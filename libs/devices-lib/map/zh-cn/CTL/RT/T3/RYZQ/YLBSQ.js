@@ -26,7 +26,7 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 17, 2, "蒸汽压力", "Mpa", 100));
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu1", 45, 2, "压力变送器断路", 0));
         _this.addPoint(new meta_1.ExceptionField("ex_yalibiansongqiduanlu", 45, 2, "压力变送器短路", 1));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing_biansongqi_", 45, 2, "超压报警（变送器）", 2));
+        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing_biansongqi_", 45, 2, "超压报警（变送器）", 2, meta_1.ExceptionField.Exception_Error));
         return _this;
     }
     return Map_CTL_RT_T3_RYZQ_YLBSQ;

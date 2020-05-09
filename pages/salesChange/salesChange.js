@@ -22,6 +22,10 @@ Page({
     comm:0,
     ctlTypeList:[],
     plcTypeList:[],
+    canctlarray: ["不可控", "可控"],
+    canctl: 0,
+    deviceDataMaparray: ["否", "是"],
+    deviceDataMap: 0,
   },
   bindsim: function (e) {
     this.setData({
@@ -39,42 +43,87 @@ Page({
         })
         return
       }
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/wechat/device/modify',
+        data: {
+          deviceNo: that.data.deviceNo,
+          status: that.data.status,
+          prefix: that.data.prefix,
+          deviceType: that.data.type,
+          power: that.data.power,
+          media: that.data.media,
+          iMEI: that.data.sim,
+          isDeviceDataMap: that.data.deviceDataMap,
+          isCanCtl: that.data.canctl,
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res)
+          wx.showToast({
+            title: '修改成功',
+            icon: 'success',
+            duration: 2000,
+            success(res) {
+              wx.switchTab({
+                url: '../index/index'
+              })
+            }
+          });
+        }
+      })
+    }else{
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/wechat/device/modify',
+        data: {
+          deviceNo: that.data.deviceNo,
+          status: that.data.status,
+          prefix: that.data.prefix,
+          deviceType: that.data.type,
+          power: that.data.power,
+          media: that.data.media,
+          isDeviceDataMap: that.data.deviceDataMap,
+          isCanCtl: that.data.canctl,
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res)
+          wx.showToast({
+            title: '修改成功',
+            icon: 'success',
+            duration: 2000,
+            success(res) {
+              wx.switchTab({
+                url: '../index/index'
+              })
+            }
+          });
+        }
+      })
     }
-    wx.request({
-      url: 'https://apis.sdcsoft.com.cn/wechat/device/modify',
-      data: {
-        deviceNo: that.data.deviceNo,
-        status: that.data.status,
-        prefix: that.data.prefix,
-        deviceType: that.data.type,
-        power: that.data.power,
-        media: that.data.media,
-        iMEI: that.data.sim,
-      },
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log(res)
-        wx.showToast({
-          title: '修改成功',
-          icon: 'success',
-          duration: 2000,
-          success(res) {
-            wx.switchTab({
-              url: '../index/index'
-            })
-          }
-        });
-      }
-    })
+  
   },
   bindPickerChange_comm: function (e) {
     var that = this
-    console.log(e.detail.value)
     that.setData({
       comm: e.detail.value,
+    })
+  },
+  bindPickerChange_canctl: function (e) {
+    var that = this
+    that.setData({
+      canctl: e.detail.value,
+    })
+  },
+  bindPickerChange_deviceDataMap: function (e) {
+    var that = this
+    that.setData({
+      deviceDataMap: e.detail.value,
     })
   },
   bindPickerChange_prefix: function (e) {
@@ -147,7 +196,25 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-           
+            console.log(res)
+            if (res.data.data.canCtl){
+              that.setData({
+                canctl: 1
+              })
+            }else{
+              that.setData({
+                canctl: 0
+              })
+            }
+            if (res.data.data.deviceDataMap) {
+              that.setData({
+                deviceDataMap: 1
+              })
+            } else {
+              that.setData({
+                deviceDataMap: 0
+              })
+            }
             var simtemp=""
             if (res.data.data.iMEI == null || res.data.data.iMEI =='null'){
               simtemp ="898607B61518900"

@@ -32,8 +32,8 @@ var Map_CTL_RT_X1_3JDJD = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField('oc_waibuliansuobaohu', 5, 2, '外部联锁保护', 5, Map_CTL_RT_X1_3JDJD.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField('oc_chaoyabaojing', 5, 2, '超压报警', 6, Map_CTL_RT_X1_3JDJD.coms_open_close));
         _this.addPoint(new meta_1.ExceptionField('ex_shuiweichuanganqiguzhang', 45, 2, '水位传感器故障', 3));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, '超压报警', 4));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 45, 2, '炉壁超温报警', 5));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, '超压报警', 4, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 45, 2, '炉壁超温报警', 5, meta_1.ExceptionField.Exception_Error));
         return _this;
     }
     Map_CTL_RT_X1_3JDJD.DJD_YaLiStatus = {

@@ -21,6 +21,7 @@ Page({
     smsExPrice: null,
     smsExAmount: 0,
     iMEI:null,
+    media:-1,
   },
   addExAmount: function(event) {
     var that = this
@@ -75,7 +76,7 @@ Page({
     var data = event.currentTarget.dataset
     var resId = data.resid
     wx.request({
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId/resId',
+      url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId/resId',
       data: {
         deviceNo: that.data.deviceNo,
         openId: app.globalData.openid,
@@ -94,7 +95,7 @@ Page({
         } else {
           wx.request({
             //获取openid接口  
-            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/list/resid',
+            url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/list/resid',
             data: {
               resId: resId,
             },
@@ -672,7 +673,7 @@ Page({
   onLoad: function(options) {
     var that = this;
     that.setData({
-      deviceNo: options.deviceNo
+      deviceNo: options.deviceNo,
     })
     wx.setStorage({
       key: "orders",
@@ -697,7 +698,7 @@ Page({
     })
     wx.request({
       //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/Resource/list',
+      url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
       method: 'GET',
       success: function(res) {
         console.log(res)
@@ -713,11 +714,15 @@ Page({
           },
           method: 'GET',
           success: function (res) {
+            
             for (var i in result) {
               if (result[i].id == 6 & res.data.data.iMEI == null) {
                 result.splice(i, 1)
-               
-              } else {
+              } else if (result[i].id == 4  ) {
+                if (res.data.data.canCtl != true){
+                    result.splice(i, 1)
+                }
+              }  else {
                 that.setData({
                   iMEI: res.data.data.iMEI
                 })
@@ -818,7 +823,7 @@ Page({
           }
           wx.request({
             //获取openid接口  
-            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Relation_DeviceSmsMap/find/deviceNo/employeeMobile',
+            url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/find/deviceNo/employeeMobile',
             method: 'GET',
             data: {
               deviceNo: that.data.deviceNo,

@@ -87,7 +87,7 @@ Page({
     })
     wx.request({
       //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
+      url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/list',
       data: {
         openId: app.globalData.openid,
       },

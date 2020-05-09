@@ -35,18 +35,18 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 13, 2, "蒸汽压力", "MPa", 100));
         _this.addPoint(new meta_1.MockField("mo_paiyanwendu", 15, 2, "排烟温度", "℃"));
         _this.addPoint(new meta_1.ExceptionField("ex_paiyanwenduchuangganqiguzhang", 45, 2, "排烟温度传感器故障", 0));
-        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "排烟温度高报警", 1));
-        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibaojing", 45, 2, "极限低水位报警 ", 2));
-        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 3));
+        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "排烟温度高报警", 1, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibaojing", 45, 2, "极限低水位报警 ", 2, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 3, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweichuanganqiguzhang", 45, 2, "水位传感器故障 ", 4));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警", 5));
-        _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhang", 45, 2, "燃烧器故障", 6));
+        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警", 5, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhang", 45, 2, "燃烧器故障", 6, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_qingfuweiranshaoqi", 45, 2, "请复位燃烧器 ", 7));
-        _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障", 8));
+        _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障", 8, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_cunchuqiguzhang", 45, 2, "存储器故障", 9));
         _this.addPoint(new meta_1.ExceptionField("ex_zhengqiyalichuangganqiguzhang", 45, 2, "蒸汽压力传感器故障", 10));
-        _this.addPoint(new meta_1.ExceptionField("ex_ranqiyalidibaojing", 45, 2, "燃气压力低报警", 11));
-        _this.addPoint(new meta_1.ExceptionField("ex_ranqixieloubaojing", 45, 2, "燃气泄漏报警", 12));
+        _this.addPoint(new meta_1.ExceptionField("ex_ranqiyalidibaojing", 45, 2, "燃气压力低报警", 11, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_ranqixieloubaojing", 45, 2, "燃气泄漏报警", 12, meta_1.ExceptionField.Exception_Error));
         return _this;
     }
     return Map_CTL_RT_X7_3;

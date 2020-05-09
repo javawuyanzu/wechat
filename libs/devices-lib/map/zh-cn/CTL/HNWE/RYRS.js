@@ -39,7 +39,7 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.OpenCloseField('oc_fa2', 4, 1, '阀2', 2, Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.OpenCloseField('oc_APS', 4, 1, 'APS', 3, Map_CTL_HNWR_485.coms_open_close));
             _this.addPoint(new meta_1.OpenCloseField('oc_suoding', 5, 1, '错误标志', 1, Map_CTL_HNWR_485.coms_biaozhi));
-            _this.addPoint(new meta_1.ExceptionField('ex_OEMcuowuhao', 6, 1, '报警', Map_CTL_HNWR_485.coms_ExceptionField));
+            _this.addPoint(new meta_1.ExceptionField('ex_OEMcuowuhao', 6, 1, '报警', Map_CTL_HNWR_485.coms_ExceptionField, meta_1.ExceptionField.Exception_Error));
             //
             _this.addPoint(new meta_1.DemandField('mo_jiarexuqiu', 19, 1, '加热需求', '', Map_CTL_HNWR_485.coms_xuqiu));
             _this.addPoint(new meta_1.SettingField('mo_shedingzhi', 22, 2, '设定值'));

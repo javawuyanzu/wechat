@@ -33,9 +33,9 @@ var Map_CTL_RT_X1_HNRT_RYZQ_6 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField('de_bushuibeng_shoudong/zidong_', 49, 2, '给水泵 手/自', 1, Map_CTL_RT_X1_HNRT_RYZQ_6.coms_auto));
         _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu, 13, 2, '排烟温度', '℃'), 'mo_paiyanwendu');
         _this.addPoint(new meta_1.ExceptionField('ex_paiyanwenduchuanganqiguzhang', 45, 2, '排烟温度传感器故障', 3));
-        _this.addPoint(new meta_1.ExceptionField('ex_paiyanwendugao', 45, 2, '排烟温度高', 4));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, '超压报警', 5));
-        _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhangbaojing', 45, 2, '燃烧器故障报警', 6));
+        _this.addPoint(new meta_1.ExceptionField('ex_paiyanwendugao', 45, 2, '排烟温度高', 4, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, '超压报警', 5, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhangbaojing', 45, 2, '燃烧器故障报警', 6, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.OpenCloseField('oc_fuhetiaojie', 5, 2, '负荷调节', 4, Map_CTL_RT_X1_HNRT_RYZQ_6.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField('oc_qitingkongzhi', 5, 2, '启停控制', 5, Map_CTL_RT_X1_HNRT_RYZQ_6.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField('oc_chaoyabaojing', 5, 2, '超压报警', 6, Map_CTL_RT_X1_HNRT_RYZQ_6.coms_open_close));

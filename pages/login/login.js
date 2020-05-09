@@ -280,41 +280,61 @@ Page({
     }else {
       var that = this
       var phone = that.data.phone;
-      wx.request({
-        url: 'https://apis.sdcsoft.com.cn/wechat/user/bind/wechat',
-        method: "GET",
-        data: {
-          mobileNumber: that.data.phone,
-          openId: app.globalData.openid,
-          unionId: app.globalData.unionId
-        },
-        header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
-        success: function (res) {
-          console.log(res)
-          if (res.data.code == 1) {
-            wx.showToast({
-              icon: 'none',
-              title: that.data.content.register_existuser,
-              duration: 2000
-            })
-          }
-          if (res.data.code == 0) {
-            wx.showToast({
-              title: that.data.content.login_sccess,
-              duration: 2000,
-              success(res) {
-                wx.switchTab({
-                  url: '/pages/deviceList/deviceList'
+      
+        wx.login({
+          success: function (res) {
+            wx.request({
+              //获取openid接口  
+              url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+              data: {
+                js_code: res.code,
+              },
+              method: 'GET',
+              success: function (res) {
+                var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+                app.globalData.openid = openid
+                wx.request({
+                  url: 'https://apis.sdcsoft.com.cn/wechat/user/bind/wechat',
+                  method: "GET",
+                  data: {
+                    mobileNumber: that.data.phone,
+                    openId: openid,
+                    unionId: app.globalData.unionId
+                  },
+                  header: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
+                  success: function (res) {
+                    console.log(res)
+                    if (res.data.code == 1) {
+                      wx.showToast({
+                        icon: 'none',
+                        title: that.data.content.register_existuser,
+                        duration: 2000
+                      })
+                    }
+                    if (res.data.code == 0) {
+                      wx.showToast({
+                        title: that.data.content.login_sccess,
+                        duration: 2000,
+                        success(res) {
+                          wx.switchTab({
+                            url: '/pages/deviceList/deviceList'
+                          })
+                        }
+                      })
+                      wx.setStorage({
+                        key: 'wxEnterpriseName',
+                        data: that.data.handleEName
+                      })
+                    }
+                  }
                 })
               }
             })
-            wx.setStorage({
-              key: 'wxEnterpriseName',
-              data: that.data.handleEName
-            })
           }
-        }
-      })
+        })
+
+      
+     
 
     }
   },

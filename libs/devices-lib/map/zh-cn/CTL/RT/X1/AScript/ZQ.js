@@ -23,8 +23,8 @@ var Map_CTL_RT_X1_ZhengQi = /** @class */ (function (_super) {
     function Map_CTL_RT_X1_ZhengQi() {
         var _this = _super.call(this) || this;
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "介质类型", 1, Map_CTL_RT_X1_ZhengQi.coms_media));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, '极限低水位报警', 0));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 45, 2, '高水位报警', 1));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, '极限低水位报警', 0, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 45, 2, '高水位报警', 1, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_shuiweichuanganqiguzhang', 45, 2, '水位传感器故障', 2));
         _this.addPoint(new meta_1.OpenCloseField('oc_jixiandishuiweidianji', 5, 2, '极限低水位电极', 0, Map_CTL_RT_X1_ZhengQi.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField('oc_didianji', 5, 2, '低位电极', 1, Map_CTL_RT_X1_ZhengQi.coms_open_close));

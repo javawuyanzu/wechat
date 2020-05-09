@@ -39,10 +39,10 @@ var Map_CTL_RT_X1_BKSR_RMZQ_9 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField(RT_1.CTL_RT.KEY_POINT_GU_FENG_FAN_1, 9, 2, "鼓风机", 1, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_open_close));
         _this.addPoint(new meta_1.MockField("mo_paiyanwendu", 13, 2, "排烟温度", "℃"));
         _this.addPoint(new meta_1.ExceptionField("ex_paiyanwenduchuanganqiguzhang", 45, 2, "排烟温度传感器故障", 1));
-        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugao", 45, 2, "排烟温度高", 2));
-        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 3));
+        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugao", 45, 2, "排烟温度高", 2, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 3, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweichuanganqiguzhang", 45, 2, "水位传感器故障", 4));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警", 5));
+        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警", 5, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.OpenCloseField("oc_dianjiedianyalibiaodizhen", 5, 2, "电接点压力低针", 4, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_dianjiedianyalibiaogaozhen", 5, 2, "电接点压力高针", 5, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_chaoyabaojing", 5, 2, "超压报警", 6, Map_CTL_RT_X1_BKSR_RMZQ_9.coms_open_close));

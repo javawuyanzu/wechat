@@ -37,7 +37,7 @@ Page({
             if (that.data.timerStates) {
               that.httptimer()
             }
-          },5000)
+          }, 10000)
         })
       }
     })
@@ -70,7 +70,7 @@ Page({
                  
                   wx.request({
                     //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/list',
+                    url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/list',
                     data: {
                       openId: openid,
                     },
@@ -122,7 +122,7 @@ Page({
     that.setData({
       ifName: true,
       lock: true,
-      deviceNo: e.currentTarget.dataset.id
+      deviceNo: e.currentTarget.dataset.id,
     })
   },
   closeTap: function(e) {
@@ -168,6 +168,14 @@ Page({
   toRepair: function (e) {
     wx.navigateTo({
       url: "/pages/repair/repair?deviceNo=" + this.data.deviceNo,
+    })
+    this.setData({
+      ifName: false
+    })
+  },
+  toPay: function (e) {
+    wx.navigateTo({
+      url: "../payMenu/payMenu?deviceNo=" + this.data.deviceNo 
     })
     this.setData({
       ifName: false
@@ -222,7 +230,7 @@ Page({
         })
         wx.request({
           //获取openid接口   
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/remove',
+          url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/remove',
           data: {
             openId: app.globalData.openid,
             deviceNo: that.data.deviceNo
@@ -291,7 +299,7 @@ Page({
             deviceList[i].deviceName = that.data.deviceTitle
             wx.request({
               //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/modify',
+              url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/modify',
               data: {
                 openId: app.globalData.openid,
                 deviceNo: that.data.deviceNo,
@@ -461,7 +469,7 @@ Page({
                     if (list.length > 0) {
                       wx.request({
                         //获取openid接口   
-                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create/many',
+                        url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create/many',
                         data: {
                           storeList: JSON.stringify(list).replace(/imgstyle/g, "imgStyle"),
                         },
@@ -572,13 +580,13 @@ Page({
       
       wx.setTabBarItem({
           index: 0,
-          text: '设备',
+        text: '主页',
           iconPath: 'images/tab_activity.png',
           selectedIconPath: 'images/tab_activity_selected.png'
         }),
         wx.setTabBarItem({
           index: 1,
-          text: '主页',
+          text: '我的',
           iconPath: 'images/tab_home.png',
           selectedIconPath: 'images/tab_home_selected.png'
         }),
@@ -804,7 +812,7 @@ Page({
           console.log()
           if (res.data.data.iMEI != null) {
             wx.request({
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/smsPaymentRecords/list/deviceNo',
+              url: 'https://apis.sdcsoft.com.cn/wechat/smsPaymentRecords/list/deviceNo',
               data: {
                 deviceNo: deviceNo,
               },
@@ -825,7 +833,7 @@ Page({
                   })
                 } else {
                   wx.request({
-                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Sim/iMEI',
+                    url: 'https://apis.sdcsoft.com.cn/wechat/Sim/iMEI',
                     data: {
                       iMEI: iMEI,
                     },
@@ -834,12 +842,25 @@ Page({
                     },
                     method: 'GET',
                     success: function (res) {
-                      console.log(res)
                       var list = that.data.imgList
 
                       for (var i = 0; i < list.length; i++) {
                         if (list[i].deviceNo == deviceNo) {
-                          list[i].simTitle = "物联卡余额:" + res.data.result[0].balance
+                          if (res.data.state=='00'){
+                              list[i].simTitle = "物联卡状态:正常" 
+                          }
+                          if (res.data.state == '01') {
+                            list[i].simTitle = "物联卡状态:代缴费"
+                          }
+                          if (res.data.state == '02') {
+                            list[i].simTitle = "物联卡状态:欠费"
+                          }
+                          if (res.data.state == '03') {
+                            list[i].simTitle = "物联卡状态:停机"
+                          }
+                          if (res.data.state == '04') {
+                            list[i].simTitle = "物联卡状态:销号"
+                          }
                         }
                       }
                       that.setData({
@@ -999,8 +1020,9 @@ Page({
                   for (var index in data.getBaseInfoFields().map) {
                     if (data.getBaseInfoFields().map[index].name === "o_system_status") {
                       runstate1 = data.getBaseInfoFields().map[index].valueString
-                      //console.log(data.getBaseInfoFields().map[index].valueString)
+                     
                     }
+                    
                   }
                   for (var index in data.getMockFields().map) {
                     if (mock11 === "") {
@@ -1051,7 +1073,7 @@ Page({
                       type: deviceType,
                       lang: app.globalData.lang,
                       jiarezu: jiarezu1,
-                      simTitle: simTitle
+                      simTitle: simTitle,
                     })
                     that.setData({
                       imgList: ilist

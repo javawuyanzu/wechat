@@ -1,0 +1,26 @@
+<!--选择框-->
+<view class="product-list">
+ <!--条件选择-->
+ <view class="choice-bar">
+  <view bindtap="opens" data-item="1" class="chioce-item" hover-class="click-once-opaque">{{start}}
+   <image class="icon-chioce" src="{{!isstart?openimg: offimg}}"></image>
+  </view>
+  <view class="sorting-list{{!isstart?' chioce-list-hide':' chioce-list-show'}}" style="z-index: 999">
+   <view wx:for="{{slist}}" catchtap="onclicks1" data-index="{{index}}" class="sorting-item" hover-class="click-once" wx:key="userInfoListId" >{{item.name}}</view>
+  </view>
+ </view>
+  <view  wx:if="{{index==0}}">
+    <view wx:for="{{wechat}}" wx:key="wechat">
+      <view style="font-size: 16px;margin: 20rpx 0 20rpx 30px">{{item.title}}</view>
+     <video  style="width: 100%;"  show-center-play-btn="{{true}}" src='{{item.src}}' controls="true" title="{{item.title}}"></video>
+    </view>
+  </view>
+   
+ 
+  <view  wx:if="{{index==1}}">
+       <view wx:for="{{boilermanage}}" wx:key="boilermanage">
+      <view style="font-size: 16px;margin: 20rpx 0 20rpx 30px">{{item.title}}</view>
+     <video  style="width: 100%;"  show-center-play-btn="{{true}}" src='{{item.src}}' controls="true" title="{{item.title}}"></video>
+    </view>
+  </view>
+</view>

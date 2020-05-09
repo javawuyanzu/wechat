@@ -291,7 +291,7 @@
     </view>
   </view>
 </view>
-<view wx:if="{{isHidden}}" class="guide" bindtap="getHidden">
+<!-- <view wx:if="{{isHidden}}" class="guide" bindtap="getHidden">
   <image style="width: 125rpx; height:150rpx" src="../../images/click.png"></image>
   当前处于收费测试期，服务功能0元购！
-</view>
+</view> -->

@@ -12,6 +12,17 @@
   </view>
 
   <view class="user-list">
+  <navigator url="../contactUs/contactUs" hover-class="none">
+      <view class="user-list-item">
+        <view class="item-left">
+          <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
+          <text>联系我们</text>
+        </view>
+        <view class="item-right">
+          <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
+        </view>
+      </view>
+    </navigator>
     <navigator url="../warningType/warningType" hover-class="none">
       <view class="user-list-item">
         <view class="item-left">
@@ -23,7 +34,7 @@
         </view>
       </view>
     </navigator>
-     <!-- <navigator url="../userType/userType" hover-class="none">
+     <navigator url="../userType/userType" hover-class="none">
       <view class="user-list-item">
         <view class="item-left">
           <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
@@ -33,7 +44,7 @@
           <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
         </view>
       </view>
-    </navigator> -->
+    </navigator>
     <view wx:if="{{sole}}">
       <navigator url="../soldUpdate/soldUpdate" hover-class="none">
         <view class="user-list-item">
@@ -117,3 +128,4 @@
     </view>
   </block>
 </view>
+ 

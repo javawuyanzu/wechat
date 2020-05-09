@@ -1,0 +1,47 @@
+<view class="page-phone" style="margin-top: 30rpx;">
+    <view class="header">
+      <view class="wx-title">简洁软件</view>
+      <view class="wx-desc">专注物联网项目开发！</view>
+      <image src="{{logosrc}}" class="logoimg"></image>
+    </view>
+
+    <view class="content">
+
+      <view class="wx-cell">
+         <view class="icon">
+            <image src="{{adrimg}}" class="icon-postion"></image>
+         </view>
+         <view class="cell-bd" bindtap="getLocation">山东省泰安市泰山区田园大街中段</view>
+        
+      </view>
+
+      <view class="wx-cell">
+         <view class="icon">
+            <image src="{{clockimg}}" class="icon-postion"></image>
+         </view>
+         <view class="cell-bd">8：00 - 18：00</view>
+      </view>
+
+      <view class="wx-cell" bindtap="calling1">
+         <view class="icon">
+            <image src="{{phoneimg}}" class="icon-postion"></image>
+         </view>
+         <view class="cell-bd">18254809623</view>
+      </view>
+      <view class="wx-cell" bindtap="calling2">
+         <view class="icon">
+            <image src="{{phoneimg}}" class="icon-postion"></image>
+         </view>
+         <view class="cell-bd">18888281821</view>
+      </view>
+      <view class="wx-cell" bindtap="calling3">
+         <view class="icon">
+            <image src="{{phoneimg}}" class="icon-postion"></image>
+         </view>
+         <view class="cell-bd">15153872106</view>
+      </view>
+
+    </view>
+
+ 
+</view>

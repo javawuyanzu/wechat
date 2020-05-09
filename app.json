@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/deviceList/deviceList",
+    "pages/download/download",
+    "pages/help/help",
     "pages/repair/repair",
     "pages/operation/operation",
     "pages/login/login",
@@ -17,7 +19,8 @@
     "pages/order/order",
     "pages/myorder/myorder",
     "pages/orderItem/orderItem",
-    "pages/userType/userType"
+    "pages/userType/userType",
+    "pages/contactUs/contactUs"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -29,13 +32,13 @@
     "list": [
       {
         "pagePath": "pages/deviceList/deviceList",
-        "text": "设备",
+        "text": "主页",
         "iconPath": "images/tab_activity.png",
         "selectedIconPath": "images/tab_activity_selected.png"
       },
       {
         "pagePath": "pages/index/index",
-        "text": "主页",
+        "text": "我的",
         "iconPath": "images/tab_home.png",
         "selectedIconPath": "images/tab_home_selected.png"
       },
@@ -44,6 +47,12 @@
         "text": "添加",
         "iconPath": "images/add.png",
         "selectedIconPath": "images/add_select.png"
+      },
+      {
+        "pagePath": "pages/help/help",
+        "text": "帮助",
+        "iconPath": "images/tab_help.png",
+        "selectedIconPath": "images/tab_help_selected.png"
       }
     ],
     "color": "#888888",

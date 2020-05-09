@@ -23,9 +23,9 @@ var Map_CTL_RT_X1_ReShui = /** @class */ (function (_super) {
     function Map_CTL_RT_X1_ReShui() {
         var _this = _super.call(this) || this;
         _this.addPoint(new FixedValueField_1.FixedValueField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_MEDIA, "介质类型", 0, Map_CTL_RT_X1_ReShui.coms_media));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, '极限低水位报警', 0));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, '极限低水位报警', 0, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_chushuiwenduchuanganqiguzhang', 45, 2, '出水温度传感器故障', 1));
-        _this.addPoint(new meta_1.ExceptionField('ex_chushuiwendugaobaojing', 45, 2, '出水温度高报警', 2));
+        _this.addPoint(new meta_1.ExceptionField('ex_chushuiwendugaobaojing', 45, 2, '出水温度高报警', 2, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.MockField("mo_chushuiwendu", 13, 2, "出水温度", "℃"));
         _this.addPoint(new meta_1.SettingField("se_baojingwendu", 57, 2, "报警温度", "℃"));
         _this.addPoint(new meta_1.SettingField("se_shangxianwendu", 59, 2, "上限温度", "℃"));

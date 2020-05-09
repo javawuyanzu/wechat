@@ -105,7 +105,7 @@ Page({
                     var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
                     var openidmax = res.data.openid
                     wx.request({
-                      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_Order/create',
+                      url: 'https://apis.sdcsoft.com.cn/wechat/JinRong_Order/create',
                       method: "POST",
                       data: {
                         status: 0,
@@ -141,7 +141,7 @@ Page({
                               })
                             }
                             wx.request({
-                              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_OrderItem/wx/create/many',
+                              url: 'https://apis.sdcsoft.com.cn/wechat/JinRong_OrderItem/wx/create/many',
                               method: "POST",
                               data: {
                                 jinRong_OrderItemList: JSON.stringify(itemList)
@@ -152,7 +152,7 @@ Page({
                               success: function (res) {
                                 console.log(res.data)
                                 wx.request({
-                                  url: 'https://apis.sdcsoft.com.cn/webapi/wechat/PayOrder/createPayOrder',
+                                  url: 'https://apis.sdcsoft.com.cn/wechat/PayOrder/createPayOrder',
                                   method: 'POST',
                                   data: {
                                     money: that.data.discount.paymentAmount*100,
@@ -223,7 +223,7 @@ Page({
             })
           } else if (list[i].resourceId == 6){
             wx.request({
-              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/smsPaymentRecords/create',
+              url: 'https://apis.sdcsoft.com.cn/wechat/smsPaymentRecords/create',
               method: "POST",
               data: {
                 openId: app.globalData.openid,
@@ -250,7 +250,7 @@ Page({
         }
        
         wx.request({
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Relation_DeviceSmsMap/create/many',
+          url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/create/many',
           method: "POST",
           data: {
             deviceSmsMapList: JSON.stringify(smsList)
@@ -263,7 +263,7 @@ Page({
           }
         })
         wx.request({
-          url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/create/many',
+          url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
           method: "POST",
           data: {
             role_ResourceList: JSON.stringify(resList)
@@ -333,7 +333,7 @@ Page({
     }
     wx.request({
       //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/DiscountStrategy/discount',
+      url: 'https://apis.sdcsoft.com.cn/wechat/DiscountStrategy/discount',
       data: {
         total: options.money,
       },

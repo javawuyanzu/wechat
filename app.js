@@ -27,7 +27,7 @@ App({
       endDatetime = endDatetime.getFullYear() + '-' + (endDatetime.getMonth() + 1) + '-' + endDatetime.getDate() + ' ' + endDatetime.getHours() + ':' + endDatetime.getMinutes() + ':' + endDatetime.getSeconds()
       wx.request({
         //获取openid接口  
-        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/onlineRecord/create',
+        url: 'https://apis.sdcsoft.com.cn/wechat/onlineRecord/create',
         data: {
           minutes: min,
           beginDatetime: beginDatetime,

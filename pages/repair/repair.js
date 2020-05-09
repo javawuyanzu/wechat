@@ -39,7 +39,8 @@ Page({
       this.data.limit[1].beyondStyle = "#9494A2"
     }
     this.setData({
-      limit: this.data.limit
+      limit: this.data.limit,
+      description:v
     })
   },
   
@@ -57,65 +58,87 @@ Page({
           title: '最多上传五张图片',
           icon: "none"
         })
-      }else if (this.imgupload.data.image.length == 0) {
-        wx.showToast({
-          title: '未添加图片',
-          icon: "none"
-        })
+      // }else if (this.imgupload.data.image.length == 0) {
+      //   wx.showToast({
+      //     title: '未添加图片',
+      //     icon: "none"
+      //   })
       } else {
-        console.log("deviceNo:" + that.data.deviceNo)
-        console.log("latitude:" + that.data.latitude)
-        console.log("longitude:" + that.data.longitude)
-        console.log("description:" + that.data.description)
-        console.log("openid:" + app.globalData.openid)
-        //确认发布
-        var image = that.imgupload.data.image
-        var rs = 0
-        wx.showLoading({
-          title: '图片上传中',
-          success: function () {
-            var imgupload = new Array()
-            for (var i = 0; i < image.length; i++) {
-              wx.uploadFile({
-                url: 'http://127.0.0.1:8080/webapi/wechat/Repair/uploadFile',
-                filePath: image[i],
-                name: 'file',
-                header: {
-                  "content-type": "multipart/form-data",
-                },
-                formData: {
-                  repairId: "E:/pic/"
-                },
-                success: function (res) {
-                  console.log()
-                 
-                  if (JSON.parse(res.data).code == 0) {
-                    rs++
-                    imgupload[rs - 1] = res.data.filePath
-                  } else if (JSON.parse(res.data).code == -1) {
-                    wx.showToast({
-                      title: '图片上传失败',
-                      icon: 'none'
-                    })
-                  }
-                  if (rs == image.length) {
-                    wx.hideLoading()
-                    wx.switchTab({
-                      url: '../deviceList/deviceList'
-                    })
-                  }
-                },
-                fail: function () {
-                  wx.showToast({
-                    title: '网络开小差了，请重试',
-                    icon: 'none'
-                  })
-                }
+        wx.request({
+          //获取openid接口  
+          url: 'http://127.0.0.1:8080/wechat/Repair/create',
+          data: {
+            repairContent: that.data.description,
+            boilerNo: that.data.deviceNo,
+            latitude: that.data.latitude,
+            longitude: that.data.longitude,
+            userName: app.globalData.openid
+          },
+          method: 'post',
+          success: function (res) {
+            console.log(res.data.data.id)
 
+            if (res.data.code==1){
+              wx.showToast({
+                title: res.data.msg,
+                icon: 'none',
+                duration: 2000,
+                mask: true
               })
+              return
             }
+            var repairId = res.data.data.id
+            //确认发布
+            // var image = that.imgupload.data.image
+            // var rs = 0
+            // wx.showLoading({
+            //   title: '图片上传中',
+            //   success: function () {
+            //     var imgupload = new Array()
+            //     for (var i = 0; i < image.length; i++) {
+            //       wx.uploadFile({
+            //         url: 'http://127.0.0.1:8080/wechat/Repair/uploadFile',
+            //         filePath: image[i],
+            //         name: 'file',
+            //         header: {
+            //           "content-type": "multipart/form-data",
+            //         },
+            //         formData: {
+            //           repairId: "E:/pic/" + repairId+"/"
+            //         },
+            //         success: function (res) {
+            //           if (JSON.parse(res.data).code == 0) {
+            //             rs++
+            //             imgupload[rs - 1] = res.data.filePath
+            //           } else if (JSON.parse(res.data).code == -1) {
+            //             wx.showToast({
+            //               title: '图片上传失败',
+            //               icon: 'none'
+            //             })
+            //           }
+            //           if (rs == image.length) {
+            //             wx.hideLoading()
+            //             wx.switchTab({
+            //               url: '../deviceList/deviceList'
+            //             })
+            //           }
+            //         },
+            //         fail: function () {
+            //           wx.showToast({
+            //             title: '网络开小差了，请重试',
+            //             icon: 'none'
+            //           })
+            //         }
+
+            //       })
+            //     }
+            //   }
+            // })
           }
         })
+       
+        
+      
 
       }
   },
@@ -134,7 +157,7 @@ Page({
    */
   onLoad: function (options) {
     var that=this
-    that.initRecord();
+
     wx.request({
       //获取openid接口   
       url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
@@ -151,16 +174,18 @@ Page({
           var list = res.data.data
           if (list.length > 0) {
             for (var i in list) {
-              if (list[i].unionId != null) {
-                
-
-                
+              if (list[i].unionId == null) {
+                wx.navigateTo({
+                  url: "/pages/login/login",
+                })
               }
             }
           }
         }
       }
     })
+    that.initRecord();
+   
     wx.getLocation({
       type: 'gcj02', //返回可以用于wx.openLocation的经纬度
       success: function (res) {

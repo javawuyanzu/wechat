@@ -76,13 +76,13 @@ Page({
     controlMenu: -1,
     smsMenu: -1,
     baseNavbar:[],
-    isHidden: false,
+    // isHidden: false,
   },
-  getHidden() {
-    this.setData({
-      isHidden: false
-    })
-  },
+  // getHidden() {
+  //   this.setData({
+  //     isHidden: false
+  //   })
+  // },
   switchChange: function(e) {
     var that = this
     var state = -1;
@@ -281,14 +281,14 @@ Page({
     if (menuName == that.data.content.detail_reportMenu) {
       that.getreportdatabyday(that.data.mock1)
     }
-    if (menuName == that.data.content.detail_payMenu) {
-      that.setData({
-        currentTab: e.currentTarget.dataset.idx - 1
-      })
-      wx.navigateTo({
-        url: '../payMenu/payMenu?deviceNo=' + that.data.deviceNo
-      })
-    }
+    // if (menuName == that.data.content.detail_payMenu) {
+    //   that.setData({
+    //     currentTab: e.currentTarget.dataset.idx - 1
+    //   })
+    //   wx.navigateTo({
+    //     url: '../payMenu/payMenu?deviceNo=' + that.data.deviceNo
+    //   })
+    // }
   },
   onHide: function() {
     app.globalData.callBack[1] = null
@@ -336,7 +336,7 @@ Page({
       that.setData({
         content: chinese.Content,
         lang: 'zh-cn',
-        baseNavbar: ['基本', '购买']
+        baseNavbar: ['基本']
       })
     }
     if (app.globalData.lang === 'en-us') {
@@ -350,7 +350,7 @@ Page({
     if (app.globalData.lang === 'en-us') {
       wx.request({
         //获取openid接口  
-        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/list',
+        url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/list',
         data: {
           openId: "guowai",
         },
@@ -407,7 +407,7 @@ Page({
     }else{
       wx.request({
         //获取openid接口  
-        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
+        url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
         data: {
           deviceNo: options.deviceNo,
           openId: app.globalData.openid,
@@ -426,7 +426,7 @@ Page({
               } else {
                 wx.request({
                   //获取openid接口  
-                  url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/wechat/remove',
+                  url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/wechat/remove',
                   data: {
                     id: list[i].id,
                   },
@@ -442,11 +442,11 @@ Page({
             that.setData({
               navbar: that.data.baseNavbar
             })
-            if (that.data.navbar.length == 2) {
-              that.setData({
-                isHidden: true
-              })
-            }
+            // if (that.data.navbar.length == 2) {
+            //   that.setData({
+            //     isHidden: true
+            //   })
+            // }
           }
           var munuList = that.data.navbar
           for (var i in munuList) {
@@ -777,7 +777,7 @@ Page({
               console.log("timerStates")
               that.onShow()
             }
-          }, 5* 1000)
+          }, 10* 1000)
         })
       }
     })

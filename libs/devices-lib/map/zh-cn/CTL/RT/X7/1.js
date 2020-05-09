@@ -33,8 +33,8 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField(X7_2.CTL_RT_X7.KEY_POINT_Add_SHUI_BENG_1, 9, 2, "给水泵", 4, X7_1.Map_CTL_RT_X7.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_baojingzhuangtaishuchu", 9, 2, "报警状态输出", 5, X7_1.Map_CTL_RT_X7.coms_open_close));
         _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 13, 2, "蒸汽压力", "mPa", 100));
-        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibao", 45, 2, "极限低水位报警", 0));
-        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 1));
+        _this.addPoint(new meta_1.ExceptionField("ex_jixiandishuiweibao", 45, 2, "极限低水位报警", 0, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_gaoshuiweibaojing", 45, 2, "高水位报警", 1, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.OpenCloseField("oc_dishuiwei", 5, 2, "低水位", 1, Map_CTL_RT_X7_1.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiwei", 5, 2, "高水位", 2, Map_CTL_RT_X7_1.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_gaoshuiweibaojing", 5, 2, "高水位报警", 3, Map_CTL_RT_X7_1.coms_open_close));
@@ -43,11 +43,11 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField("mo_jienengqishuiwen", 19, 2, "节能器水温", "℃"));
         _this.addPoint(new meta_1.MockField("mo_lengningpaiyanwendu", 21, 2, "冷凝排烟温度", "℃"));
         _this.addPoint(new meta_1.ExceptionField("ex_shuiweichuanganqiguzhang", 45, 2, "水位传感器故障", 2));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警 ", 3));
-        _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhangbaojing", 45, 2, "燃烧器故障报警", 4));
-        _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障 ", 5));
+        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警 ", 3, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhangbaojing", 45, 2, "燃烧器故障报警", 4, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障 ", 5, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_cunchuqiguzhang", 45, 2, "存储器故障", 6));
-        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "排烟温度高报警", 7));
+        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "排烟温度高报警", 7, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_qingfuweiranshaoqi", 45, 2, "请复位燃烧器 ", 8));
         _this.addPoint(new meta_1.ExceptionField("ex_qingshoudongqidongpaiwufa", 45, 2, "请手动启动排污阀", 9));
         _this.addPoint(new meta_1.ExceptionField("ex_A1tongxinguzhang", 45, 2, "A1通信故障", 10));

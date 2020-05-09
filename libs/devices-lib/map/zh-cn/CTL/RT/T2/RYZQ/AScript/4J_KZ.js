@@ -26,7 +26,7 @@ var Map_CTL_RT_T2_RYZQ_4JKZ = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.OpenCloseField("oc_ranshaoqifuhe_zengda", 9, 2, "燃烧器负荷增大调节", 1, Map_CTL_RT_T2_RYZQ_4JKZ.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_fuhetiaojie", 5, 2, "负荷调节", 7, Map_CTL_RT_T2_RYZQ_4JKZ.coms_open_close));
         _this.addPoint(new meta_1.OpenCloseField("oc_qitingkongzhi", 5, 2, "启停控制", 8, Map_CTL_RT_T2_RYZQ_4JKZ.coms_open_close));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警(控制器)", 13), "ex_chaoyabaojing_kongzhiqi");
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警(控制器)", 13, meta_1.ExceptionField.Exception_Error), "ex_chaoyabaojing_kongzhiqi");
         return _this;
     }
     //4电极压力控制器2端火

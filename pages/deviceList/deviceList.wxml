@@ -5,7 +5,7 @@
       <view class="ul">
         <view class='ff_anniu'>
           <view class="li" wx:for="{{imgList}}" wx:key="key" wx:for-item="item">
-            <view wx:if="{{item.runstate === '未连接' || item.runstate === 'Not connected'|| item.runstate === 'Error' }}" data-id='{{item.deviceNo}}' bindlongtap="longTap">
+            <view wx:if="{{item.runstate === '未连接' || item.runstate === 'Not connected'|| item.runstate === 'Error' }}" data-id='{{item.deviceNo}}' data-media='{{item.media}}'  bindlongtap="longTap">
               <view class="title">
                 <view >
                   <view >{{item.title}}-{{item.runstate}}</view>
@@ -24,7 +24,7 @@
                 <image src="" style="width: 140px; height: 70px;" mode="aspectFit"></image>
               </view>
             </view>
-            <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgstyle}}' data-control='{{item.control}}' data-title='{{item.title}}' data-type='{{item.type}}' data-device='{{item.device}}' data-jiarezu='{{item.jiarezu}}' bindlongtap="longTap">
+            <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgstyle}}' data-control='{{item.control}}' data-title='{{item.title}}' data-type='{{item.type}}' data-device='{{item.device}}' data-jiarezu='{{item.jiarezu}}' data-media='{{item.media}}' bindlongtap="longTap">
               <view class="title">
                 <view style='float:right;' wx:if="{{item.errcount >0}}">
                   <text style='height:25px;padding:0 2%;padding-top:10px;font-size:16px;color:red'>{{item.errcount}}</text>
@@ -83,6 +83,7 @@
         <view wx:if="{{userType==1}}" >
           <button catchtap='toRepair' style=' background-color: white;'>{{content.list_weibao}}</button>
         </view>
+         <button catchtap='toPay' style=' background-color: white;'>{{content.list_goumai}}</button>
         <button catchtap='imgstyle' style=' background-color: white;'>{{content.list_chooseimg}}</button>
       </view>
       <view style='border-top:1px solid #eee;width:100%'>

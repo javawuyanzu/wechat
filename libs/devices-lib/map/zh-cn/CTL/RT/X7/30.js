@@ -24,11 +24,11 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField("mo_guoluchukouyanwen", 19, 2, "锅炉出口烟温", "℃"));
         _this.addPoint(new meta_1.MockField("mo_jienengqishuiwen", 21, 2, "节能器水温", "℃"));
         _this.addPoint(new meta_1.MockField("mo_lengningpaiyanwendu", 23, 2, "冷凝排烟温度", "℃"));
-        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警 ", 2));
-        _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhangbaojing", 45, 2, "燃烧器故障报警", 3));
-        _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障 ", 4));
+        _this.addPoint(new meta_1.ExceptionField("ex_chaoyabaojing", 45, 2, "超压报警 ", 2, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_ranshaoqiguzhangbaojing", 45, 2, "燃烧器故障报警", 3, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障 ", 4, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_cunchuqiguzhang", 45, 2, "存储器故障", 5));
-        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "排烟温度高报警", 6));
+        _this.addPoint(new meta_1.ExceptionField("ex_paiyanwendugaobaojing", 45, 2, "排烟温度高报警", 6, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField("ex_qingfuweiranshaoqi", 45, 2, "请复位燃烧器 ", 7));
         _this.addPoint(new meta_1.ExceptionField("ex_zhengqiyalichuanganqiguzhang", 45, 2, "蒸汽压力传感器故障", 8));
         _this.addPoint(new meta_1.ExceptionField("ex_bianpinqiguzhang", 45, 2, "变频器故障", 9));

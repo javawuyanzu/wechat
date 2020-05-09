@@ -66,7 +66,7 @@ Page({
     var that = this
     wx.request({
       //获取openid接口  
-      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/userAddDeviceHistory/create',
+      url: 'https://apis.sdcsoft.com.cn/wechat/userAddDeviceHistory/create',
       data: {
         deviceNo: deviceNo,
         openId: app.globalData.openid
@@ -101,8 +101,9 @@ Page({
     var deviceNo;
     wx.scanCode({
       success: (res) => {
+        console.log(res)
         if (res.result.indexOf('?') > 0) {
-          deviceNo = res.result.substr(43, 55);
+          deviceNo = res.result.substr(res.result.length-10, res.result.length);
         } else {
           deviceNo = res.result;
         }
@@ -154,7 +155,7 @@ Page({
                 if (deviceNo.substr(0, 2) === '20') {
                   wx.request({
                     //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create',
+                    url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
                     data: {
                       openId: app.globalData.openid,
                       deviceNo: deviceNo,
@@ -199,7 +200,7 @@ Page({
                           let dateB = new Date(creatDate);
                           if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
                             wx.request({
-                              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/Resource/list',
+                              url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
                               method: "GET",
                               data: {},
                               header: {
@@ -221,7 +222,7 @@ Page({
                                   }
                                 }
                                 wx.request({
-                                  url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
+                                  url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
                                   method: "GET",
                                   data: {
                                     deviceNo: deviceNo,
@@ -233,7 +234,7 @@ Page({
                                   success: function (res) {
                                     if (!res.data.data.length > 0) {
                                       wx.request({
-                                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/create/many',
+                                        url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
                                         method: "POST",
                                         data: {
                                           role_ResourceList: JSON.stringify(resList)
@@ -273,7 +274,7 @@ Page({
                 } else {
                   wx.request({
                     //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create',
+                    url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
                     data: {
                       openId: app.globalData.openid,
                       deviceNo: deviceNo,
@@ -316,7 +317,7 @@ Page({
                           let dateB = new Date(creatDate);
                           if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
                             wx.request({
-                              url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/Resource/list',
+                              url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
                               method: "GET",
                               data: {},
                               header: {
@@ -339,7 +340,7 @@ Page({
                                 }
                                 
                                 wx.request({
-                                  url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
+                                  url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
                                   method: "GET",
                                   data: {
                                     deviceNo: deviceNo,
@@ -351,7 +352,7 @@ Page({
                                   success: function (res) {
                                     if (!res.data.data.length > 0) {
                                       wx.request({
-                                        url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/create/many',
+                                        url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
                                         method: "POST",
                                         data: {
                                           role_ResourceList: JSON.stringify(resList)
@@ -505,7 +506,7 @@ Page({
               if (deviceNo.substr(0, 2) === '20') {
                 wx.request({
                   //获取openid接口   
-                  url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create',
+                  url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
                   data: {
                     openId: app.globalData.openid,
                     deviceNo: deviceNo,
@@ -550,7 +551,7 @@ Page({
                         let dateB = new Date(creatDate);
                         if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
                           wx.request({
-                            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/Resource/list',
+                            url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
                             method: "GET",
                             data: {},
                             header: {
@@ -572,7 +573,7 @@ Page({
                                 }
                               }
                               wx.request({
-                                url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
+                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
                                 method: "GET",
                                 data: {
                                   deviceNo: deviceNo,
@@ -584,7 +585,7 @@ Page({
                                 success: function (res) {
                                   if (!res.data.data.length > 0) {
                                     wx.request({
-                                      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/create/many',
+                                      url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
                                       method: "POST",
                                       data: {
                                         role_ResourceList: JSON.stringify(resList)
@@ -624,7 +625,7 @@ Page({
               } else {
                 wx.request({
                   //获取openid接口   
-                  url: 'https://apis.sdcsoft.com.cn/webapi/wechat/showDeviceStore/create',
+                  url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
                   data: {
                     openId: app.globalData.openid,
                     deviceNo: deviceNo,
@@ -666,7 +667,7 @@ Page({
                         let dateB = new Date(creatDate);
                         if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
                           wx.request({
-                            url: 'https://apis.sdcsoft.com.cn/webapi/wechat/Resource_Product/Resource/list',
+                            url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
                             method: "GET",
                             data: {},
                             header: {
@@ -688,7 +689,7 @@ Page({
                                 }
                               }
                               wx.request({
-                                url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/find/deviceNo/openId',
+                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
                                 method: "GET",
                                 data: {
                                   deviceNo: deviceNo,
@@ -700,7 +701,7 @@ Page({
                                 success: function (res) {
                                   if (!res.data.data.length > 0) {
                                     wx.request({
-                                      url: 'https://apis.sdcsoft.com.cn/webapi/wechat/RoleResource/create/many',
+                                      url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
                                       method: "POST",
                                       data: {
                                         role_ResourceList: JSON.stringify(resList)

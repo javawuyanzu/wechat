@@ -59,13 +59,13 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_ChuKouWenDu, 13, 2, "出水温度", "℃"));
             _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_HuiLiuWenDu, 15, 2, "回水温度", "℃"));
             _this.addPoint(new meta_1.ExceptionField("ex_chushuiwenduchuanganqiguzhang", 45, 2, "出水温度传感器故障", 0));
-            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChuKouWenDuChaoGao, 45, 2, "出水温度高报警", 1));
+            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChuKouWenDuChaoGao, 45, 2, "出水温度高报警", 1, meta_1.ExceptionField.Exception_Error));
             _this.addPoint(new meta_1.ExceptionField("ex_huishuiwenduchuanganqiguzhang", 45, 2, "回水温度传感器故障", 2));
-            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, "极限低水位报警", 3));
+            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 45, 2, "极限低水位报警", 3, meta_1.ExceptionField.Exception_Error));
             _this.addPoint(new meta_1.ExceptionField("ex_shuiweichuanganqiguzhang", 45, 2, "水位传感器故障", 4));
-            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警", 5));
-            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 45, 2, "炉壁超温报警", 6));
-            _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障", 7));
+            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChaoYa, 45, 2, "超压报警", 5, meta_1.ExceptionField.Exception_Error));
+            _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 45, 2, "炉壁超温报警", 6, meta_1.ExceptionField.Exception_Error));
+            _this.addPoint(new meta_1.ExceptionField("ex_xitongguzhang", 45, 2, "系统故障", 7, meta_1.ExceptionField.Exception_Error));
             return _this;
         }
         return Map_CTL_RT_E3_DRS;

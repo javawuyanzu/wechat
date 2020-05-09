@@ -22,7 +22,7 @@ Page({
      var that=this;
      var orderId = options.orderId
      wx.request({
-       url: 'https://apis.sdcsoft.com.cn/webapi/wechat/JinRong_OrderItem/list',
+       url: 'https://apis.sdcsoft.com.cn/wechat/JinRong_OrderItem/list',
        method: "GET",
        data: {
          OrderId: orderId,
