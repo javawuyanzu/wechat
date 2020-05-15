@@ -762,6 +762,7 @@ Page({
     })
   },
   onShow: function() {
+    var that = this
     wx.getStorage({
       key: 'userType',
       fail(res) {
@@ -776,7 +777,6 @@ Page({
         })
       }
     })
-    var that = this
     that.httptimer()
     that.setData({
       timerStates: true

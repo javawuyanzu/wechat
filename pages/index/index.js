@@ -7,7 +7,43 @@ Page({
     content:null,
     sole: false,
     canIUse: true,
-    resList:[]
+    resList:[],
+    exarray: [],
+    exindex: 0,
+    userarray: [],
+    userindex: 0,
+    canctlarray: ["不可控", "可控"],
+    canctl: 0,
+  },
+  bindPickerExChange: function (e) {
+    var that = this
+    wx.setStorage({
+      key: 'warningType',
+      data: e.detail.value
+    })
+    wx.showToast({
+      title: that.data.content.warningType_updatesuccess,
+      icon: 'success',
+      duration: 2000,
+      success(res) {
+        that.onLoad()
+      }
+    });
+  },
+  bindPickerUserChange: function (e) {
+    var that = this
+    wx.setStorage({
+      key: 'userType',
+      data: e.detail.value
+    })
+    wx.showToast({
+      title: that.data.content.warningType_updatesuccess,
+      icon: 'success',
+      duration: 2000,
+      success(res) {
+        that.onLoad()
+      }
+    });
   },
   // getPhoneNumber: function (e) {
   //   wx.login({
@@ -70,6 +106,24 @@ Page({
   },
   onLoad: function () {
     var that = this;
+    var userType = 0
+    wx.getStorage({
+      key: 'userType',
+      success(res) {
+        that.setData({
+          userindex: res.data
+        })
+      }
+    })
+    var warningType = 0
+    wx.getStorage({
+      key: 'warningType',
+      success(res) {
+        that.setData({
+          exindex: res.data
+        })
+      }
+    })
     wx.request({
       //获取openid接口   
       url: 'https://apis.sdcsoft.com.cn/wechat/employee/getSoldPermissions',
@@ -78,6 +132,7 @@ Page({
       },
       method: 'GET',
       success: function (res) {
+        console.log(res)
         if (res.data == 0) {
           that.setData({
             sole: true
@@ -114,16 +169,21 @@ Page({
   },
 
   onShow: function () {
+
     var that =this
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
       that.setData({
+        userarray: ["锅炉监控", "锅炉维保"],
+        exarray: ["无", "振动", "响铃", "震动+响铃"],
         content: chinese.Content
       })
     }
     if (app.globalData.lang === 'en-us') {
       var english = require("../../utils/English.js")
       that.setData({
+        userarray: ["Monitoring of the boiler", "Maintenance of the boiler"],
+        exarray: ["None", "Vibration", "Ring the bell", "Vibration+Ring the bell"],
         content: english.Content
       })
     }

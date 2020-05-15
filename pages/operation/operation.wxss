@@ -28,7 +28,7 @@ button::after {
 .page {
     min-height: 100%;
     flex: 1;
-    background-color: #FBF9FE;
+    background-color: #EEE;
     font-size: 32rpx;
     font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
     overflow: hidden;

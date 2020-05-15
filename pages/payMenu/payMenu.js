@@ -714,24 +714,26 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-            
+            var menus=[];
             for (var i in result) {
               if (result[i].id == 6 & res.data.data.iMEI == null) {
-                result.splice(i, 1)
+                //result.splice(i, 1)
               } else if (result[i].id == 4  ) {
                 if (res.data.data.canCtl != true){
-                    result.splice(i, 1)
+                    //result.splice(i, 1)
                 }
               }  else {
                 that.setData({
                   iMEI: res.data.data.iMEI
                 })
                 result[i].productList = []
+                menus.push(result[i])
               }
             }
             that.setData({
-              menus: result
+              menus: menus
             })
+            console.log(menus)
           }
         })
       
@@ -859,8 +861,9 @@ Page({
               var menus = that.data.menus
               for (var i in menus) {
                 if (menus[i].id == that.data.smsExResId) {
-
+                  console.log(menus[i])
                   var plist = menus[i].productList
+                  
                   for (var k in phonelist) {
                     plist.push({
                       resourceName: resourceName,

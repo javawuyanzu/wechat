@@ -32,7 +32,7 @@ App({
           minutes: min,
           beginDatetime: beginDatetime,
           endDatetime: endDatetime,
-          openId: openid
+          openId: this.globalData.openid
         },
         method: 'post',
         success: function (res) {

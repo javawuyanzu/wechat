@@ -1,14 +1,15 @@
 {
   "pages": [
     "pages/deviceList/deviceList",
-    "pages/download/download",
+    "pages/add/add",
+    "pages/index/index",
     "pages/help/help",
+    "pages/contactUs/contactUs",
+    "pages/download/download",
     "pages/repair/repair",
     "pages/operation/operation",
     "pages/login/login",
     "pages/deviceDetail/deviceDetail",
-    "pages/index/index",
-    "pages/warningType/warningType",
     "pages/register/register",
     "pages/forgotPw/forgotPw",
     "pages/reports/reports",
@@ -20,7 +21,7 @@
     "pages/myorder/myorder",
     "pages/orderItem/orderItem",
     "pages/userType/userType",
-    "pages/contactUs/contactUs"
+    "pages/video/video"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -43,16 +44,21 @@
         "selectedIconPath": "images/tab_home_selected.png"
       },
       {
-        "pagePath": "pages/operation/operation",
+        "pagePath": "pages/add/add",
         "text": "添加",
-        "iconPath": "images/add.png",
-        "selectedIconPath": "images/add_select.png"
+        "iconPath": "images/add.png"
       },
       {
         "pagePath": "pages/help/help",
         "text": "帮助",
         "iconPath": "images/tab_help.png",
         "selectedIconPath": "images/tab_help_selected.png"
+      },
+      {
+        "pagePath": "pages/contactUs/contactUs",
+        "text": "联系",
+        "iconPath": "images/call.png",
+        "selectedIconPath": "images/call_selected.png"
       }
     ],
     "color": "#888888",
@@ -72,7 +78,7 @@
   },
   "plugins": {
     "WechatSI": {
-      "version": "0.3.3",
+      "version": "0.3.4",
       "provider": "wx069ba97219f66d99"
     }
   }

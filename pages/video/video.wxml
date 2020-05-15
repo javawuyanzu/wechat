@@ -1,0 +1,1 @@
+<video style="width: 100%;" show-center-play-btn="{{true}}" src='{{src}}' controls="true" title="{{title}}"></video>

@@ -6,45 +6,55 @@
     <view style='flex-direction:column '>
       <view style='height:50rpx;color:white;'>
         <open-data type="userNickName" lang="zh_CN" style="margin-left:50rpx;" bindtap="error"></open-data>
-        
+
       </view>
     </view>
   </view>
 
   <view class="user-list">
-  <navigator url="../contactUs/contactUs" hover-class="none">
-      <view class="user-list-item">
-        <view class="item-left">
-          <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
-          <text>联系我们</text>
-        </view>
-        <view class="item-right">
-          <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
-        </view>
+
+
+    <view class="user-list-item">
+      <view class="item-left">
+        <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
+        <text>{{content.index_exType}}</text>
       </view>
-    </navigator>
-    <navigator url="../warningType/warningType" hover-class="none">
-      <view class="user-list-item">
-        <view class="item-left">
-          <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
-          <text>{{content.index_exType}}</text>
-        </view>
-        <view class="item-right">
-          <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
-        </view>
+      <view class="item-right" style="height: 290rpx;font-size: 16px;color: #333;">
+        <picker bindchange="bindPickerExChange" value="{{exindex}}" range="{{exarray}}">
+          <text>
+            {{content.warningType_nowChoose}}:{{exarray[exindex]}}
+          </text>
+        </picker>
       </view>
-    </navigator>
-     <navigator url="../userType/userType" hover-class="none">
-      <view class="user-list-item">
-        <view class="item-left">
-          <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
-          <text>{{content.index_userType}}</text>
-        </view>
-        <view class="item-right">
-          <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
-        </view>
+      <!-- <view style=" margin-top:-10000px">
+        <picker bindchange="bindPickerExChange" value="{{exindex}}" range="{{exarray}}">
+          <text>
+            {{content.warningType_nowChoose}}:{{exarray[exindex]}}
+          </text>
+        </picker>
+      </view> -->
+    </view>
+
+
+
+    <view class="user-list-item">
+      <view class="item-left">
+        <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
+        <text>{{content.index_userType}}</text>
       </view>
-    </navigator>
+      <view class="item-right" style="height: 290rpx;font-size: 16px;color: #333;">
+        <picker bindchange="bindPickerUserChange" value="{{userindex}}" range="{{userarray}}">
+          <text>
+            {{content.warningType_nowChoose}}:{{userarray[userindex]}}
+          </text>
+        </picker>
+      </view>
+    </view>
+
+
+
+
+
     <view wx:if="{{sole}}">
       <navigator url="../soldUpdate/soldUpdate" hover-class="none">
         <view class="user-list-item">
@@ -58,7 +68,7 @@
         </view>
       </navigator>
     </view>
-     <view>
+    <view>
       <navigator url="../myorder/myorder" hover-class="none">
         <view class="user-list-item">
           <view class="item-left">
@@ -97,7 +107,7 @@
         </view>
       </navigator>
     </view> -->
-     <!-- <navigator url="../reports/reports" hover-class="none">
+    <!-- <navigator url="../reports/reports" hover-class="none">
       <view class="user-list-item">
         <view class="item-left">
           <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
@@ -128,4 +138,3 @@
     </view>
   </block>
 </view>
- 

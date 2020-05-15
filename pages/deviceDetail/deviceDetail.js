@@ -16,6 +16,7 @@ Page({
    */
   data: {
     date: '00:00',
+    exRecord: false,
     imgstyle: '',
     deviceNo: '',
     src: '',
@@ -308,6 +309,9 @@ Page({
     var list = that.data.baseNavbar
     if (num == 2) {
       list.push(that.data.content.detail_exceptionMenu)
+      that.setData({
+        exRecord:true
+      })
     }
     if (num == 3) {
       list.push(that.data.content.detail_reportMenu)
@@ -583,7 +587,9 @@ Page({
         states: that.data.content.detail_nochuli
       })
     }
-    that.getException(errorList);
+    if (that.data.exRecord){
+      that.getException(errorList);
+    }
     var imgstyle1 = that.data.imgstyle
     var keylist = GroupKeys.getKeys();
    
@@ -702,7 +708,10 @@ Page({
               states: that.data.content.detail_nochuli
             })
           }
-          that.getException(errorList);
+
+          if (that.data.exRecord) {
+            that.getException(errorList);
+          }
           var imgstyle1 = that.data.imgstyle
 
           if (that.data.mock1 == null){
