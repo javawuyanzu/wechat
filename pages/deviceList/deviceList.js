@@ -122,7 +122,6 @@ Page({
     that.setData({
       ifName: true,
       lock: true,
-      deviceNo: e.currentTarget.dataset.id,
     })
   },
   closeTap: function(e) {
@@ -158,6 +157,9 @@ Page({
       })
     }
   },
+  runstate: function (e) {
+    console.log("14516155")
+  },
   rename: function(e) {
     var that = this;
     that.setData({
@@ -174,8 +176,9 @@ Page({
     })
   },
   toPay: function (e) {
+    console.log(e.currentTarget.dataset.deviceno)
     wx.navigateTo({
-      url: "../payMenu/payMenu?deviceNo=" + this.data.deviceNo 
+      url: "../payMenu/payMenu?deviceNo=" + e.currentTarget.dataset.deviceno 
     })
     this.setData({
       ifName: false
@@ -351,7 +354,7 @@ Page({
         var imglist = that.data.imgList
         for (var i = 0; i < imglist.length; i++) {
           if (imglist[i].deviceNo === that.data.deviceNo) {
-            imglist[i].imgstyle = 1
+            imglist[i].imgStyle = 1
             imglist[i].src = imglist[i].src.substr(0, 67) + "1" + '.gif'
             var ilist = that.data.imgList
           }
@@ -362,7 +365,7 @@ Page({
         deviceList = res.data
         for (var i = 0; i < deviceList.length; i++) {
           if (deviceList[i].deviceNo === that.data.deviceNo) {
-            deviceList[i].imgstyle = 1
+            deviceList[i].imgStyle = 1
           }
         }
         wx.setStorage({
@@ -393,7 +396,7 @@ Page({
         var imglist = that.data.imgList
         for (var i = 0; i < imglist.length; i++) {
           if (imglist[i].deviceNo === that.data.deviceNo) {
-            imglist[i].imgstyle = 0
+            imglist[i].imgStyle = 0
             imglist[i].src = imglist[i].src.substr(0, 67) + "0" + '.gif'
           }
         }
@@ -404,7 +407,7 @@ Page({
         deviceList = res.data
         for (var i = 0; i < deviceList.length; i++) {
           if (deviceList[i].deviceNo === that.data.deviceNo) {
-            deviceList[i].imgstyle = 0
+            deviceList[i].imgStyle = 0
           }
         }
 
@@ -947,7 +950,7 @@ Page({
                       ilist[i].deviceNo = deviceno
                       ilist[i].title = title1
                       ilist[i].runstate = that.data.content.list_runstate
-                      ilist[i].imgstyle = imgstyle1
+                      ilist[i].imgStyle = imgstyle1
                       ilist[i].errcount = errcount1
                       ilist[i].src = src1
                       ilist[i].mock1 = ""
@@ -964,7 +967,7 @@ Page({
                     title: deviceno,
                     runstate: that.data.content.list_runstate,
                     deviceNo: deviceno,
-                    imgstyle: imgstyle1,
+                    imgStyle: imgstyle1,
                     simTitle: simTitle
                   })
                   that.setData({
@@ -1043,7 +1046,7 @@ Page({
                         ilist[i].deviceNo = deviceno
                         ilist[i].title = title1
                         ilist[i].runstate = runstate1
-                        ilist[i].imgstyle = imgstyle1
+                        ilist[i].imgStyle = imgstyle1
                         ilist[i].errcount = errcount1
                         ilist[i].src = src1
                         ilist[i].mock1 = mock11
@@ -1064,7 +1067,7 @@ Page({
                       title: title1,
                       runstate: runstate1,
                       deviceNo: deviceno,
-                      imgstyle: imgstyle1,
+                      imgStyle: imgstyle1,
                       errcount: errcount1,
                       src: src1,
                       mock1: mock11,
@@ -1238,7 +1241,7 @@ Page({
                 ilist[i].deviceNo = deviceNo
                 ilist[i].title = title1
                 ilist[i].runstate = runstate1
-                ilist[i].imgstyle = imgstyle1
+                ilist[i].imgStyle = imgstyle1
                 ilist[i].errcount = errcount1
                 ilist[i].src = src1
                 ilist[i].mock1 = mock11
@@ -1258,7 +1261,7 @@ Page({
               title: title1,
               runstate: runstate1,
               deviceNo: deviceNo,
-              imgstyle: imgstyle1,
+              imgStyle: imgstyle1,
               errcount: errcount1,
               src: src1,
               mock1: mock11,

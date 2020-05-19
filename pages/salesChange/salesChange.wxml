@@ -45,12 +45,12 @@
             是否可控：{{canctlarray[canctl]}}
           </view>
         </picker>
-        <view class="section__title"></view>
+        <!-- <view class="section__title"></view>
         <picker bindchange="bindPickerChange_deviceDataMap" value="{{deviceDataMap}}" range="{{deviceDataMaparray}}">
           <view class="picker">
             是否为设备数据动态映射解析：{{deviceDataMaparray[deviceDataMap]}}
           </view>
-        </picker>
+        </picker> -->
         <view class="section__title"></view>
         <view class="section__title" wx:if="{{comm ==0}}">
         Sim卡号：<input bindinput="bindsim"value="{{sim}}" style='padding:15rpx 25rpx;margin-top: 20rpx;border: 1px solid #EEE;' />

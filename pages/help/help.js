@@ -12,8 +12,8 @@ Page({
       { id: 3, title: "如何添加锅炉", src: "http://www.sdcsoft.com.cn/app/gl/media/wechat/add.mp4" },
       { id: 4, title: "如何进行锅炉管理", src: "http://www.sdcsoft.com.cn/app/gl/media/wechat/devicemanage.mp4" },
       { id: 5,title: "如何进行系统设置", src: "http://www.sdcsoft.com.cn/app/gl/media/wechat/setting.mp4" },
-      { id: 6, title: "收费服务介绍", src: "http://www.sdcsoft.com.cn/app/gl/media/wechat/service.mp4" },
-      { id: 7, title: "如何购买收费服务", src: "http://www.sdcsoft.com.cn/app/gl/media/wechat/servicepay.mp4" },
+      // { id: 6, title: "收费服务介绍", src: "http://www.sdcsoft.com.cn/app/gl/media/wechat/service.mp4" },
+      // { id: 7, title: "如何购买收费服务", src: "http://www.sdcsoft.com.cn/app/gl/media/wechat/servicepay.mp4" },
     ],
     boilermanage: [
       { id: 1,title: "锅炉厂管理系统锅炉信息", src: "http://www.sdcsoft.com.cn/app/gl/media/boilermanage/glc_glxx.mp4" },

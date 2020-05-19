@@ -120,9 +120,9 @@ open-data[type="userAvatarUrl"]{
  
   padding: 0 3%;
  
-  height: 40px;
+  height: 40rpx;
  
-  line-height: 40px;
+  line-height: 40rpx;
  
   background-color: #27c79a;
  
