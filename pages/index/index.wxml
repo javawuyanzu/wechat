@@ -19,30 +19,22 @@
         <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
         <text>{{content.index_exType}}</text>
       </view>
-      <view class="item-right" style="height: 290rpx;font-size: 16px;color: #333;">
+      <view class="item-right" style="line-height: 0rpx;font-size: 16px;color: #333;">
         <picker bindchange="bindPickerExChange" value="{{exindex}}" range="{{exarray}}">
           <text>
             {{content.warningType_nowChoose}}:{{exarray[exindex]}}
           </text>
         </picker>
       </view>
-      <!-- <view style=" margin-top:-10000px">
-        <picker bindchange="bindPickerExChange" value="{{exindex}}" range="{{exarray}}">
-          <text>
-            {{content.warningType_nowChoose}}:{{exarray[exindex]}}
-          </text>
-        </picker>
-      </view> -->
+     
     </view>
-
-
 
     <view class="user-list-item">
       <view class="item-left">
         <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
         <text>{{content.index_userType}}</text>
       </view>
-      <view class="item-right" style="height: 290rpx;font-size: 16px;color: #333;">
+      <view class="item-right" style="line-height: 0rpx;font-size: 16px;color: #333;">
         <picker bindchange="bindPickerUserChange" value="{{userindex}}" range="{{userarray}}">
           <text>
             {{content.warningType_nowChoose}}:{{userarray[userindex]}}
@@ -95,11 +87,11 @@
       </navigator>
     </view>
     <!-- <view >
-      <navigator url="../payMenu/payMenu" hover-class="none">
+      <navigator url="../dataMap/dataMap" hover-class="none">
         <view class="user-list-item">
           <view class="item-left">
             <image style="width: 42rpx; height: 42rpx" src="../../images/collect-kong.png"></image>
-            <text>购买服务</text>
+            <text>动态点位</text>
           </view>
           <view class="item-right">
             <image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../images/right-arrow-gray.png"></image>
@@ -138,3 +130,4 @@
     </view>
   </block>
 </view>
+

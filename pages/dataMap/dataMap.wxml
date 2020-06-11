@@ -1,0 +1,272 @@
+<view class="plate">
+	<view url="/pages/action/action" open-type="switchTab" hover-class="other-navigator-hover" class="plate-item" bindtap="mediaDialogOpen">
+		<view class="plate-img">
+			<image src="{{a1src}}"></image>
+		</view>
+		<text class="plate-info">
+        基本信息
+       </text>
+	</view>
+	<view url="/pages/signup/signup" open-type="switchTab" hover-class="other-navigator-hover" class="plate-item" bindtap="atmapDialogDialogOpen">
+		<view class="plate-img">
+			<image src="{{a2src}}"></image>
+		</view>
+		<text class="plate-info">
+      动画参数
+       </text>
+	</view>
+	<view url="/pages/teacher/teacher" hover-class="navigator-hover" class="plate-item" bindtap="valuemapDialogOpen">
+		<view class="plate-img">
+			<image src="{{a4src}}"></image>
+		</view>
+		<text class="plate-info">
+        数值映射
+       </text>
+	</view>
+	<view url="/pages/about/about" hover-class="navigator-hover" class="plate-item">
+		<view class="plate-img">
+			<image src="{{a3src}}"></image>
+		</view>
+		<text class="plate-info">
+        控制点位
+       </text>
+	</view>
+</view>
+
+<view class="plate">
+	<view url="/pages/action/action" open-type="switchTab" hover-class="other-navigator-hover" class="plate-item" bindtap="dingshiDialogOpen">
+		<view class="plate-img">
+			<image src="{{a1src}}"></image>
+		</view>
+		<text class="plate-info">
+        定时设置
+       </text>
+	</view>
+	<view url="/pages/signup/signup" open-type="switchTab" hover-class="other-navigator-hover" class="plate-item">
+		<view class="plate-img">
+			<image src="{{a2src}}"></image>
+		</view>
+		<text class="plate-info">
+        计算函数
+       </text>
+	</view>
+	<view url="/pages/teacher/teacher" hover-class="navigator-hover" class="plate-item">
+		<view class="plate-img">
+			<image src="{{a4src}}"></image>
+		</view>
+		<text class="plate-info">
+        计算点位
+       </text>
+	</view>
+	<view url="/pages/about/about" hover-class="navigator-hover" class="plate-item">
+		<view class="plate-img">
+			<image src="{{a3src}}"></image>
+		</view>
+		<text class="plate-info">
+        待定待定
+       </text>
+	</view>
+</view>
+
+
+<view class="fadeIn" wx:if="{{mediaDialog}}">
+	<view class="weui-mask" bindtap="close"></view>
+	<view class="weui-half-screen-dialog">
+		<view class="weui-half-screen-dialog__hd">
+			<view class="weui-half-screen-dialog__hd__side" bindtap="mediaDialogClose">
+				<a class="weui-icon-btn">关闭<i class="weui-icon-close-thin"></i></a>
+			</view>
+			<view class="weui-half-screen-dialog__hd__main">
+				<strong class="weui-half-screen-dialog__title">燃料介质</strong>
+			</view>
+		</view>
+		<scroll-view scroll-y='true' style='width:100%;height:400px;display:flex;'>
+			<view>
+				<image class="image" src="../../images/countSelAdd1.png" bindtap="addBase" />
+			</view>
+			<view style="padding-top:32px;height:50px;">
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+						<view class="weui-cell__hd">
+							<view class="weui-label">燃料</view>
+						</view>
+						<view class="weui-cell__bd">
+							<picker bindchange="bindPowersChange" value="{{powerIndex}}" range="{{powers}}">
+								<view class="weui-select weui-select_in-select-after">{{powers[powerIndex]}}</view>
+							</picker>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+						<view class="weui-cell__hd">
+							<view class="weui-label">介质</view>
+						</view>
+						<view class="weui-cell__bd">
+							<picker bindchange="bindMediaChange" value="{{mediaIndex}}" range="{{medias}}">
+								<view class="weui-select weui-select_in-select-after">{{medias[mediaIndex]}}</view>
+							</picker>
+						</view>
+					</view>
+					<view class="li" wx:for="{{fixfields}}" wx:key="key" wx:for-item="base" wx:for-index="idx">
+						<view wx:if="{{idx=='power' || idx=='media'}}"></view>
+						<view wx:else style="display: flex;">
+							<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+								<input class="weui-input" placeholder="请输入名称" bindinput="baseName" data-key="{{idx}}" value="{{base.name}}" />
+							</view>
+							<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+								<input class="weui-input" placeholder="请输入数值" bindinput="baseV" data-key="{{idx}}" value="{{base.v}}" />
+							</view>
+							<image class="image" src="../../images/countMinus1.png" bindtap="removeBase" data-key="{{idx}}" />
+						</view>
+					</view>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+</view>
+<view class="fadeIn" wx:if="{{atmapDialog}}">
+	<view class="weui-mask" bindtap="close"></view>
+	<view class="weui-half-screen-dialog">
+		<view class="weui-half-screen-dialog__hd">
+			<view class="weui-half-screen-dialog__hd__side" bindtap="atmapDialogDialogClose">
+				<a class="weui-icon-btn">关闭<i class="weui-icon-close-thin"></i></a>
+			</view>
+			<view class="weui-half-screen-dialog__hd__main">
+				<strong class="weui-half-screen-dialog__title">动画参数</strong>
+			</view>
+		</view>
+		<scroll-view scroll-y='true' style='width:100%;height:400px;display:flex;'>
+			<view class="title">
+				<text  style="width: 25%;">   燃烧器    </text>
+				<image class="image" src="../../images/countSelAdd1.png" bindtap="addFire" />
+			</view>
+			<view class="li" wx:for="{{atmap.fire}}" wx:key="key" wx:for-item="fire" wx:for-index="idx">
+				<view style="display: flex;line-height: 70rpx;height: 70rpx;">
+					{{fire.name}}
+					<picker bindchange="bindPickerFire" value="{{fire.typ}}" range="{{fires}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 60rpx;">
+						<text>
+							燃烧器类型:{{fires[fire.typ]}}
+							</text>
+					</picker>
+					<image class="image" src="../../images/countMinus1.png" bindtap="removeFire" data-key="{{idx}}" />
+				</view>
+			</view>
+
+			<view class="title">
+				<text style="width: 25%;" >   水泵    </text>
+				<image class="image" src="../../images/countSelAdd1.png" bindtap="addBeng" />
+			</view>
+			<view class="li" wx:for="{{atmap.beng}}" wx:key="key" wx:for-item="beng" wx:for-index="idx">
+
+				<view style="display: flex;">
+					<picker wx:if="{{beng.name==''}}" bindchange="bindPickerBeng" range="{{bengs}}" data-key="{{idx}}" style="line-height: 24rpx;">
+						<text>
+							水泵类型:{{bengs[bengsIndex]}}
+							</text>
+					</picker>
+					<view wx:if="{{beng.name!=''}}" style="margin-top: 12rpx;">{{beng.name}}</view>
+					<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="请输入数量" bindinput="bengCount" data-key="{{idx}}" />
+					</view>
+					<image class="image" src="../../images/countMinus1.png" bindtap="removeBeng" data-key="{{idx}}" />
+				</view>
+			</view>
+
+			<view class="title">
+				<text style="width: 25%;" >   风机    </text>
+				<image class="image" src="../../images/countSelAdd1.png" bindtap="addFan" />
+			</view>
+			<view class="li" wx:for="{{atmap.fan}}" wx:key="key" wx:for-item="fan" wx:for-index="idx">
+
+				<view style="display: flex;">
+					<picker wx:if="{{fan.name==''}}" bindchange="bindPickerFan" range="{{fans}}" data-key="{{idx}}" style="line-height: 24rpx;">
+						<text>
+							风机类型:{{fans[fanIndex]}}
+							</text>
+					</picker>
+					<view wx:if="{{fan.name!=''}}" style="margin-top: 12rpx;">{{fan.name}}</view>
+					<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="请输入数量" bindinput="fanCount" data-key="{{idx}}" />
+					</view>
+					<image class="image" src="../../images/countMinus1.png" bindtap="removeFan" data-key="{{idx}}" />
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+</view>
+
+<view class="fadeIn" wx:if="{{valuemapDialog}}">
+	<view class="weui-mask" bindtap="close"></view>
+	<view class="weui-half-screen-dialog">
+		<view class="weui-half-screen-dialog__hd">
+			<view class="weui-half-screen-dialog__hd__side" bindtap="valuemapDialogClose">
+				<a class="weui-icon-btn">关闭<i class="weui-icon-close-thin"></i></a>
+			</view>
+			<view class="weui-half-screen-dialog__hd__main">
+				<strong class="weui-half-screen-dialog__title">数值映射</strong>
+			</view>
+		</view>
+		<scroll-view scroll-y='true' style='width:100%;height:400px;display:flex;'>
+			<view class="title">
+				<text  style="width: 35%;">   大类添加    </text>
+				<image class="image" src="../../images/countSelAdd1.png" bindtap="addValuemapDaLei" />
+
+			</view>
+			<view class="li" wx:for="{{valuemap}}" wx:key="key" wx:for-item="value" wx:for-index="key">
+
+				<view class="title">
+					<input class="weui-input" style="width: 35%;font-size: 18px;" placeholder="请输入名称" bindinput="ValuemapDaLei" data-key="{{key}}" value="{{key}}" />
+
+					<image class="image" src="../../images/countSelAdd1.png" bindtap="addValuemapXiaoLei" data-key="{{key}}" />
+					<image class="image" src="../../images/countMinus1.png" bindtap="removeValuemapDaLei" data-key="{{key}}" />
+				</view>
+				<view class="li" wx:for="{{value}}" wx:key="key1" wx:for-item="v" wx:for-index="k" style="display: flex;line-height: 70rpx;height: 70rpx;">
+					<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="请输入数值" bindinput="valuemapXiaoLeiName" data-key="{{k}}" data-key1="{{key}}" value="{{k}}" />
+					</view>
+					<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="请输入名称" bindinput="valuemapXiaoLeiV" data-key="{{k}}" data-key1="{{key}}" value="{{v}}" />
+					</view>
+					<image class="image" src="../../images/countMinus1.png" bindtap="removeValuemapXiaoLei" data-key="{{k}}" data-key1="{{key}}" />
+				</view>
+
+
+
+			</view>
+		</scroll-view>
+	</view>
+</view>
+<view class="fadeIn" wx:if="{{dingshiDialog}}">
+	<view class="weui-mask" bindtap="close"></view>
+	<view class="weui-half-screen-dialog">
+		<view class="weui-half-screen-dialog__hd">
+			<view class="weui-half-screen-dialog__hd__side" bindtap="dingshiDialogClose">
+				<a class="weui-icon-btn">关闭<i class="weui-icon-close-thin"></i></a>
+			</view>
+			<view class="weui-half-screen-dialog__hd__main">
+				<strong class="weui-half-screen-dialog__title">定时设置</strong>
+			</view>
+		</view>
+		<scroll-view scroll-y='true' style='width:100%;height:400px;display:flex;'>
+			<view class="title">
+				<text  style="width: 25%;">      </text>
+				<image class="image" src="../../images/countSelAdd1.png" bindtap="adddingshi" />
+			</view>
+			<view class="li" wx:for="{{dingshi}}" wx:key="key" wx:for-item="dingshi" wx:for-index="idx">
+				<view style="display: flex;height: 70rpx;">
+					<input class="weui-input" style="width: 35%;font-size: 18px;" placeholder="请输入名称" bindinput="dingshiName" data-key="{{idx}}" value="	{{dingshi.name}}" />
+					<picker wx:if="{{dingshi.h==''}}" mode="time" value="{{time}}" bindchange="bindTimeChange" style="margin-left: 50rpx;" data-key="{{idx}}">
+						<view class="weui-input">{{time}}</view>
+					</picker>
+					<view wx:if="{{dingshi.h!=''}}" style="margin-left: 50rpx;">{{dingshi.h}}:{{dingshi.m}}</view>
+
+					<image class="image" src="../../images/countMinus1.png" bindtap="removedingshi" data-key="{{idx}}" />
+				</view>
+			</view>
+
+		</scroll-view>
+	</view>
+</view>
+<view class="title">
+	<text  style="width: 25%;margin-left:30rpx"> {{startIndex}}</text>
+	<image class="image" src="../../images/countSelAdd1.png" bindtap="addFire" />
+</view>

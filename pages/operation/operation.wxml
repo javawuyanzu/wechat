@@ -10,9 +10,9 @@
                 <view class="button-wrapper">
                     <button type="primary" formType="submit" class="primary">{{content.operation_add}}</button>
                 </view>
-                <!-- <view class="button-wrapper">
+                <view class="button-wrapper">
                     <button type="default" formType="reset" bindtap="scanCode">{{content.operation_scanadd}}</button>
-                </view> -->
+                </view>
             </view>
         </form>
     </view>

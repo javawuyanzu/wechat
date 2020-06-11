@@ -86,6 +86,7 @@ Page({
           media: that.data.media,
           isDeviceDataMap: that.data.deviceDataMap,
           isCanCtl: that.data.canctl,
+          iMEI: "0",
         },
         header: {
           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -216,10 +217,16 @@ Page({
               })
             }
             var simtemp=""
-            if (res.data.data.iMEI == null || res.data.data.iMEI =='null'){
+            if (res.data.data.iMEI == null || res.data.data.iMEI =='null' || res.data.data.iMEI =='0'){
               simtemp ="898607B61518900"
-            }else{res.data.data.iMEI
+              that.setData({
+                comm:1
+              })
+            }else{
               simtemp = res.data.data.iMEI
+              that.setData({
+                comm:0
+              })
             }
 
             var plcTypeList=[]

@@ -1,0 +1,26 @@
+<view class="button-wrapper">
+  <button type="primary" formType="submit" class="primary">新增</button>
+</view>
+<block wx:for-items="{{minaList}}">
+  <view class="item">
+    <view class="minaitem" style="flex-direction:row;">
+      <view style="flex-direction:column;" class="mina-info">
+        <view class="mina-name">
+          <text selectable="true">{{item.name}}</text>
+        </view>
+        <view class="mina-click-time" style="margin-right: 17rpx;">
+          <text>{{item.useName}}</text>
+        </view>
+      </view>
+      <view class="mina-go">
+        <navigator class="mina-use" bindtap="use">使用</navigator>
+      </view>
+      <view class="mina-go">
+        <navigator class="mina-use" bindtap="use">编辑</navigator>
+      </view>
+    </view>
+    <view class="mina-desc">
+      <text selectable="true">{{item.desc}}</text>
+    </view>
+  </view>
+</block>

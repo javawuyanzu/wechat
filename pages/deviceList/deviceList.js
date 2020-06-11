@@ -19,6 +19,8 @@ Page({
     devices: map,
     mqttif: false,
     userType:null,
+    version: null,
+    ifversion: false,
   },
   onHide: function() {
     var that = this
@@ -122,6 +124,7 @@ Page({
     that.setData({
       ifName: true,
       lock: true,
+      deviceNo: e.currentTarget.dataset.id,
     })
   },
   closeTap: function(e) {
@@ -168,6 +171,7 @@ Page({
     })
   },
   toRepair: function (e) {
+    console.log(this.data.deviceNo)
     wx.navigateTo({
       url: "/pages/repair/repair?deviceNo=" + this.data.deviceNo,
     })
@@ -326,7 +330,6 @@ Page({
               ifrename: false,
               lock: false,
             })
-            //that.onLoad();
           }
         })
         wx.showToast({
@@ -436,6 +439,12 @@ Page({
       lock: false,
     })
   },
+  versionHidden: function(e) {
+    var that = this;
+    that.setData({
+      ifversion: false,
+    })
+  },
   updateDevice: function(e) {
     var that = this;
     wx.login({
@@ -497,7 +506,25 @@ Page({
   },
   onLoad: function(options) {
     var that = this;
-    
+    wx.getStorage({
+      key: 'version',
+      success(res) {
+        if(res.data!="2.4.20"){
+          that.setData({
+            ifversion: true,
+            version:"2.4.20"
+          })
+          wx.setStorageSync('version', "2.4.20")
+        }
+      },
+      fail(res) {
+        wx.setStorageSync('version', "2.4.20")
+        that.setData({
+          ifversion: true,
+          version:"2.4.20"
+        })
+      },
+    })
     wx.login({
       success: function (res) {
         wx.request({
@@ -888,7 +915,6 @@ Page({
     var that = this;
     console.log(data)
     let d = app.globalData.deviceAdapter.getSdcSoftDevice(deviceType, new Uint8Array(data))
-    
     map.set(deviceNo, d)
     return d
   },

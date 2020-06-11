@@ -8,12 +8,11 @@
       <cover-image class='cover-corner cover-left-bottom' src='/images/left-bottom.png'></cover-image>
       <cover-image class='cover-corner cover-right-bottom' src='/images/right-bottom.png'></cover-image> -->
       <cover-view class='scan-animation' animation="{{animation}}"></cover-view>
-         <view  style="bottom: 100rpx;left: 40%;position: absolute;">
-          <image style="width:150rpx; height:140rpx" src="../../images/add2.png" bindtap="toAdd"></image>
-          <view><text style="color: white;">手动添加</text></view>
-         </view>
+         <cover-view  style="">
+          <image style="" src="../../images/add2.png" bindtap="toAdd"></image>
+          <cover-view style=""><text style="color: white;">手动添加</text></cover-view>
+         </cover-view>
     </camera>
-  
   </view>
 </view>
 

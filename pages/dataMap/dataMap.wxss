@@ -1,0 +1,40 @@
+/**index.wxss**/
+page {
+  height: 100%;
+}
+.plate{
+  height:240rpx;
+  background: #fff;
+}
+.plate-item{
+  display: flex;
+  float:left;
+  position: relative;
+  width: 140rpx;
+  height:180rpx;
+  margin-top:38rpx; 
+  margin-left:42rpx;
+}
+.plate-img image{
+  width: 100rpx;
+  height: 100rpx;
+}
+.plate-info{
+  position: absolute;
+  height:40rpx;
+  font-size: 30rpx;
+  font-family: '微软雅黑';
+  bottom: 60rpx;
+  left:-10rpx;
+}
+.image{
+  width: 75rpx;
+  height: 70rpx;
+  margin-left: 70rpx;
+}
+.title{
+  font-size: 22px;
+  display: flex;
+  line-height: 70rpx;
+  height: 70rpx;
+}

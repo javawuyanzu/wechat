@@ -1,1 +1,3 @@
-<video style="width: 100%;" show-center-play-btn="{{true}}" src='{{src}}' controls="true" title="{{title}}"></video>
+<!-- <video style="width: 100%;" show-center-play-btn="{{true}}" src='{{src}}' controls="true" title="{{title}}"></video>
+ -->
+  <txv-video vid="{{src}}" playerid="txv1" autoplay="true"></txv-video> 

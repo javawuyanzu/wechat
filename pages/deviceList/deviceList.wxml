@@ -54,7 +54,6 @@
                 </view>
                 <view class="start" style='color:white'>
                   <text>{{content.list_runtime}}:{{item.runday}}</text>
-                  <!-- <text style="float: right;margin-right: 30rpx;">{{item.simTitle}}</text> -->
                 </view>
                 <view class="image">
                   <view style=' position: absolute;right:110rpx;top:70rpx;' wx:if="{{item.jiarezu !=''}}">
@@ -64,7 +63,7 @@
                 </view>
               </view>
               <view style="padding: 0 3%;" catchtap='toPay' data-deviceNo='{{item.deviceNo}}'>
-                <text style="width: 200rpx; height: 70rpx;line-height:70rpx;float: left;">{{item.simTitle}}</text>
+                <text style="height: 70rpx;line-height:70rpx;float: left;">{{item.simTitle}}</text>
                 <text style=" height: 70rpx;line-height:70rpx;float: right;margin-left: -15rpx;">服务</text>
                 <image src="../../images/vip.png" style="width: 100rpx; height:70rpx;float: right;" mode="aspectFit"></image>
               </view>
@@ -169,6 +168,28 @@
       </view>
       <view class='button2'>
         <button catchtap='yesdelete'>{{content.list_yes}}</button>
+      </view>
+    </view>
+  </view>
+</view>
+<view class='toast-box' hidden='{{!ifversion}}'>
+  <view class='toastbg'></view>
+  <view class='showToast'>
+    <view class='toast-title'>
+      <text>{{version}}版本更新内容：</text>
+    </view>
+    <view  style="padding-left: 2vh;padding-top: 2vh;background-color: white;">
+      <text>1、修复可控设备不能购买控制服务问题</text>
+    </view>
+   <view  style="padding-left: 2vh;padding-top: 2vh;background-color: white;">
+      <text>2、修改添加设备页面</text>
+    </view>
+   <view  style="padding-left: 2vh;padding-top: 2vh;background-color: white;">
+      <text>3、新增更新内容弹框、版本提示</text>
+    </view>
+    <view class='toast-button'>
+      <view class='button2' style="width:100%">
+        <button catchtap='versionHidden' style="border-bottom-left-radius: 16rpx;">{{content.list_yes}}</button>
       </view>
     </view>
   </view>

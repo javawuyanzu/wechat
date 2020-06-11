@@ -1,0 +1,83 @@
+page{
+  background-color: #f0f0f0;
+}
+.button-wrapper{
+width: 88%;
+margin: 20px auto;
+}
+.item{
+   display: flex;
+flex-direction: column;
+width: 88%;
+margin: 20px auto;
+padding: 10px;
+background-color: #fff;
+border-radius: 5px;
+text-align: left;
+box-shadow: 0 6rpx 5px 2px #DCDCDC;
+-webkit-box-shadow: 0px 3px 5px 2px #DCDCDC;
+}
+.minaitem{
+    display:flex;
+    margin-top: 10rpx;
+}
+.item:first-child {
+  margin-top: 10;
+}
+
+.mina-info{
+    width: 450rpx;
+}
+/* 类型的样式控制 */
+.mina-tag-name{
+    border: 1px solid #1AAD19;
+    font-size: 26rpx;
+    padding: 4rpx;
+    border-radius: 10rpx;
+    margin-right: 10rpx;
+}
+
+.logo{
+    width: 142rpx;
+    display: flex;
+    align-items: center;
+}
+
+.image {
+  width: 108rpx;
+  height: 108rpx;
+  margin-left: 17rpx;
+}
+.mina-go{
+    width: 148rpx;
+    display: flex;
+    align-items: center;
+}
+.mina-use{
+    border-radius: 10px;
+    width: 80%;
+    height: 50rpx;
+line-height: 50rpx;
+
+}
+navigator{
+    background-color: #1AAD19;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.mina-desc{
+    color: #888888;
+    font-size: 28rpx;
+    margin-left: 17rpx;
+    margin-right: 17rpx;
+    margin-top: 17rpx;
+}
+.mina-name,.mina-click-time{
+    height: 34rpx;
+    margin-bottom: 18rpx;
+}
+
+.searct-item{
+    margin-top: 20rpx;
+}

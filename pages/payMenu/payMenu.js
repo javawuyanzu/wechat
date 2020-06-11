@@ -718,10 +718,8 @@ Page({
             for (var i in result) {
               if (result[i].id == 6 & res.data.data.iMEI == null) {
                 //result.splice(i, 1)
-              } else if (result[i].id == 4  ) {
-                if (res.data.data.canCtl != true){
-                    //result.splice(i, 1)
-                }
+              } else if (result[i].id == 4 & res.data.data.canCtl != true  ) {
+              
               }  else {
                 that.setData({
                   iMEI: res.data.data.iMEI

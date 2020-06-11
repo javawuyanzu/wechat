@@ -130,6 +130,7 @@ App({
       wx.setStorageSync('cachedVersion', 1.0)
       wx.setStorageSync('orders', [])
       wx.setStorageSync('userType', 0)
+      wx.setStorageSync('version', "2.4.20")
     }
   },
   

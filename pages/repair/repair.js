@@ -168,7 +168,9 @@ Page({
    */
   onLoad: function(options) {
     var that = this
-
+    that.setData({
+      deviceNo: options.deviceNo
+    })
     wx.request({
       //获取openid接口   
       url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
@@ -196,7 +198,6 @@ Page({
       }
     })
     that.initRecord();
-
     wx.getLocation({
       type: 'gcj02', //返回可以用于wx.openLocation的经纬度
       success: function(res) {
