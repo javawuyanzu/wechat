@@ -9,23 +9,23 @@ Page({
     inputValue: '',
     empower: false,
   },
-  refusedEmpower: function() {
+  refusedEmpower: function () {
     var that = this;
     that.setData({
       empower: false
     })
   },
-  bindGetUserInfo: function(e) {
+  bindGetUserInfo: function (e) {
     var that = this
     wx.getSetting({
       success: res => {
         if (res.authSetting['scope.userInfo']) {
           wx.login({
-            success: function(res) {
+            success: function (res) {
               var code = res.code;
               if (code) {
                 wx.getUserInfo({
-                  success: function(res) {
+                  success: function (res) {
                     wx.request({
                       url: 'https://apis.sdcsoft.com.cn/wechat/user/saveEmployee',
                       method: "GET",
@@ -36,7 +36,7 @@ Page({
                       header: {
                         'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
                       },
-                      success: function(res) {
+                      success: function (res) {
                         console.log(res)
                         that.setData({
                           empower: false
@@ -44,7 +44,7 @@ Page({
                       }
                     })
                   },
-                  fail: function() {
+                  fail: function () {
                     console.log('获取用户信息失败')
                   }
                 })
@@ -52,7 +52,7 @@ Page({
                 console.log('获取用户登录态失败！' + r.errMsg)
               }
             },
-            fail: function() {
+            fail: function () {
               console.log('登陆失败')
             }
           })
@@ -62,7 +62,7 @@ Page({
       }
     })
   },
-  addDeviceRecord: function(deviceNo) {
+  addDeviceRecord: function (deviceNo) {
     var that = this
     wx.request({
       //获取openid接口  
@@ -72,12 +72,12 @@ Page({
         openId: app.globalData.openid
       },
       method: 'post',
-      success: function(res) {
+      success: function (res) {
         console.log(res)
       }
     })
   },
-  onShow: function() {
+  onShow: function () {
     var that = this
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../utils/Chinses.js")
@@ -95,52 +95,345 @@ Page({
       title: that.data.content.operation_title
     })
   },
+  addDevice: function (deviceNo,deviceType,newFrame,dataMapId) {
+    var that = this
+    
+    var deviceList = []
+   
+    if (deviceNo.substr(0, 2) === '20') {
+      wx.request({
+        //获取openid接口   
+        url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
+        data: {
+          openId: app.globalData.openid,
+          deviceNo: deviceNo,
+          deviceType: deviceType,
+          deviceName: null,
+          imgStyle: 0
+        },
+        method: 'POST',
+        success: function (res) {
+          wx.request({
+            url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
+            data: {
+              id: dataMapId,
+            },
+            method: 'GET',
+            header: {
+              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+            },
+            success: function (res) {
+              let map;
+              let addr;
+              if (newFrame) {
+                map = JSON.parse(res.data.data.deviceDataMap)
+                addr = JSON.parse(res.data.data.pointIndexMap)
+              }
+              deviceList.push({
+                map: map,
+                addr: addr,
+                dataMapId: dataMapId,
+                newFrame: newFrame,
+                deviceNo: deviceNo,
+                deviceName: "",
+                deviceType: deviceType,
+                imgStyle: 0,
+                mqttName: "/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
+              });
+              that.subTopic("/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
+              wx.setStorage({
+                key: 'deviceList',
+                data: deviceList,
+                success: function (res) {
+                  wx.showToast({
+                    title: that.data.content.operation_addsuccess,
+                    icon: 'success',
+                    duration: 2000
+                  });
+                }
+              })
+              wx.request({
+                url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
+                method: 'POST',
+                data: {
+                  openId: app.globalData.openid,
+                },
+                header: {
+                  'content-type': 'application/x-www-form-urlencoded'
+                },
+                success: function (res) {
+                  var creatDate = res.data.data.createDatetime
+                  let dateA = new Date();
+                  let dateB = new Date(creatDate);
+                  if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
+                    wx.request({
+                      url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
+                      method: "GET",
+                      data: {},
+                      header: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                      },
+                      success: function (res) {
+                        var list = res.data.data
+                        var resList = []
+                        for (var i in list) {
+                          if (list[i].id != 6 & list[i].id != 5) {
+                            resList.push({
+                              openId: app.globalData.openid,
+                              resId: list[i].id,
+                              deviceNo: deviceNo,
+                              range: 1,
+                              rangeType: 2,
+                              amount: 1,
+                            })
+                          }
+                        }
+                        wx.request({
+                          url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
+                          method: "GET",
+                          data: {
+                            deviceNo: deviceNo,
+                            openId: app.globalData.openid,
+                          },
+                          header: {
+                            'content-type': 'application/x-www-form-urlencoded'
+                          },
+                          success: function (res) {
+                            if (!res.data.data.length > 0) {
+                              wx.request({
+                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
+                                method: "POST",
+                                data: {
+                                  role_ResourceList: JSON.stringify(resList)
+                                },
+                                header: {
+                                  'content-type': 'application/x-www-form-urlencoded'
+                                },
+                                success: function (res) {
+                                  console.log(res)
+                                }
+                              })
+                            }
+                          }
+                        })
 
-  scanCode: function(e) {
+                      }
+                    })
+
+                  }
+                },
+              })
+              wx.switchTab({
+                url: '../deviceList/deviceList'
+              })
+              that.setData({
+                inputValue: ""
+              })
+
+            }
+          })
+
+        },
+        fail: function (res) {
+          wx.showToast({
+            title: that.data.content.operation_connfail,
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      })
+    } else {
+      wx.request({
+        //获取openid接口   
+        url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
+        data: {
+          openId: app.globalData.openid,
+          deviceNo: deviceNo,
+          deviceType: deviceType,
+          deviceName: null,
+          imgStyle: 0
+        },
+        method: 'POST',
+        success: function (res) {
+          console.log(res)
+          wx.request({
+            url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
+            data: {
+              id: dataMapId,
+            },
+            method: 'GET',
+            header: {
+              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+            },
+            success: function (res) {
+              let map;
+              let addr;
+              if (newFrame) {
+                map = JSON.parse(res.data.data.deviceDataMap)
+                addr = JSON.parse(res.data.data.pointIndexMap)
+              }
+              deviceList.push({
+                map: map,
+                addr: addr,
+                dataMapId: dataMapId,
+                newFrame: newFrame,
+                deviceNo: deviceNo,
+                deviceName: '',
+                deviceType: deviceType,
+                imgStyle: 0
+              });
+              wx.setStorage({
+                key: 'deviceList',
+                data: deviceList,
+                success: function (res) {
+                  wx.showToast({
+                    title: that.data.content.operation_addsuccess,
+                    icon: 'success',
+                    duration: 2000
+                  });
+                }
+              })
+              wx.request({
+                url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
+                method: 'POST',
+                data: {
+                  openId: app.globalData.openid,
+                },
+                header: {
+                  'content-type': 'application/x-www-form-urlencoded'
+                },
+                success: function (res) {
+                  var creatDate = res.data.data.createDatetime
+                  let dateA = new Date();
+                  let dateB = new Date(creatDate);
+                  if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
+                    wx.request({
+                      url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
+                      method: "GET",
+                      data: {},
+                      header: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                      },
+                      success: function (res) {
+                        var list = res.data.data
+                        var resList = []
+                        for (var i in list) {
+                          if (list[i].id != 6 & list[i].id != 5) {
+                            resList.push({
+                              openId: app.globalData.openid,
+                              resId: list[i].id,
+                              deviceNo: deviceNo,
+                              range: 1,
+                              rangeType: 2,
+                              amount: 1,
+                            })
+                          }
+                        }
+
+                        wx.request({
+                          url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
+                          method: "GET",
+                          data: {
+                            deviceNo: deviceNo,
+                            openId: app.globalData.openid,
+                          },
+                          header: {
+                            'content-type': 'application/x-www-form-urlencoded'
+                          },
+                          success: function (res) {
+                            if (!res.data.data.length > 0) {
+                              wx.request({
+                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
+                                method: "POST",
+                                data: {
+                                  role_ResourceList: JSON.stringify(resList)
+                                },
+                                header: {
+                                  'content-type': 'application/x-www-form-urlencoded'
+                                },
+                                success: function (res) {
+                                  console.log(res)
+                                }
+                              })
+                            }
+                          }
+                        })
+
+                      }
+                    })
+
+                  }
+                },
+              })
+              wx.switchTab({
+                url: '../deviceList/deviceList'
+              })
+              that.setData({
+                inputValue: ""
+              })
+            }
+          })
+
+        },
+        fail: function (res) {
+          wx.showToast({
+            title: that.data.content.operation_connfail,
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      })
+    }
+    that.addDeviceRecord(deviceNo)
+  },
+  scanCode: function (e) {
     var that = this
     var deviceNo;
     wx.scanCode({
       success: (res) => {
         console.log(res)
         if (res.result.indexOf('?') > 0) {
-          deviceNo = res.result.substr(res.result.length-10, res.result.length);
+          deviceNo = res.result.substr(res.result.length - 10, res.result.length);
         } else {
           deviceNo = res.result;
         }
         var deviceList = []
-        var type = ''
-        wx.getStorage({
-          key: 'deviceList',
-          success(res) {
-            deviceList = res.data;
-            wx.request({
-              url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
-              data: {
-                deviceNo: deviceNo,
+        wx.request({
+          url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
+          data: {
+            deviceNo: deviceNo,
+          },
+          header: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+          },
+          method: 'GET',
+          success: function (res) {
+            console.log(res)
+            if (res.data.code != 0) {
+              wx.showToast({
+                title: res.data.msg,
+                icon: 'none',
+                duration: 2000
+              });
+              return;
+            }
+            console.log(deviceNo)
+            deviceNo = res.data.data.deviceSuffix
+            var deviceType = res.data.data.deviceType;
+            var newFrame = res.data.data.newFrame;
+            var dataMapId
+            if (res.data.data.deviceDataMapCn) {
+              dataMapId = res.data.data.deviceDataMapCn;
+            } else {
+              dataMapId = 1
+            }
+            wx.getStorage({
+              key: 'deviceList',
+              fail(res) {
+                that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
               },
-              header: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-              },
-              method: 'GET',
-              success: function(res) {
-                console.log(res)
-                if (res.data.code != 0) {
-                  wx.showToast({
-                    title: res.data.msg,
-                    icon: 'none',
-                    duration: 2000
-                  });
-                  return;
-                }
-                deviceNo = res.data.data.deviceSuffix
-                var deviceType = res.data.data.deviceType;
-                if (res.data.code == 2) {
-                  that.setData({
-                    empower: true
-                  })
-                  return
-                }
-
+              success(res) {
+                deviceList = res.data;
                 for (var i = 0; i < deviceList.length; i++) {
                   if (deviceList[i].deviceNo == deviceNo) {
                     wx.showToast({
@@ -151,246 +444,7 @@ Page({
                     return;
                   }
                 }
-
-                if (deviceNo.substr(0, 2) === '20') {
-                  wx.request({
-                    //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
-                    data: {
-                      openId: app.globalData.openid,
-                      deviceNo: deviceNo,
-                      deviceType: deviceType,
-                      deviceName: null,
-                      imgStyle: 0
-                    },
-                    method: 'POST',
-                    success: function (res) {
-                      console.log(res)
-                      deviceList.push({
-                        deviceNo: deviceNo,
-                        deviceName: "",
-                        deviceType: deviceType,
-                        imgStyle: 0,
-                        mqttName: "/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
-                      });
-                      that.subTopic("/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
-                      wx.setStorage({
-                        key: 'deviceList',
-                        data: deviceList,
-                        success: function (res) {
-                          wx.showToast({
-                            title: that.data.content.operation_addsuccess,
-                            icon: 'success',
-                            duration: 2000
-                          });
-                        }
-                      })
-                      wx.request({
-                        url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
-                        method: 'POST',
-                        data: {
-                          openId: app.globalData.openid,
-                        },
-                        header: {
-                          'content-type': 'application/x-www-form-urlencoded'
-                        },
-                        success: function (res) {
-                          var creatDate = res.data.data.createDatetime
-                          let dateA = new Date();
-                          let dateB = new Date(creatDate);
-                          if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
-                            wx.request({
-                              url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
-                              method: "GET",
-                              data: {},
-                              header: {
-                                'content-type': 'application/x-www-form-urlencoded'
-                              },
-                              success: function (res) {
-                                var list = res.data.data
-                                var resList = []
-                                for (var i in list) {
-                                  if (list[i].id != 6 & list[i].id != 5) {
-                                    resList.push({
-                                      openId: app.globalData.openid,
-                                      resId: list[i].id,
-                                      deviceNo: deviceNo,
-                                      range: 1,
-                                      rangeType: 2,
-                                      amount: 1,
-                                    })
-                                  }
-                                }
-                                wx.request({
-                                  url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
-                                  method: "GET",
-                                  data: {
-                                    deviceNo: deviceNo,
-                                    openId: app.globalData.openid,
-                                  },
-                                  header: {
-                                    'content-type': 'application/x-www-form-urlencoded'
-                                  },
-                                  success: function (res) {
-                                    if (!res.data.data.length > 0) {
-                                      wx.request({
-                                        url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
-                                        method: "POST",
-                                        data: {
-                                          role_ResourceList: JSON.stringify(resList)
-                                        },
-                                        header: {
-                                          'content-type': 'application/x-www-form-urlencoded'
-                                        },
-                                        success: function (res) {
-                                          console.log(res)
-                                        }
-                                      })
-                                    }
-                                  }
-                                })
-
-                              }
-                            })
-
-                          }
-                        },
-                      })
-                      wx.switchTab({
-                        url: '../deviceList/deviceList'
-                      })
-                      that.setData({
-                        inputValue: ""
-                      })
-                    },
-                    fail: function (res) {
-                      wx.showToast({
-                        title: that.data.content.operation_connfail,
-                        icon: 'none',
-                        duration: 2000
-                      });
-                    }
-                  })
-                } else {
-                  wx.request({
-                    //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
-                    data: {
-                      openId: app.globalData.openid,
-                      deviceNo: deviceNo,
-                      deviceType: deviceType,
-                      deviceName: null,
-                      imgStyle: 0
-                    },
-                    method: 'POST',
-                    success: function(res) {
-                      console.log(res)
-                      deviceList.push({
-                        deviceNo: deviceNo,
-                        deviceName: '',
-                        deviceType: deviceType,
-                        imgStyle: 0
-                      });
-                      wx.setStorage({
-                        key: 'deviceList',
-                        data: deviceList,
-                        success: function(res) {
-                          wx.showToast({
-                            title: that.data.content.operation_addsuccess,
-                            icon: 'success',
-                            duration: 2000
-                          });
-                        }
-                      })
-                      wx.request({
-                        url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
-                        method: 'POST',
-                        data: {
-                          openId: app.globalData.openid,
-                        },
-                        header: {
-                          'content-type': 'application/x-www-form-urlencoded'
-                        },
-                        success: function (res) {
-                          var creatDate = res.data.data.createDatetime
-                          let dateA = new Date();
-                          let dateB = new Date(creatDate);
-                          if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
-                            wx.request({
-                              url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
-                              method: "GET",
-                              data: {},
-                              header: {
-                                'content-type': 'application/x-www-form-urlencoded'
-                              },
-                              success: function (res) {
-                                var list = res.data.data
-                                var resList = []
-                                for (var i in list) {
-                                  if (list[i].id != 6 & list[i].id != 5){
-                                    resList.push({
-                                      openId: app.globalData.openid,
-                                      resId: list[i].id,
-                                      deviceNo: deviceNo,
-                                      range: 1,
-                                      rangeType: 2,
-                                      amount: 1,
-                                    })
-                                  }
-                                }
-                                
-                                wx.request({
-                                  url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
-                                  method: "GET",
-                                  data: {
-                                    deviceNo: deviceNo,
-                                    openId: app.globalData.openid,
-                                  },
-                                  header: {
-                                    'content-type': 'application/x-www-form-urlencoded'
-                                  },
-                                  success: function (res) {
-                                    if (!res.data.data.length > 0) {
-                                      wx.request({
-                                        url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
-                                        method: "POST",
-                                        data: {
-                                          role_ResourceList: JSON.stringify(resList)
-                                        },
-                                        header: {
-                                          'content-type': 'application/x-www-form-urlencoded'
-                                        },
-                                        success: function (res) {
-                                          console.log(res)
-                                        }
-                                      })
-                                    }
-                                  }
-                                })
-
-                              }
-                            })
-
-                          }
-                        },
-                      })
-                      wx.switchTab({
-                        url: '../deviceList/deviceList'
-                      })
-                      that.setData({
-                        inputValue: ""
-                      })
-                    },
-                    fail: function(res) {
-                      wx.showToast({
-                        title: that.data.content.operation_connfail,
-                        icon: 'none',
-                        duration: 2000
-                      });
-                    }
-                  })
-                }
-                that.addDeviceRecord(deviceNo)
+                that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
               }
             })
           }
@@ -398,13 +452,13 @@ Page({
       }
     })
   },
-  subTopic: function(topic) {
+  subTopic: function (topic) {
     var client = app.globalData.client;
     if (client == null) {
-      getApp().conmqtt().then(function() {
+      getApp().conmqtt().then(function () {
         client = app.globalData.client;
         console.log("---------------------")
-        client.subscribe(topic, null, function(err, granted) {
+        client.subscribe(topic, null, function (err, granted) {
           if (!err) {
             console.log('订阅成功' + topic)
           } else {
@@ -414,7 +468,7 @@ Page({
       })
     } else {
       if (client.connected != null & client.connected) {
-        client.subscribe(topic, null, function(err, granted) {
+        client.subscribe(topic, null, function (err, granted) {
           if (!err) {
             console.log('订阅成功' + topic)
           } else {
@@ -435,10 +489,10 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-   
+  onLoad: function (options) {
+
   },
-  tologin: function() {
+  tologin: function () {
     wx.redirectTo({
       url: '../loginChoose/loginChoose'
     })
@@ -447,7 +501,7 @@ Page({
   /**
    *  表单功能
    */
-  formSubmit: function(e) {
+  formSubmit: function (e) {
     var that = this;
     var formData = e.detail.value; //获取表数据
     if (formData.deviceNo == null || formData.deviceNo == '') {
@@ -457,42 +511,45 @@ Page({
         duration: 2000
       });
     } else {
-      var deviceList = []
-      var type = ''
-      var deviceNo = formData.deviceNo
-      wx.getStorage({
-        key: 'deviceList',
-        success(res) {
-          deviceList = res.data;
-          var deviceNo = formData.deviceNo
-          wx.request({
-            url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
-            data: {
-              deviceNo: deviceNo,
-            },
-            header: {
-              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-            },
-            method: 'GET',
-            success: function(res) {
-              console.log(res)
-              if (res.data.code != 0) {
-                wx.showToast({
-                  title: res.data.msg,
-                  icon: 'none',
-                  duration: 2000
-                });
-                return;
-              }
-              deviceNo = res.data.data.deviceSuffix
-              var deviceType = res.data.data.deviceType;
-              if (res.data.code == 2) {
-                that.setData({
-                  empower: true
-                })
-                return
-              }
 
+      var deviceNo = formData.deviceNo
+      var deviceList = []
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
+        data: {
+          deviceNo: deviceNo,
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res)
+          if (res.data.code != 0) {
+            wx.showToast({
+              title: res.data.msg,
+              icon: 'none',
+              duration: 2000
+            });
+            return;
+          }
+          console.log(deviceNo)
+          deviceNo = res.data.data.deviceSuffix
+          var deviceType = res.data.data.deviceType;
+          var newFrame = res.data.data.newFrame;
+          var dataMapId
+          if (res.data.data.deviceDataMapCn) {
+            dataMapId = res.data.data.deviceDataMapCn;
+          } else {
+            dataMapId = 1
+          }
+          wx.getStorage({
+            key: 'deviceList',
+            fail(res) {
+              that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
+            },
+            success(res) {
+              deviceList = res.data;
               for (var i = 0; i < deviceList.length; i++) {
                 if (deviceList[i].deviceNo == deviceNo) {
                   wx.showToast({
@@ -503,249 +560,19 @@ Page({
                   return;
                 }
               }
-              if (deviceNo.substr(0, 2) === '20') {
-                wx.request({
-                  //获取openid接口   
-                  url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
-                  data: {
-                    openId: app.globalData.openid,
-                    deviceNo: deviceNo,
-                    deviceType: deviceType,
-                    deviceName: null,
-                    imgStyle: 0
-                  },
-                  method: 'POST',
-                  success: function(res) {
-                    console.log(res)
-                    deviceList.push({
-                      deviceNo: deviceNo,
-                      deviceName: "",
-                      deviceType: deviceType,
-                      imgStyle: 0,
-                      mqttName: "/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5)
-                    });
-                    that.subTopic("/Msg/" + deviceNo.substr(0, 2) + "/" + deviceNo.substr(2, 3) + "/" + deviceNo.substr(5, 5))
-                    wx.setStorage({
-                      key: 'deviceList',
-                      data: deviceList,
-                      success: function(res) {
-                        wx.showToast({
-                          title: that.data.content.operation_addsuccess,
-                          icon: 'success',
-                          duration: 2000
-                        });
-                      }
-                    })
-                    wx.request({
-                      url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
-                      method: 'POST',
-                      data: {
-                        openId: app.globalData.openid,
-                      },
-                      header: {
-                        'content-type': 'application/x-www-form-urlencoded'
-                      },
-                      success: function (res) {
-                        var creatDate = res.data.data.createDatetime
-                        let dateA = new Date();
-                        let dateB = new Date(creatDate);
-                        if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
-                          wx.request({
-                            url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
-                            method: "GET",
-                            data: {},
-                            header: {
-                              'content-type': 'application/x-www-form-urlencoded'
-                            },
-                            success: function (res) {
-                              var list = res.data.data
-                              var resList = []
-                              for (var i in list) {
-                                if (list[i].id != 6 & list[i].id != 5) {
-                                  resList.push({
-                                    openId: app.globalData.openid,
-                                    resId: list[i].id,
-                                    deviceNo: deviceNo,
-                                    range: 1,
-                                    rangeType: 2,
-                                    amount: 1,
-                                  })
-                                }
-                              }
-                              wx.request({
-                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
-                                method: "GET",
-                                data: {
-                                  deviceNo: deviceNo,
-                                  openId: app.globalData.openid,
-                                },
-                                header: {
-                                  'content-type': 'application/x-www-form-urlencoded'
-                                },
-                                success: function (res) {
-                                  if (!res.data.data.length > 0) {
-                                    wx.request({
-                                      url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
-                                      method: "POST",
-                                      data: {
-                                        role_ResourceList: JSON.stringify(resList)
-                                      },
-                                      header: {
-                                        'content-type': 'application/x-www-form-urlencoded'
-                                      },
-                                      success: function (res) {
-                                        console.log(res)
-                                      }
-                                    })
-                                  }
-                                }
-                              })
-
-                            }
-                          })
-
-                        }
-                      },
-                    })
-                    wx.switchTab({
-                      url: '../deviceList/deviceList'
-                    })
-                    that.setData({
-                      inputValue: ""
-                    })
-                  },
-                  fail: function(res) {
-                    wx.showToast({
-                      title: that.data.content.operation_connfail,
-                      icon: 'none',
-                      duration: 2000
-                    });
-                  }
-                })
-              } else {
-                wx.request({
-                  //获取openid接口   
-                  url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/create',
-                  data: {
-                    openId: app.globalData.openid,
-                    deviceNo: deviceNo,
-                    deviceType: deviceType,
-                    deviceName: null,
-                    imgStyle: 0
-                  },
-                  method: 'POST',
-                  success: function(res) {
-                    deviceList.push({
-                      deviceNo: deviceNo,
-                      deviceName: "",
-                      deviceType: deviceType,
-                      imgStyle: 0
-                    });
-                    wx.setStorage({
-                      key: 'deviceList',
-                      data: deviceList,
-                      success: function(res) {
-                        wx.showToast({
-                          title: that.data.content.operation_addsuccess,
-                          icon: 'success',
-                          duration: 2000
-                        });
-                      }
-                    })
-                    wx.request({
-                      url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
-                      method: 'POST',
-                      data: {
-                        openId: app.globalData.openid,
-                      },
-                      header: {
-                        'content-type': 'application/x-www-form-urlencoded'
-                      },
-                      success: function (res) {
-                        var creatDate = res.data.data.createDatetime
-                        let dateA = new Date();
-                        let dateB = new Date(creatDate);
-                        if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
-                          wx.request({
-                            url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
-                            method: "GET",
-                            data: {},
-                            header: {
-                              'content-type': 'application/x-www-form-urlencoded'
-                            },
-                            success: function (res) {
-                              var list = res.data.data
-                              var resList = []
-                              for (var i in list) {
-                                if (list[i].id != 6 & list[i].id != 5) {
-                                  resList.push({
-                                    openId: app.globalData.openid,
-                                    resId: list[i].id,
-                                    deviceNo: deviceNo,
-                                    range: 1,
-                                    rangeType: 2,
-                                    amount: 1,
-                                  })
-                                }
-                              }
-                              wx.request({
-                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
-                                method: "GET",
-                                data: {
-                                  deviceNo: deviceNo,
-                                  openId: app.globalData.openid,
-                                },
-                                header: {
-                                  'content-type': 'application/x-www-form-urlencoded'
-                                },
-                                success: function (res) {
-                                  if (!res.data.data.length > 0) {
-                                    wx.request({
-                                      url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
-                                      method: "POST",
-                                      data: {
-                                        role_ResourceList: JSON.stringify(resList)
-                                      },
-                                      header: {
-                                        'content-type': 'application/x-www-form-urlencoded'
-                                      },
-                                      success: function (res) {
-                                        console.log(res)
-                                      }
-                                    })
-                                  }
-                                }
-                              })
-
-                            }
-                          })
-
-                        }
-                      },
-                    })
-                    wx.switchTab({
-                      url: '../deviceList/deviceList'
-                    })
-                    that.setData({
-                      inputValue: ""
-                    })
-                  },
-                  fail: function(res) {
-                    wx.showToast({
-                      title: that.data.content.operation_connfail,
-                      icon: 'none',
-                      duration: 2000
-                    });
-                  }
-                })
-              }
-              that.addDeviceRecord(deviceNo)
-
+              that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
             }
           })
+          
+          
+  
+          
+          
         }
       })
     }
 
   }
 })
+
+

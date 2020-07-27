@@ -1,28 +1,41 @@
-<!--index.wxml-->
-<view class="container">
-  <view  class="item" wx:for="{{orders}}" wx:key="{{i}}">
-  <navigator url="../orderItem/orderItem?orderId={{item.id}}">
-  <view class="order">
-  <image class="imag" src="../../images/orderlog.png"></image>
-  <view >
-   <view class="text">订单状态：{{item.status}}</view>
-    <view wx:if="{{item.status=='待支付'}}" class="text1">下单时间：{{item.createDate}}</view>
-    <view wx:if="{{item.status=='已付款'}}" class="text1">付款时间：{{item.payforDate}}</view>
-  </view>
-  </view>
-   <view  wx:if="{{item.total}}" class="total">
-  <view class="text">应付金额</view>
-    <view class="text">￥{{item.total}}</view>
-  </view>
-   <view  wx:if="{{item.discount}}" class="discount">
-  <view class="text">折扣</view>
-     <view class="text"  wx:if="{{item.discount==' '}}">无</view>
-    <view class="text" wx:else >{{item.discount}}</view>
-  </view>
-  <view  wx:if="{{item.paymentAmount}}" class="paymentAmount">
-  <view class="text">实付金额</view>
-    <view class="text">￥{{item.paymentAmount}}</view>
-  </view>
-  </navigator>
+
+
+<view class="page" data-weui-theme="{{theme}}">
+	<view class="page__hd">
+		<view class="page__title">My order</view>
+		<view class="page__desc">我的订单</view>
+	</view>
+  <view wx:for="{{orders}}" wx:key="{{i}}">
+      <view class="page__bd">
+		<view class="weui-form-preview">
+			<view class="weui-form-preview__hd">
+				<view class="weui-form-preview__item">
+					<label class="weui-form-preview__label">付款金额</label>
+					<em class="weui-form-preview__value">¥{{item.paymentAmount}}</em>
+				</view>
+			</view>
+			<view class="weui-form-preview__bd">
+				<view class="weui-form-preview__item">
+					<label class="weui-form-preview__label">订单状态</label>
+					<text class="weui-form-preview__value">{{item.status}}</text>
+				</view>
+				<view class="weui-form-preview__item">
+					<label class="weui-form-preview__label">应付金额</label>
+					<text class="weui-form-preview__value">￥{{item.total}}</text>
+				</view>
+				<view class="weui-form-preview__item">
+					<label class="weui-form-preview__label">折扣信息</label>
+          <text class="weui-form-preview__value" wx:if="{{item.discount==' '}}">无</text>
+					<text class="weui-form-preview__value"  wx:else>{{item.discount}}</text>
+				</view>
+			</view>
+      
+        <navigator url="../orderItem/orderItem?orderId={{item.id}}">
+          <view class="weui-form-preview__ft">
+            <a class="weui-form-preview__btn weui-form-preview__btn_primary">操作</a>
+          </view>
+        </navigator>
+		</view>
+	</view>
   </view>
 </view>

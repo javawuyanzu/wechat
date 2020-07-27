@@ -63,9 +63,12 @@ Page({
    */
   onLoad: function (options) {
     var that = this
-    
   },
-  
+  todatamap: function (e) {
+    wx.navigateTo({
+      url: "/pages/dataMapList/dataMapList",
+    })
+  },
   /**
    *  表单功能
    */

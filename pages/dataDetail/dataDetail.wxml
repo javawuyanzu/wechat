@@ -1,0 +1,338 @@
+<view class="weui-cells weui-cells_after-title">
+	<view class="weui-cell weui-cell_active">
+		<view class="weui-cell__hd">
+			<view class="weui-label">点位地址：</view>
+		</view>
+		<view class="weui-cell__bd">
+			<input class="weui-input" placeholder="请输入点位地址" bindinput="dataaddr" value="{{currentIndex}}" />
+		</view>
+	</view>
+</view>
+<view class="weui-cells weui-cells_after-title">
+	<view class="weui-cell weui-cell_active">
+		<view class="weui-cell__hd">
+			<view class="weui-label">无效值：</view>
+		</view>
+		<view class="weui-cell__bd">
+			<input class="weui-input" placeholder="请输入无效值" bindinput="invalidValues" value="{{currentPoint.mask}}" />
+		</view>
+	</view>
+</view>
+<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;">
+	<view class="weui-cell__hd">
+		<view class="weui-label">数值类型：</view>
+	</view>
+	<view class="weui-cell__bd">
+		<picker bindchange="bindNumTypChange" value="{{countryIndex}}" range="{{pointtyp}}">
+			<view class="weui-select weui-select_in-select-after">{{pointtyp[currentPoint.typ]}}</view>
+		</picker>
+	</view>
+</view>
+<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;">
+	<view class="weui-cell__hd">
+		<view class="weui-label">数据格式：</view>
+	</view>
+	<view class="weui-cell__bd">
+		<picker bindchange="bindDataTypChange" range="{{endina[currentPoint.typ]}}">
+			<view class="weui-select weui-select_in-select-after">{{endina[currentPoint.typ][currentPoint.endina]}}</view>
+		</picker>
+	</view>
+</view>
+<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;">
+	<view class="weui-cell__hd">
+		<view class="weui-label">点位类型：</view>
+	</view>
+	<view class="weui-cell__bd">
+		<picker bindchange="bindPointTypChange" value="{{pointTypindex}}" range="{{types}}">
+			<view class="weui-select weui-select_in-select-after">{{types[pointTypindex]}}</view>
+		</picker>
+	</view>
+</view>
+
+
+<view>
+	<button type="primary" bindtap="addPoint" class="primary" style="width: 85%;">添加</button>
+</view>
+
+<view wx:for="{{currentPoint.fields}}" wx:key="key" wx:for-item="field" wx:for-index="idx">
+	<view class='help_item'>
+		<view class='title'>
+			<view class='title_1' wx:if="{{currentPoint.typ==0}}">第{{field.bit}}位</view>
+			<view class='title_1' wx:else>{{field.name}}</view>
+			<view style="width: 15%;color: red;" bindtap="deletebit" data-key="{{idx}}">删除</view>
+			<view class='title_2' data-index="{{idx}}" catchtap='panel' style="margin-left: 100rpx;">
+				<image src="../../images/{{showIndex == idx ? 'shang':'xia'}}.png"></image>
+			</view>
+		</view>
+		<view class='detail' wx:if="{{showIndex == idx}}">
+			<view wx:if="{{pointTypindex=='1' || pointTypindex=='2'|| pointTypindex=='3'|| pointTypindex=='4'|| pointTypindex=='6'|| pointTypindex=='7'}}">
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd">
+							<view class="weui-label">名称：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="名称" bindinput="dataName" data-key="{{idx}}" value="{{field.name}}" />
+						</view>
+					</view>
+				</view>
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd">
+							<view class="weui-label">单位：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="单位" bindinput="dataUnit" data-key="{{idx}}" value="{{field.unit}}" />
+						</view>
+					</view>
+				</view>
+			</view>
+			<view wx:if="{{pointTypindex=='0'}}">
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd">
+							<view class="weui-label">名称：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="名称" bindinput="dataExName" data-key="{{idx}}" value="{{field.name}}" />
+						</view>
+					</view>
+				</view>
+				<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;">
+					<view class="weui-cell__hd">
+						<view class="weui-label">报警类型：</view>
+					</view>
+					<view class="weui-cell__bd">
+						<picker bindchange="bindExTypChange" value="{{field.level}}" data-key="{{idx}}" range="{{extyp}}">
+							<view class="weui-select weui-select_in-select-after">{{extyp[field.level]}}</view>
+						</picker>
+					</view>
+
+				</view>
+			</view>
+			<view wx:if="{{pointTypindex=='5'}}">
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd">
+							<view class="weui-label">名称：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="名称" bindinput="dataName" data-key="{{idx}}" value="{{field.name}}" />
+						</view>
+					</view>
+				</view>
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd">
+							<view class="weui-label">闭合数值：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="名称" bindinput="dataOpenCloseNum" data-key="{{idx}}" value="1" />
+						</view>
+					</view>
+				</view>
+			</view>
+			<view wx:if="{{pointTypindex=='8'}}">
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd">
+							<view class="weui-label">名称：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="名称" bindinput="dataTimeName" data-key="{{idx}}" value="{{field.name}}" />
+						</view>
+					</view>
+				</view>
+				<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;">
+					<view class="weui-cell__hd">
+						<view class="weui-label">定时类型：</view>
+					</view>
+					<view class="weui-cell__bd">
+						<picker bindchange="bindTimeTypChange" data-key="{{idx}}" range="{{dingshi}}" range-key="{{'name'}}">
+							<view class="weui-select weui-select_in-select-after">{{dingshi[field.index].name}}</view>
+						</picker>
+					</view>
+
+				</view>
+				<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;">
+					<view class="weui-cell__hd">
+						<view class="weui-label">时间类型：</view>
+					</view>
+					<view class="weui-cell__bd">
+						<picker bindchange="bindPartTypChange" data-key="{{idx}}" range="{{parttyp}}">
+							<view class="weui-select weui-select_in-select-after">{{parttyp[field.part]}}</view>
+						</picker>
+					</view>
+
+				</view>
+			</view>
+			<view class="weui-cells weui-cells_after-title">
+				<view class="weui-cell weui-cell_active">
+					<view class="weui-cell__hd">
+						<view class="weui-label">位数：</view>
+					</view>
+					<view class="weui-cell__bd">
+						<input class="weui-input" placeholder="位数" bindinput="dataBit" data-key="{{idx}}" value="{{field.bit}}" />
+					</view>
+				</view>
+			</view>
+			<view class="weui-cells weui-cells_checkbox weui-cells_after-title">
+				<checkbox-group bindchange="checkboxMenuChange" data-key="{{idx}}">
+					<label class="weui-cell weui-check__label" wx:for="{{field.checkboxItems}}" wx:key="value">
+						<view class="weui-cell__hd">
+							<checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}" />
+							<i class="weui-icon-checked"></i>
+						</view>
+						<view class="weui-cell__bd">
+							<view>{{item.name}}</view>
+						</view>
+					</label>
+				</checkbox-group>
+			</view>
+			<view class="weui-cells weui-cells_after-title" wx:if="{{field.ctl!=null&field.typ!=5}}">
+				<view style="display: flex;">
+					控制点位：
+					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="站号" bindinput="datakongzhiNo" data-key="{{idx}}" value="{{field.ctl.no}}" />
+					</view>
+					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="地址" bindinput="datakongzhiaddr" data-key="{{idx}}" value="{{field.ctl.addr}}" />
+					</view>
+				</view>
+				<view style="display: flex;">
+					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="最大值" bindinput="datakongzhiMax" data-key="{{idx}}" value="{{field.ctl.max}}" />
+					</view>
+					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="最小值" bindinput="datakongzhiMin" data-key="{{idx}}" value="{{field.ctl.min}}" />
+					</view>
+					<picker bindchange="bindPickerCtlGroup" range="{{ctlgroup}}" data-key="{{idx}}" style="line-height: 24rpx;">
+						<text>
+                  类型:{{ctlgroup[field.ctl.group]}}
+                  </text>
+					</picker>
+				</view>
+				<view style="display: flex; height: 50px">
+
+					<picker bindchange="bindPickerDataKongzhiFnDa" range="{{FnGroups}}" data-key="{{idx}}" style="line-height: 24rpx;">
+						<text>
+						{{FnGroups[field.ctl.multiIndex[0]]}}
+						</text>
+					</picker>
+					<picker bindchange="bindPickerDataKongzhiFnXiao" range="{{Fns[field.ctl.multiIndex[0]]}}" range-key="{{'title'}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 24rpx;">
+						<text>
+						{{Fns[field.ctl.multiIndex[0]][field.ctl.multiIndex[1]].title}}
+						</text>
+					</picker>
+				</view>
+			</view>
+			<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;" wx:if="{{field.vm!=null}}">
+				<view class="weui-cell__hd">
+					<view class="weui-label">数值映射：</view>
+				</view>
+				<view class="weui-cell__bd">
+					<picker bindchange="bindPickerVm" range="{{valuemapList}}" data-key="{{idx}}">
+						<view class="weui-select weui-select_in-select-after">{{field.vm}}</view>
+					</picker>
+				</view>
+
+			</view>
+			<view style="display: flex; height: 50px" wx:if="{{field.reftyp=='at'}}">
+				关联动画元素：
+				<picker bindchange="bindPickerAtmap" range="{{atmapList}}" data-key="{{idx}}" style="line-height: 24rpx;">
+					<text>
+					{{field.refgroup}}
+					</text>
+				</picker>
+				<picker bindchange="bindPickerElement" range="{{elementList}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 24rpx;" range-key="{{'name'}}">
+					<text>
+					{{elementList[field.refindex].name}}
+					</text>
+				</picker>
+			</view>
+			<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;" wx:if="{{field.reftyp=='count'}}">
+				<view class="weui-cell__hd">
+					<view class="weui-label">计算点位：</view>
+				</view>
+				<view class="weui-cell__bd">
+					<picker bindchange="bindPickerCountmap" range="{{countmap}}" data-key="{{idx}}" range-key="{{'name'}}">
+						<view class="weui-select weui-select_in-select-after">{{countmap[field.refindex].name}}</view>
+					</picker>
+				</view>
+			</view>
+			<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;" wx:if="{{field.mat!=null}}">
+				<view class="weui-cell__hd">
+					<view class="weui-label">简单运算：</view>
+				</view>
+				<view class="weui-cell__bd">
+					<picker bindchange="bindPickerEasyOperation" range="{{easyOperation}}" data-key="{{idx}}">
+						<view class="weui-select weui-select_in-select-after">{{field.mat}}</view>
+					</picker>
+				</view>
+			</view>
+			<view class="weui-cells weui-cells_after-title" wx:if="{{field.mat!=null}}">
+				<view class="weui-cell weui-cell_active">
+					<view class="weui-cell__hd">
+						<view class="weui-label">计算数值：</view>
+					</view>
+					<view class="weui-cell__bd">
+						<input class="weui-input" placeholder="计算数值：" bindinput="countMapValues" data-key="{{idx}}" value="{{field.number}}" />
+					</view>
+				</view>
+			</view>
+			<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;" wx:if="{{field.sysrun!=null}}">
+				<view class="weui-cell__hd">
+					<view class="weui-label">时间选择：</view>
+				</view>
+				<view class="weui-cell__bd">
+					<picker bindchange="bindPickerTime" range="{{timetyp}}" data-key="{{idx}}">
+						<view class="weui-select weui-select_in-select-after">{{timetyp[field.part]}}</view>
+					</picker>
+				</view>
+			</view>
+		</view>
+	</view>
+
+</view>
+<view class="fadeIn" wx:if="{{valuemapDialog}}">
+	<view class="weui-mask" bindtap="close"></view>
+	<view class="weui-half-screen-dialog">
+		<view class="weui-half-screen-dialog__hd">
+			<view class="weui-half-screen-dialog__hd__side" bindtap="valuemapDialogClose">
+				<a class="weui-icon-btn">关闭<i class="weui-icon-close-thin"></i></a>
+			</view>
+			<view class="weui-half-screen-dialog__hd__main">
+				<strong class="weui-half-screen-dialog__title">数值映射</strong>
+			</view>
+		</view>
+		<scroll-view scroll-y='true' style='width:100%;height:400px;display:flex;'>
+			<view>
+				<a class="weui-btn weui-btn_mini weui-btn_primary" bindtap="addValuemapDaLei">大类新增</a>
+			</view>
+			<view class="li" wx:for="{{valuemap}}" wx:key="key" wx:for-item="value" wx:for-index="key">
+
+				<view class="title" style="border-bottom: 1px solid #eee; display: flex">
+					<input class="weui-input" style="width: 35%;font-size: 18px;" placeholder="请输入名称" bindinput="ValuemapDaLei" data-key="{{key}}" value="{{key}}" />
+
+					<image class="image" src="../../images/countSelAdd1.png" bindtap="addValuemapXiaoLei" data-key="{{key}}" />
+					<image class="image" src="../../images/countMinus1.png" bindtap="removeValuemapDaLei" data-key="{{key}}" />
+				</view>
+				<view class="li" wx:for="{{value}}" wx:key="key1" wx:for-item="v" wx:for-index="k" style="display: flex;line-height: 70rpx;height: 70rpx;border-bottom: 1px solid #eee;">
+					<image class="littleimage" src="../../images/countMinus1.png" bindtap="removeValuemapXiaoLei" data-key="{{k}}" data-key1="{{key}}" />
+					<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="请输入数值" bindinput="valuemapXiaoLeiName" data-key="{{k}}" data-key1="{{key}}" value="{{k}}" />
+					</view>
+					<view class="" style="width: 33%;margin-top: 12rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="请输入名称" bindinput="valuemapXiaoLeiV" data-key="{{k}}" data-key1="{{key}}" value="{{v}}" />
+					</view>
+
+				</view>
+
+
+
+			</view>
+		</scroll-view>
+	</view>
+</view>
+
+

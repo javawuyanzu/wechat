@@ -42,7 +42,7 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField('mo_zhengqishunshiliuliang', 55, 4, '蒸汽瞬时流量', 'm³/h'));
         _this.addPoint(new meta_1.MockField('mo_bushuishunshiliuliang', 59, 4, '补水瞬时流量', 'm³/h'));
         _this.addPoint(new meta_1.MockField('mo_lutangwendu', 63, 4, '炉膛温度', '℃'));
-        _this.addPoint(new meta_1.MockField('mo_lutangyali', 67, 4, '炉膛压力', 'MPa'));
+        _this.addPoint(new meta_1.MockField('mo_lutangyali', 67, 4, '炉膛压力', 'kPa'));
         _this.addPoint(new meta_1.MockField('mo_lengningqijinkouyanwen', 71, 4, '冷凝器进口烟温', '℃'));
         _this.addPoint(new meta_1.MockField('mo_lengningqijinkouyanya', 75, 4, '冷凝器进口烟压', 'kPa'));
         _this.addPoint(new meta_1.MockField('mo_jienengqijinkouyanwen', 79, 4, '节能器进口烟温', '℃'));
@@ -52,7 +52,7 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField('mo_kongyuqijinyanwendu', 95, 4, '空预器进烟温度', '℃'));
         _this.addPoint(new meta_1.MockField('mo_kongyuqijinyanyali', 99, 4, '空预器进烟压力', 'kPa'));
         _this.addPoint(new meta_1.MockField(gfrm_1.GroupFieldsRelationalMapping.KEY_MOCK_PaiYanWenDu, 103, 4, '排烟温度', '℃'));
-        _this.addPoint(new meta_1.MockField('mo_zuizhongpaiyanyali', 107, 4, '最终排烟压力', 'MPa'));
+        _this.addPoint(new meta_1.MockField('mo_zuizhongpaiyanyali', 107, 4, '最终排烟压力', 'kPa'));
         _this.addPoint(new meta_1.MockField('mo_lengningqijinshuiwendu', 111, 4, '冷凝器进水温度', '℃'));
         _this.addPoint(new meta_1.MockField('mo_lengningqichushuiwendu', 115, 4, '冷凝器出水温度', '℃'));
         _this.addPoint(new meta_1.MockField('mo_jienengqijinshuiwendu', 119, 4, '节能器进水温度', '℃'));
@@ -68,9 +68,9 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.MockField('mo_zhufengjipinlüfankui', 159, 4, '主风机频率反馈', ''));
         _this.addPoint(new meta_1.MockField('mo_xunhuanfengjipinlüfankui', 163, 4, '循环风机频率反馈', ''));
         _this.addPoint(new meta_1.MockField('mo_kongyuqijinfengwendu', 167, 4, '空预器进风温度', '℃'));
-        _this.addPoint(new meta_1.MockField('mo_kongyuqijinfengyali', 171, 4, '空预器进风压力', 'MPa'));
+        _this.addPoint(new meta_1.MockField('mo_kongyuqijinfengyali', 171, 4, '空预器进风压力', 'kPa'));
         _this.addPoint(new meta_1.MockField('mo_kongyuqichufengwendu', 175, 4, '空预器出风温度', '℃'));
-        _this.addPoint(new meta_1.MockField('mo_kongyuqichufengyali', 179, 4, '空预器出风压力', 'MPa'));
+        _this.addPoint(new meta_1.MockField('mo_kongyuqichufengyali', 179, 4, '空预器出风压力', 'kPa'));
         _this.addPoint(new meta_1.MockField('mo_zhaoqiyali', 183, 4, '沼气压力', 'KPa'));
         _this.addPoint(new meta_1.MockField('mo_zhaoqishunshiliuliang', 187, 4, '沼气瞬时流量', 'm³/h'));
         _this.addPoint(new meta_1.MockField('mo_zhaoqileijiliuliang', 191, 4, '沼气累计流量', 'm³/h'));
@@ -131,11 +131,11 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.ExceptionField('ex_yalibiansongqiguzhangbaojing', 448, 2, '压力变送器故障报警', 5));
         _this.addPoint(new meta_1.ExceptionField('ex_shuiweibiansongqiguzhangbaojing', 448, 2, '水位变送器故障报警', 6));
         _this.addPoint(new meta_1.ExceptionField('ex_paiyanwenduchuanganqiguzhangbaojing', 448, 2, '排烟温度传感器故障报警', 7));
-        _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhang', 448, 2, '燃烧器故障', 8));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 448, 2, '燃气泄漏', 9));
-        _this.addPoint(new meta_1.ExceptionField('ex_ranqiyaliyichang', 448, 2, '燃气压力异常', 10));
-        _this.addPoint(new meta_1.ExceptionField('ex_shuiweiweidibaojingdianji', 448, 2, '水位危低报警（电极）', 11));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 448, 2, '水位极低报警（电极）', 12), 'ex_shuiweijidibaojingdianji');
+        _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhang', 448, 2, '燃烧器故障', 8, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 448, 2, '燃气泄漏', 9, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_ranqiyaliyichang', 448, 2, '燃气压力异常', 10, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_shuiweiweidibaojingdianji', 448, 2, '水位危低报警（电极）', 11, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 448, 2, '水位极低报警（电极）', 12, meta_1.ExceptionField.Exception_Error), 'ex_shuiweijidibaojingdianji');
         _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 448, 2, '水位极高报警（电极）', 13), 'ex_shuiweijigaobaojingdianji');
         _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianDiShuiWei, 448, 2, '水位极低报警（设定值）', 14), 'ex_shuiweijidibaojingshedingzhi');
         _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_JiXianGaoShuiWei, 448, 2, '水位极高报警（设定值）', 15), 'ex_shuiweijigaobaojingshedingzhi');

@@ -10,6 +10,7 @@ Page({
    */
   data: {
    list:[],
+   manage:false,
   },
   startdebug: function () {
     wx.setEnableDebug({
@@ -21,7 +22,11 @@ Page({
       enableDebug: false
     })
   },
- 
+  tomanage: function () {
+    wx.navigateTo({
+      url: "/pages/devicemanage/devicemanage",
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -31,12 +36,16 @@ Page({
     wx.getStorage({
       key: 'deviceList',
       success(res) {
-        console.log(res.data)
         that.setData({
           list: res.data
         })
       }
     })
+    if(app.globalData.openid=="oskc75AGW__mvhn2UVc" ||app.globalData.openid=="oskc75CFkX_1NT1BqBk"||app.globalData.openid=="oskc75LNTq_aBLLq9Mo"){
+      that.setData({
+        manage:true
+      })
+    }
+   
   },
-
 })

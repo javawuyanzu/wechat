@@ -60,9 +60,9 @@ module.exports = (_a = /** @class */ (function (_super) {
             _this.addPoint(new meta_1.SimpleDeviceField("de_ranshaoyunxingfankui", 12, 1, "燃烧运行反馈", 1, Map_PLC_BJKN_RYZQ.coms_open_close));
             _this.addPoint(new meta_1.SimpleDeviceField("de_guoluyuanchengxuanzefankui", 12, 1, "锅炉远程选择反馈", 2, Map_PLC_BJKN_RYZQ.coms_open_close));
             _this.addPoint(new meta_1.SimpleDeviceField("de_guoluyuanchengqidongfankui", 12, 1, "锅炉远程启动反馈", 3, Map_PLC_BJKN_RYZQ.coms_open_close));
-            _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 18, 2, "蒸汽压力", "MPa", 1000));
-            _this.addPoint(new meta_1.MockField("mo_guoluyanxiangwendu", 20, 2, "锅炉烟箱温度", "℃"));
-            _this.addPoint(new meta_1.MockField("mo_guolupaiyanwendu", 22, 2, "锅炉排烟温度", "℃"));
+            _this.addPoint(new meta_1.MockField("mo_zhengqiyali", 18, 2, "蒸汽压力", "MPa", 40000));
+            _this.addPoint(new meta_1.MockField("mo_guoluyanxiangwendu", 20, 2, "锅炉烟箱温度", "℃", 160));
+            _this.addPoint(new meta_1.MockField("mo_guolupaiyanwendu", 22, 2, "锅炉排烟温度", "℃", 160));
             return _this;
         }
         return Map_PLC_BJKN_RYZQ;

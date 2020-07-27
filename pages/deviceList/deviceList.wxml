@@ -25,7 +25,7 @@
                   <image src="" style="width: 140px; height: 70px;" mode="aspectFit"></image>
                 </view>
               </view>
-              <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgStyle}}' data-control='{{item.control}}' data-title='{{item.title}}' data-type='{{item.type}}' data-device='{{item.device}}' data-jiarezu='{{item.jiarezu}}' data-media='{{item.media}}' bindlongtap="longTap">
+              <view wx:else bindtap="handleTap" data-id='{{item.deviceNo}}' data-imgstyle='{{item.imgStyle}}' data-control='{{item.control}}' data-title='{{item.title}}' data-type='{{item.type}}' data-device='{{item.device}}' data-dataMapId='{{item.dataMapId}}'  data-newFrame='{{item.newFrame}}'    data-jiarezu='{{item.jiarezu}}' data-media='{{item.media}}' bindlongtap="longTap">
                 <view class="title">
                   <view style='float:right;' wx:if="{{item.errcount >0}}">
                     <text style='height:25px;padding:0 2%;padding-top:10px;font-size:16px;color:red'>{{item.errcount}}</text>
@@ -53,7 +53,7 @@
                   </view>
                 </view>
                 <view class="start" style='color:white'>
-                  <text>{{content.list_runtime}}:{{item.runday}}</text>
+                  <text>{{item.runday}}</text>
                 </view>
                 <view class="image">
                   <view style=' position: absolute;right:110rpx;top:70rpx;' wx:if="{{item.jiarezu !=''}}">
@@ -179,13 +179,7 @@
       <text>{{version}}版本更新内容：</text>
     </view>
     <view  style="padding-left: 2vh;padding-top: 2vh;background-color: white;">
-      <text>1、修复可控设备不能购买控制服务问题</text>
-    </view>
-   <view  style="padding-left: 2vh;padding-top: 2vh;background-color: white;">
-      <text>2、修改添加设备页面</text>
-    </view>
-   <view  style="padding-left: 2vh;padding-top: 2vh;background-color: white;">
-      <text>3、新增更新内容弹框、版本提示</text>
+      <text>1、新协议解析正式生效</text>
     </view>
     <view class='toast-button'>
       <view class='button2' style="width:100%">

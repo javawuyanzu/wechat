@@ -1,7 +1,12 @@
 {
   "pages": [
-    "pages/dataMap/dataMap",
     "pages/deviceList/deviceList",
+    "pages/myorder/myorder",
+    "pages/devicemanage/devicemanage",
+    "pages/reports/reports",
+    "pages/dataMap/dataMap",
+    "pages/soldUpdate/soldUpdate",
+    "pages/salesChange/salesChange",
     "pages/dataMapList/dataMapList",
     "pages/login/login",
     "pages/add/add",
@@ -14,16 +19,13 @@
     "pages/deviceDetail/deviceDetail",
     "pages/register/register",
     "pages/forgotPw/forgotPw",
-    "pages/reports/reports",
-    "pages/soldUpdate/soldUpdate",
-    "pages/salesChange/salesChange",
     "pages/loginChoose/loginChoose",
     "pages/payMenu/payMenu",
     "pages/order/order",
-    "pages/myorder/myorder",
     "pages/orderItem/orderItem",
     "pages/userType/userType",
-    "pages/video/video"
+    "pages/video/video",
+    "pages/dataDetail/dataDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

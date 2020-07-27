@@ -75,21 +75,21 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_XUN_HUAN_BENG_3, 213, 2, '3#循环泵', Map_PLC_RanYouDaoReYou.coms_start_stop));
         _this.addPoint(new meta_1.DeviceField('de_zhuyoubeng_auto', 215, 2, '注油泵', BaseMap_1.Map_PLC.coms_atuo));
         _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_ZHU_YOU_BENG_1, 217, 2, '注油泵', Map_PLC_RanYouDaoReYou.coms_start_stop));
-        _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhang', 229, 2, '燃烧器故障', 8));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 229, 2, '燃气泄漏', 9));
-        _this.addPoint(new meta_1.ExceptionField('ex_ranqiyaliyichang', 229, 2, '燃气压力异常', 10));
+        _this.addPoint(new meta_1.ExceptionField('ex_ranshaoqiguzhang', 229, 2, '燃烧器故障', 8, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 229, 2, '燃气泄漏', 9, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_ranqiyaliyichang', 229, 2, '燃气压力异常', 10, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_fengjiguzhang', 229, 2, '风机故障', 11));
         _this.addPoint(new meta_1.ExceptionField('ex_1_xunhuanbengguzhang', 229, 2, '1#循环泵故障', 12));
         _this.addPoint(new meta_1.ExceptionField('ex_2_xunhuanbengguzhang', 229, 2, '2#循环泵故障', 13));
         _this.addPoint(new meta_1.ExceptionField('ex_3_xunhuanbengguzhang', 229, 2, '3#循环泵故障', 14));
-        _this.addPoint(new meta_1.ExceptionField('ex_zhuyoubengguzhang', 229, 2, '注油泵故障', 15));
-        _this.addPoint(new meta_1.ExceptionField('ex_jinchukouyachachaogao', 229, 2, '进出口压差超高', 0));
+        _this.addPoint(new meta_1.ExceptionField('ex_zhuyoubengguzhang', 229, 2, '注油泵故障', 15, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_jinchukouyachachaogao', 229, 2, '进出口压差超高', 0, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_jinchukouyachachaodi', 229, 2, '进出口压差超低', 1));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 229, 2, '排烟温度超高', 2));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChuKouWenDuChaoGao, 229, 2, '出口温度超高', 3));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 229, 2, '排烟温度超高', 2, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_ChuKouWenDuChaoGao, 229, 2, '出口温度超高', 3, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_liuliangxiaxianbaojing', 229, 2, '流量下限报警', 4));
         _this.addPoint(new meta_1.ExceptionField('ex_liuliangjidibaojing', 229, 2, '流量极低报警', 5));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_QueYou, 229, 2, '缺油报警（浮球）', 6), 'ex_queyoubaojingfuqiu');
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_QueYou, 229, 2, '缺油报警（浮球）', 6, meta_1.ExceptionField.Exception_Error), 'ex_queyoubaojingfuqiu');
         _this.addPoint(new meta_1.ExceptionField('ex_chuyouwenduchuanganqibaojing', 229, 2, '出油温度传感器故障', 7));
         _this.addPoint(new meta_1.ExceptionField('ex_huiyouwenduchuanganqibaojing', 231, 2, '回油温度传感器故障', 8));
         _this.addPoint(new meta_1.ExceptionField('ex_paiyanwenduchuanganqiguzhang', 231, 2, '排烟温度传感器故障', 9));
@@ -107,7 +107,7 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.ExceptionField('ex_8_zhiguanchaowenbaojing', 231, 2, '8#支管超温报警', 5));
         _this.addPoint(new meta_1.ExceptionField('ex_9_zhiguanchaowenbaojing', 231, 2, '9#支管超温报警', 6));
         _this.addPoint(new meta_1.ExceptionField('ex_10_zhiguanchaowenbaojing', 231, 2, '10#支管超温报警', 7));
-        _this.addPoint(new meta_1.ExceptionField('ex_plcguzhangbaojing', 233, 2, 'PLC故障报警', 8));
+        _this.addPoint(new meta_1.ExceptionField('ex_plcguzhangbaojing', 233, 2, 'PLC故障报警', 8, meta_1.ExceptionField.Exception_Error));
         return _this;
     }
     return Map_PLC_RanYouDaoReYou;

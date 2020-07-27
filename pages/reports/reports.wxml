@@ -3,5 +3,6 @@
  </view>
   <button bindtap="startdebug">开启调试</button>
   <button bindtap="enddebug">关闭调试</button>
-   <!-- <button bindtap="conn">conn</button>
-  <button bindtap="publish">publish</button> -->
+  <view wx:if="{{manage}}">
+    <button bindtap="tomanage">设备开号</button>
+  </view> 

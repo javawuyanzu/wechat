@@ -1,12 +1,14 @@
 const app = getApp();
 var openid='';
+import './vendor/weapp-cookie/index'
+import mqtt from '/libs/mqtt/mqtt.js'
 import {
   Wechat_DeviceAdapter
 } from '/libs/devices-lib/index.js'
 var deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn');
 
-
-import mqtt from '/libs/mqtt/mqtt.js'
+import { DeviceAdapter, ComValueMap,Endian} from '/libs/datamap/index.js';
+let adapter = new DeviceAdapter()
 App({
   data: {},
   onShow: function () {
@@ -121,7 +123,8 @@ App({
     })
    
     const storage = wx.getStorageInfoSync()
-    if (storage.keys.length == 0) {
+    
+    if (storage.keys.length == 1) {
       wx.setStorageSync('deviceList', [])
       wx.setStorageSync('errorList', [])
       wx.setStorageSync('time', 30)
@@ -130,11 +133,14 @@ App({
       wx.setStorageSync('cachedVersion', 1.0)
       wx.setStorageSync('orders', [])
       wx.setStorageSync('userType', 0)
-      wx.setStorageSync('version', "2.4.20")
+      wx.setStorageSync('version', "2.5.0")
     }
   },
-  
   globalData: {
+    endina:Endian.Info(),
+    powerArray:ComValueMap.power,
+    mediaArray:ComValueMap.media,
+    adapter:adapter,
     deviceAdapter: deviceAdapter,
     lang: 'zh-cn',
     client: null,

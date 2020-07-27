@@ -21,24 +21,24 @@ var Map_CTL_NJZJ_IP_Http_1526 = /** @class */ (function (_super) {
     function Map_CTL_NJZJ_IP_Http_1526() {
         var _this = _super.call(this) || this;
         //扩展报警
-        _this.addPoint(new meta_1.ExceptionField('ex_cainuanchukouwendugaobaojing', 135, 1, '采暖出口温度高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_reshuichukouwendugaobaojing', 136, 1, '热水出口温度高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_jinkouwendugaobaojing', 137, 1, '进口温度高报警'));
+        _this.addPoint(new meta_1.ExceptionField('ex_cainuanchukouwendugaobaojing', 135, 1, '采暖出口温度高报警', meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_reshuichukouwendugaobaojing', 136, 1, '热水出口温度高报警', meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_jinkouwendugaobaojing', 137, 1, '进口温度高报警', meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_pengzhangguanwendugaobaojing', 138, 1, '膨胀罐温度高报警'));
         _this.addPoint(new meta_1.ExceptionField('ex_guodianliubaojing', 139, 1, '过电流报警'));
         _this.addPoint(new meta_1.ExceptionField('ex_jishuiyaligaobaojing', 140, 1, '给水压力高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_jienengqichukouyanwengaobaojing', 141, 1, '节能器出口烟温高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_lengningqichukouyanwengaobaojing', 142, 1, '冷凝器出口烟温高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_chushuiwendugaobaojing', 143, 1, '出水温度高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_gaowenbaohuwendugaobaojing', 144, 1, '高温保护温度高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_youwengaobaojing', 145, 1, '油温高报警'));
+        _this.addPoint(new meta_1.ExceptionField('ex_jienengqichukouyanwengaobaojing', 141, 1, '节能器出口烟温高报警', meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_lengningqichukouyanwengaobaojing', 142, 1, '冷凝器出口烟温高报警', meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_chushuiwendugaobaojing', 143, 1, '出水温度高报警', meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_gaowenbaohuwendugaobaojing', 144, 1, '高温保护温度高报警', meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_youwengaobaojing', 145, 1, '油温高报警', meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_wenchagaobaojing', 146, 1, '温差高报警'));
         _this.addPoint(new meta_1.ExceptionField('ex_shuibengguozaibaojing', 147, 1, '水泵过载报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_jiarezuguozaibaojing', 148, 1, '加热组过载报警'));
+        _this.addPoint(new meta_1.ExceptionField('ex_jiarezuguozaibaojing', 148, 1, '加热组过载报警', meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_churexunhuanbengguzhangbaojing', 149, 1, '储热循环泵故障报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_yandaodiefaguzhang', 150, 1, '烟道蝶阀故障'));
+        _this.addPoint(new meta_1.ExceptionField('ex_yandaodiefaguzhang', 150, 1, '烟道蝶阀故障', meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_nengliangshezhiwendugaobaojing', 151, 1, '能量设置温度高报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_zhengqiwendugaobaojing', 152, 1, '蒸汽温度高报警'));
+        _this.addPoint(new meta_1.ExceptionField('ex_zhengqiwendugaobaojing', 152, 1, '蒸汽温度高报警', meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_shuixiangwendugaobaojing', 153, 1, '水箱温度高报警'));
         _this.addPoint(new meta_1.ExceptionField('ex_4#guodianliubaojing', 154, 1, '4#过电流报警'));
         _this.addPoint(new meta_1.ExceptionField('ex_5#guodianliubaojing', 155, 1, '5#过电流报警'));
@@ -46,8 +46,8 @@ var Map_CTL_NJZJ_IP_Http_1526 = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.ExceptionField('ex_7#guodianliubaojing', 157, 1, '7#过电流报警'));
         _this.addPoint(new meta_1.ExceptionField('ex_8#guodianliubaojing', 158, 1, '8#过电流报警'));
         _this.addPoint(new meta_1.ExceptionField('ex_gufengjiguzhangbaojing', 159, 1, '鼓风机故障报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_jiezhigaowenbaojing', 160, 1, '介质高温报警'));
-        _this.addPoint(new meta_1.ExceptionField('ex_jiezhidiwenbaojing', 161, 1, '介质低温报警'));
+        _this.addPoint(new meta_1.ExceptionField('ex_jiezhigaowenbaojing', 160, 1, '介质高温报警', meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_jiezhidiwenbaojing', 161, 1, '介质低温报警', meta_1.ExceptionField.Exception_Error));
         //扩展故障
         _this.addPoint(new meta_1.ExceptionField('ex_cainuanchukouwenduchuanganqiguzhang', 250, 1, '采暖出口温度传感器故障'));
         _this.addPoint(new meta_1.ExceptionField('ex_reshuichukouwenduchuanganqiguzhang', 251, 1, '热水出口温度传感器故障'));

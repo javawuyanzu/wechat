@@ -13,6 +13,9 @@
                 <view class="button-wrapper">
                     <button type="default" formType="reset" bindtap="scanCode">扫一扫查询</button>
                 </view>
+                 <view class="button-wrapper">
+                    <button type="default" formType="reset" bindtap="todatamap">点位录入</button>
+                </view>
             </view>
         </form>
     </view>

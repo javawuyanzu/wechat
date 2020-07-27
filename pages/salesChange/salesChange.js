@@ -1,4 +1,4 @@
-// pages/salesChange/salesChange.js
+const app = getApp();
 Page({
 
   /**
@@ -22,8 +22,13 @@ Page({
     comm:0,
     ctlTypeList:[],
     plcTypeList:[],
+    datamapList:[],
+    datamapId:0,
+    datamapName:"请选择",
     canctlarray: ["不可控", "可控"],
     canctl: 0,
+    datamaptyparray: ["中文", "英文"],
+    datamaptyp: 0,
     deviceDataMaparray: ["否", "是"],
     deviceDataMap: 0,
   },
@@ -34,6 +39,15 @@ Page({
   },
   formSubmit: function (e) {
     var that= this
+    var cnId="";
+    var enId="";
+      if(that.data.datamaptyp==0){
+        cnId=that.data.datamapId
+        enId=""
+      }else{
+        enId=that.data.datamapId
+        cnId=""
+      }
     if (that.data.comm==0){
       if (typeof (that.data.sim) == "undefined" || that.data.sim == '898607B61518900') {
         wx.showToast({
@@ -53,7 +67,8 @@ Page({
           power: that.data.power,
           media: that.data.media,
           iMEI: that.data.sim,
-          isDeviceDataMap: that.data.deviceDataMap,
+          cnId: cnId,
+          enId:enId,
           isCanCtl: that.data.canctl,
         },
         header: {
@@ -84,7 +99,8 @@ Page({
           deviceType: that.data.type,
           power: that.data.power,
           media: that.data.media,
-          isDeviceDataMap: that.data.deviceDataMap,
+          enId: enId,
+          cnId: cnId,
           isCanCtl: that.data.canctl,
           iMEI: "0",
         },
@@ -119,6 +135,19 @@ Page({
     var that = this
     that.setData({
       canctl: e.detail.value,
+    })
+  },
+  bindPickerChange_DataMap: function (e) {
+    var that = this
+    that.setData({
+      datamapId: that.data.datamapList[e.detail.value].id,
+      datamapName:that.data.datamapList[e.detail.value].title
+    })
+  },
+  bindPickerChange_DataMapTyp: function (e) {
+    var that = this
+    that.setData({
+      datamaptyp: e.detail.value,
     })
   },
   bindPickerChange_deviceDataMap: function (e) {
@@ -186,7 +215,6 @@ Page({
         for (var i in res.data.data){
           list.push(res.data.data[i].deviceType)
         }
-       
         wx.request({
           url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
           data: {
@@ -198,6 +226,38 @@ Page({
           method: 'GET',
           success: function (res) {
             console.log(res)
+            var datamapId=null;
+            if(res.data.data.deviceDataMapCn!=null){
+              datamapId=res.data.data.deviceDataMapCn
+            }else{
+              datamapId=res.data.data.deviceDataMapEn
+            }
+            var datamapList=[]
+            wx.request({
+              url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/search/author',
+              method: "Get",
+              data: {
+                author: app.globalData.openid,
+              },
+              success: function (res) {
+                var list=res.data.data
+                for(var i in list){
+                  console.log(datamapId)
+                  if(datamapId!=null){
+                    console.log(list[i].id)
+                    if(datamapId==list[i].id){
+                      that.setData({
+                        datamapName:list[i].title
+                      })
+                    }
+                  }
+                  datamapList.push({id:list[i].id,title:list[i].title})
+                }
+                that.setData({
+                  datamapList:datamapList
+                })
+              }
+            })
             if (res.data.data.canCtl){
               that.setData({
                 canctl: 1
@@ -207,9 +267,18 @@ Page({
                 canctl: 0
               })
             }
-            if (res.data.data.deviceDataMap) {
+            if (res.data.data.deviceDataMapCn!=null) {
               that.setData({
-                deviceDataMap: 1
+                datamaptyp: 0
+              })
+            } else {
+              that.setData({
+                datamaptyp: 1
+              })
+            }
+            if (res.data.data.newFrame) {
+              that.setData({
+                deviceDataMap: 1,
               })
             } else {
               that.setData({
@@ -231,6 +300,7 @@ Page({
 
             var plcTypeList=[]
             var ctlTypeList = []
+            
             for (var i in list) {
               if (list[i].substr(0, 3) == 'PLC') {
                 plcTypeList.push(list[i])
@@ -267,6 +337,8 @@ Page({
               mediaarray: ["热水", "蒸汽", "导热油", "热风", "真空"],
               sim: simtemp
             })
+           
+           
           }
         })
       }

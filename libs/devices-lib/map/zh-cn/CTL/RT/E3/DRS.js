@@ -28,7 +28,7 @@ module.exports = (_a = /** @class */ (function (_super) {
         function Map_CTL_RT_E3_DRS() {
             var _this = _super.call(this) || this;
             _this.addPoint(new CountField_1.CountField(RT_2.CTL_RT.KEY_POINT_JIA_RE_ZU, "加热组"));
-            _this.addPoint(new CountField_1.CountField(RT_2.CTL_RT.KEY_POINT_Add_SHUI_BENG, "给水泵"));
+            _this.addPoint(new CountField_1.CountField(RT_2.CTL_RT.KEY_POINT_Add_SHUI_BENG, "补水泵"));
             _this.addPoint(new CountField_1.CountField(RT_2.CTL_RT.KEY_POINT_LENG_NING_BENG, "循环泵"));
             _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_SYSTEM_STATUS, 3, 2, "控制器状态", '', Map_CTL_RT_E3_DRS.coms_status));
             _this.addPoint(new meta_1.BaseInfoField(SdcSoftDevice_1.SdcSoftDevice.KEY_POINT_RUN_LIFE, 53, 2, "运行时间", "时"));

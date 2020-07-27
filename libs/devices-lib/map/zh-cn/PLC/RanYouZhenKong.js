@@ -65,7 +65,7 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_Add_SHUI_BENG_2, 179, 2, '2#补水泵', Map_PLC_RanYouZhenKong.coms_start_stop));
         _this.addPoint(new meta_1.DeviceField('de_zhenkongbeng_auto', 181, 2, '真空泵', BaseMap_1.Map_PLC.coms_atuo));
         _this.addPoint(new meta_1.DeviceField(BaseDevice_1.PLC.KEY_POINT_ZHEN_KONG_BENG_1, 183, 2, '真空泵', Map_PLC_RanYouZhenKong.coms_start_stop));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 203, 2, '炉壁超温报警', 0));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_LuBiChaoWen, 203, 2, '炉壁超温报警', 0, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_remeishuiwenduchuanganqiguzhang', 203, 2, '热媒水温度传感器故障', 1));
         _this.addPoint(new meta_1.ExceptionField('ex_paiyanwenduchuanganqiguzhang', 203, 2, '排烟温度传感器故障', 2));
         _this.addPoint(new meta_1.ExceptionField('ex_cainuanchushuiwenduchuanganqiguzhang', 203, 2, '采暖出水温度传感器故障', 3));
@@ -73,13 +73,13 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.ExceptionField('ex_wendushedingcuowubaojing', 203, 2, '温度设定错误报警', 5));
         _this.addPoint(new meta_1.ExceptionField('ex_xunhuanbengliansuoduankaibaojing', 203, 2, '循环泵连锁断开报警', 6));
         _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_WaiBuLianSuoDuanKai, 203, 2, '外部连锁断开报警', 7));
-        _this.addPoint(new meta_1.ExceptionField('ex_ranshaojiguzhang', 203, 2, '燃烧器故障', 8));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 203, 2, '燃气泄漏', 9));
-        _this.addPoint(new meta_1.ExceptionField('ex_ranqiyaliyichang', 203, 2, '燃气压力异常', 10));
-        _this.addPoint(new meta_1.ExceptionField('ex_luneiyaligaobaojingshedingzhi', 203, 2, '炉内压力高报警（设定值）', 11));
-        _this.addPoint(new meta_1.ExceptionField('ex_luneiyaligaobaojingyalikaiguan', 203, 2, '炉内压力高报警（压力开关）', 12));
-        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 203, 2, '排烟温度超高报警', 13));
-        _this.addPoint(new meta_1.ExceptionField('ex_remeishuiwenduchaogaobaojing', 203, 2, '热媒水温度超高报警', 14));
+        _this.addPoint(new meta_1.ExceptionField('ex_ranshaojiguzhang', 203, 2, '燃烧器故障', 8, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_RanQiXieLou, 203, 2, '燃气泄漏', 9, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_ranqiyaliyichang', 203, 2, '燃气压力异常', 10, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_luneiyaligaobaojingshedingzhi', 203, 2, '炉内压力高报警（设定值）', 11, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_luneiyaligaobaojingyalikaiguan', 203, 2, '炉内压力高报警（压力开关）', 12, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField(gfrm_1.GroupFieldsRelationalMapping.KEY_Expt_PaiYanWenDuChaoGao, 203, 2, '排烟温度超高报警', 13, meta_1.ExceptionField.Exception_Error));
+        _this.addPoint(new meta_1.ExceptionField('ex_remeishuiwenduchaogaobaojing', 203, 2, '热媒水温度超高报警', 14, meta_1.ExceptionField.Exception_Error));
         _this.addPoint(new meta_1.ExceptionField('ex_queshuibaohubaojing', 203, 2, '缺水保护报警', 15));
         return _this;
     }

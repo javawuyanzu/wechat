@@ -6,12 +6,6 @@ Page({
   data: {
      orders:[],
   },
-  //事件处理函数
-  // bindViewTap: function() {
-  //   wx.navigateTo({
-  //     url: '../demo/demo?orderId='+
-  //   })
-  // },
   status:function (id) {
     var statusJson = {};
     var x = "";
@@ -50,20 +44,7 @@ return statusJson;
             ['orders[' + i + '].status']: that.status(res.data.data[i].status).x,
           })
         }
-       
-            }
+        }
     })
-    // this.setData({
-    //    orders:[
-    //   {
-    //     total:200,
-    //     paymentAmount:150,
-    //     discount: '满50减20',
-    //     payforDate: util.formatTime(new Date()),
-    //     createDate: util.formatTime(new Date()),
-    //     status: 
-    //   },
-    // ]
-    // })
   }
 })
