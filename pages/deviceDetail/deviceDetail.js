@@ -488,8 +488,8 @@ Page({
         }
       })
     }
-   
-    if (options.newFrame=="true") {
+
+    if (options.newFrame == "true") {
       that.setData({
         detail_base: "基本信息",
         detail_wendu: "温度",
@@ -519,7 +519,7 @@ Page({
       imgstyle: options.imgstyle,
       jiarezu: options.jiarezu,
       deviceType: options.type,
-      dataMapId:options.dataMapId,
+      dataMapId: options.dataMapId,
       newFrame: options.newFrame,
       zuotian: that.getDateStr(null, -1),
       qiantian: that.getDateStr(null, -2),
@@ -622,22 +622,62 @@ Page({
     }
     var imgstyle1 = that.data.imgstyle
     var keylist = GroupKeys.getKeys();
-
+    
+    var baseInfoMap = []
+    for (let i in data.getBaseInfoFields().map) {
+      baseInfoMap.push(data.getBaseInfoFields().map[i]);
+    }
+    var mockInfoMap = []
+    for (let i in data.getMockFields().map) {
+      if(data.getMockFields().map[i]){
+        mockInfoMap.push(data.getMockFields().map[i]);
+      }
+    }
+    var settingInfoMap = []
+    for (let i in data.getSettingFields().map) {
+      if(data.getSettingFields().map[i]){
+        settingInfoMap.push(data.getSettingFields().map[i]);
+      }
+     
+    }
+    var deviceInfoMap = []
+    for (let i in data.getDeviceFields().map) {
+      if(data.getDeviceFields().map[i]){
+        deviceInfoMap.push(data.getDeviceFields().map[i]);
+      }
+    }
+    var weeksettingMap = []
+    for (let i in data.getFieldsMap(keylist[5]).map) {
+      if(data.getFieldsMap(keylist[5]).map[i]){
+        weeksettingMap.push(data.getFieldsMap(keylist[5]).map[i]);
+      }
+    }
+    var startstoptimeMap = []
+    for (let i in data.getFieldsMap(keylist[6]).map) {
+      if(data.getFieldsMap(keylist[6]).map[i]){
+        startstoptimeMap.push(data.getFieldsMap(keylist[6]).map[i]);
+      }
+    }
+    var switchquantityMap = []
+    for (let i in data.getFieldsMap(keylist[7]).map) {
+      if(data.getFieldsMap(keylist[7]).map[i]){
+      switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
+      }
+    }
     that.setData({
       src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
       bengAnimationList: data.getBeng(),
       exceptionInfoMap: data.getExceptionFields().map,
       fanAnimationList: data.getFan(),
-      baseInfoMap: data.getBaseInfoFields().map,
-      mockInfoMap: data.getMockFields().map,
-      settingInfoMap: data.getSettingFields().map,
-      deviceInfoMap: data.getDeviceFields().map,
-      weeksettingMap: data.getFieldsMap(keylist[5]),
-      startstoptimeMap: data.getFieldsMap(keylist[6]),
-      switchquantityMap: data.getFieldsMap(keylist[7]),
+      baseInfoMap:baseInfoMap,
+      mockInfoMap: mockInfoMap,
+      settingInfoMap: settingInfoMap,
+      deviceInfoMap: deviceInfoMap,
+      weeksettingMap:weeksettingMap,
+      startstoptimeMap: startstoptimeMap,
+      switchquantityMap: switchquantityMap,
     })
     wx.hideLoading()
-
     for (var i = 0; i < that.data.bengAnimationList.length; i++) {
       console.log()
       var src = 'bengList[' + i + '].src'
@@ -705,9 +745,9 @@ Page({
         },
         responseType: 'arraybuffer',
         success: function (res) {
-          var bytes=res.data
+          var bytes = res.data
           console.log(that.data.newFrame)
-          if (that.data.newFrame=="true") {
+          if (that.data.newFrame == "true") {
             wx.request({
               url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
               data: {
@@ -725,7 +765,7 @@ Page({
                 let device = app.globalData.adapter.Device
                 var errorList = []
                 var myDate = new Date();
-                if(device.bj.length>0){
+                if (device.bj.length > 0) {
                   for (var index in device.bj) {
                     errorList.push({
                       deviceNo: deviceNo,
@@ -739,15 +779,15 @@ Page({
                   }
                 }
                 var imgstyle1 = that.data.imgstyle
-                var el=device.getStoveElements()[0].values
-                  var stove=device.getStoveElements()[0].prefix
-                  for(var i in el){
-                    if(el[i]!=-1){
-                      stove=stove+"-"+el[i]
-                    }
+                var el = device.getStoveElements()[0].values
+                var stove = device.getStoveElements()[0].prefix
+                for (var i in el) {
+                  if (el[i] != -1) {
+                    stove = stove + "-" + el[i]
                   }
+                }
                 that.setData({
-                  src:  'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0,7) + "-"+imgstyle1 + '.gif',
+                  src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif',
                   bengAnimationList: device.getBeng(),
                   fanAnimationList: device.getFan(),
                   baseInfoMap: device.jb,
@@ -769,7 +809,7 @@ Page({
                     [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/beng/' + that.data.bengAnimationList[i].getElementPrefixAndValuesString() + '.gif'
                   })
                 }
-    
+
                 for (var i = 0; i < that.data.fanAnimationList.length; i++) {
                   var src = 'fanList[' + i + '].src'
                   var title = 'fanList[' + i + '].title'
@@ -780,8 +820,8 @@ Page({
                 }
               }
             })
-              
-           
+
+
           } else {
             var errorList = []
             let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
@@ -838,21 +878,59 @@ Page({
               }
 
             }
-
-
             var keylist = GroupKeys.getKeys();
+            var baseInfoMap = []
+            for (let i in data.getBaseInfoFields().map) {
+              baseInfoMap.push(data.getBaseInfoFields().map[i]);
+            }
+            var mockInfoMap = []
+            for (let i in data.getMockFields().map) {
+              if(data.getMockFields().map[i]){
+                mockInfoMap.push(data.getMockFields().map[i]);
+              }
+            }
+            var settingInfoMap = []
+            for (let i in data.getSettingFields().map) {
+              if(data.getSettingFields().map[i]){
+                settingInfoMap.push(data.getSettingFields().map[i]);
+              }
+            }
+            var deviceInfoMap = []
+            for (let i in data.getDeviceFields().map) {
+              if(data.getDeviceFields().map[i]){
+                deviceInfoMap.push(data.getDeviceFields().map[i]);
+              }
+            }
+            var weeksettingMap = []
+            for (let i in data.getFieldsMap(keylist[5]).map) {
+              if(data.getFieldsMap(keylist[5]).map[i]){
+                weeksettingMap.push(data.getFieldsMap(keylist[5]).map[i]);
+              }
+            }
+            var startstoptimeMap = []
+            for (let i in data.getFieldsMap(keylist[6]).map) {
+              if(data.getFieldsMap(keylist[6]).map[i]){
+                startstoptimeMap.push(data.getFieldsMap(keylist[6]).map[i]);
+              }
+            }
+            var switchquantityMap = []
+            for (let i in data.getFieldsMap(keylist[7]).map) {
+              if(data.getFieldsMap(keylist[7]).map[i]){
+              switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
+              }
+            }
             that.setData({
               src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
               bengAnimationList: data.getBeng(),
               exceptionInfoMap: data.getExceptionFields().map,
               fanAnimationList: data.getFan(),
-              baseInfoMap: data.getBaseInfoFields().map,
-              mockInfoMap: data.getMockFields().map,
-              settingInfoMap: data.getSettingFields().map,
-              deviceInfoMap: data.getDeviceFields().map,
-              weeksettingMap: data.getFieldsMap(keylist[5]).map,
-              startstoptimeMap: data.getFieldsMap(keylist[6]).map,
-              switchquantityMap: data.getFieldsMap(keylist[7]).map,
+              baseInfoMap: baseInfoMap,
+              mockInfoMap: mockInfoMap,
+              settingInfoMap:settingInfoMap,
+              deviceInfoMap: deviceInfoMap,
+              weeksettingMap: weeksettingMap,
+              startstoptimeMap: startstoptimeMap,
+              switchquantityMap: switchquantityMap,
             })
             wx.hideLoading()
             for (var i = 0; i < that.data.bengAnimationList.length; i++) {

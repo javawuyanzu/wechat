@@ -1065,8 +1065,8 @@ Page({
                 try {
                   if (newFrame) {
                     app.globalData.adapter.Init(map, addr)
-                    app.globalData.adapter.handlerData(new Uint8Array(bytes))
                     console.log(new Uint8Array(bytes))
+                    app.globalData.adapter.handlerData(new Uint8Array(bytes))
                     let device = app.globalData.adapter.Device
                     var errorList = []
                     for (var index in device.BaoJing) {
@@ -1090,7 +1090,6 @@ Page({
                         break;
                       }
                     }
-                    console.log(device.Run)
                     if(device.Run){
                       runday = device.Run.name + ":" + device.Run.vstr
                     }
@@ -1215,7 +1214,6 @@ Page({
                         break;
                       }
                     }
-
                     errcount1 = errorList.length,
                       src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
                     var ilist = that.data.imgList
@@ -1316,50 +1314,90 @@ Page({
                         })
                         return
                       }
-                      var dataMapId;
-                     if(res.data.data.deviceDataMapCn){
-                      dataMapId= res.data.data.deviceDataMapCn
-                     }else{
-                      dataMapId= res.data.data.deviceDataMapEn
-                     }
-                     wx.request({
-                      url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
-                      data: {
-                        id: dataMapId,
-                      },
-                      method: 'GET',
-                      header: {
-                        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-                      },
-                      success: function (res) {
-                        let map= JSON.parse(res.data.data.deviceDataMap)
-                        let addr= JSON.parse(res.data.data.pointIndexMap)
-                        wx.getStorage({
-                          key: 'deviceList',
-                          success(res) {
-                            deviceList = res.data;
-                            for(var i in deviceList){
-                              if(deviceList[i].deviceNo==deviceno){
-                                deviceList[i].map= map,
-                                deviceList[i].addr= addr,
-                                deviceList[i].dataMapId= dataMapId,
-                                deviceList[i].newFrame= newFrame,
-                                deviceList[i].deviceNo= deviceno,
-                                deviceList[i].deviceName= '',
-                                deviceList[i].deviceType= "",
-                                deviceList[i].imgStyle= 0
+                      try {
+                        var dataMapId;
+                        if(res.data.data.deviceDataMapCn){
+                         dataMapId= res.data.data.deviceDataMapCn
+                        }else{
+                         dataMapId= res.data.data.deviceDataMapEn
+                        }
+                        wx.request({
+                         url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
+                         data: {
+                           id: dataMapId,
+                         },
+                         method: 'GET',
+                         header: {
+                           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                         },
+                         success: function (res) {
+                           console.log(res)
+                           let map= JSON.parse(res.data.data.deviceDataMap)
+                           let addr= JSON.parse(res.data.data.pointIndexMap)
+                           wx.getStorage({
+                             key: 'deviceList',
+                             success(res) {
+                               deviceList = res.data;
+                               for(var i in deviceList){
+                                 if(deviceList[i].deviceNo==deviceno){
+                                   deviceList[i].map= map,
+                                   deviceList[i].addr= addr,
+                                   deviceList[i].dataMapId= dataMapId,
+                                   deviceList[i].newFrame= newFrame,
+                                   deviceList[i].deviceNo= deviceno,
+                                   deviceList[i].deviceName= '',
+                                   deviceList[i].deviceType= "",
+                                   deviceList[i].imgStyle= 0
+                                 }
+                               }
+                               wx.setStorage({
+                                 key: 'deviceList',
+                                 data: deviceList,
+                                 success: function (res) {
+                                 }
+                               })
+                             }
+                           })
+                         }
+                       })
+                      } catch (error) {
+                        console.log(error)
+                        var ilist = that.data.imgList
+                        if (that.finddevice(ilist, deviceno)) {
+                          for (var i = 0; i < ilist.length; i++) {
+                            if (ilist[i].deviceNo === deviceno) {
+                              if (ilist[i].runstate != "Error") {
+                                ilist[i].deviceNo = deviceno
+                                ilist[i].title = deviceno
+                                ilist[i].runstate = "Error"
+                                ilist[i].error = 1
+                                that.setData({
+                                  imgList: ilist
+                                })
+                                wx.showModal({
+                                  title: that.data.content.list_prompt,
+                                  content: that.data.content.list_error1 + deviceno + that.data.content.list_error2,
+                                  success(res) { }
+                                })
                               }
+                              break;
                             }
-                            wx.setStorage({
-                              key: 'deviceList',
-                              data: deviceList,
-                              success: function (res) {
-                              }
-                            })
                           }
+                        } else {
+                          var ilist = that.data.imgList
+                          ilist.push({
+                            title: deviceno,
+                            runstate: "Error",
+                            deviceNo: deviceno,
+                            lang: app.globalData.lang
+                          })
+                        }
+                        that.setData({
+                          imgList: ilist
                         })
+                        return
                       }
-                    })
+                     
                     }
                   })
                 }

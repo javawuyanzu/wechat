@@ -196,12 +196,12 @@
 							</picker>
 						</view>
 					</view>
-						<view class="weui-cell weui-cell_active">
+					<view class="weui-cell weui-cell_active">
 						<view class="weui-cell__hd">
 							<view class="weui-label">自定义介质：</view>
 						</view>
 						<view class="weui-cell__bd">
-							<input class="weui-input" placeholder="自定义介质名称：" bindinput="mediaName" value="{{media.vstr}}" />
+							<input class="weui-input" placeholder="自定义介质名称" bindinput="mediaName" value="{{media.vstr}}" />
 						</view>
 					</view>
 					<view class="weui-cell weui-cell_active">
@@ -212,7 +212,50 @@
 							<input class="weui-input" placeholder="点位名称：" bindinput="sysrunName" value="{{sysrun.name}}" />
 						</view>
 					</view>
-
+					<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+						<view class="weui-cell__hd">
+							<view class="weui-label">是否可控</view>
+						</view>
+						<view class="weui-cell__bd">
+							<picker bindchange="bindCtlChange" range="{{ifctl}}">
+								<view class="weui-select weui-select_in-select-after">{{ifctl[ctlindex]}}</view>
+							</picker>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active" wx:if="{{ctlindex==1}}">
+						<view class="weui-cell__hd">
+							<view class="weui-label">站号：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="站号" bindinput="ctlNo" value="{{no}}" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+						<view class="weui-cell__hd">
+							<view class="weui-label">是否使用传感器计算</view>
+						</view>
+						<view class="weui-cell__bd">
+							<picker bindchange="bindInputChange" range="{{ifinput}}">
+								<view class="weui-select weui-select_in-select-after">{{ifinput[inputIndex]}}</view>
+							</picker>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active" wx:if="{{inputIndex==1}}">
+						<view class="weui-cell__hd">
+							<view class="weui-label">计算数值上限：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="计算数值上限" bindinput="inputMax" value="{{input.max}}" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active" wx:if="{{inputIndex==1}}">
+						<view class="weui-cell__hd">
+							<view class="weui-label">计算数值下限：</view>
+						</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="计算数值下限" bindinput="inputMin" value="{{input.min}}" />
+						</view>
+					</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -259,15 +302,17 @@
 			</view>
 			<view class="li" wx:for="{{atmap.beng}}" wx:key="key" wx:for-item="beng" wx:for-index="idx">
 
-				<view style="display: flex;">
+				<view style="display: flex; margin-top: 20rpx;">
 					<image class="littleimage" src="../../images/countMinus1.png" bindtap="removeBeng" data-key="{{idx}}" />
 					<picker bindchange="bindPickerBeng" range="{{bengs}}" data-key="{{idx}}" style="line-height: 55rpx;">
 						<view style="margin-left: 50rpx;">
-							水泵类型:{{atmap.beng[idx].name}}
+							水泵名称
 						</view>
 					</picker>
-
-					<view class="" style="width: 33%;margin-top: 4rpx;margin-left: 20rpx;">
+					<view class="" style="width: 20%;margin-top: 4rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="自定义名称" bindinput="bengName" data-key="{{idx}}" value="{{atmap.beng[idx].name}}" />
+					</view>
+					<view class="" style="width: 20%;margin-top: 4rpx;margin-left: 20rpx;">
 						<input class="weui-input" placeholder="请输入数量" type="number" bindinput="bengCount" data-key="{{idx}}" value="{{atmap.beng[idx].amount}}" />
 					</view>
 
@@ -282,15 +327,17 @@
 			</view>
 			<view class="li" wx:for="{{atmap.fan}}" wx:key="key" wx:for-item="fan" wx:for-index="idx">
 
-				<view style="display: flex;">
+				<view style="display: flex; margin-top: 20rpx;">
 					<image class="littleimage" src="../../images/countMinus1.png" bindtap="removeFan" data-key="{{idx}}" />
 					<picker bindchange="bindPickerFan" range="{{fans}}" data-key="{{idx}}" style="line-height: 55rpx;">
 						<view style="margin-left: 50rpx;">
-							风机类型:{{atmap.fan[idx].name}}
+							风机名称
 						</view>
 					</picker>
-
-					<view class="" style="width: 33%;margin-top: 4rpx;margin-left: 20rpx;">
+					<view class="" style="width: 20%;margin-top: 4rpx;margin-left: 20rpx;">
+						<input class="weui-input" placeholder="自定义名称" bindinput="fanName" data-key="{{idx}}" value="{{atmap.fan[idx].name}}" />
+					</view>
+					<view class="" style="width: 20%;margin-top: 4rpx;margin-left: 20rpx;">
 						<input class="weui-input" placeholder="请输入数量" type="number" bindinput="fanCount" data-key="{{idx}}" value="{{atmap.fan[idx].amount}}" />
 					</view>
 
@@ -391,7 +438,7 @@
 			<view class="help" wx:for="{{kongzhi}}" wx:key="key" wx:for-item="kongzhi" wx:for-index="idx">
 				<view class='help_item'>
 					<view class='title'>
-						<view class='title_1'>{{kongzhi.addr}}</view>
+						<view class='title_1'>{{kongzhi.name}}</view>
 						<view style="width: 20%;color: red;" bindtap="removekongzhi" data-key="{{idx}}">删除</view>
 						<view class='title_2' data-index="{{idx}}" catchtap='kongzhipanel' style="margin-left: 100rpx;">
 							<image src="../../images/{{kongzhiIndex == idx ? 'shang':'xia'}}.png"></image>
@@ -400,13 +447,42 @@
 					<view class='detail' wx:if="{{kongzhiIndex == idx}}">
 						<view class="weui-cell weui-cell_active">
 							<view class=" weui-cell__hd">
-								<view class="weui-label">站号：</view>
+								<view class="weui-label">名称：</view>
 							</view>
 							<view class="weui-cell__bd">
-								<input class="weui-input" placeholder="站号" bindinput="kongzhiNo" data-key="{{idx}}" value="{{kongzhi.no}}" />
+								<input class="weui-input" placeholder="名称" bindinput="kongzhiName" data-key="{{idx}}" value="{{kongzhi.name}}" />
 							</view>
 						</view>
-
+						<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after" style="border-bottom:0.5px solid var(--weui-FG-3);">
+							<view class=" weui-cell__hd">
+								<view class="weui-label">类型：</view>
+							</view>
+							<view class="weui-cell__bd">
+								<picker bindchange="bindPickerKongzhityp" range="{{ctltyp}}" data-key="{{idx}}">
+									<view class="weui-select weui-select_in-select-after"> {{ctltyp[kongzhi.typ]}}</view>
+								</picker>
+							</view>
+						</view>
+						<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after" style="border-bottom:0.5px solid var(--weui-FG-3);">
+							<view class=" weui-cell__hd">
+								<view class="weui-label">控制类型：</view>
+							</view>
+							<view class="weui-cell__bd">
+								<picker bindchange="bindPickerKongzhitype" range="{{ctlgroup}}" data-key="{{idx}}">
+									<view class="weui-select weui-select_in-select-after"> {{ctlgroup[kongzhi.group]}}</view>
+								</picker>
+							</view>
+						</view>
+						<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after" style="border-bottom:0.5px solid var(--weui-FG-3);">
+							<view class=" weui-cell__hd">
+								<view class="weui-label">模式：</view>
+							</view>
+							<view class="weui-cell__bd">
+								<picker bindchange="bindPickerKongzhiMode" range="{{mode}}" data-key="{{idx}}">
+									<view class="weui-select weui-select_in-select-after"> {{mode[kongzhi.mode]}}</view>
+								</picker>
+							</view>
+						</view>
 						<view class="weui-cell weui-cell_active">
 							<view class=" weui-cell__hd">
 								<view class="weui-label">地址:</view>
@@ -431,16 +507,16 @@
 								<input class="weui-input" placeholder="最小值" bindinput="kongzhiMin" data-key="{{idx}}" value="{{kongzhi.min}}" />
 							</view>
 						</view>
-						<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after" style="border-bottom:0.5px solid var(--weui-FG-3);">
-							<view class=" weui-cell__hd">
-								<view class="weui-label">控制类型：</view>
-							</view>
-							<view class="weui-cell__bd">
-								<picker bindchange="bindPickerKongzhityp" range="{{ctlgroup}}" data-key="{{idx}}">
-									<view class="weui-select weui-select_in-select-after"> {{ctlgroup[kongzhi.group]}}</view>
-								</picker>
-							</view>
+						<view wx:if="{{kongzhi.typ==1}}">
+							<view class="weui-cells__title">说明：</view>
+							<view class="weui-cells weui-cells_after-title">
+								<view class="weui-cell weui-cell_active">
+									<view class="weui-cell__bd">
+										<textarea class="weui-textarea" placeholder="请输入控制说明" style="height: 3.3em" value="{{kongzhi.desc}}" bindinput="inputDescription"  data-key="{{idx}}"/>
+									</view>
+            </view>
 						</view>
+        </view>
 						<view class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after" style="border-bottom:0.5px solid var(--weui-FG-3)">
 							<view class=" weui-cell__hd">
 								<view class="weui-label">计算函数</view>

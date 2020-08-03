@@ -95,11 +95,8 @@ Page({
       title: that.data.content.operation_title
     })
   },
-  addDevice: function (deviceNo,deviceType,newFrame,dataMapId) {
+  addDevice: function (deviceList,deviceNo,deviceType,newFrame,dataMapId) {
     var that = this
-    
-    var deviceList = []
-   
     if (deviceNo.substr(0, 2) === '20') {
       wx.request({
         //获取openid接口   
@@ -399,7 +396,7 @@ Page({
         }
         var deviceList = []
         wx.request({
-          url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
+          url: 'https://apis.sdcsoft.com.cn/webapi/output/decoder/decode',
           data: {
             deviceNo: deviceNo,
           },
@@ -430,7 +427,8 @@ Page({
             wx.getStorage({
               key: 'deviceList',
               fail(res) {
-                that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
+                var deviceList=[]
+                that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
               },
               success(res) {
                 deviceList = res.data;
@@ -444,7 +442,7 @@ Page({
                     return;
                   }
                 }
-                that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
+                that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
               }
             })
           }
@@ -515,7 +513,7 @@ Page({
       var deviceNo = formData.deviceNo
       var deviceList = []
       wx.request({
-        url: 'https://apis.sdcsoft.com.cn/wechat/device/getdecode',
+        url: 'https://apis.sdcsoft.com.cn/webapi/output/decoder/decode',
         data: {
           deviceNo: deviceNo,
         },
@@ -546,7 +544,8 @@ Page({
           wx.getStorage({
             key: 'deviceList',
             fail(res) {
-              that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
+              var deviceList=[]
+              that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
             },
             success(res) {
               deviceList = res.data;
@@ -560,18 +559,32 @@ Page({
                   return;
                 }
               }
-              that.addDevice(deviceNo,deviceType,newFrame,dataMapId)
+              wx.request({
+                //获取openid接口   
+                url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/list',
+                data: {
+                  openId: app.globalData.openid,
+                },
+                method: 'GET',
+                success: function (res) {
+                  console.log(res)
+                  if (res.data.data.length>10) {
+                    wx.showToast({
+                      title: "添加设备数量不能超过十台",
+                      icon: 'none',
+                      duration: 2000
+                    });
+                    return;
+                  }
+                  that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
+                }
+              })
+              
             }
           })
-          
-          
-  
-          
-          
         }
       })
     }
-
   }
 })
 

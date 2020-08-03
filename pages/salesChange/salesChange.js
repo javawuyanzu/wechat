@@ -189,6 +189,11 @@ Page({
     that.setData({
       media: e.detail.value,
     })
+    if(e.detail.value==0||e.detail.value){
+      that.setData({
+        canctl:1
+      })
+    }
   },
   bindPickerChange_deviceType: function (e) {
     var that = this

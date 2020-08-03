@@ -189,41 +189,65 @@
 					</label>
 				</checkbox-group>
 			</view>
-			<view class="weui-cells weui-cells_after-title" wx:if="{{field.ctl!=null&field.typ!=5}}">
+			<view class="weui-cells weui-cells_after-title" wx:if="{{field.kz!=null}}">
 				<view style="display: flex;">
-					控制点位：
+					<view>	控制点位：</view>
 					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
-						<input class="weui-input" placeholder="站号" bindinput="datakongzhiNo" data-key="{{idx}}" value="{{field.ctl.no}}" />
+						<input class="weui-input" placeholder="站号" bindinput="datakongzhiNo" data-key="{{idx}}" value="{{field.kz.no}}" />
 					</view>
 					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
-						<input class="weui-input" placeholder="地址" bindinput="datakongzhiaddr" data-key="{{idx}}" value="{{field.ctl.addr}}" />
+					<input class="weui-input" placeholder="地址" bindinput="datakongzhiaddr" data-key="{{idx}}" value="{{field.kz.addr}}" />
 					</view>
 				</view>
 				<view style="display: flex;">
 					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
-						<input class="weui-input" placeholder="最大值" bindinput="datakongzhiMax" data-key="{{idx}}" value="{{field.ctl.max}}" />
+					<input class="weui-input" placeholder="最大值" bindinput="datakongzhiMax" data-key="{{idx}}" value="{{field.kz.max}}" />
 					</view>
 					<view class="" style="width: 30%;margin-top: 12rpx;margin-left: 20rpx;">
-						<input class="weui-input" placeholder="最小值" bindinput="datakongzhiMin" data-key="{{idx}}" value="{{field.ctl.min}}" />
+						<input class="weui-input" placeholder="最小值" bindinput="datakongzhiMin" data-key="{{idx}}" value="{{field.kz.min}}" />
 					</view>
+
+
+				</view>
+				<view style="display: flex; height: 50px;margin-top: 20rpx;">
 					<picker bindchange="bindPickerCtlGroup" range="{{ctlgroup}}" data-key="{{idx}}" style="line-height: 24rpx;">
 						<text>
-                  类型:{{ctlgroup[field.ctl.group]}}
+                  控制组别:{{ctlgroup[field.kz.group]}}
                   </text>
+					</picker>
+					<picker bindchange="bindPickerCtlTyp" range="{{ctltyp}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 30rpx;">
+						<text>
+                  类型:{{ctltyp[field.kz.typ]}}
+                  </text>
+					</picker>
+					<picker bindchange="bindPickerKongzhiMode" range="{{mode}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 30rpx;">
+						<text>
+                  模式:{{mode[field.kz.mode]}}
+            </text>
 					</picker>
 				</view>
 				<view style="display: flex; height: 50px">
-
 					<picker bindchange="bindPickerDataKongzhiFnDa" range="{{FnGroups}}" data-key="{{idx}}" style="line-height: 24rpx;">
 						<text>
-						{{FnGroups[field.ctl.multiIndex[0]]}}
+						函数类别：{{FnGroups[field.kz.multiIndex[0]]}}
 						</text>
 					</picker>
-					<picker bindchange="bindPickerDataKongzhiFnXiao" range="{{Fns[field.ctl.multiIndex[0]]}}" range-key="{{'title'}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 24rpx;">
+					<picker bindchange="bindPickerDataKongzhiFnXiao" range="{{Fns[field.kz.multiIndex[0]]}}" range-key="{{'title'}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 24rpx;">
 						<text>
-						{{Fns[field.ctl.multiIndex[0]][field.ctl.multiIndex[1]].title}}
+						函数名称：{{Fns[field.kz.multiIndex[0]][field.kz.multiIndex[1]].title}}
 						</text>
 					</picker>
+				</view>
+
+				<view wx:if="{{field.kz.typ==1}}">
+					<view class="weui-cells__title">说明：</view>
+					<view class="weui-cells weui-cells_after-title">
+						<view class="weui-cell weui-cell_active">
+							<view class="weui-cell__bd">
+								<textarea class="weui-textarea" placeholder="请输入控制说明" style="height: 3.3em" value="{{field.kz.desc}}" bindinput="bindPickerCtlDesc" data-key="{{idx}}" />
+								</view>
+						</view>
+					</view>
 				</view>
 			</view>
 			<view class="weui-cell weui-cell_active weui-cell_select " style="margin-left: 30rpx;" wx:if="{{field.vm!=null}}">
@@ -246,7 +270,7 @@
 				</picker>
 				<picker bindchange="bindPickerElement" range="{{elementList}}" data-key="{{idx}}" style="line-height: 24rpx;margin-left: 24rpx;" range-key="{{'name'}}">
 					<text>
-					{{elementList[field.refindex].name}}
+					{{atmap[field.refgroup][field.refindex].name}}
 					</text>
 				</picker>
 			</view>
@@ -288,6 +312,24 @@
 					<picker bindchange="bindPickerTime" range="{{timetyp}}" data-key="{{idx}}">
 						<view class="weui-select weui-select_in-select-after">{{timetyp[field.part]}}</view>
 					</picker>
+				</view>
+			</view>
+			<view class="weui-cells weui-cells_after-title " wx:if="{{field.input!=null}}">
+				<view class="weui-cell weui-cell_active">
+					<view class="weui-cell__hd">
+						<view class="weui-label">量程上限：</view>
+					</view>
+					<view class="weui-cell__bd">
+						<input class="weui-input" placeholder="量程上限：" bindinput="inputlmax" data-key="{{idx}}" value="{{field.input.lmax}}" />
+					</view>
+				</view>
+				<view class="weui-cell weui-cell_active">
+					<view class="weui-cell__hd">
+						<view class="weui-label">量程下限：</view>
+					</view>
+					<view class="weui-cell__bd">
+						<input class="weui-input" placeholder="量程下限：" bindinput="inputlmin" data-key="{{idx}}" value="{{field.input.lmin}}" />
+					</view>
 				</view>
 			</view>
 		</view>
@@ -334,5 +376,3 @@
 		</scroll-view>
 	</view>
 </view>
-
-

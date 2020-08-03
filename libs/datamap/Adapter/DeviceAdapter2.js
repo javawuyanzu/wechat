@@ -251,12 +251,15 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.prototype.handleVMapProperty = function (field, item) {
         if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_ValueMap)) {
             var mapName = field[DeviceAdapter2.Formate_Field_Option_ValueMap];
+            //console.log(mapName)
             try {
                 if (this.valueMap.containsKey(mapName)) {
                     item.vstr = this.valueMap.getItem(mapName).getItem(item.v.toString());
+                    //console.log("a->" + field.name + "->" + this.valueMap.getItem(mapName).getItem(item.v.toString()))
                 }
                 else {
                     item.vstr = ComValueMap_1.ComValueMap[mapName][item.v];
+                    //console.log("b->" + field.name + "->" + ComValueMap[mapName][item.v])
                 }
                 return true;
             }
@@ -380,21 +383,28 @@ var DeviceAdapter2 = /** @class */ (function () {
         }
     };
     DeviceAdapter2.prototype.handleExceptionField = function (field, num) {
+        var level = field[DeviceAdapter2.Formate_Field_Option_ExecptionLevel];
+        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "level": level, "vstr": "" };
         if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Bit)) {
             //取bit位的值进行验证
             var v = 1 << field[DeviceAdapter2.Formate_Field_Option_Bit];
             //判断位与结果是否与原值v相同，相同则发生异常
             if (v == (num & v)) {
-                var level = field[DeviceAdapter2.Formate_Field_Option_ExecptionLevel];
                 //记录异常信息
-                this.device.BaoJing.push({ "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": 1, "level": level });
+                item.v = 1;
+                item.vstr = item.name;
+                this.device.BaoJing.push(item);
             }
         }
+        else if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_ValueMap)) {
+            this.handleVMapProperty(field, item);
+            this.device.BaoJing.push(item);
+        }
         else {
-            if (1 == num) {
-                var level = field[DeviceAdapter2.Formate_Field_Option_ExecptionLevel];
+            if (0 < num) {
                 //记录异常信息
-                this.device.BaoJing.push({ "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": 1, "level": level });
+                item.vstr = item.name;
+                this.device.BaoJing.push(item);
             }
         }
     };
@@ -417,7 +427,15 @@ var DeviceAdapter2 = /** @class */ (function () {
         return false;
     };
     DeviceAdapter2.prototype.handleKaiGuanField = function (field, item) {
+        //开关必需包含vm属性
+        //开关如果不包含bit位，则将item.v>0的值识别位1
         if (!this.handleBitField(field, item)) {
+            if (item.v) {
+                item.v = 1;
+            }
+            else {
+                item.v = 0;
+            }
             this.handleVMapProperty(field, item);
             this.handleRefProperty(field, item);
         }
@@ -667,8 +685,10 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                     else if (DeviceAdapter2.Formate_Type_JiBen == field.typ) { //如果是基本信息
                         var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
-                        if (!this.handleVMapProperty(field, item)) {
-                            this.handleMathActionProperty(num, field, item);
+                        if (!this.handleBitField(field, item)) {
+                            if (!this.handleVMapProperty(field, item)) {
+                                this.handleMathActionProperty(num, field, item);
+                            }
                         }
                         this.handleInputField(field, item);
                         this.handleFocus(field, item);
@@ -707,6 +727,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                         this.device.LiuLiang.push(item);
                     }
                     else if (DeviceAdapter2.Formate_Type_KaiGuan == field.typ) { //如果是开关
+                        //框架不再提供固定vm，因此要求开关点必需要有vm属性
                         var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
                         this.handleKaiGuanField(field, item);
                         this.handleKongZhiField(key, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
@@ -714,11 +735,15 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                     else if (DeviceAdapter2.Formate_Type_SheZhi == field.typ) { //如果是设置
                         var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
+                        //console.log("*****************" + field.name + "********************")
                         if (!this.handleBitField(field, item)) {
-                            this.handleMathActionProperty(num, field, item);
+                            if (!this.handleVMapProperty(field, item)) {
+                                this.handleMathActionProperty(num, field, item);
+                            }
                         }
                         this.handleKongZhiField(key, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
                         this.device.SheZhi.push(item);
+                        //console.log("*****************" + field.name + "********************")
                         //this.handleCtlProperty(field)
                     }
                     else if (DeviceAdapter2.Formate_Type_SheBei == field.typ) { //如果是设备
@@ -812,7 +837,7 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.Formate_Key_CountMap = 'countmap';
     DeviceAdapter2.Formate_Key_DataMap = 'datamap';
     DeviceAdapter2.Formate_Key_Point_Fields = 'fields';
-    DeviceAdapter2['Formate_Key_Point_Endina'] = 'endian';
+    DeviceAdapter2.Formate_Key_Point_Endina = 'endian';
     DeviceAdapter2.Formate_Key_Point_Mask = 'mask';
     DeviceAdapter2.Formate_Key_Point_Type = 'typ';
     DeviceAdapter2.Formate_Field_AT_Class_Fire = 'fire';

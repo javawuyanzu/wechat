@@ -1,11 +1,14 @@
 const app = getApp();
 Page({
   data: {
-    mapList: [
-    ]
+    mapList: [],
+    openid:null
   },
   onShow: function (options) {
     var that=this
+    that.setData({
+      openid:app.globalData.openid
+    })
     wx.request({
       url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/search/author',
       method: "Get",
@@ -16,7 +19,7 @@ Page({
         var list=res.data.data
         var mapList=[]
         for(var i in list){
-          mapList.push({id:list[i].id,title:list[i].title,createDatetime:list[i].createDatetime,share:list[i].share,deviceDataMap:list[i].deviceDataMap})
+          mapList.push({id:list[i].id,title:list[i].title,createDatetime:list[i].createDatetime,share:list[i].share,deviceDataMap:list[i].deviceDataMap,author:list[i].author})
         }
         that.setData({
           mapList:mapList

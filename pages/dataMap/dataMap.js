@@ -32,12 +32,19 @@ Page({
     kongzhiIndex:-1,
     share:1,
     valuemapList:[],
-     datamap:{
-     },
-      atmapList:[],
-      elementList:[],
-      title:"",
-      currentIndex:40001,
+    datamap:{},
+    atmapList:[],
+    elementList:[],
+    title:"",
+    currentIndex:40001,
+    ifctl:["不可控","可控"],
+    ctlindex:0,
+    ifinput:["不使用","使用"],
+    "input":{},
+    inputIndex:0,
+    ctltyp:["线圈","寄存器"],
+    mode:["开关","整数","浮点数","长整数"],
+    no:"",
     "power": { "typ": 1, "name": "燃料", "v": 0, "vstr": "油气" },
     "media": { "typ": 1, "name": "介质", "v": 0, "vstr": "热水" },
     "sysrun": { "name": "系统运行时间", "vstr": ""},
@@ -51,7 +58,8 @@ Page({
       "fan": [
       ]
     },
-    "valuemap": {},
+    "valuemap": {
+          },
     "dingshi": [
     ],
     "countmap": [
@@ -169,6 +177,7 @@ Page({
     })
   },
   todataDetail: function (e) {
+    console.log(getCurrentPages().length)
     var that= this
     var datamap =that.data.datamap
     var key=e.currentTarget.dataset.key
@@ -223,6 +232,13 @@ Page({
       }
      
     }
+    if(JSON.stringify(that.data.input)!="{}"){
+      json["input"]=that.data.input
+    }
+    if(that.data.no!=""){
+      json["no"]=that.data.no
+    }
+    console.log(json)
     json["countmap"]=countmap
     json["kongzhi"]=kongzhi
     json["valuemap"]=that.data.valuemap
@@ -234,7 +250,6 @@ Page({
     json["fixfields"]=that.data.fixfields
     json["datamap"]=datamap
     var deviceDataMap=JSON.stringify(json)
-    console.log(json)
     wx.request({
       url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/modify/map',
       method: "POST",
@@ -308,7 +323,12 @@ Page({
       for(var j in fs){
         delete fs[j].checkboxItems
       }
-     
+    }
+    if(JSON.stringify(that.data.input)!="{}"){
+      json["input"]=that.data.input
+    }
+    if(that.data.no!=""){
+      json["no"]=that.data.no
     }
     json["countmap"]=countmap
     json["kongzhi"]=kongzhi
@@ -636,7 +656,7 @@ bindPartTypChange: function (e) {
   addCountmap: function (e) {
     var that=this
     var countmap= that.data.countmap
-    countmap.push( { "typ": 1, "name": "", "v": 0, "vm": "选择映射", "vstr": "", "fn": "" ,"multiIndex": [0, 0]})
+    countmap.push( { "typ": 1, "name": "", "v": 0, "vm": "选择映射", "vstr": "", "fn": "0-0" ,"multiIndex": [0, 0]})
     that.setData({
       countmap:countmap,
     });
@@ -658,14 +678,15 @@ countmapDialogOpen() {
         countmapDialog: true
       });
   },
-  kongzhiNo: function (e) {
+  
+  kongzhiName: function (e) {
     var that=this
     var key=e.currentTarget.dataset.key
     var index =e.detail.value
     
     var kongzhi =that.data.kongzhi
   
-    kongzhi[key].no= index
+    kongzhi[key].name= index
     that.setData({
       kongzhi:kongzhi,
     });
@@ -715,7 +736,7 @@ countmapDialogOpen() {
       kongzhi:kongzhi,
     });
   },
-  bindPickerKongzhityp: function (e) {
+  bindPickerKongzhitype: function (e) {
     var that=this
     var key=e.currentTarget.dataset.key
     var index =e.detail.value
@@ -726,13 +747,43 @@ countmapDialogOpen() {
       kongzhi:kongzhi
     });
   },
-  bindPickerKongzhiFnDa: function (e) {
+  bindPickerKongzhiMode: function (e) {
     var that=this
     var key=e.currentTarget.dataset.key
     var index =e.detail.value
-    
     var kongzhi =that.data.kongzhi
   
+    kongzhi[key].mode= index
+    that.setData({
+      kongzhi:kongzhi
+    });
+  },
+  bindPickerKongzhityp: function (e) {
+    var that=this
+    var key=e.currentTarget.dataset.key
+    var index =e.detail.value
+    var kongzhi =that.data.kongzhi
+  
+    kongzhi[key].typ= index
+    that.setData({
+      kongzhi:kongzhi
+    });
+  },
+  inputDescription: function (e) {
+    var that=this
+    var key=e.currentTarget.dataset.key
+    var index =e.detail.value
+    var kongzhi =that.data.kongzhi
+    kongzhi[key].desc= index
+    that.setData({
+      kongzhi:kongzhi
+    });
+  },
+  bindPickerKongzhiFnDa: function (e) {
+    var that=this
+    var key=e.currentTarget.dataset.key
+    var index =e.detail.valuemapDialogOpen
+    var kongzhi =that.data.kongzhi
     kongzhi[key].multiIndex= [index,0]
     that.setData({
       kongzhi:kongzhi
@@ -755,11 +806,10 @@ countmapDialogOpen() {
     var that=this
     var kongzhi= that.data.kongzhi
     kongzhi.push( {
-      "no": "",
+      "name": "",
+      "typ":0,
+      "mode":0,
       "addr": "",
-      "min": "",
-      "max": "",
-      "fn": "",
       "group": 1,
       "multiIndex": [0, 0],
   })
@@ -999,6 +1049,51 @@ removeBase: function (e) {
       power:power
     })
   },
+  bindInputChange(e) {
+    var that=this
+    var inputIndex=Number(e.detail.value)
+    that.setData({
+      inputIndex:inputIndex,
+    })
+    if(inputIndex==1){
+      that.setData({
+        input:{"min":0,"max":0}
+      })
+    }else{
+      that.setData({
+        input:{}
+      })
+    }
+  },
+  bindCtlChange(e) {
+    var that=this
+    var ctlindex=Number(e.detail.value)
+    that.setData({
+      ctlindex:ctlindex,
+    })
+  },
+  inputMax(e) {
+    var that=this
+    var input=that.data.input
+    input.max=Number(e.detail.value)
+    that.setData({
+      input:input
+    })
+  },
+  inputMin(e) {
+    var that=this
+    var input=that.data.input
+    input.min=Number(e.detail.value)
+    that.setData({
+      input:input
+    })
+  },
+  ctlNo(e) {
+    var that=this
+    that.setData({
+      no:e.detail.value,
+    })
+  },
   bindMediaChange(e) {
     var that=this
     var media=that.data.media
@@ -1013,6 +1108,7 @@ removeBase: function (e) {
     var power=that.data.power
     power.v=Number(e.detail.value)
     power.vstr=that.data.powers[e.detail.value]
+    
     that.setData({
       power:power
     })
@@ -1078,8 +1174,18 @@ addBeng() {
   var that=this
   var atmap =that.data.atmap
   var beng =atmap.beng
-  var b={ "name": "", "amount": 0, "v": 0 }
+  var b={ "name": "", "amount": 1, "v": 0 }
   beng.push(b)
+  that.setData({
+    atmap:atmap,
+  });
+},
+bengName: function (e) {
+  var that=this
+  var key=e.currentTarget.dataset.key
+  var atmap =that.data.atmap
+  var beng =atmap.beng
+  beng[key].name= e.detail.value
   that.setData({
     atmap:atmap,
   });
@@ -1123,6 +1229,16 @@ addFan() {
   var fan =atmap.fan
   var f={ "name": "", "amount": 0, "v": 0 }
   fan.push(f)
+  that.setData({
+    atmap:atmap,
+  });
+},
+fanName: function (e) {
+  var that=this
+  var key=e.currentTarget.dataset.key
+  var atmap =that.data.atmap
+  var fan =atmap.fan
+  fan[key].name= e.detail.value
   that.setData({
     atmap:atmap,
   });

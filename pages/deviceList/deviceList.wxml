@@ -13,7 +13,6 @@
                   </view>
                 </view>
                 <view class="info" style="height: 120rpx;">
-
                   <text>{{item.mock1}}</text>
                   <text>{{item.mock2}}</text>
                 </view>
@@ -36,9 +35,7 @@
                   <view >
                     <view  >{{item.title}}-{{item.runstate}}</view>
                   </view>
-                  
                 </view>
-
                 <view wx:if="{{item.lang === 'zh-cn'}}">
                   <view class="info" style='padding-bottom: 10px; '>
                     <text style="height: 20rpx;"></text>

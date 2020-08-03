@@ -1,10 +1,10 @@
 {
   "pages": [
     "pages/deviceList/deviceList",
+    "pages/dataMap/dataMap",
     "pages/myorder/myorder",
     "pages/devicemanage/devicemanage",
     "pages/reports/reports",
-    "pages/dataMap/dataMap",
     "pages/soldUpdate/soldUpdate",
     "pages/salesChange/salesChange",
     "pages/dataMapList/dataMapList",

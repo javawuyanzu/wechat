@@ -23,6 +23,8 @@ Page({
     parttyp: ["请选择", "小时", "分钟", "小时+分钟"],
     timetyp: ["请选择", "天", "小时"],
     endina:[],
+    mode:["开关","整数","浮点数","长整数"],
+    ctltyp:["线圈","寄存器"],
     FnGroups: [
       "算术运算",
       "时间运算"
@@ -51,17 +53,23 @@ Page({
     var pages = getCurrentPages();
     var prevPage = pages[pages.length - 2];  //上一个页面
     var atmap = prevPage.data.atmap
+    console.log(prevPage)
     var valuemap = prevPage.data.valuemap
     var countmap = prevPage.data.countmap
     var dingshi = prevPage.data.dingshi
+
+    var valuemapList=[]
+    for(var i in valuemap){
+      valuemapList.push(i)
+    }
     that.setData({
+      valuemapList:valuemapList,
       atmap: atmap,
       valuemap: valuemap,
       countmap: countmap,
       dingshi: dingshi,
     })
     if (options.data != "undefined") {
-      console.log(options.data)
       var currentPoint = JSON.parse(options.data)
       if (currentPoint) {
         var fields = currentPoint.fields
@@ -83,35 +91,33 @@ Page({
             { name: '是否对燃烧器起到控制作用', value: '6' },
             { name: '是否为系统状态', value: '7' },
             { name: '是否为系统运行时间', value: '8' },
+            { name: '是否设置传感器量程', value: '9' },
           ]
           if (fields[i].ctl) {
-            if(typeof(fields[i].ctl)!="boolean"){
-              var fn = fields[i].ctl.fn
-              fn = fields[i].ctl.multiIndex = fn.split("-")
-              if (currentPoint.typ == 5) {
-                checkboxItems[6].checked = true
-              } else {
-                checkboxItems[0].checked = true
+            console.log(fields[i].ctl)
+            checkboxItems[6].checked = true
+          }
+          if (fields[i].kz) {
+            var fn = fields[i].kz.fn
+              if(fn){
+                fn = fields[i].kz.multiIndex = fn.split("-")
               }
-            }
+              checkboxItems[0].checked = true
           }
           if (fields[i].focus) {
             checkboxItems[1].checked = true
           }
-          
+          if (fields[i].input) {
+            checkboxItems[9].checked = true
+          }
           if (fields[i].systatus) {
             checkboxItems[7].checked = true
           }
-        
           if (fields[i].vm) {
             checkboxItems[2].checked = true
           }
           if (fields[i].reftyp == 'at') {
             checkboxItems[3].checked = true
-            var elementList = atmap[fields[i].refgroup]
-            that.setData({
-              elementList:elementList
-            })
           }
           if (fields[i].reftyp == 'count') {
             checkboxItems[4].checked = true
@@ -134,7 +140,6 @@ Page({
         currentPoint: currentPoint
       })
     }
-   
   },
   bindExTypChange: function (e) {
     var that = this
@@ -181,7 +186,7 @@ Page({
     var that = this
     var currentPoint = that.data.currentPoint
     var pointTypindex = that.data.pointTypindex
-    if (pointTypindex == 1 || pointTypindex == 2 || pointTypindex == 3 || pointTypindex == 4 || pointTypindex == 6 || pointTypindex == 7) {
+    if (pointTypindex == 1 || pointTypindex == 2 || pointTypindex == 3 || pointTypindex == 4 || pointTypindex == 6 ) {
         currentPoint.fields.push({
           "typ": pointTypindex, "name": that.data.currentIndex, "unit": "", "checkboxItems": [
             { name: '是否为系统运行时间', value: '8' },
@@ -192,6 +197,7 @@ Page({
             { name: '关联动画元素', value: '3' },
             { name: '关联计算点位', value: '4' },
             { name: '简单运算（加减乘除）', value: '5' },
+            { name: '是否设置传感器量程', value: '9' },
           ]
         })
     }
@@ -207,7 +213,7 @@ Page({
           ]
         })
     }
-    if (pointTypindex == 5) {
+    if (pointTypindex == 5|| pointTypindex == 7) {
         currentPoint.fields.push({
           "typ": pointTypindex, "name": that.data.currentIndex, "checkboxItems": [
             { name: '可控', value: '0' },
@@ -239,6 +245,15 @@ Page({
   },
   dataaddr: function (e) {
     var that = this
+    var num =Number(e.detail.value)
+    if(num==10000||num==20000||num==30000||num==40000){
+      wx.showToast({
+        title: "输入地址不正确",
+        icon: 'none',
+        duration: 5000
+      });
+      return
+    }
     that.setData({
       currentIndex: e.detail.value
     });
@@ -250,7 +265,7 @@ Page({
 
     var currentPoint = that.data.currentPoint
 
-    currentPoint.fields[key].ctl.multiIndex = [index, 0]
+    currentPoint.fields[key].kz.multiIndex = [index, 0]
     that.setData({
       currentPoint: currentPoint
     });
@@ -262,8 +277,8 @@ Page({
 
     var currentPoint = that.data.currentPoint
 
-    currentPoint.fields[key].ctl.multiIndex[1] = index
-    currentPoint.fields[key].ctl.fn = "" + currentPoint.fields[key].ctl.multiIndex[0] + "-" + currentPoint.fields[key].ctl.multiIndex[1] + ""
+    currentPoint.fields[key].kz.multiIndex[1] = index
+    currentPoint.fields[key].kz.fn = "" + currentPoint.fields[key].kz.multiIndex[0] + "-" + currentPoint.fields[key].kz.multiIndex[1] + ""
     that.setData({
       currentPoint: currentPoint,
     });
@@ -285,20 +300,15 @@ Page({
     var list = e.detail.value
 
     if (list.indexOf("0") != -1) {
-      if (currentPoint.fields[key].ctl) {
-      } else {
-        currentPoint.fields[key].ctl = {
-          "no": "",
-          "addr": "",
-          "min": "",
-          "max": "",
-          "fn": "",
+        currentPoint.fields[key].kz = {
+          "name": "",
+          "typ":0,
+          "mode":0,
           "group": 1,
           "multiIndex": [0, 0],
         }
-      }
     } else {
-      delete currentPoint.fields[key].ctl
+      delete currentPoint.fields[key].kz
     }
     if (list.indexOf("1") != -1) {
       if (currentPoint.fields[key].focus) {
@@ -379,9 +389,7 @@ Page({
         currentPoint.fields[key].ctl = true
       }
     } else {
-      if (list.indexOf("0") == -1) {
         delete currentPoint.fields[key].ctl
-      }
     }
     if (list.indexOf("7") != -1) {
       currentPoint.fields[key].systatus = true
@@ -395,6 +403,13 @@ Page({
     } else {
       if (list.indexOf("8") == -1) {
         delete currentPoint.fields[key].sysrun
+      }
+    }
+    if (list.indexOf("9") != -1) {
+      currentPoint.fields[key].input = {"lmax":0,"lmin":0}
+    } else {
+      if (list.indexOf("9") == -1) {
+        delete currentPoint.fields[key].input
       }
     }
     var checkboxItems = that.data.currentPoint.fields[key].checkboxItems, values = e.detail.value;
@@ -526,7 +541,7 @@ Page({
     var index = e.detail.value
 
     var currentPoint = that.data.currentPoint
-    currentPoint.fields[key].ctl.no = index
+    currentPoint.fields[key].kz.no = index
 
     that.setData({
       currentPoint: currentPoint
@@ -538,7 +553,7 @@ Page({
     var index = e.detail.value
 
     var currentPoint = that.data.currentPoint
-    currentPoint.fields[key].ctl.addr = index
+    currentPoint.fields[key].kz.addr = index
 
     that.setData({
       currentPoint: currentPoint
@@ -556,12 +571,42 @@ Page({
       currentPoint: currentPoint
     });
   },
+  bindPickerKongzhiMode: function (e) {
+    var that = this
+    var key = e.currentTarget.dataset.key
+    var index = e.detail.value
+    var currentPoint = that.data.currentPoint
+    currentPoint.fields[key].kz.mode = index
+    that.setData({
+      currentPoint: currentPoint
+    });
+  },
   bindPickerCtlGroup: function (e) {
     var that = this
     var key = e.currentTarget.dataset.key
     var index = e.detail.value
     var currentPoint = that.data.currentPoint
-    currentPoint.fields[key].ctl.group = index
+    currentPoint.fields[key].kz.group = index
+    that.setData({
+      currentPoint: currentPoint
+    });
+  },
+  bindPickerCtlDesc: function (e) {
+    var that = this
+    var key = e.currentTarget.dataset.key
+    var index = e.detail.value
+    var currentPoint = that.data.currentPoint
+    currentPoint.fields[key].kz.desc = index
+    that.setData({
+      currentPoint: currentPoint
+    });
+  },
+  bindPickerCtlTyp: function (e) {
+    var that = this
+    var key = e.currentTarget.dataset.key
+    var index = e.detail.value
+    var currentPoint = that.data.currentPoint
+    currentPoint.fields[key].kz.typ = index
     that.setData({
       currentPoint: currentPoint
     });
@@ -572,7 +617,7 @@ Page({
     var index = e.detail.value
 
     var currentPoint = that.data.currentPoint
-    currentPoint.fields[key].ctl.max = index
+    currentPoint.fields[key].kz.max = index
 
     that.setData({
       currentPoint: currentPoint
@@ -584,7 +629,7 @@ Page({
     var index = e.detail.value
 
     var currentPoint = that.data.currentPoint
-    currentPoint.fields[key].ctl.min = index
+    currentPoint.fields[key].kz.min = index
 
     that.setData({
       currentPoint: currentPoint
@@ -636,6 +681,30 @@ Page({
       currentPoint: currentPoint
     });
   },
+  inputlmin: function (e) {
+    var that = this
+    var key = e.currentTarget.dataset.key
+    var index = e.detail.value
+
+    var currentPoint = that.data.currentPoint
+    currentPoint.fields[key].input.lmin = Number(index)
+
+    that.setData({
+      currentPoint: currentPoint
+    });
+  },
+  inputlmax: function (e) {
+    var that = this
+    var key = e.currentTarget.dataset.key
+    var index = e.detail.value
+
+    var currentPoint = that.data.currentPoint
+    currentPoint.fields[key].input.lmax = Number(index)
+
+    that.setData({
+      currentPoint: currentPoint
+    });
+  },
   countMapValues: function (e) {
     var that = this
     var key = e.currentTarget.dataset.key
@@ -668,10 +737,8 @@ Page({
     var currentPoint = that.data.currentPoint
     currentPoint.fields[key].refgroup = that.data.atmapList[index]
     currentPoint.fields[key].refindex = 0
-    var elementList = that.data.atmap[that.data.atmapList[index]]
 
     that.setData({
-      elementList: elementList,
       currentPoint: currentPoint
     });
   },
@@ -715,10 +782,10 @@ Page({
     var that = this
     var index = e.detail.value
     var currentPoint = that.data.currentPoint
-    var felds = currentPoint.fields
-    for (var i in felds) {
-      felds[i].typ = index
-    }
+    // var felds = currentPoint.fields
+    // for (var i in felds) {
+    //   felds[i].typ = index
+    // }
 
     that.setData({
       pointTypindex: index,
@@ -736,8 +803,8 @@ Page({
     var currentIndex = that.data.currentIndex
     var fields = currentPoint.fields
     for (var i in fields) {
-      if (fields[i].ctl) {
-        delete fields[i].ctl.multiIndex
+      if (fields[i].kz) {
+        delete fields[i].kz.multiIndex
         delete fields[i].checkboxItems
       }
     }
