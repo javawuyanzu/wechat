@@ -240,7 +240,6 @@ Page({
           key: 'deviceList',
           data: deviceList,
         })
-        console.log(deviceList)
         wx.request({
           //获取openid接口   
           url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/remove',
@@ -251,6 +250,29 @@ Page({
           method: 'GET',
           success: function (res) {
             console.log(res)
+          }
+        })
+        wx.request({
+          //获取openid接口   
+          url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/remove',
+          data: {
+            openId: app.globalData.openid,
+            deviceNo: that.data.deviceNo
+          },
+          method: 'GET',
+          success: function (res) {
+            wx.request({
+              //获取openid接口   
+              url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/remove',
+              data: {
+                openId: app.globalData.openid,
+                deviceNo: that.data.deviceNo
+              },
+              method: 'GET',
+              success: function (res) {
+                console.log(res)
+              }
+            })
           }
         })
         wx.showToast({
@@ -511,6 +533,8 @@ Page({
     })
   },
   onLoad: function (options) {
+
+   
     var that = this;
     var ilist = that.data.imgList
     wx.getStorage({
@@ -554,7 +578,7 @@ Page({
             })
           }
         }
-       
+
       }
     })
     wx.getStorage({
@@ -1090,10 +1114,10 @@ Page({
                         break;
                       }
                     }
-                    if(device.Run){
+                    if (device.Run) {
                       runday = device.Run.name + ":" + device.Run.vstr
                     }
-                    if(device.status){
+                    if (device.status) {
                       runstate1 = device.status.vstr
                     }
                     var el = device.getStoveElements()[0].values
@@ -1278,7 +1302,7 @@ Page({
                     success: function (res) {
                       console.log(res)
                       var newFrame = res.data.data.newFrame;
-                      if(!newFrame){
+                      if (!newFrame) {
                         var ilist = that.data.imgList
                         if (that.finddevice(ilist, deviceno)) {
                           for (var i = 0; i < ilist.length; i++) {
@@ -1316,50 +1340,50 @@ Page({
                       }
                       try {
                         var dataMapId;
-                        if(res.data.data.deviceDataMapCn){
-                         dataMapId= res.data.data.deviceDataMapCn
-                        }else{
-                         dataMapId= res.data.data.deviceDataMapEn
+                        if (res.data.data.deviceDataMapCn) {
+                          dataMapId = res.data.data.deviceDataMapCn
+                        } else {
+                          dataMapId = res.data.data.deviceDataMapEn
                         }
                         wx.request({
-                         url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
-                         data: {
-                           id: dataMapId,
-                         },
-                         method: 'GET',
-                         header: {
-                           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-                         },
-                         success: function (res) {
-                           console.log(res)
-                           let map= JSON.parse(res.data.data.deviceDataMap)
-                           let addr= JSON.parse(res.data.data.pointIndexMap)
-                           wx.getStorage({
-                             key: 'deviceList',
-                             success(res) {
-                               deviceList = res.data;
-                               for(var i in deviceList){
-                                 if(deviceList[i].deviceNo==deviceno){
-                                   deviceList[i].map= map,
-                                   deviceList[i].addr= addr,
-                                   deviceList[i].dataMapId= dataMapId,
-                                   deviceList[i].newFrame= newFrame,
-                                   deviceList[i].deviceNo= deviceno,
-                                   deviceList[i].deviceName= '',
-                                   deviceList[i].deviceType= "",
-                                   deviceList[i].imgStyle= 0
-                                 }
-                               }
-                               wx.setStorage({
-                                 key: 'deviceList',
-                                 data: deviceList,
-                                 success: function (res) {
-                                 }
-                               })
-                             }
-                           })
-                         }
-                       })
+                          url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
+                          data: {
+                            id: dataMapId,
+                          },
+                          method: 'GET',
+                          header: {
+                            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                          },
+                          success: function (res) {
+                            console.log(res)
+                            let map = JSON.parse(res.data.data.deviceDataMap)
+                            let addr = JSON.parse(res.data.data.pointIndexMap)
+                            wx.getStorage({
+                              key: 'deviceList',
+                              success(res) {
+                                deviceList = res.data;
+                                for (var i in deviceList) {
+                                  if (deviceList[i].deviceNo == deviceno) {
+                                    deviceList[i].map = map,
+                                      deviceList[i].addr = addr,
+                                      deviceList[i].dataMapId = dataMapId,
+                                      deviceList[i].newFrame = newFrame,
+                                      deviceList[i].deviceNo = deviceno,
+                                      deviceList[i].deviceName = '',
+                                      deviceList[i].deviceType = "",
+                                      deviceList[i].imgStyle = 0
+                                  }
+                                }
+                                wx.setStorage({
+                                  key: 'deviceList',
+                                  data: deviceList,
+                                  success: function (res) {
+                                  }
+                                })
+                              }
+                            })
+                          }
+                        })
                       } catch (error) {
                         console.log(error)
                         var ilist = that.data.imgList
@@ -1397,7 +1421,7 @@ Page({
                         })
                         return
                       }
-                     
+
                     }
                   })
                 }

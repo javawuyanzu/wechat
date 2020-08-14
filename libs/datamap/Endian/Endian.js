@@ -13,9 +13,14 @@ var Endian = /** @class */ (function () {
          * */
         return [
             ["auto"],
-            ["A B", "B A"],
-            ["A B C D", "D C B A", "CD AB"],
-            ["A B C D", "D C B A", "CD AB"],
+            ["A B",
+                "B A"],
+            ["A B C D",
+                "D C B A",
+                "CD AB"],
+            ["A B C D",
+                "D C B A",
+                "CD AB"],
         ];
     };
     Endian.HandleBytes = function (endianType) {

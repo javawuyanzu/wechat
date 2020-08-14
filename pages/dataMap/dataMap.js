@@ -106,12 +106,17 @@ Page({
     var countmap=datamap.countmap
     for(var i in countmap){
       var fn=countmap[i].fn
-      countmap[i].multiIndex= fn.split("-")
+      if(fn){
+        countmap[i].multiIndex= fn.split("-")
+      }
     }
     var kongzhi=datamap.kongzhi
     for(var i in kongzhi){
       var fn=kongzhi[i].fn
-      kongzhi[i].multiIndex= fn.split("-")
+      if(fn){
+        kongzhi[i].multiIndex= fn.split("-")
+      }
+     
     }
     var typ="";
     if(typeof(options.saveAs)=="undefined"){

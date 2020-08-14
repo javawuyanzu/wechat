@@ -1,4 +1,5 @@
 const app = getApp();
+import req from '../../utils/Request.js'
 Page({
   /**
    * 页面的初始数据
@@ -69,7 +70,8 @@ Page({
       url: 'https://apis.sdcsoft.com.cn/wechat/userAddDeviceHistory/create',
       data: {
         deviceNo: deviceNo,
-        openId: app.globalData.openid
+        openId: app.globalData.openid,
+        bindTime: new Date()
       },
       method: 'post',
       success: function (res) {
@@ -95,7 +97,7 @@ Page({
       title: that.data.content.operation_title
     })
   },
-  addDevice: function (deviceList,deviceNo,deviceType,newFrame,dataMapId) {
+  addDevice: function (deviceList, deviceNo, deviceType, newFrame, dataMapId) {
     var that = this
     if (deviceNo.substr(0, 2) === '20') {
       wx.request({
@@ -149,82 +151,50 @@ Page({
                   });
                 }
               })
-              wx.request({
-                url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
-                method: 'POST',
-                data: {
-                  openId: app.globalData.openid,
-                },
-                header: {
-                  'content-type': 'application/x-www-form-urlencoded'
-                },
-                success: function (res) {
-                  var creatDate = res.data.data.createDatetime
-                  let dateA = new Date();
-                  let dateB = new Date(creatDate);
-                  if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
-                    wx.request({
-                      url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
-                      method: "GET",
-                      data: {},
-                      header: {
-                        'content-type': 'application/x-www-form-urlencoded'
-                      },
-                      success: function (res) {
-                        var list = res.data.data
-                        var resList = []
-                        for (var i in list) {
-                          if (list[i].id != 6 & list[i].id != 5) {
-                            resList.push({
-                              openId: app.globalData.openid,
-                              resId: list[i].id,
-                              deviceNo: deviceNo,
-                              range: 1,
-                              rangeType: 2,
-                              amount: 1,
-                            })
-                          }
-                        }
-                        wx.request({
-                          url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
-                          method: "GET",
-                          data: {
-                            deviceNo: deviceNo,
-                            openId: app.globalData.openid,
-                          },
-                          header: {
-                            'content-type': 'application/x-www-form-urlencoded'
-                          },
-                          success: function (res) {
-                            if (!res.data.data.length > 0) {
-                              wx.request({
-                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
-                                method: "POST",
-                                data: {
-                                  role_ResourceList: JSON.stringify(resList)
-                                },
-                                header: {
-                                  'content-type': 'application/x-www-form-urlencoded'
-                                },
-                                success: function (res) {
-                                  console.log(res)
-                                }
-                              })
-                            }
-                          }
+              req.get('https://apis.sdcsoft.com.cn/wechat/userAddDeviceHistory/find/deviceNo/openId', {
+                openId: app.globalData.openid, deviceNo: deviceNo,
+              }, {
+                'content-type': 'application/x-www-form-urlencoded'
+              }).then(res => {
+                var date;
+                if (res.data.data.length != 0) {
+                  date = new Date(res.data.data[0].bindTime);
+                  date.setFullYear(date.getFullYear() + 1);
+                  date.setDate(date.getDate() - 1);
+                } else {
+                  date = new Date().setFullYear((new Date().getFullYear() + 1))
+                  that.addDeviceRecord(deviceNo)
+                }
+                return date
+              }).then(date => {
+                if (date > new Date()) {
+                  req.get('https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list', {}, {
+                    'content-type': 'application/x-www-form-urlencoded'
+                  }).then(res => {
+                    var list = res.data.data
+                    var resList = []
+                    for (var i in list) {
+                      if (list[i].id != 6) {
+                        resList.push({
+                          openId: app.globalData.openid,
+                          resId: list[i].id,
+                          deviceNo: deviceNo,
+                          dueTime: date,
                         })
-
                       }
+                    }
+                    req.post('https://apis.sdcsoft.com.cn/wechat/RoleResource/newUser/create/many', {role_ResourceList:JSON.stringify(resList)}, {
+                    'content-type': 'application/x-www-form-urlencoded'
+                  }).then(res => {
+                    wx.switchTab({
+                      url: '../deviceList/deviceList'
                     })
-
-                  }
-                },
-              })
-              wx.switchTab({
-                url: '../deviceList/deviceList'
-              })
-              that.setData({
-                inputValue: ""
+                    that.setData({
+                      inputValue: ""
+                    })
+                  })
+                  })
+                }
               })
 
             }
@@ -290,87 +260,65 @@ Page({
                   });
                 }
               })
-              wx.request({
-                url: 'https://apis.sdcsoft.com.cn/wechat/user/find/openId',
-                method: 'POST',
-                data: {
-                  openId: app.globalData.openid,
-                },
-                header: {
-                  'content-type': 'application/x-www-form-urlencoded'
-                },
-                success: function (res) {
-                  var creatDate = res.data.data.createDatetime
-                  let dateA = new Date();
-                  let dateB = new Date(creatDate);
-                  if ((dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0))) {
-                    wx.request({
-                      url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
-                      method: "GET",
-                      data: {},
-                      header: {
-                        'content-type': 'application/x-www-form-urlencoded'
-                      },
-                      success: function (res) {
-                        var list = res.data.data
-                        var resList = []
-                        for (var i in list) {
-                          if (list[i].id != 6 & list[i].id != 5) {
-                            resList.push({
-                              openId: app.globalData.openid,
-                              resId: list[i].id,
-                              deviceNo: deviceNo,
-                              range: 1,
-                              rangeType: 2,
-                              amount: 1,
-                            })
-                          }
-                        }
 
-                        wx.request({
-                          url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/find/deviceNo/openId',
-                          method: "GET",
-                          data: {
-                            deviceNo: deviceNo,
-                            openId: app.globalData.openid,
-                          },
-                          header: {
-                            'content-type': 'application/x-www-form-urlencoded'
-                          },
-                          success: function (res) {
-                            if (!res.data.data.length > 0) {
-                              wx.request({
-                                url: 'https://apis.sdcsoft.com.cn/wechat/RoleResource/create/many',
-                                method: "POST",
-                                data: {
-                                  role_ResourceList: JSON.stringify(resList)
-                                },
-                                header: {
-                                  'content-type': 'application/x-www-form-urlencoded'
-                                },
-                                success: function (res) {
-                                  console.log(res)
-                                }
-                              })
-                            }
-                          }
+              req.get('https://apis.sdcsoft.com.cn/wechat/userAddDeviceHistory/find/deviceNo/openId', {
+                openId: app.globalData.openid, deviceNo: deviceNo,
+              }, {
+                'content-type': 'application/x-www-form-urlencoded'
+              }).then(res => {
+                var date;
+                if (res.data.data.length != 0) {
+                  date = new Date(res.data.data[0].bindTime);
+                  date.setFullYear(date.getFullYear() + 1);
+                  date.setDate(date.getDate() - 1);
+                } else {
+                  date = new Date().setFullYear((new Date().getFullYear() + 1))
+                  that.addDeviceRecord(deviceNo)
+                }
+                return date
+              }).then(date => {
+                if (date > new Date()) {
+                  req.get('https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list', {}, {
+                    'content-type': 'application/x-www-form-urlencoded'
+                  }).then(res => {
+                    var list = res.data.data
+                    var resList = []
+                    for (var i in list) {
+                      if (list[i].id != 6) {
+                        resList.push({
+                          openId: app.globalData.openid,
+                          resId: list[i].id,
+                          deviceNo: deviceNo,
+                          dueTime: date,
                         })
-
                       }
+                    }
+                    var smsList = []
+                    smsList.push({
+                      deviceNo: deviceNo,
+                      range: 12,
+                      rangeType: 2,
+                      amount: 1,
+                      openId: app.globalData.openid,
                     })
-
-                  }
-                },
-              })
-              wx.switchTab({
-                url: '../deviceList/deviceList'
-              })
-              that.setData({
-                inputValue: ""
+                    req.post('https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/create/many', {deviceSmsMapList:JSON.stringify(smsList)}, {
+                    'content-type': 'application/x-www-form-urlencoded'
+                    })
+                    req.post('https://apis.sdcsoft.com.cn/wechat/RoleResource/newUser/create/many', {role_ResourceList:JSON.stringify(resList)}, {
+                    'content-type': 'application/x-www-form-urlencoded'
+                  }).then(res => {
+                    wx.switchTab({
+                      url: '../deviceList/deviceList'
+                    })
+                    that.setData({
+                      inputValue: ""
+                    })
+                  })
+                  })
+                }
               })
             }
           })
-
         },
         fail: function (res) {
           wx.showToast({
@@ -381,7 +329,7 @@ Page({
         }
       })
     }
-    that.addDeviceRecord(deviceNo)
+
   },
   scanCode: function (e) {
     var that = this
@@ -427,8 +375,8 @@ Page({
             wx.getStorage({
               key: 'deviceList',
               fail(res) {
-                var deviceList=[]
-                that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
+                var deviceList = []
+                that.addDevice(deviceList, deviceNo, deviceType, newFrame, dataMapId)
               },
               success(res) {
                 deviceList = res.data;
@@ -442,7 +390,42 @@ Page({
                     return;
                   }
                 }
-                that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
+                wx.request({
+                  //获取openid接口   
+                  url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/list',
+                  data: {
+                    openId: app.globalData.openid,
+                  },
+                  method: 'GET',
+                  success: function (res) {
+                    var count=res.data.data.length
+                    var max=10
+                    wx.request({
+                      //获取openid接口   
+                      url: 'https://apis.sdcsoft.com.cn/wechat/employee/getSoldPermissions',
+                      data: {
+                        openid: app.globalData.openid,
+                      },
+                      method: 'GET',
+                      success: function (res) {
+                        if (res.data == 0) {
+                          max=50
+                        }
+                        console.log(max)
+                        if (count > max) {
+                          wx.showToast({
+                            title: "添加设备数量不能超过"+max+"台",
+                            icon: 'none',
+                            duration: 2000
+                          });
+                          return;
+                        }
+                        that.addDevice(deviceList, deviceNo, deviceType, newFrame, dataMapId)
+                      }
+                    })
+                   
+                  }
+                })
               }
             })
           }
@@ -484,12 +467,7 @@ Page({
     }
 
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
 
-  },
   tologin: function () {
     wx.redirectTo({
       url: '../loginChoose/loginChoose'
@@ -531,7 +509,6 @@ Page({
             });
             return;
           }
-          console.log(deviceNo)
           deviceNo = res.data.data.deviceSuffix
           var deviceType = res.data.data.deviceType;
           var newFrame = res.data.data.newFrame;
@@ -544,8 +521,8 @@ Page({
           wx.getStorage({
             key: 'deviceList',
             fail(res) {
-              var deviceList=[]
-              that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
+              var deviceList = []
+              that.addDevice(deviceList, deviceNo, deviceType, newFrame, dataMapId)
             },
             success(res) {
               deviceList = res.data;
@@ -567,19 +544,35 @@ Page({
                 },
                 method: 'GET',
                 success: function (res) {
-                  console.log(res)
-                  if (res.data.data.length>10) {
-                    wx.showToast({
-                      title: "添加设备数量不能超过十台",
-                      icon: 'none',
-                      duration: 2000
-                    });
-                    return;
-                  }
-                  that.addDevice(deviceList,deviceNo,deviceType,newFrame,dataMapId)
+                  var count=res.data.data.length
+                  var max=10
+                  wx.request({
+                    //获取openid接口   
+                    url: 'https://apis.sdcsoft.com.cn/wechat/employee/getSoldPermissions',
+                    data: {
+                      openid: app.globalData.openid,
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                      if (res.data == 0) {
+                        max=50
+                      }
+                      console.log(max)
+                      if (count > max) {
+                        wx.showToast({
+                          title: "添加设备数量不能超过"+max+"台",
+                          icon: 'none',
+                          duration: 2000
+                        });
+                        return;
+                      }
+                      that.addDevice(deviceList, deviceNo, deviceType, newFrame, dataMapId)
+                    }
+                  })
+                 
                 }
               })
-              
+
             }
           })
         }

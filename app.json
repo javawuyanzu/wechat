@@ -1,6 +1,9 @@
 {
   "pages": [
     "pages/deviceList/deviceList",
+    "pages/help/help",
+    "pages/help/videoList",
+    "pages/help/download",
     "pages/dataMap/dataMap",
     "pages/myorder/myorder",
     "pages/devicemanage/devicemanage",
@@ -11,9 +14,7 @@
     "pages/login/login",
     "pages/add/add",
     "pages/index/index",
-    "pages/help/help",
     "pages/contactUs/contactUs",
-    "pages/download/download",
     "pages/repair/repair",
     "pages/operation/operation",
     "pages/deviceDetail/deviceDetail",
@@ -54,7 +55,7 @@
       },
       {
         "pagePath": "pages/help/help",
-        "text": "帮助",
+        "text": "资料",
         "iconPath": "images/tab_help.png",
         "selectedIconPath": "images/tab_help_selected.png"
       },

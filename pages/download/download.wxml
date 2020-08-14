@@ -1,7 +1,0 @@
-<!-- wxml -->
-<!-- 指向微信公众平台首页的web-view -->
-<!-- http://sdcsoft.com.cn/app/gl/wifi.apk -->
-<!-- <web-view src="http://www.sdcsoft.com.cn/"></web-view> -->
- <view style="width:100%">
-  <image style="width: 300rpx; height: 300rpx;vertical-align: middle;" src="../../images/erweima.png"></image>
- </view>

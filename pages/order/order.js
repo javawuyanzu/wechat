@@ -220,6 +220,7 @@ Page({
               range: list[i].range,
               rangeType: list[i].rangeType,
               amount: list[i].amount,
+              openId: app.globalData.openid,
             })
           } else if (list[i].resourceId == 6){
             wx.request({

@@ -44,7 +44,6 @@ Page({
       })
     }
     
-    console.log(deviceList)
     wx.request({
       url: 'https://apis.sdcsoft.com.cn/webapi/datacenter/core/device/create/wechat',
       method: "POST",

@@ -32,13 +32,18 @@ var DeviceAdapter2 = /** @class */ (function () {
         this.device = new SdcSoftDevice2_1.SdcSoftDevice2();
     }
     DeviceAdapter2.prototype.KongZhiPoints = function () {
+        //console.log(this.deviceNo)
         if (this.deviceNo < 0) {
             return;
         }
         for (var key in this.formate[DeviceAdapter2.Formate_Key_KongZhi]) {
             var ctl = this.formate[DeviceAdapter2.Formate_Key_KongZhi][key];
+            //console.log(ctl)
             var type = ctl[DeviceAdapter2.Formate_Field_Option_Type];
+            //console.log(type)
             var group = ctl[DeviceAdapter2.Formate_Field_Option_Ctl_Group];
+            //console.log(group)
+            //console.log(this.device.KongZhi)
             if (DeviceAdapter2.CTL_TAG_CLC == type) { //如果是线圈控制
                 var ctlField = new Fields_1.CtlField();
                 ctlField.No = this.deviceNo;
@@ -50,6 +55,9 @@ var DeviceAdapter2 = /** @class */ (function () {
                 ctlItem.Description = ctl.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? ctl[DeviceAdapter2.Formate_Field_Option_Description] : '';
                 ctlField.Value = 0;
                 ctlField.addCtlItem(ctlItem);
+                if (!this.device.KongZhi.containsKey(group)) {
+                    this.device.KongZhi.addItem(group, []);
+                }
                 this.device.KongZhi.getItem(group).push(ctlField);
             }
             else if (DeviceAdapter2.CTL_TAG_REG == type) { //如果是寄存器控制
@@ -65,23 +73,19 @@ var DeviceAdapter2 = /** @class */ (function () {
                     else {
                         ctlField.Action = Fields_1.CtlField.CTL_ACTION_REG;
                     }
-                    var ctlItem_1 = new Fields_1.CtlItem();
-                    ctlItem_1.Name = ctl[DeviceAdapter2.Formate_Field_Option_Name];
-                    ctlItem_1.Description = ctl.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? ctl[DeviceAdapter2.Formate_Field_Option_Description] : '';
+                    var ctlItem = new Fields_1.CtlItem();
+                    ctlItem.Name = ctl[DeviceAdapter2.Formate_Field_Option_Name];
+                    ctlItem.Description = ctl.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? ctl[DeviceAdapter2.Formate_Field_Option_Description] : '';
                     ctlField.Value = 0;
-                    ctlField.addCtlItem(ctlItem_1);
+                    ctlField.addCtlItem(ctlItem);
+                    if (!this.device.KongZhi.containsKey(group)) {
+                        this.device.KongZhi.addItem(group, []);
+                    }
                     this.device.KongZhi.getItem(group).push(ctlField);
                 }
                 else {
                     throw '控制点：' + ctl[DeviceAdapter2.Formate_Field_Option_Name] + ' 未明确数据类型';
                 }
-                ctlField.Action = Fields_1.CtlField.CTL_ACTION_COI;
-                var ctlItem = new Fields_1.CtlItem();
-                ctlItem.Name = ctl[DeviceAdapter2.Formate_Field_Option_Name];
-                ctlItem.Description = ctl.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? ctl[DeviceAdapter2.Formate_Field_Option_Description] : '';
-                ctlField.Value = 0;
-                ctlField.addCtlItem(ctlItem);
-                this.device.KongZhi.getItem(group).push(ctlField);
             }
             else {
                 continue;
@@ -460,32 +464,49 @@ var DeviceAdapter2 = /** @class */ (function () {
                 //为设备添加系统运行时间
                 if (!this.device.Run) {
                     //v -1表示未进行过时间处理
-                    this.device.Run = { name: this.formate[DeviceAdapter2.Formate_Key_System_Run].name, vstr: '', v: 0 };
-                }
-                if (2 == count) //如果单数据中包含2个点，则需要对该点进行运算
-                 {
-                    if (1 == p) {
-                        var ds = Math.floor(item.v / 24);
-                        this.device.Run.vstr = ds + field.unit + this.device.Run.vstr;
-                        item.v = ds;
-                        item.vstr = ds + field.unit;
+                    var item_1 = this.formate[DeviceAdapter2.Formate_Key_System_Run];
+                    //临时兼容旧版本设置，升级后将仅保留if内代码部分
+                    if (item_1.typ) {
+                        this.device.Run = { name: item_1.name, typ: item_1.typ, vstr: '', v: 0 };
                     }
                     else {
-                        var hs = item.v % 24;
-                        this.device.Run.vstr = this.device.Run.vstr + hs + field.unit;
-                        item.v = hs;
-                        item.vstr = hs + field.unit;
+                        this.device.Run = { name: item_1.name, typ: 3, vstr: '', v: 0 };
                     }
-                    //this.device.Run.v = item.v 
                 }
-                else {
-                    if (1 == p) {
-                        this.device.Run.vstr = item.v + field.unit + this.device.Run.vstr;
-                    }
-                    else {
+                var t = this.device.Run.typ;
+                if (t < 3) { // 只包含天或小时数
+                    if (1 == p || 2 == p) {
                         this.device.Run.vstr = this.device.Run.vstr + item.v + field.unit;
                     }
-                    //this.device.Run.v = 0
+                    else {
+                        throw '设备不能同时支持 运行天数与小时数 ！';
+                    }
+                }
+                else {
+                    //包含天和小时数
+                    if (2 == count) //如果单数据中包含2个点，则需要对该点进行运算
+                     {
+                        if (1 == p) {
+                            var ds = Math.floor(item.v / 24);
+                            this.device.Run.vstr = ds + field.unit + this.device.Run.vstr;
+                            item.v = ds;
+                            item.vstr = ds + field.unit;
+                        }
+                        else {
+                            var hs = item.v % 24;
+                            this.device.Run.vstr = this.device.Run.vstr + hs + field.unit;
+                            item.v = hs;
+                            item.vstr = hs + field.unit;
+                        }
+                    }
+                    else {
+                        if (1 == p) {
+                            this.device.Run.vstr = item.v + field.unit + this.device.Run.vstr;
+                        }
+                        else {
+                            this.device.Run.vstr = this.device.Run.vstr + item.v + field.unit;
+                        }
+                    }
                 }
             }
         }
@@ -632,8 +653,8 @@ var DeviceAdapter2 = /** @class */ (function () {
                     typ = point[DeviceAdapter2.Formate_Key_Point_Type];
                 }
                 //保存大小端选项
-                if (point.hasOwnProperty(DeviceAdapter2.Formate_Key_Point_Endina)) {
-                    endian = point[DeviceAdapter2.Formate_Key_Point_Endina];
+                if (point.hasOwnProperty(DeviceAdapter2.Formate_Key_Point_Endian)) {
+                    endian = point[DeviceAdapter2.Formate_Key_Point_Endian];
                 }
                 //判断是否有掩码
                 if (point.hasOwnProperty(DeviceAdapter2.Formate_Key_Point_Mask)) {
@@ -649,7 +670,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                 else if (1 == typ) {
                     num = Endian_1.Endian.HandleBytes(endian, data[index], data[index + 1]);
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_UINT;
-                    if (mask) {
+                    if (null != mask) {
                         if (num == mask) {
                             continue;
                         }
@@ -658,7 +679,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                 else if (2 == typ) {
                     num = Endian_1.Endian.HandleBytes(endian, data[index], data[index + 1], data[index + 2], data[index + 3]);
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_FLOAT;
-                    if (mask) {
+                    if (null != mask) {
                         if (num == mask) {
                             continue;
                         }
@@ -668,9 +689,11 @@ var DeviceAdapter2 = /** @class */ (function () {
                     num = Math.round(dv.getFloat32(0) * 100) / 100;
                 }
                 else if (3 == typ) {
+                    console.log(data[index] + ' ' + data[index + 1] + ' ' + data[index + 2] + ' ' + data[index + 3]);
                     num = Endian_1.Endian.HandleBytes(endian, data[index], data[index + 1], data[index + 2], data[index + 3]);
+                    console.log(endian + ' ' + num);
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_LONG;
-                    if (mask) {
+                    if (null != mask) {
                         if (num == mask) {
                             continue;
                         }
@@ -748,10 +771,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                     else if (DeviceAdapter2.Formate_Type_SheBei == field.typ) { //如果是设备
                         var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
-                        if (this.handleBitField(field, item)) {
-                            this.handleRefProperty(field, item);
-                        }
-                        else {
+                        if (!this.handleBitField(field, item)) {
                             if (!this.handleVMapProperty(field, item)) {
                                 this.handleMathActionProperty(num, field, item);
                             }
@@ -837,7 +857,7 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.Formate_Key_CountMap = 'countmap';
     DeviceAdapter2.Formate_Key_DataMap = 'datamap';
     DeviceAdapter2.Formate_Key_Point_Fields = 'fields';
-    DeviceAdapter2.Formate_Key_Point_Endina = 'endian';
+    DeviceAdapter2.Formate_Key_Point_Endian = 'endina';
     DeviceAdapter2.Formate_Key_Point_Mask = 'mask';
     DeviceAdapter2.Formate_Key_Point_Type = 'typ';
     DeviceAdapter2.Formate_Field_AT_Class_Fire = 'fire';

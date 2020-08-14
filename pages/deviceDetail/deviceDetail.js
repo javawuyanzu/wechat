@@ -77,13 +77,11 @@ Page({
     controlMenu: -1,
     smsMenu: -1,
     baseNavbar: [],
-    // isHidden: false,
+    media:-1,
+    deviceSmsMapDueTime:"",
+    deviceSmsMapDueMoble:null,
+    deviceSmsMapId:0,
   },
-  // getHidden() {
-  //   this.setData({
-  //     isHidden: false
-  //   })
-  // },
   switchChange: function (e) {
     var that = this
     var state = -1;
@@ -100,6 +98,12 @@ Page({
       controlList: cList,
       'inputValue': ''
     })
+  },
+  inputMoble: function (e) {
+    var that = this
+    that.setData({
+      deviceSmsMapDueMoble:e.detail.value
+    });
   },
   editData: function (e) {
     var that = this;
@@ -150,6 +154,35 @@ Page({
     }
 
   },
+  editMoble: function () {
+    var that =this
+    if(that.data.deviceSmsMapDueMoble==null){
+      wx.showToast({
+        title: "手机号不能为空",
+        icon: 'none',
+        duration: 2000
+      });
+      return
+    }
+    wx.request({
+      url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/modify',
+      method: "POST",
+      data: {
+        employeeMobile: that.data.deviceSmsMapDueMoble,
+        id: that.data.deviceSmsMapId,
+      },
+      success: function (res) {
+        console.log(res)
+        if (res.statusCode) {
+          wx.showToast({
+            title: that.data.content.detail_zhixing,
+            icon: 'success',
+            duration: 2000
+          });
+        }
+      }
+    })
+  },
   bindDateChange: function (e) {
     this.setData({
       date: e.detail.value
@@ -172,7 +205,15 @@ Page({
         str += that.data.controlList[i][commmd].getCommandString();
       }
     }
-
+    if(that.data.media!=0||that.data.media!=3){
+      wx.showToast({
+        title: '当前锅炉类型不支持远程控制',
+        icon: 'error',
+        duration: 1000,
+        mask: true
+      })
+      return
+    }
     if (str != '') {
       if (that.data.deviceNo.substr(0, 2) == '20') {
         var strlist = [];
@@ -229,8 +270,8 @@ Page({
               method: 'GET',
               success: function (res) {
                 wx.request({
-                  url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
-                  method: "GET",
+                  url: 'https://apis.sdcsoft.com.cn/webapi/commands/send',
+                  method: "POST",
                   data: {
                     command: str,
                     deviceSuffix: that.data.deviceNo,
@@ -359,7 +400,6 @@ Page({
         method: 'GET',
         success: function (res) {
           if (res.data.code == 0 & res.data.data.length > 0) {
-
             var list = res.data.data
             for (var i = 0; i < list.length; i++) {
               that.chooseMenu(list[i].resId)
@@ -488,7 +528,23 @@ Page({
         }
       })
     }
-
+    wx.request({
+      //获取openid接口  
+      url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/find/deviceNo/openId',
+      data: {
+        deviceNo:options.deviceNo,
+        openId:app.globalData.openid
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        that.setData({
+          deviceSmsMapDueTime:res.data.data.dueTime,
+          deviceSmsMapDueMoble:res.data.data.employeeMobile,
+          deviceSmsMapId:res.data.data.id
+        })
+      }
+    })
     if (options.newFrame == "true") {
       that.setData({
         detail_base: "基本信息",
@@ -786,6 +842,14 @@ Page({
                     stove = stove + "-" + el[i]
                   }
                 }
+                for (var i in device.jb) {
+                  if (device.jb[i].name =="介质") {
+                    that.setData({
+                      media:device.jb[i].v
+                    })
+                    
+                  }
+                }
                 that.setData({
                   src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif',
                   bengAnimationList: device.getBeng(),
@@ -833,6 +897,10 @@ Page({
                 media = data.getBaseInfoFields().map[index].value
               }
             }
+           
+            that.setData({
+              media:media
+            })
             if (JSON.stringify(clist) != '{}') {
               that.setData({
                 controlList: clist,
@@ -1325,9 +1393,15 @@ Page({
   },
   radiochange: function (res) {
     var that = this
-    that.setData({
-      mock1Name: that.data.mockInfoMap[res.detail.value].title
-    })
+    var mockmap=that.data.mockInfoMap
+    for(var i in mockmap){
+      if(mockmap[i].name==res.detail.value){
+        that.setData({
+          mock1Name:mockmap[i].title
+        })
+      }
+    }
+   
     that.getreportdatabykey(res.detail.value)
   },
   getDatefmt: function getDateStr(today) {

@@ -1,0 +1,18 @@
+<view class="page" data-weui-theme="{{theme}}">
+	<view class="page__hd">
+		<view class="page__title">General information</view>
+		<view class="page__desc">通用资料</view>
+	</view>
+
+    <view class="page__bd" >
+        <view class="weui-cells weui-cells_after-title">
+            <view  class="weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{downloadFile}}" wx:key="index" wx:for-item="item" wx:for-index="idx">
+                <view class="weui-cell__hd">
+                    <image src="../../images/word.png" style="margin-right: 16px;vertical-align: middle;width:30px; height: 30px;"></image>
+                </view>
+                <view class="weui-cell__bd">{{item.file}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" data-path="{{item.path}}" data-url="{{item.url}}" data-file="{{item.file}}" data-idx="{{idx}}" bindtap='savefiles'> 点击下载</view>
+            </view>
+        </view>
+    </view>
+</view>

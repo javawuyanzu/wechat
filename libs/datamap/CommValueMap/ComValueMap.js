@@ -19,7 +19,7 @@ var ComValueMap = {
         "1": "电",
         "2": "煤",
         "3": "生物质",
-        "4": "余热",
+        "30": "余热",
         "5": "换热器"
     },
     "openclose": {
@@ -28,9 +28,8 @@ var ComValueMap = {
     },
     "djdyl": {
         "0": "中压",
-        "1": "高压",
-        "2": "低压",
-        "3": "错误"
+        "1": "低压",
+        "2": "高压"
     }
 };
 exports.ComValueMap = ComValueMap;
