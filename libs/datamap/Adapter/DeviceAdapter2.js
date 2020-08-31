@@ -389,9 +389,12 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.prototype.handleExceptionField = function (field, num) {
         var level = field[DeviceAdapter2.Formate_Field_Option_ExecptionLevel];
         var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "level": level, "vstr": "" };
+        //console.log(num)
+        //console.log(item)
         if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Bit)) {
             //取bit位的值进行验证
             var v = 1 << field[DeviceAdapter2.Formate_Field_Option_Bit];
+            //console.log('bitv->' + v)
             //判断位与结果是否与原值v相同，相同则发生异常
             if (v == (num & v)) {
                 //记录异常信息
@@ -401,11 +404,13 @@ var DeviceAdapter2 = /** @class */ (function () {
             }
         }
         else if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_ValueMap)) {
+            //console.log('vm->' + item)
             this.handleVMapProperty(field, item);
             this.device.BaoJing.push(item);
         }
         else {
             if (0 < num) {
+                //console.log('num->' + num)
                 //记录异常信息
                 item.vstr = item.name;
                 this.device.BaoJing.push(item);
@@ -669,6 +674,9 @@ var DeviceAdapter2 = /** @class */ (function () {
                 }
                 else if (1 == typ) {
                     num = Endian_1.Endian.HandleBytes(endian, data[index], data[index + 1]);
+                    //console.log('point->' + key)
+                    //console.log('endian->' + endian)
+                    //console.log(num)
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_UINT;
                     if (null != mask) {
                         if (num == mask) {
@@ -689,9 +697,9 @@ var DeviceAdapter2 = /** @class */ (function () {
                     num = Math.round(dv.getFloat32(0) * 100) / 100;
                 }
                 else if (3 == typ) {
-                    console.log(data[index] + ' ' + data[index + 1] + ' ' + data[index + 2] + ' ' + data[index + 3]);
+                    //console.log(data[index] + ' ' + data[index + 1] + ' ' + data[index + 2] + ' ' + data[index + 3])
                     num = Endian_1.Endian.HandleBytes(endian, data[index], data[index + 1], data[index + 2], data[index + 3]);
-                    console.log(endian + ' ' + num);
+                    //console.log(endian + ' ' + num)
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_LONG;
                     if (null != mask) {
                         if (num == mask) {

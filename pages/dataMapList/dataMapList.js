@@ -1,13 +1,14 @@
 const app = getApp();
 Page({
   data: {
+    index: null,
     mapList: [],
-    openid:null
+    openid: null
   },
   onShow: function (options) {
-    var that=this
+    var that = this
     that.setData({
-      openid:app.globalData.openid
+      openid: app.globalData.openid
     })
     wx.request({
       url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/search/author',
@@ -16,33 +17,41 @@ Page({
         author: app.globalData.openid,
       },
       success: function (res) {
-        var list=res.data.data
-        var mapList=[]
-        for(var i in list){
-          mapList.push({id:list[i].id,title:list[i].title,createDatetime:list[i].createDatetime,share:list[i].share,deviceDataMap:list[i].deviceDataMap,author:list[i].author})
+        var list = res.data.data
+        var mapList = []
+        for (var i in list) {
+          mapList.push({ id: list[i].id, title: list[i].title, createDatetime: list[i].createDatetime, share: list[i].share, deviceDataMap: list[i].deviceDataMap, author: list[i].author })
         }
         that.setData({
-          mapList:mapList
+          mapList: mapList
         })
       }
     })
-   },
-   toedit: function (e) {
-    var data=e.currentTarget.dataset.key
-    
-    wx.navigateTo({
-      url: "/pages/dataMap/dataMap?data="+data+"&title="+e.currentTarget.dataset.title+"&id="+e.currentTarget.dataset.id,
-    })
   },
-  saveAs: function (e) {
-    var data=e.currentTarget.dataset.key
+  getMap() {
+    if (null != this.data.index) {
+      let index = this.data.index
+      return { map: JSON.parse(this.data.mapList[index].deviceDataMap) }
+    } else {
+      return { map: null }
+    }
+  },
+  toedit: function (e) {
+    this.setData({ index: e.currentTarget.dataset.index })
     wx.navigateTo({
-      url: "/pages/dataMap/dataMap?data="+data+"&title="+e.currentTarget.dataset.title+"&id="+e.currentTarget.dataset.id+"&saveAs=saveAs",
+      url: "/pages/mapediter/editer/editer?datamapId="+e.currentTarget.dataset.id
     })
   },
   add: function (e) {
+    this.setData({ index: null })
     wx.navigateTo({
-      url: "/pages/dataMap/dataMap",
+      url: "/pages/mapediter/editer/editer"
     })
-  }
+  },
+  saveAs: function (e) {
+    this.setData({ index: e.currentTarget.dataset.index })
+    wx.navigateTo({
+      url: "/pages/mapediter/editer/editer"
+    })
+  },
 })

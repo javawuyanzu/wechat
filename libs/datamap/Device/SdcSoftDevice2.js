@@ -30,7 +30,10 @@ var SdcSoftDevice2 = /** @class */ (function () {
     }
     Object.defineProperty(SdcSoftDevice2.prototype, "Status", {
         get: function () {
-            return this.status;
+            if (this.status) {
+                return this.status;
+            }
+            return { name: '', v: 0, vstr: '' };
         },
         set: function (status) {
             this.status = status;
@@ -40,7 +43,10 @@ var SdcSoftDevice2 = /** @class */ (function () {
     });
     Object.defineProperty(SdcSoftDevice2.prototype, "Run", {
         get: function () {
-            return this.run;
+            if (this.run) {
+                return this.run;
+            }
+            return { name: '', v: 0, typ: 0, vstr: '' };
         },
         set: function (run) {
             this.run = run;

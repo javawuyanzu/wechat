@@ -65,6 +65,7 @@ Page({
     var that = this
   },
   todatamap: function (e) {
+      //url: "/pages/dataMapList/dataMapList",
     wx.navigateTo({
       url: "/pages/dataMapList/dataMapList",
     })

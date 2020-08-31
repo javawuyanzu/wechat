@@ -1,0 +1,50 @@
+<view class="page" data-weui-theme="light">
+	<view class="page_bd">
+		<view class="weui-form">
+			<view class="weui-form__control-area">
+				<view class="weui-cells__group weui-cells__group_form">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">映射名</label></view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="使用英文或拼音" value="{{name}}" placeholder-class="weui-input__placeholder" bindinput="setName" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__bd fix">
+							<input type="number" class="weui-input" value="{{key}}" placeholder="映射数值" placeholder-class="weui-input__placeholder" bindinput="setKey" />
+							<input  class="weui-input" value="{{value}}" placeholder="数值含义" placeholder-class="weui-input__placeholder" bindinput="setValue" />
+							<button size="mini" bindtap="addlist">+</button>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active" wx:for="{{list}}" wx:key="*this" wx:for-index="key">
+						<view class="weui-cell__bd fix">
+							<view>{{key}}</view>
+							<view>{{list[key]}}</view>
+							<view>
+								<button size="mini" bindtap="sublist" data-key="{{key}}">×</button>
+							</view>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<a class="weui-btn weui-btn_primary" bindtap="create">+</a>
+					</view>
+					<view wx:for="{{vm}}" wx:key="*this" wx:for-index="key"  class="weui-cell weui-cell_active">
+						<view class="weui-cell__bd fix">
+							<view>
+								<picker range="{{vma[key]}}">
+									<view class="picker">
+										<view>{{key}}</view>
+										<view>></view>
+									</view>
+								</picker>
+							</view>
+							<view>
+								<button size="mini" bindtap="subvm" data-key="{{key}}">×</button>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>

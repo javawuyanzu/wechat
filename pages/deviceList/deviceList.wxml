@@ -33,7 +33,7 @@
                     <image src="../../images/ling.png" style='width: 50rpx; height: 50rpx'></image>
                   </view>
                   <view >
-                    <view  >{{item.title}}-{{item.runstate}}</view>
+                    <view  >{{item.title}}{{item.runstate}}</view>
                   </view>
                 </view>
                 <view wx:if="{{item.lang === 'zh-cn'}}">

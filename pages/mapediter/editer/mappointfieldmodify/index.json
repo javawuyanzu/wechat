@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "可视点新增/修改",
+  "usingComponents": {
+    "pickertype":"../../components/pickertyp/index",
+    "pickervm":"../../components/pickervm/index"
+  }
+}

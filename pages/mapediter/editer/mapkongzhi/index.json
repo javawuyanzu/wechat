@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "点位表编辑-可控点",
+  "usingComponents": {
+    "pickertype":"../../components/pickertyp/index",
+    "pickervm":"../../components/pickervm/index",
+    "pickerfg":"../../components/pickerfg/index",
+    "pickerfn":"../../components/pickerfn/index"
+  }
+}

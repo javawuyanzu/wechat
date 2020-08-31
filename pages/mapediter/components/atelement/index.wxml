@@ -1,0 +1,27 @@
+<view class="page" data-weui-theme="light">
+	<view class="weui-form">
+		<view class="weui-form__control-area">
+			<view class="weui-cells__group weui-cells__group_form">
+				<view class="weui-cell weui-cell_active fix">
+					<input class="weui-input" placeholder="名称" value="{{name}}" placeholder-class="weui-input__placeholder" bindinput="setName" />
+					<input type="number" class="weui-input" placeholder="数量" value="{{amount}}" placeholder-class="weui-input__placeholder" bindinput="setAmount" />
+				</view>
+				<view class="weui-cell weui-cell_active">
+						<a class="weui-btn weui-btn_primary" bindtap="add">+</a>
+				</view>
+			</view>
+			<view class="weui-cells__group weui-cells__group_form">
+				<view class="weui-cells weui-cells_form">
+					<view wx:for="{{elements}}" wx:key="*this" class="weui-cell weui-cell_active fix">
+						<view class="weui-cell__hd"><label class="weui-label">{{item.name}}</label>
+						</view>
+						<view class="weui-cell__bd">
+							<label class="weui-label">{{item.amount}}</label>
+						</view>
+						<view> <button size="mini" bindtap="sub" data-index="{{index}}">×</button></view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>

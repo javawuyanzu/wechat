@@ -2,13 +2,28 @@
 
 Page({
   data: {
-    downloadFile:[
-       {file:"锅炉房安全管理制度",path:"",url:"http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/anquanguanli.docx"},
-       {file:"锅炉安全知识",path:"",url:"http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/anquanzhishi.docx"}
-    ],
+    downloadFile:[],
   },
-
   onLoad (query) {
+    var that =this
+    wx.request({
+      //获取openid接口   
+      url: 'https://apis.sdcsoft.com.cn/webapi/docs/comms',
+      data: {
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        var list=res.data.data
+          var files=[]
+          for(var i in list){
+            files.push({file:list[i].fileName,path:"",url:"https://docs.sdcsoft.com.cn/gl/comms/"+"/"+list[i].fileName})
+          }
+          that.setData({
+            downloadFile:files
+          })
+      }
+    })
     wx.getSavedFileList({
       success (res) {
         if (res.fileList.length > 0){
@@ -48,6 +63,7 @@ Page({
   savefiles(e){
     var that =this
     const fileName = e.currentTarget.dataset.file;   //获取页面要下载的文件名
+    var fileType=fileName.substr(fileName.indexOf('.')+1,fileName.length)
     const url = e.currentTarget.dataset.url; 
     const idx = e.currentTarget.dataset.idx; 
     let $this = this;
@@ -70,7 +86,7 @@ Page({
               success(res){
                 wx.openDocument({
                   filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
-                  fileType: "docx",
+                  fileType: fileType,
                   success:(res)=>{
                     wx.hideLoading()
                     console.log('读取成功',res)
@@ -95,7 +111,7 @@ Page({
                     success: (res) => {
                       wx.openDocument({
                         filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
-                        fileType: "docx",
+                        fileType: fileType,
                         success:(res)=>{
                           wx.hideLoading()
                           console.log('读取成功',res)
@@ -132,7 +148,7 @@ Page({
                     success: (res) => {
                       wx.openDocument({
                         filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
-                        fileType: "docx",
+                        fileType: fileType,
                         success:(res)=>{
                           wx.hideLoading()
                           console.log('读取成功',res)
@@ -158,20 +174,6 @@ Page({
           console.log(err, "下载失败")
       }
     })
-  },
-  openfile(e){
-      let path = e.currentTarget.dataset.path;
-      console.log(path)
-      wx.openDocument({
-        filePath: path,
-        fileType: "docx",
-        success:(res)=>{
-          console.log('读取成功',res)
-        },
-        fail:(err)=>{
-          console.log('读取失败',err)
-        }
-      })
   },
  
 

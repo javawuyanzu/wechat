@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "点位表编辑- 水泵动画",
+  "usingComponents": {
+    "atelement":"../../components/atelement/index"
+  }
+}

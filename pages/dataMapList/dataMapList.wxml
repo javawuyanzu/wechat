@@ -13,10 +13,10 @@
         </view>
       </view>
       <view class="mina-go">
-        <view class="mina-use" style="background-color: #1AAD19;color: #FFFFFF;text-align: center;" bindtap="saveAs" data-key="{{item.deviceDataMap}}" data-title="{{item.title}}" data-id="{{item.id}}">使用</view>
+        <view class="mina-use" style="background-color: #1AAD19;color: #FFFFFF;text-align: center;" bindtap="saveAs" data-index="{{index}}" data-key="{{item.deviceDataMap}}" data-title="{{item.title}}" data-id="{{item.id}}">使用</view>
       </view>
       <view class="mina-go" wx:if="{{item.share || item.author==openid}}">
-        <view class="mina-use" style="background-color: #1AAD19;color: #FFFFFF;text-align: center;"  bindtap="toedit" data-key="{{item.deviceDataMap}}" data-title="{{item.title}}" data-id="{{item.id}}" >编辑</view>
+        <view class="mina-use" style="background-color: #1AAD19;color: #FFFFFF;text-align: center;"  bindtap="toedit" data-index="{{index}}" data-key="{{item.deviceDataMap}}" data-title="{{item.title}}" data-id="{{item.id}}" >编辑</view>
       </view>
     </view>
     <view class="mina-desc">

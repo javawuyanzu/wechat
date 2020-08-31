@@ -1,0 +1,70 @@
+<view class="page" data-weui-theme="light">
+	<view class="page_bd">
+		<view class="weui-form">
+			<view class="weui-form__control-area">
+				<view class="weui-cells__group weui-cells__group_form">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">控制目标</label></view>
+						<view class="weui-cell__bd">
+							<!-- <pickertype index="{{count.typ}}" bind:onChange="onTypChange"></pickertype> -->
+							<picker bindchange="onTagChange" value="{{tagindex}}" range="{{tags}}">
+								<view class="picker">
+									<view>{{tags[tagindex]}}</view>
+									<view>></view>
+								</view>
+							</picker>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">数据类型</label></view>
+						<view class="weui-cell__bd">
+							<picker bindchange="onModeChange" value="{{modeindex}}" range="{{modes}}">
+								<view class="picker">
+									<view>{{modes[modeindex]}}</view>
+									<view>></view>
+								</view>
+							</picker>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">名称</label></view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="控制点名称" value="{{kongzhi.name}}" placeholder-class="weui-input__placeholder" bindinput="setName" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">地址</label></view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="16进制地址" value="{{kongzhi.addr}}" placeholder-class="weui-input__placeholder" bindinput="setAddr" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">分组</label></view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="给它一个小组编号" value="{{kongzhi.group}}" placeholder-class="weui-input__placeholder" bindinput="setGroup" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__bd">
+							<textarea class="weui-textarea" placeholder-class="weui-textarea__placeholder" placeholder="输入说明信息" bindinput="setDesc" value="{{kongzhi.desc}}">
+</textarea>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<a class="weui-btn weui-btn_primary" bindtap="add">{{null != action?'s':'+'}}</a>
+					</view>
+					<view wx:for="{{kongzhis}}" wx:key="*this" class="weui-cell weui-cell_active fix">
+						<view class="weui-cell__hd" bindtap="modify" data-index="{{index}}"><label class="weui-label">{{item.name}}</label>
+						</view>
+						<view> <button size="mini" bindtap="sub" data-index="{{index}}">×</button></view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+	<!-- <view class="page__ft">
+		<view class="weui-form__opr-area">
+			<a class="weui-btn weui-btn_primary" bindtap="save">保存</a>
+		</view>
+	</view> -->
+</view>

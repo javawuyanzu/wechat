@@ -461,14 +461,24 @@
 			</view>
 		</view>
 	</view>
-	<view wx:if="{{deviceSmsMapDueMoble==null}}">
+	<view style="font-size: 13px;color: #A9A9A9;margin-left: 33rpx;">当设备发生报警视，绑定手机号可以收到短信通知</view>
+	<view wx:if="{{deviceSmsMapDueMoble==null}}" style="margin-top:20rpx">
 		<button type="primary" bindtap="editMoble" class="primary" style="width: 85%;">绑定手机号</button>
 	</view>
 	<view wx:else>
 		<button type="primary" bindtap="editMoble" class="primary" style="width: 85%;">修改手机号</button>
 	</view>
 </view>
-<view hidden="{{currentTab!=payMenu}}">
+<view hidden="{{currentTab!=deviceword}}">
+	<view class="weui-cells weui-cells_after-title">
+            <view  class="weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{downloadFile}}" wx:key="index" wx:for-item="item" wx:for-index="idx">
+                <view class="weui-cell__hd">
+                    <image src="../../images/word.png" style="margin-right: 16px;vertical-align: middle;width:30px; height: 30px;"></image>
+                </view>
+                <view class="weui-cell__bd">{{item.file}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access" data-path="{{item.path}}" data-url="{{item.url}}" data-file="{{item.file}}" data-idx="{{idx}}" bindtap='savefiles'> 点击下载</view>
+            </view>
+  </view>
 </view>
 
 <view class='toast-box' hidden='{{!ifedit}}'>
@@ -492,7 +502,3 @@
 		</view>
 	</view>
 </view>
-<!-- <view wx:if="{{isHidden}}" class="guide" bindtap="getHidden">
-  <image style="width: 125rpx; height:150rpx" src="../../images/click.png"></image>
-  当前处于收费测试期，服务功能0元购！
-</view> -->

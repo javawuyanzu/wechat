@@ -1,0 +1,27 @@
+<!--pages/mapediter/editer/mapshare/index.wxml-->
+<view class="page" data-weui-theme="light">
+	<view class="weui-form">
+		<view class="weui-form__control-area">
+			<view class="weui-cells__group weui-cells__group_form">
+					<view class="weui-cells weui-cells_checkbox">
+						<checkbox-group bindchange="checkboxChange">
+							<label class="weui-cell weui-cell_active weui-check__label">
+								<view class="weui-cell__hd">
+									<checkbox class="weui-check" checked="{{share == 0}}" />
+									<i class="weui-icon-checked"></i>
+								</view>
+								<view class="weui-cell__bd">
+									<view>共享，他人可用但不能修改</view>
+								</view>
+							</label>
+						</checkbox-group>
+					</view>
+			</view>
+		</view>
+	</view>
+	<view class="page__ft">
+		<view class="weui-form__opr-area">
+			<a class="weui-btn weui-btn_primary" bindtap="save">保存</a>
+		</view>
+	</view>
+</view>

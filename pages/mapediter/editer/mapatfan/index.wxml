@@ -1,0 +1,1 @@
+<atelement elements="{{fan}}"  bind:onSave="onSave"></atelement>

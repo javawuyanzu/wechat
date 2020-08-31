@@ -1,0 +1,11 @@
+.weui-form{
+  padding-top: 0em;
+  min-height: 300px;
+}
+.weui-form__control-area{
+  margin-top: 0em;
+}
+.picker{
+  display: flex;
+  justify-content: space-between;
+}

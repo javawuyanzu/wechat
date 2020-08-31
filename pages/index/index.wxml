@@ -126,6 +126,7 @@
       <view class="td" wx:if="{{res.resId == 3}}">统计报表</view>
       <view class="td" wx:if="{{res.resId == 4}}">管理控制</view>
       <view class="td" wx:if="{{res.resId == 5}}">短信报警</view>
+       <view class="td" wx:if="{{res.resId == 7}}">设备资料</view>
       <view class="td">{{res.dueTime}}</view>
     </view>
   </block>

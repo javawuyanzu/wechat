@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "点位表编辑-燃料",
+  "usingComponents": {
+    "powermedia": "../../components/powermedia/powermedia"
+  }
+}

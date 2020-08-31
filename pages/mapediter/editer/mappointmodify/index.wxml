@@ -1,0 +1,48 @@
+<view class="page" data-weui-theme="light">
+	<view class="page_bd">
+		<view class="weui-form">
+			<view class="weui-form__control-area">
+				<view class="weui-cells__group weui-cells__group_form">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">地址</label></view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="如40001" value="{{point.addr}}" placeholder-class="weui-input__placeholder" bindinput="setAddr" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">数据类型</label></view>
+						<view class="weui-cell__bd">
+							<picker bindchange="onTypChange" value="{{typindex}}" range="{{typs}}">
+								<view class="picker">
+									<view>{{typs[typindex]}}</view>
+									<view>></view>
+								</view>
+							</picker>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">数据格式</label></view>
+						<view class="weui-cell__bd">
+							<picker bindchange="onEndianChange" value="{{endianindex}}" range="{{endians}}">
+								<view class="picker">
+									<view>{{endians[endianindex]}}</view>
+									<view>></view>
+								</view>
+							</picker>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">无效值</label></view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" type="number" placeholder="点为该值时将不显示" value="{{point.mask}}" placeholder-class="weui-input__placeholder" bindinput="setMask" />
+						</view>
+					</view>
+
+					<view class="weui-cell weui-cell_active">
+						<a class="weui-btn weui-btn_primary" bindtap="save">保存</a>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>

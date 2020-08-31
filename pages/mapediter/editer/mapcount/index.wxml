@@ -1,0 +1,59 @@
+<view class="page" data-weui-theme="light">
+	<view class="page_bd">
+		<view class="weui-form">
+			<view class="weui-form__control-area">
+				<view class="weui-cells__group weui-cells__group_form">
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">类别</label></view>
+						<view class="weui-cell__bd">
+							<pickertype index="{{count.typ}}" bind:onChange="onTypChange"></pickertype>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">名称</label></view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" placeholder="计算项名称" value="{{count.name}}" placeholder-class="weui-input__placeholder" bindinput="setName" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">数值映射</label></view>
+						<view class="weui-cell__bd">
+							<pickervm options="{{vm}}" index="{{count.v}}" bind:onChange="onVmChange"></pickervm>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">运算类型</label></view>
+						<view class="weui-cell__bd">
+							<pickerfg index="{{count.fg}}" bind:onChange="onFgChange"></pickerfg>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">具体运算</label></view>
+						<view class="weui-cell__bd">
+							<pickerfn id="pickerfn" index="{{count.fn}}" bind:onChange="onFnChange"></pickerfn>
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<view class="weui-cell__hd"><label class="weui-label">关注顺序</label></view>
+						<view class="weui-cell__bd">
+							<input type="number" class="weui-input" value="{{count.focus}}" placeholder="最小为0，不能重复" placeholder-class="weui-input__placeholder" bindinput="setFocus" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_active">
+						<a class="weui-btn weui-btn_primary" bindtap="add">{{null != action?'s':'+'}}</a>
+					</view>
+					<view wx:for="{{counts}}" wx:key="*this" class="weui-cell weui-cell_active fix">
+						<view class="weui-cell__hd" bindtap="modify" data-index="{{index}}"><label class="weui-label">{{item.name}}</label>
+						</view>
+						<view> <button size="mini" bindtap="sub" data-index="{{index}}">×</button></view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+	<!-- <view class="page__ft">
+		<view class="weui-form__opr-area">
+			<a class="weui-btn weui-btn_primary" bindtap="save">保存</a>
+		</view>
+	</view> -->
+</view>

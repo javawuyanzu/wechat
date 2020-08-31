@@ -121,9 +121,7 @@ App({
         }
       }
     })
-   
     const storage = wx.getStorageInfoSync()
-    
     if (storage.keys.length == 1) {
       wx.setStorageSync('deviceList', [])
       wx.setStorageSync('errorList', [])
@@ -153,5 +151,6 @@ App({
     bytedata:[],
     device:null,
     content: null,
+    editpage:null,
   },
 })

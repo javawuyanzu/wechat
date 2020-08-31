@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "点位表编辑-静态值",
+  "usingComponents": {
+    "pickertype":"../../components/pickertyp/index"
+  }
+}

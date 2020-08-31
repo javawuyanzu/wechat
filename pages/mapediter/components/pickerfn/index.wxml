@@ -1,0 +1,6 @@
+<picker bindchange="bindPickerChange" value="{{index}}" range="{{fns}}">
+	<view class="picker">
+		<view>{{fns[index]}}</view>
+		<view>></view>
+	</view>
+</picker>

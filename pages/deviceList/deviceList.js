@@ -533,8 +533,7 @@ Page({
     })
   },
   onLoad: function (options) {
-
-   
+    
     var that = this;
     var ilist = that.data.imgList
     wx.getStorage({
@@ -610,6 +609,7 @@ Page({
           },
           method: 'GET',
           success: function (res) {
+            console.log(res.data.openid)
             var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             app.globalData.openid = openid
 
@@ -1099,6 +1099,7 @@ Page({
                         title: device.BaoJing[index].name
                       })
                     }
+                    errcount1 = errorList.length,
                     that.setData({
                       errorNewList: that.data.errorNewList.concat(errorList)
                     })
@@ -1114,28 +1115,32 @@ Page({
                         break;
                       }
                     }
-                    if (device.Run) {
+                    if (device.Run.name!="") {
+                     
                       runday = device.Run.name + ":" + device.Run.vstr
                     }
+                    console.log(device.status)
                     if (device.status) {
-                      runstate1 = device.status.vstr
+                      runstate1 = "-"+ device.status.vstr
                     }
-                    var el = device.getStoveElements()[0].values
-                    var stove = device.getStoveElements()[0].prefix
-                    for (var i in el) {
-                      if (el[i] != -1) {
-                        stove = stove + "-" + el[i]
+                    if(device.getStoveElements().length>0){
+                      var el = device.getStoveElements()[0].values
+                      var stove = device.getStoveElements()[0].prefix
+                      for (var i in el) {
+                        if (el[i] != -1) {
+                          stove = stove + "-" + el[i]
+                        }
                       }
+                    
+                        src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     }
-                    errcount1 = errorList.length,
-                      src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     var ilist = that.data.imgList
                     if (that.finddevice(ilist, deviceno)) {
                       for (var i = 0; i < ilist.length; i++) {
                         if (ilist[i].deviceNo === deviceno) {
                           ilist[i].deviceNo = deviceno
                           ilist[i].title = title1
-                          ilist[i].runstate = runstate1
+                          ilist[i].runstate =runstate1
                           ilist[i].imgStyle = imgstyle1
                           ilist[i].errcount = errcount1
                           ilist[i].src = src1
@@ -1157,7 +1162,7 @@ Page({
                     } else {
                       ilist.push({
                         title: title1,
-                        runstate: runstate1,
+                        runstate:"-"+ runstate1,
                         deviceNo: deviceno,
                         imgStyle: imgstyle1,
                         errcount: errcount1,
@@ -1246,7 +1251,7 @@ Page({
                         if (ilist[i].deviceNo === deviceno) {
                           ilist[i].deviceNo = deviceno
                           ilist[i].title = title1
-                          ilist[i].runstate = runstate1
+                          ilist[i].runstate ="-"+ runstate1
                           ilist[i].imgStyle = imgstyle1
                           ilist[i].errcount = errcount1
                           ilist[i].src = src1
@@ -1268,7 +1273,7 @@ Page({
                     } else {
                       ilist.push({
                         title: title1,
-                        runstate: runstate1,
+                        runstate:"-"+ runstate1,
                         deviceNo: deviceno,
                         imgStyle: imgstyle1,
                         errcount: errcount1,
@@ -1307,7 +1312,7 @@ Page({
                         if (that.finddevice(ilist, deviceno)) {
                           for (var i = 0; i < ilist.length; i++) {
                             if (ilist[i].deviceNo === deviceno) {
-                              if (ilist[i].runstate != "Error") {
+                              if (ilist[i].runstate != "-Error") {
                                 ilist[i].deviceNo = deviceno
                                 ilist[i].title = deviceno
                                 ilist[i].runstate = "Error"
@@ -1328,7 +1333,7 @@ Page({
                           var ilist = that.data.imgList
                           ilist.push({
                             title: deviceno,
-                            runstate: "Error",
+                            runstate:"-"+ "Error",
                             deviceNo: deviceno,
                             lang: app.globalData.lang
                           })
@@ -1390,10 +1395,10 @@ Page({
                         if (that.finddevice(ilist, deviceno)) {
                           for (var i = 0; i < ilist.length; i++) {
                             if (ilist[i].deviceNo === deviceno) {
-                              if (ilist[i].runstate != "Error") {
+                              if (ilist[i].runstate != "-Error") {
                                 ilist[i].deviceNo = deviceno
                                 ilist[i].title = deviceno
-                                ilist[i].runstate = "Error"
+                                ilist[i].runstate = "-"+"Error"
                                 ilist[i].error = 1
                                 that.setData({
                                   imgList: ilist
@@ -1411,7 +1416,7 @@ Page({
                           var ilist = that.data.imgList
                           ilist.push({
                             title: deviceno,
-                            runstate: "Error",
+                            runstate: "-Error",
                             deviceNo: deviceno,
                             lang: app.globalData.lang
                           })
