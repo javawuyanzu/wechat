@@ -3,10 +3,10 @@
 var app = getApp()
 Page({
   data: {
-    logosrc: '../../images/orderlog.png',
-    adrimg: '../../images/ditu.png',
-    clockimg: '../../images/shijian.png',
-    phoneimg: '../../images/dianhua.png',
+    logosrc: '../../../images/orderlog.png',
+    adrimg: '../../../images/ditu.png',
+    clockimg: '../../../images/shijian.png',
+    phoneimg: '../../../images/dianhua.png',
     indicatorDots: false,
     autoplay: true,
     interval: 5000,

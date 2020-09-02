@@ -161,7 +161,7 @@ Page({
       return;
     } else {
       wx.navigateTo({
-        url: "/pages/deviceDetail/deviceDetail?deviceNo=" + deviceNo + "&imgstyle=" + imgstyle + "&control=" + control + "&title=" + title + "&type=" + type + "&jiarezu=" + jiarezu + "&newFrame=" + newFrame + "&dataMapId=" + dataMapId,
+        url: "/pages/root/deviceDetail/deviceDetail?deviceNo=" + deviceNo + "&imgstyle=" + imgstyle + "&control=" + control + "&title=" + title + "&type=" + type + "&jiarezu=" + jiarezu + "&newFrame=" + newFrame + "&dataMapId=" + dataMapId,
       })
     }
   },
@@ -187,7 +187,7 @@ Page({
   toPay: function (e) {
     console.log(e.currentTarget.dataset.deviceno)
     wx.navigateTo({
-      url: "../payMenu/payMenu?deviceNo=" + e.currentTarget.dataset.deviceno
+      url: "../../payMenu/payMenu?deviceNo=" + e.currentTarget.dataset.deviceno
     })
     this.setData({
       ifName: false
@@ -678,7 +678,7 @@ Page({
 
     that.updateDevice();
     if (app.globalData.lang === 'zh-cn') {
-      var chinese = require("../../utils/Chinses.js")
+      var chinese = require("../../../utils/Chinses.js")
       that.setData({
         content: chinese.Content
       })
@@ -703,7 +703,7 @@ Page({
         })
     }
     if (app.globalData.lang === 'en-us') {
-      var english = require("../../utils/English.js")
+      var english = require("../../../utils/English.js")
       that.setData({
         content: english.Content
       })

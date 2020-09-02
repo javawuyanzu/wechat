@@ -25,7 +25,7 @@
 	<view class='show' style='border: 1px solid #c8c7cc;border-radius: 5px;margin: 10px; margin-top:30px;overflow:scroll' wx:if="{{newFrame=='true'}}">
 		<view class="li" data-index="0" bindtap='changeToggle' wx:if="{{baseInfoMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/jiben.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/jiben.png"></image>
 				{{detail_base}}
 			</view>
 			<view class="right">
@@ -41,7 +41,7 @@
 		</view>
 		<view class="li" data-index="1" bindtap='changeToggle'>
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/moniliang.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/moniliang.png"></image>
 				{{detail_ex}}
 			</view>
 			<view class="right">
@@ -59,7 +59,7 @@
 		</view>
 		<view class="li" data-index="2" bindtap='changeToggle' wx:if="{{wenduMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/baojing.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/baojing.png"></image>
 				{{detail_wendu}}
 			</view>
 			<view class="right red">
@@ -77,7 +77,7 @@
 
 		<view class="li" data-index="3" bindtap='changeToggle' wx:if="{{yaliMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shebei.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/shebei.png"></image>
 				{{detail_yali}}
 			</view>
 			<view class="right ">
@@ -95,7 +95,7 @@
 		</view>
 		<view class="li" data-index="4" bindtap='changeToggle' wx:if="{{liuliangMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/shezhi.png"></image>
 				{{detail_liuliang}}
 			</view>
 			<view class="right ">
@@ -115,7 +115,7 @@
 
 		<view class="li" data-index="5" bindtap='changeToggle' wx:if="{{kaiguanMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/weeksetting.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/weeksetting.png"></image>
 				{{detail_kaiguan}}
 			</view>
 			<view class="right ">
@@ -134,7 +134,7 @@
 
 		<view class="li" data-index="6" bindtap='changeToggle' wx:if="{{shebeiMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/switchquantity.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/switchquantity.png"></image>
 				{{detail_shebei}}
 			</view>
 			<view class="right ">
@@ -154,7 +154,7 @@
 
 		<view class="li" data-index="7" bindtap='changeToggle' wx:if="{{shezhiMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/startstop.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/startstop.png"></image>
 				{{detail_shezhi}}
 			</view>
 			<view class="right ">
@@ -172,7 +172,7 @@
 		</view>
 		<view class="li" data-index="8" bindtap='changeToggle' wx:if="{{dingshiMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/startstop.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/startstop.png"></image>
 				{{detail_dingshi}}
 			</view>
 			<view class="right ">
@@ -193,7 +193,7 @@
 	<view class='show' style='border: 1px solid #c8c7cc;border-radius: 5px;margin: 10px; margin-top:30px;overflow:scroll' wx:else>
 		<view class="li" data-index="0" bindtap='changeToggle'>
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/jiben.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/jiben.png"></image>
 				{{detail_base}}
 			</view>
 			<view class="right">
@@ -210,7 +210,7 @@
 		</view>
 		<view class="li" data-index="1" bindtap='changeToggle' wx:if="{{mockInfoMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/moniliang.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/moniliang.png"></image>
 				{{detail_mock}}
 			</view>
 			<view class="right">
@@ -228,7 +228,7 @@
 		</view>
 		<view class="li" data-index="2" bindtap='changeToggle'>
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/baojing.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/baojing.png"></image>
 				{{detail_ex}}
 			</view>
 			<view class="right red">
@@ -245,7 +245,7 @@
 
 		<view class="li" data-index="3" bindtap='changeToggle' wx:if="{{deviceInfoMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shebei.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/shebei.png"></image>
 				{{detail_deviceinfo}}
 			</view>
 			<view class="right ">
@@ -263,7 +263,7 @@
 		</view>
 		<view class="li" data-index="4" bindtap='changeToggle' wx:if="{{settingInfoMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/shezhi.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/shezhi.png"></image>
 				{{detail_deviceparameters}}
 			</view>
 			<view class="right ">
@@ -283,7 +283,7 @@
 
 		<view class="li" data-index="5" bindtap='changeToggle' wx:if="{{weeksettingMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/weeksetting.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/weeksetting.png"></image>
 				{{detail_weeksetting}}
 			</view>
 			<view class="right ">
@@ -302,7 +302,7 @@
 
 		<view class="li" data-index="6" bindtap='changeToggle' wx:if="{{startstoptimeMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/switchquantity.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/switchquantity.png"></image>
 				{{detail_startstoptime}}
 			</view>
 			<view class="right ">
@@ -322,7 +322,7 @@
 
 		<view class="li" data-index="7" bindtap='changeToggle' wx:if="{{switchquantityMap.length>0}}">
 			<view class="left">
-				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../images/startstop.png"></image>
+				<image style="width: 60rpx; height: 60rpx;bertical-align:middle;vertical-align: middle" src="../../../images/startstop.png"></image>
 				{{detail_switchquantity}}
 			</view>
 			<view class="right ">
@@ -391,7 +391,7 @@
 						<view wx:if="{{item1.valueType==1|| item1.valueType==2}}">
 							<view class="section" catchtap='editData' data-index="{{index}}" data-index1="{{index1}}" data-max="{{item1.maxValue}}" data-min="{{item1.minValue}}">
 								<label style='display:block;float:left;'>{{item1.title}}：</label>
-								<image style="width: 42rpx; height: 42rpx;float:right;" src="../../images/right.png"></image>
+								<image style="width: 42rpx; height: 42rpx;float:right;" src="../../../images/right.png"></image>
 								<label style='display:block;float:right;'>{{item1.valueString}}</label>
 							</view>
 						</view>
@@ -453,15 +453,10 @@
 	</view>
 	<view class="weui-cells weui-cells_after-title">
 		<view class="weui-cell weui-cell_active">
-			<view class="weui-cell__hd">
-				<view class="weui-label">到期时间：</view>
-			</view>
-			<view class="weui-cell__bd">
-				<input class="weui-input" value="{{deviceSmsMapDueTime}}" />
-			</view>
+				<view>该功能将于{{deviceSmsMapDueTime}}到期</view>
 		</view>
 	</view>
-	<view style="font-size: 13px;color: #A9A9A9;margin-left: 33rpx;">当设备发生报警视，绑定手机号可以收到短信通知</view>
+	<view style="font-size: 13px;color: #A9A9A9;margin-left: 33rpx;">当设备发生报警时，绑定手机号可以收到短信通知</view>
 	<view wx:if="{{deviceSmsMapDueMoble==null}}" style="margin-top:20rpx">
 		<button type="primary" bindtap="editMoble" class="primary" style="width: 85%;">绑定手机号</button>
 	</view>
@@ -473,7 +468,7 @@
 	<view class="weui-cells weui-cells_after-title">
             <view  class="weui-cell weui-cell_access" hover-class="weui-cell_active" wx:for="{{downloadFile}}" wx:key="index" wx:for-item="item" wx:for-index="idx">
                 <view class="weui-cell__hd">
-                    <image src="../../images/word.png" style="margin-right: 16px;vertical-align: middle;width:30px; height: 30px;"></image>
+                    <image src="../../../images/word.png" style="margin-right: 16px;vertical-align: middle;width:30px; height: 30px;"></image>
                 </view>
                 <view class="weui-cell__bd">{{item.file}}</view>
                 <view class="weui-cell__ft weui-cell__ft_in-access" data-path="{{item.path}}" data-url="{{item.url}}" data-file="{{item.file}}" data-idx="{{idx}}" bindtap='savefiles'> 点击下载</view>

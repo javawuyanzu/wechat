@@ -30,7 +30,7 @@
                     <text style='height:25px;padding:0 2%;padding-top:10px;font-size:16px;color:red'>{{item.errcount}}</text>
                   </view>
                   <view style='float:right;' wx:if="{{item.errcount >0}}">
-                    <image src="../../images/ling.png" style='width: 50rpx; height: 50rpx'></image>
+                    <image src="../../../images/ling.png" style='width: 50rpx; height: 50rpx'></image>
                   </view>
                   <view >
                     <view  >{{item.title}}{{item.runstate}}</view>
@@ -62,7 +62,7 @@
               <view style="padding: 0 3%;" catchtap='toPay' data-deviceNo='{{item.deviceNo}}'>
                 <text style="height: 70rpx;line-height:70rpx;float: left;">{{item.simTitle}}</text>
                 <text style=" height: 70rpx;line-height:70rpx;float: right;margin-left: -15rpx;">服务</text>
-                <image src="../../images/vip.png" style="width: 100rpx; height:70rpx;float: right;" mode="aspectFit"></image>
+                <image src="../../../images/vip.png" style="width: 100rpx; height:70rpx;float: right;" mode="aspectFit"></image>
               </view>
             </view>
 

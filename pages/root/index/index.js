@@ -88,9 +88,9 @@ Page({
   //     }
   //   })
   // },
-  error: function () {
+  debug: function () {
     wx.navigateTo({
-      url: '../reports/reports'
+      url: '../../reports/reports'
     })
   },
   //事件处理函数
@@ -173,7 +173,7 @@ Page({
 
     var that =this
     if (app.globalData.lang === 'zh-cn') {
-      var chinese = require("../../utils/Chinses.js")
+      var chinese = require("../../../utils/Chinses.js")
       that.setData({
         userarray: ["锅炉监控", "锅炉维保"],
         exarray: ["无", "振动", "响铃", "震动+响铃"],
@@ -181,7 +181,7 @@ Page({
       })
     }
     if (app.globalData.lang === 'en-us') {
-      var english = require("../../utils/English.js")
+      var english = require("../../../utils/English.js")
       that.setData({
         userarray: ["Monitoring of the boiler", "Maintenance of the boiler"],
         exarray: ["None", "Vibration", "Ring the bell", "Vibration+Ring the bell"],

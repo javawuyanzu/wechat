@@ -1,0 +1,109 @@
+<!--index.wxml-->
+<view class="1" style='background-color:#eee;'>
+	<view class="userinfo">
+		<open-data type="userAvatarUrl" style="width:120rpx;height:120rpx;border-radius:20rpx;overflow: hidden;"></open-data>
+		<!-- <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"> </button> -->
+		<view style='flex-direction:column '>
+			<view style='height:50rpx;color:white;'>
+				<open-data type="userNickName" lang="zh_CN" style="margin-left:50rpx;" bindtap="debug"></open-data>
+
+			</view>
+		</view>
+	</view>
+
+	<view class="user-list">
+
+
+		<view class="user-list-item">
+			<view class="item-left">
+				<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
+				<text>{{content.index_exType}}</text>
+			</view>
+			<view class="item-right" style="line-height: 0rpx;font-size: 16px;color: #333;">
+				<picker bindchange="bindPickerExChange" value="{{exindex}}" range="{{exarray}}">
+					<text>
+					{{content.warningType_nowChoose}}:{{exarray[exindex]}}
+					</text>
+				</picker>
+			</view>
+
+		</view>
+
+		<view class="user-list-item">
+			<view class="item-left">
+				<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
+				<text>{{content.index_userType}}</text>
+			</view>
+			<view class="item-right" style="line-height: 0rpx;font-size: 16px;color: #333;">
+				<picker bindchange="bindPickerUserChange" value="{{userindex}}" range="{{userarray}}">
+					<text>
+					{{content.warningType_nowChoose}}:{{userarray[userindex]}}
+					</text>
+				</picker>
+			</view>
+		</view>
+
+
+
+
+
+		<view wx:if="{{sole}}">
+			<navigator url="../soldUpdate/soldUpdate" hover-class="none">
+				<view class="user-list-item">
+					<view class="item-left">
+						<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
+						<text>{{content.index_sold}}</text>
+					</view>
+					<view class="item-right">
+						<image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../../images/right-arrow-gray.png"></image>
+					</view>
+				</view>
+			</navigator>
+		</view>
+		<view>
+			<navigator url="../myorder/myorder" hover-class="none">
+				<view class="user-list-item">
+					<view class="item-left">
+						<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
+						<text>{{content.myOrder_exType}}</text>
+					</view>
+					<view class="item-right">
+						<image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../../images/right-arrow-gray.png"></image>
+					</view>
+				</view>
+			</navigator>
+		</view>
+		<view wx:if="{{canIUse}}">
+			<navigator url="../login/login" hover-class="none">
+				<view class="user-list-item">
+					<view class="item-left">
+						<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
+						<text>{{content.index_canIUse}}</text>
+					</view>
+					<view class="item-right">
+						<image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../../images/right-arrow-gray.png"></image>
+					</view>
+				</view>
+			</navigator>
+		</view>
+	</view>
+</view>
+<view class="table" style="font-size: 16px;">
+	<view class="tr bg-w">
+		<view class="th">设备编号</view>
+		<view class="th ">服务产品</view>
+		<view class="th">到期时间</view>
+	</view>
+	<block wx:for="{{resList}}" wx:key="{{key}}" wx:for-item="res">
+		<view class="tr" style="font-size: 14px;">
+			<view class="td">{{res.deviceNo}}</view>
+			<view class="td" wx:if="{{res.resId == 1}}">运行信息</view>
+			<view class="td" wx:if="{{res.resId == 2}}">报警信息</view>
+			<view class="td" wx:if="{{res.resId == 3}}">统计报表</view>
+			<view class="td" wx:if="{{res.resId == 4}}">管理控制</view>
+			<view class="td" wx:if="{{res.resId == 5}}">短信报警</view>
+			<view class="td" wx:if="{{res.resId == 7}}">设备资料</view>
+			<view class="td">{{res.dueTime}}</view>
+		</view>
+	</block>
+</view>

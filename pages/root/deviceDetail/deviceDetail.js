@@ -1,5 +1,5 @@
 const app = getApp();
-var wxCharts = require('../../utils/wxcharts.js');
+var wxCharts = require('../../../utils/wxcharts.js');
 var lineChart = null;
 var startPos = null;
 import {
@@ -527,7 +527,7 @@ Page({
       title: "loading...",
     })
     if (app.globalData.lang === 'zh-cn') {
-      var chinese = require("../../utils/Chinses.js")
+      var chinese = require("../../../utils/Chinses.js")
       that.setData({
         content: chinese.Content,
         lang: 'zh-cn',
@@ -535,7 +535,7 @@ Page({
       })
     }
     if (app.globalData.lang === 'en-us') {
-      var english = require("../../utils/English.js")
+      var english = require("../../../utils/English.js")
       that.setData({
         content: english.Content,
         lang: 'en-us',
@@ -704,7 +704,7 @@ Page({
       success: function (res) {
         console.log(res)
         that.setData({
-          deviceSmsMapDueTime:res.data.data.dueTime,
+          deviceSmsMapDueTime:res.data.data.dueTime.substr(0,10),
           deviceSmsMapDueMoble:res.data.data.employeeMobile,
           deviceSmsMapId:res.data.data.id
         })

@@ -1,5 +1,5 @@
 const app = getApp();
-import req from '../../utils/Request.js'
+import req from '../../../utils/Request.js'
 Page({
   /**
    * 页面的初始数据
@@ -82,13 +82,13 @@ Page({
   onShow: function () {
     var that = this
     if (app.globalData.lang === 'zh-cn') {
-      var chinese = require("../../utils/Chinses.js")
+      var chinese = require("../../../utils/Chinses.js")
       that.setData({
         content: chinese.Content
       })
     }
     if (app.globalData.lang === 'en-us') {
-      var english = require("../../utils/English.js")
+      var english = require("../../../utils/English.js")
       that.setData({
         content: english.Content
       })

@@ -1,28 +1,27 @@
 {
   "pages": [
-    "pages/deviceList/deviceList",
-    "pages/help/help",
-    "pages/help/videoList",
-    "pages/help/download",
-    "pages/myorder/myorder",
+    "pages/root/deviceList/deviceList",
+    "pages/root/help/help",
+    "pages/root/help/videoList",
+    "pages/root/help/download",
+    "pages/root/myorder/myorder",
     "pages/devicemanage/devicemanage",
     "pages/reports/reports",
-    "pages/soldUpdate/soldUpdate",
-    "pages/salesChange/salesChange",
-    "pages/dataMapList/dataMapList",
+    "pages/root/soldUpdate/soldUpdate",
+    "pages/root/salesChange/salesChange",
+    "pages/root/dataMapList/dataMapList",
     "pages/login/login",
-    "pages/index/index",
-    "pages/contactUs/contactUs",
+    "pages/root/index/index",
+    "pages/root/contactUs/contactUs",
     "pages/repair/repair",
-    "pages/operation/operation",
-    "pages/deviceDetail/deviceDetail",
+    "pages/root/operation/operation",
+    "pages/root/deviceDetail/deviceDetail",
     "pages/register/register",
     "pages/forgotPw/forgotPw",
     "pages/payMenu/payMenu",
     "pages/order/order",
-    "pages/orderItem/orderItem",
-    "pages/userType/userType",
-    "pages/video/video"
+    "pages/root/orderItem/orderItem",
+    "pages/root/video/video"
   ],
   "subPackages": [
     {
@@ -48,7 +47,7 @@
     }
   ],
   "preloadRule": {
-    "pages/soldUpdate/soldUpdate": {
+    "pages/root/soldUpdate/soldUpdate": {
       "packages": ["pages/mapediter/"]
     }
   },
@@ -61,30 +60,30 @@
   "tabBar": {
     "list": [
       {
-        "pagePath": "pages/deviceList/deviceList",
+        "pagePath": "pages/root/deviceList/deviceList",
         "text": "主页",
         "iconPath": "images/tab_activity.png",
         "selectedIconPath": "images/tab_activity_selected.png"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/root/index/index",
         "text": "我的",
         "iconPath": "images/tab_home.png",
         "selectedIconPath": "images/tab_home_selected.png"
       },
       {
-        "pagePath": "pages/operation/operation",
+        "pagePath": "pages/root/operation/operation",
         "text": "添加",
         "iconPath": "images/add.png"
       },
       {
-        "pagePath": "pages/help/help",
+        "pagePath": "pages/root/help/help",
         "text": "资料",
         "iconPath": "images/tab_help.png",
         "selectedIconPath": "images/tab_help_selected.png"
       },
       {
-        "pagePath": "pages/contactUs/contactUs",
+        "pagePath": "pages/root/contactUs/contactUs",
         "text": "联系",
         "iconPath": "images/call.png",
         "selectedIconPath": "images/call_selected.png"

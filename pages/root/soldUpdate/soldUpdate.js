@@ -48,7 +48,7 @@ Page({
                 }
                 deviceNo = res.data.data.deviceSuffix
                 wx.navigateTo({
-                  url: "/pages/salesChange/salesChange?deviceNo=" + deviceNo,
+                  url: "/pages/root/salesChange/salesChange?deviceNo=" + deviceNo,
                 })
               }
             })
@@ -65,9 +65,8 @@ Page({
     var that = this
   },
   todatamap: function (e) {
-      //url: "/pages/dataMapList/dataMapList",
     wx.navigateTo({
-      url: "/pages/dataMapList/dataMapList",
+      url: "/pages/root/dataMapList/dataMapList",
     })
   },
   /**
@@ -113,7 +112,7 @@ Page({
               }
               deviceNo = res.data.data.deviceSuffix
               wx.navigateTo({
-                url: "/pages/salesChange/salesChange?deviceNo=" + deviceNo,
+                url: "/pages/root/salesChange/salesChange?deviceNo=" + deviceNo,
               })
             }
           })
