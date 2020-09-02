@@ -4,7 +4,6 @@
     "pages/help/help",
     "pages/help/videoList",
     "pages/help/download",
-    "pages/dataMap/dataMap",
     "pages/myorder/myorder",
     "pages/devicemanage/devicemanage",
     "pages/reports/reports",
@@ -12,7 +11,6 @@
     "pages/salesChange/salesChange",
     "pages/dataMapList/dataMapList",
     "pages/login/login",
-    "pages/add/add",
     "pages/index/index",
     "pages/contactUs/contactUs",
     "pages/repair/repair",
@@ -20,30 +18,40 @@
     "pages/deviceDetail/deviceDetail",
     "pages/register/register",
     "pages/forgotPw/forgotPw",
-    "pages/loginChoose/loginChoose",
     "pages/payMenu/payMenu",
     "pages/order/order",
     "pages/orderItem/orderItem",
     "pages/userType/userType",
-    "pages/video/video",
-    "pages/dataDetail/dataDetail",
-    "pages/mapediter/editer/maptitle/index",
-    "pages/mapediter/editer/mapshare/index",
-    "pages/mapediter/editer/mapmedia/index",
-    "pages/mapediter/editer/mappower/index",
-    "pages/mapediter/editer/mapno/index",
-    "pages/mapediter/editer/mapinput/index",
-    "pages/mapediter/editer/mapsysrun/index",
-    "pages/mapediter/editer/mapatfire/index",
-    "pages/mapediter/editer/mapatbeng/index",
-    "pages/mapediter/editer/mapatfan/index",
-    "pages/mapediter/editer/mapdingshi/index",
-    "pages/mapediter/editer/mapfix/index",
-    "pages/mapediter/editer/mapcount/index",
-    "pages/mapediter/editer/mapvm/index",
-    "pages/mapediter/editer/mappointlist/index",
-    "pages/mapediter/editer/editer"
+    "pages/video/video"
   ],
+  "subPackages": [
+    {
+      "root": "pages/mapediter/",
+      "pages": [
+        "editer/maptitle/index",
+        "editer/mapshare/index",
+        "editer/mapmedia/index",
+        "editer/mappower/index",
+        "editer/mapno/index",
+        "editer/mapinput/index",
+        "editer/mapsysrun/index",
+        "editer/mapatfire/index",
+        "editer/mapatbeng/index",
+        "editer/mapatfan/index",
+        "editer/mapdingshi/index",
+        "editer/mapfix/index",
+        "editer/mapcount/index",
+        "editer/mapvm/index",
+        "editer/mappointlist/index",
+        "editer/editer"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/soldUpdate/soldUpdate": {
+      "packages": ["pages/mapediter/"]
+    }
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
