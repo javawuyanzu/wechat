@@ -1,0 +1,62 @@
+
+.navbar{
+  flex: none;
+  margin-top: 10px;
+  display: flex;
+  background: #fff;
+}
+.image{
+  padding-top: 20px;
+ width: 30px;
+ height: 25px;
+}
+.navbar .item{
+  margin-left: 10px;
+  padding-top: 20px;
+  position: relative;
+  flex: auto;
+ 
+  line-height: 80rpx;
+}
+checkbox .wx-checkbox-input {
+    width: 40rpx;
+    height: 40rpx;
+  
+    border-radius: 50%;
+}
+ 
+ 
+/*checkbox选中后样式  */
+ 
+checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+    background: #67c23a;
+      color: white;
+    border: none;
+}
+ 
+ 
+/*checkbox选中后图标样式  */
+ 
+.checkbox{
+  width: 100%;
+  margin-left: 30px;
+   font-size: 50rpx;
+  margin-top: 20px;
+display: flex;
+}
+
+
+.intro {
+  margin: 30px;
+  text-align: center;
+}
+.quenyButton1{
+ background-color:#67c23a;
+ color: white;
+ margin-top: 40rpx;
+ font-size: 30rpx;
+ height: 7%;
+  width: 70%;
+   margin-left: 15%;  
+}
+

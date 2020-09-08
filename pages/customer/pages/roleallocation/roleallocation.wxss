@@ -1,0 +1,23 @@
+
+
+
+.checkbox{
+  width: 100%;
+  margin-left: 30px;
+   font-size: 50rpx;
+  margin-top: 20px;
+display: flex;
+}
+
+
+
+.quenyButton1{
+ background-color:#67c23a;
+ color: white;
+ margin-top: 40rpx;
+ font-size: 30rpx;
+ height: 7%;
+  width: 70%;
+   margin-left: 15%;  
+}
+
