@@ -76,131 +76,132 @@ Page({
     reportMenu: -1,
     controlMenu: -1,
     smsMenu: -1,
-    deviceword:-1,
+    deviceword: -1,
     baseNavbar: [],
-    media:-1,
-    deviceSmsMapDueTime:"",
-    deviceSmsMapDueMoble:null,
-    deviceSmsMapId:0,
-    downloadFile:[
-   ],
+    media: -1,
+    deviceSmsMapDueTime: "",
+    deviceSmsMapDueMoble: null,
+    deviceSmsMapId: 0,
+    downloadFile: [
+    ],
+    mockType:"",
   },
-  savefiles(e){
-    var that =this
+  savefiles(e) {
+    var that = this
     const fileName = e.currentTarget.dataset.file;   //获取页面要下载的文件名
-    const url = e.currentTarget.dataset.url; 
-    const idx = e.currentTarget.dataset.idx; 
+    const url = e.currentTarget.dataset.url;
+    const idx = e.currentTarget.dataset.idx;
     let $this = this;
-    var fileType=fileName.substr(fileName.indexOf('.')+1,fileName.length)
+    var fileType = fileName.substr(fileName.indexOf('.') + 1, fileName.length)
     wx.showLoading({
       title: "正在下载...",
     })
     wx.downloadFile({
-      url:url,   
-      success:(res)=> {
+      url: url,
+      success: (res) => {
         var filePath = res.tempFilePath;
         let manager = wx.getFileSystemManager();  //获取全局唯一的文件管理器
         //判断目录是否存在
         manager.access({
           path: `${wx.env.USER_DATA_PATH}/download`,
           success: (res) => {
-             console.log('已存在path对应目录',res)
+            console.log('已存在path对应目录', res)
             //保存文件之前查看是否存在此文件  
             manager.access({
-              path: `${wx.env.USER_DATA_PATH}/download/${fileName}`, 
-              success(res){
+              path: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
+              success(res) {
                 wx.openDocument({
                   filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
                   fileType: fileType,
-                  success:(res)=>{
+                  success: (res) => {
                     wx.hideLoading()
-                    console.log('读取成功',res)
+                    console.log('读取成功', res)
                   },
-                  fail:(err)=>{
-                    console.log('读取失败',err)
+                  fail: (err) => {
+                    console.log('读取失败', err)
                   }
                 })
                 return false;
               },
-              fail(err){
-                  console.log('不存在此文件')
-                  var downloadFile=that.data.downloadFile
-                  downloadFile[idx].path=`${wx.env.USER_DATA_PATH}/download/${fileName}`
-                  that.setData({
-                    downloadFile: downloadFile
-                  })
-                  
-                  manager.saveFile({
-                    tempFilePath: filePath,     //filePath为保存到本地的临时路径
-                    filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
-                    success: (res) => {
-                      wx.openDocument({
-                        filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
-                        fileType: fileType,
-                        success:(res)=>{
-                          wx.hideLoading()
-                          console.log('读取成功',res)
-                        },
-                        fail:(err)=>{
-                          console.log('读取失败',err)
-                        }
-                      })
-                    },
-                    fail: (err) => {
-                      console.log(err)
-                    }
-                  })
+              fail(err) {
+                console.log('不存在此文件')
+                var downloadFile = that.data.downloadFile
+                downloadFile[idx].path = `${wx.env.USER_DATA_PATH}/download/${fileName}`
+                that.setData({
+                  downloadFile: downloadFile
+                })
+
+                manager.saveFile({
+                  tempFilePath: filePath,     //filePath为保存到本地的临时路径
+                  filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
+                  success: (res) => {
+                    wx.openDocument({
+                      filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
+                      fileType: fileType,
+                      success: (res) => {
+                        wx.hideLoading()
+                        console.log('读取成功', res)
+                      },
+                      fail: (err) => {
+                        console.log('读取失败', err)
+                      }
+                    })
+                  },
+                  fail: (err) => {
+                    console.log(err)
+                  }
+                })
               }
             })
-            },
-            fail: (err) => {
-               console.log(err, '本地缓存为空')
-              //创建保存文件的目录
-              manager.mkdir({
-                dirPath: `${wx.env.USER_DATA_PATH}/download`,
-                recursive: false,
-                success: (res) => {
-                  //将临时文件保存到目录  /download
-                  var downloadFile=that.data.downloadFile
-                  downloadFile[idx].path=`${wx.env.USER_DATA_PATH}/download/${fileName}`
-                  that.setData({
-                    downloadFile: downloadFile
-                  })
-                  
-                   manager.saveFile({
-                    tempFilePath: filePath,
-                    filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
-                    success: (res) => {
-                      wx.openDocument({
-                        filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
-                        fileType: fileType,
-                        success:(res)=>{
-                          wx.hideLoading()
-                          console.log('读取成功',res)
-                        },
-                        fail:(err)=>{
-                          console.log('读取失败',err)
-                        }
-                      })
-                    },
-                    fail: (err) => {
-                      console.log(err)
-                    }
-                  })
-                },
-                fail: (err) => {
-                  console.log(err,)
-                }
-              })
-            }
+          },
+          fail: (err) => {
+            console.log(err, '本地缓存为空')
+            //创建保存文件的目录
+            manager.mkdir({
+              dirPath: `${wx.env.USER_DATA_PATH}/download`,
+              recursive: false,
+              success: (res) => {
+                //将临时文件保存到目录  /download
+                var downloadFile = that.data.downloadFile
+                downloadFile[idx].path = `${wx.env.USER_DATA_PATH}/download/${fileName}`
+                that.setData({
+                  downloadFile: downloadFile
+                })
+
+                manager.saveFile({
+                  tempFilePath: filePath,
+                  filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
+                  success: (res) => {
+                    wx.openDocument({
+                      filePath: `${wx.env.USER_DATA_PATH}/download/${fileName}`,
+                      fileType: fileType,
+                      success: (res) => {
+                        wx.hideLoading()
+                        console.log('读取成功', res)
+                      },
+                      fail: (err) => {
+                        console.log('读取失败', err)
+                      }
+                    })
+                  },
+                  fail: (err) => {
+                    console.log(err)
+                  }
+                })
+              },
+              fail: (err) => {
+                console.log(err,)
+              }
+            })
+          }
         })
       },
-      fail:(err)=>{
-          console.log(err, "下载失败")
+      fail: (err) => {
+        console.log(err, "下载失败")
       }
     })
   },
-  
+
   switchChange: function (e) {
     var that = this
     var state = -1;
@@ -221,7 +222,7 @@ Page({
   inputMoble: function (e) {
     var that = this
     that.setData({
-      deviceSmsMapDueMoble:e.detail.value
+      deviceSmsMapDueMoble: e.detail.value
     });
   },
   editData: function (e) {
@@ -274,8 +275,8 @@ Page({
 
   },
   editMoble: function () {
-    var that =this
-    if(that.data.deviceSmsMapDueMoble==null){
+    var that = this
+    if (that.data.deviceSmsMapDueMoble == null) {
       wx.showToast({
         title: "手机号不能为空",
         icon: 'none',
@@ -324,10 +325,10 @@ Page({
         str += that.data.controlList[i][commmd].getCommandString();
       }
     }
-    console.log(that.data.media!=0)
-    console.log(that.data.media!=3)
-    console.log(that.data.media!=0||that.data.media!=3)
-    if(that.data.media!=0 & that.data.media!=3){
+    console.log(that.data.media != 0)
+    console.log(that.data.media != 3)
+    console.log(that.data.media != 0 || that.data.media != 3)
+    if (that.data.media != 0 & that.data.media != 3) {
       wx.showToast({
         title: '当前锅炉类型不支持远程控制',
         icon: 'error',
@@ -395,9 +396,9 @@ Page({
                   url: 'https://apis.sdcsoft.com.cn/wechat/device/sendcmd',
                   method: "GET",
                   data: {
-                    command: str ,
+                    command: str,
                     deviceSuffix: that.data.deviceNo,
-                    userId: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length), 
+                    userId: res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length),
                   },
                   header: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -456,20 +457,20 @@ Page({
         },
         method: 'GET',
         success: function (res) {
-         
-          var list=res.data.data
+
+          var list = res.data.data
           console.log(list)
-          var files=[]
-          for(var i in list){
-            files.push({file:list[i].fileName,path:"",url:"https://docs.sdcsoft.com.cn/gl/devices/"+that.data.deviceNo+"/"+list[i].fileName})
+          var files = []
+          for (var i in list) {
+            files.push({ file: list[i].fileName, path: "", url: "https://docs.sdcsoft.com.cn/gl/devices/" + that.data.deviceNo + "/" + list[i].fileName })
           }
           that.setData({
-            downloadFile:files
+            downloadFile: files
           })
         }
       })
     }
-   
+
     // if (menuName == that.data.content.detail_payMenu) {
     //   that.setData({
     //     currentTab: e.currentTarget.dataset.idx - 1
@@ -510,7 +511,7 @@ Page({
     if (num == 5) {
       list.push(that.data.content.detail_smsMenu)
     }
-  
+
     if (num == 7) {
       list.push(that.data.content.detail_deviceword)
     }
@@ -595,7 +596,7 @@ Page({
                 smsMenu: i
               })
             }
-           
+
             if (munu == that.data.content.deviceword) {
               that.setData({
                 deviceword: i
@@ -682,7 +683,7 @@ Page({
                 smsMenu: i
               })
             }
-            
+
             if (munu == that.data.content.detail_deviceword) {
               console.log(i)
               that.setData({
@@ -697,16 +698,16 @@ Page({
       //获取openid接口  
       url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/find/deviceNo/openId',
       data: {
-        deviceNo:options.deviceNo,
-        openId:app.globalData.openid
+        deviceNo: options.deviceNo,
+        openId: app.globalData.openid
       },
       method: 'GET',
       success: function (res) {
         console.log(res)
         that.setData({
-          deviceSmsMapDueTime:res.data.data.dueTime.substr(0,10),
-          deviceSmsMapDueMoble:res.data.data.employeeMobile,
-          deviceSmsMapId:res.data.data.id
+          deviceSmsMapDueTime: res.data.data.dueTime.substr(0, 10),
+          deviceSmsMapDueMoble: res.data.data.employeeMobile,
+          deviceSmsMapId: res.data.data.id
         })
       }
     })
@@ -843,46 +844,46 @@ Page({
     }
     var imgstyle1 = that.data.imgstyle
     var keylist = GroupKeys.getKeys();
-    
+
     var baseInfoMap = []
     for (let i in data.getBaseInfoFields().map) {
       baseInfoMap.push(data.getBaseInfoFields().map[i]);
     }
     var mockInfoMap = []
     for (let i in data.getMockFields().map) {
-      if(data.getMockFields().map[i]){
+      if (data.getMockFields().map[i]) {
         mockInfoMap.push(data.getMockFields().map[i]);
       }
     }
     var settingInfoMap = []
     for (let i in data.getSettingFields().map) {
-      if(data.getSettingFields().map[i]){
+      if (data.getSettingFields().map[i]) {
         settingInfoMap.push(data.getSettingFields().map[i]);
       }
-     
+
     }
     var deviceInfoMap = []
     for (let i in data.getDeviceFields().map) {
-      if(data.getDeviceFields().map[i]){
+      if (data.getDeviceFields().map[i]) {
         deviceInfoMap.push(data.getDeviceFields().map[i]);
       }
     }
     var weeksettingMap = []
     for (let i in data.getFieldsMap(keylist[5]).map) {
-      if(data.getFieldsMap(keylist[5]).map[i]){
+      if (data.getFieldsMap(keylist[5]).map[i]) {
         weeksettingMap.push(data.getFieldsMap(keylist[5]).map[i]);
       }
     }
     var startstoptimeMap = []
     for (let i in data.getFieldsMap(keylist[6]).map) {
-      if(data.getFieldsMap(keylist[6]).map[i]){
+      if (data.getFieldsMap(keylist[6]).map[i]) {
         startstoptimeMap.push(data.getFieldsMap(keylist[6]).map[i]);
       }
     }
     var switchquantityMap = []
     for (let i in data.getFieldsMap(keylist[7]).map) {
-      if(data.getFieldsMap(keylist[7]).map[i]){
-      switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
+      if (data.getFieldsMap(keylist[7]).map[i]) {
+        switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
       }
     }
     that.setData({
@@ -890,11 +891,11 @@ Page({
       bengAnimationList: data.getBeng(),
       exceptionInfoMap: data.getExceptionFields().map,
       fanAnimationList: data.getFan(),
-      baseInfoMap:baseInfoMap,
+      baseInfoMap: baseInfoMap,
       mockInfoMap: mockInfoMap,
       settingInfoMap: settingInfoMap,
       deviceInfoMap: deviceInfoMap,
-      weeksettingMap:weeksettingMap,
+      weeksettingMap: weeksettingMap,
       startstoptimeMap: startstoptimeMap,
       switchquantityMap: switchquantityMap,
     })
@@ -1000,7 +1001,7 @@ Page({
                   }
                 }
                 var imgstyle1 = that.data.imgstyle
-                if(device.getStoveElements().length>0){
+                if (device.getStoveElements().length > 0) {
                   var el = device.getStoveElements()[0].values
                   var stove = device.getStoveElements()[0].prefix
                   for (var i in el) {
@@ -1013,10 +1014,10 @@ Page({
                   })
                 }
                 for (var i in device.jb) {
-                  if (device.jb[i].name =="介质") {
+                  if (device.jb[i].name == "介质") {
                     that.setData({
-                      media:device.jb[i].v
-                    }) 
+                      media: device.jb[i].v
+                    })
                   }
                 }
                 that.setData({
@@ -1033,6 +1034,39 @@ Page({
                   dingshiMap: device.ds,
                 })
                 wx.hideLoading()
+                if (that.data.mock1 == null) {
+                  var runInfoMoList = []
+                  for (var wd in that.data.wenduMap) {
+                    runInfoMoList.push({
+                      name: that.data.wenduMap[wd].name,
+                      title: that.data.wenduMap[wd].name,
+                      type: "wd",
+                    })
+                  }
+                  for (var yl in that.data.yaliMap) {
+                    runInfoMoList.push({
+                      name: that.data.yaliMap[yl].name,
+                      title: that.data.yaliMap[yl].name,
+                      type: "yl",
+                    })
+                  }
+                  for (var ll in that.data.liuliangMap) {
+                    runInfoMoList.push({
+                      name: that.data.liuliangMap[ll].name,
+                      title: that.data.liuliangMap[ll].name,
+                      type: "ll",
+                    })
+                  }
+                if (runInfoMoList.length > 0) {
+                  that.setData({
+                    report: true,
+                    runInfoMoList: runInfoMoList,
+                    mock1: runInfoMoList[0].name,
+                    mock1Name: runInfoMoList[0].title,
+                    mockType:runInfoMoList[0].type
+                  })
+                }
+              }
                 for (var i = 0; i < that.data.bengAnimationList.length; i++) {
                   var src = 'bengList[' + i + '].src'
                   var title = 'bengList[' + i + '].title'
@@ -1052,8 +1086,7 @@ Page({
                 }
               }
             })
-
-
+          
           } else {
             var errorList = []
             let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
@@ -1065,9 +1098,9 @@ Page({
                 media = data.getBaseInfoFields().map[index].value
               }
             }
-           
+
             that.setData({
-              media:media
+              media: media
             })
             if (JSON.stringify(clist) != '{}') {
               that.setData({
@@ -1089,8 +1122,9 @@ Page({
               that.getException(errorList);
             }
             var imgstyle1 = that.data.imgstyle
-
+            console.log(that.data.mock1 == null)
             if (that.data.mock1 == null) {
+
               var gf = new gfrm.GroupFieldsRelationalMapping;
               var moMap = gf.groupMap.getItem("mockInfo")["map"]["map"]
               var runInfoMoList = []
@@ -1104,6 +1138,8 @@ Page({
                   }
                 }
               }
+
+
               if (runInfoMoList.length > 0) {
                 that.setData({
                   report: true,
@@ -1121,38 +1157,38 @@ Page({
             }
             var mockInfoMap = []
             for (let i in data.getMockFields().map) {
-              if(data.getMockFields().map[i]){
+              if (data.getMockFields().map[i]) {
                 mockInfoMap.push(data.getMockFields().map[i]);
               }
             }
             var settingInfoMap = []
             for (let i in data.getSettingFields().map) {
-              if(data.getSettingFields().map[i]){
+              if (data.getSettingFields().map[i]) {
                 settingInfoMap.push(data.getSettingFields().map[i]);
               }
             }
             var deviceInfoMap = []
             for (let i in data.getDeviceFields().map) {
-              if(data.getDeviceFields().map[i]){
+              if (data.getDeviceFields().map[i]) {
                 deviceInfoMap.push(data.getDeviceFields().map[i]);
               }
             }
             var weeksettingMap = []
             for (let i in data.getFieldsMap(keylist[5]).map) {
-              if(data.getFieldsMap(keylist[5]).map[i]){
+              if (data.getFieldsMap(keylist[5]).map[i]) {
                 weeksettingMap.push(data.getFieldsMap(keylist[5]).map[i]);
               }
             }
             var startstoptimeMap = []
             for (let i in data.getFieldsMap(keylist[6]).map) {
-              if(data.getFieldsMap(keylist[6]).map[i]){
+              if (data.getFieldsMap(keylist[6]).map[i]) {
                 startstoptimeMap.push(data.getFieldsMap(keylist[6]).map[i]);
               }
             }
             var switchquantityMap = []
             for (let i in data.getFieldsMap(keylist[7]).map) {
-              if(data.getFieldsMap(keylist[7]).map[i]){
-              switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
+              if (data.getFieldsMap(keylist[7]).map[i]) {
+                switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
               }
             }
             that.setData({
@@ -1162,7 +1198,7 @@ Page({
               fanAnimationList: data.getFan(),
               baseInfoMap: baseInfoMap,
               mockInfoMap: mockInfoMap,
-              settingInfoMap:settingInfoMap,
+              settingInfoMap: settingInfoMap,
               deviceInfoMap: deviceInfoMap,
               weeksettingMap: weeksettingMap,
               startstoptimeMap: startstoptimeMap,
@@ -1384,86 +1420,167 @@ Page({
       var beginDate = that.getDateStr(null, -3)
     }
     var endDate = that.getDateStr(beginDate, 1)
-    wx.request({
-      url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
-      data: {
-        key: key,
-        begintime: beginDate,
-        endtime: endDate,
-        deviceNo: that.data.deviceNo
-      },
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-      },
-      method: 'GET',
-      success: function (res) {
-        if (res.data.code == 0) {
-          that.setData({
-            havedata: true
-          })
-          var systemStateCategories = []
-          var systemStateData = res.data.data.data[0]
-          var detelist = res.data.data.date
-          for (var d in detelist) {
-            systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
-          }
-
-          if (systemStateData.length > 0) {
-            var windowWidth = 320;
-            try {
-              var res = wx.getSystemInfoSync();
-              windowWidth = res.windowWidth;
-            } catch (e) {
-              console.error('getSystemInfoSync failed!');
+    if(that.data.newFrame){
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
+        data: {
+          key: key,
+          begintime: beginDate,
+          endtime: endDate,
+          deviceNo: that.data.deviceNo,
+          type:that.data.mockType,
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res)
+          if (res.data.code == 0) {
+            that.setData({
+              havedata: true
+            })
+            var systemStateCategories = []
+            var systemStateData = res.data.data.data
+            var detelist = res.data.data.date
+            for (var d in detelist) {
+              systemStateCategories.push(DateUtil.dateFormat(new Date(detelist[d]), "yyyy-MM-dd HH:mm:ss"))
             }
-
-            lineChart = new wxCharts({
-              canvasId: 'mockLine',
-              type: 'line',
-              categories: systemStateCategories,
-              animation: false,
-              series: [{
-                name: that.data.mock1Name,
-                data: systemStateData,
-                format: function (val, name) {
-                  var fomatFloat = parseFloat(val);
-                  return fomatFloat.toFixed(2);
-                }
-              }],
-              xAxis: {
-                disableGrid: false
-              },
-              yAxis: {
-                title: that.data.content.detail_y,
-                format: function (val) {
-                  return val.toFixed(2);
-                },
-                min: 0
-              },
-              width: windowWidth,
-              height: 200,
-              dataLabel: true,
-              dataPointShape: true,
-              enableScroll: true,
-              extra: {
-                lineStyle: 'curve'
+  
+            if (systemStateData.length > 0) {
+              var windowWidth = 320;
+              try {
+                var res = wx.getSystemInfoSync();
+                windowWidth = res.windowWidth;
+              } catch (e) {
+                console.error('getSystemInfoSync failed!');
               }
+              lineChart = new wxCharts({
+                canvasId: 'mockLine',
+                type: 'line',
+                categories: systemStateCategories,
+                animation: false,
+                series: [{
+                  name: that.data.mock1Name,
+                  data: systemStateData,
+                  format: function (val, name) {
+                    var fomatFloat = parseFloat(val);
+                    return fomatFloat.toFixed(2);
+                  }
+                }],
+                xAxis: {
+                  disableGrid: false
+                },
+                yAxis: {
+                  title: that.data.content.detail_y,
+                  format: function (val) {
+                    return val.toFixed(2);
+                  },
+                  min: 0
+                },
+                width: windowWidth,
+                height: 200,
+                dataLabel: true,
+                dataPointShape: true,
+                enableScroll: true,
+                extra: {
+                  lineStyle: 'curve'
+                }
+              });
+            }
+          } else {
+            wx.showToast({
+              title: "此设备在" + beginDate + "未开机",
+              icon: 'none',
+              duration: 5000
             });
+            that.setData({
+              havedata: false
+            })
           }
-        } else {
-          wx.showToast({
-            title: "未查询到符合条件的数据",
-            icon: 'none',
-            duration: 5000
-          });
-          // that.setData({
-          //   havedata: false
-          // })
         }
-      }
-    })
-
-
+      })
+    }else{
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
+        data: {
+          key: key,
+          begintime: beginDate,
+          endtime: endDate,
+          deviceNo: that.data.deviceNo
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res)
+          if (res.data.code == 0) {
+            that.setData({
+              havedata: true
+            })
+            var systemStateCategories = []
+            var systemStateData = res.data.data.data[0]
+            var detelist = res.data.data.date
+            for (var d in detelist) {
+              systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
+            }
+  
+            if (systemStateData.length > 0) {
+              var windowWidth = 320;
+              try {
+                var res = wx.getSystemInfoSync();
+                windowWidth = res.windowWidth;
+              } catch (e) {
+                console.error('getSystemInfoSync failed!');
+              }
+  
+              lineChart = new wxCharts({
+                canvasId: 'mockLine',
+                type: 'line',
+                categories: systemStateCategories,
+                animation: false,
+                series: [{
+                  name: that.data.mock1Name,
+                  data: systemStateData,
+                  format: function (val, name) {
+                    var fomatFloat = parseFloat(val);
+                    return fomatFloat.toFixed(2);
+                  }
+                }],
+                xAxis: {
+                  disableGrid: false
+                },
+                yAxis: {
+                  title: that.data.content.detail_y,
+                  format: function (val) {
+                    return val.toFixed(2);
+                  },
+                  min: 0
+                },
+                width: windowWidth,
+                height: 200,
+                dataLabel: true,
+                dataPointShape: true,
+                enableScroll: true,
+                extra: {
+                  lineStyle: 'curve'
+                }
+              });
+            }
+          } else {
+            wx.showToast({
+              title: "此设备在" + beginDate + "未开机",
+              icon: 'none',
+              duration: 5000
+            });
+            that.setData({
+              havedata: false
+            })
+          }
+        }
+      })
+    }
   },
   getreportdatabyday: function (key) {
     var that = this
@@ -1477,99 +1594,182 @@ Page({
       var beginDate = that.getDateStr(null, -3)
     }
     var endDate = that.getDateStr(beginDate, 1)
-    wx.request({
-      url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
-      data: {
-        key: key,
-        begintime: beginDate,
-        endtime: endDate,
-        deviceNo: that.data.deviceNo
-      },
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-      },
-      method: 'GET',
-      success: function (res) {
-        console.log(res)
-        if (res.data.code == 0) {
-          that.setData({
-            havedata: true
-          })
-          var systemStateCategories = []
-          var systemStateData = res.data.data.data[0]
-          var detelist = res.data.data.date
-          for (var d in detelist) {
-            systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
-          }
-
-          if (systemStateData.length > 0) {
-            var windowWidth = 320;
-            try {
-              var res = wx.getSystemInfoSync();
-              windowWidth = res.windowWidth;
-            } catch (e) {
-              console.error('getSystemInfoSync failed!');
+    if(that.data.newFrame){
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
+        data: {
+          key: key,
+          begintime: beginDate,
+          endtime: endDate,
+          deviceNo: that.data.deviceNo,
+          type:that.data.mockType,
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res)
+          if (res.data.code == 0) {
+            that.setData({
+              havedata: true
+            })
+            var systemStateCategories = []
+            var systemStateData = res.data.data.data
+            var detelist = res.data.data.date
+            for (var d in detelist) {
+              systemStateCategories.push(DateUtil.dateFormat(new Date(detelist[d]), "yyyy-MM-dd HH:mm:ss"))
             }
-
-            lineChart = new wxCharts({
-              canvasId: 'mockLine',
-              type: 'line',
-              categories: systemStateCategories,
-              animation: false,
-              series: [{
-                name: that.data.mock1Name,
-                data: systemStateData,
-                format: function (val, name) {
-                  var fomatFloat = parseFloat(val);
-                  return fomatFloat.toFixed(2);
-                }
-              }],
-              xAxis: {
-                disableGrid: false
-              },
-              yAxis: {
-                title: that.data.content.detail_y,
-                format: function (val) {
-                  return val.toFixed(2);
-                },
-                min: 0
-              },
-              width: windowWidth,
-              height: 200,
-              dataLabel: true,
-              dataPointShape: true,
-              enableScroll: true,
-              extra: {
-                lineStyle: 'curve'
+            if (systemStateData.length > 0) {
+              var windowWidth = 320;
+              try {
+                var res = wx.getSystemInfoSync();
+                windowWidth = res.windowWidth;
+              } catch (e) {
+                console.error('getSystemInfoSync failed!');
               }
+              lineChart = new wxCharts({
+                canvasId: 'mockLine',
+                type: 'line',
+                categories: systemStateCategories,
+                animation: false,
+                series: [{
+                  name: that.data.mock1Name,
+                  data: systemStateData,
+                  format: function (val, name) {
+                    var fomatFloat = parseFloat(val);
+                    return fomatFloat.toFixed(2);
+                  }
+                }],
+                xAxis: {
+                  disableGrid: false
+                },
+                yAxis: {
+                  title: that.data.content.detail_y,
+                  format: function (val) {
+                    return val.toFixed(2);
+                  },
+                  min: 0
+                },
+                width: windowWidth,
+                height: 200,
+                dataLabel: true,
+                dataPointShape: true,
+                enableScroll: true,
+                extra: {
+                  lineStyle: 'curve'
+                }
+              });
+            }
+          } else {
+            wx.showToast({
+              title: "此设备在" + beginDate + "未开机",
+              icon: 'none',
+              duration: 5000
             });
+            that.setData({
+              havedata: false
+            })
           }
-        } else {
-          wx.showToast({
-            title: "此设备在" + beginDate + "未开机",
-            icon: 'none',
-            duration: 5000
-          });
-          that.setData({
-            havedata: false
-          })
         }
-      }
-    })
+      })
+    }else{
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
+        data: {
+          key: key,
+          begintime: beginDate,
+          endtime: endDate,
+          deviceNo: that.data.deviceNo
+        },
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        method: 'GET',
+        success: function (res) {
+          console.log(res)
+          if (res.data.code == 0) {
+            that.setData({
+              havedata: true
+            })
+            var systemStateCategories = []
+            var systemStateData = res.data.data.data[0]
+            var detelist = res.data.data.date
+            for (var d in detelist) {
+              systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
+            }
+  
+            if (systemStateData.length > 0) {
+              var windowWidth = 320;
+              try {
+                var res = wx.getSystemInfoSync();
+                windowWidth = res.windowWidth;
+              } catch (e) {
+                console.error('getSystemInfoSync failed!');
+              }
+  
+              lineChart = new wxCharts({
+                canvasId: 'mockLine',
+                type: 'line',
+                categories: systemStateCategories,
+                animation: false,
+                series: [{
+                  name: that.data.mock1Name,
+                  data: systemStateData,
+                  format: function (val, name) {
+                    var fomatFloat = parseFloat(val);
+                    return fomatFloat.toFixed(2);
+                  }
+                }],
+                xAxis: {
+                  disableGrid: false
+                },
+                yAxis: {
+                  title: that.data.content.detail_y,
+                  format: function (val) {
+                    return val.toFixed(2);
+                  },
+                  min: 0
+                },
+                width: windowWidth,
+                height: 200,
+                dataLabel: true,
+                dataPointShape: true,
+                enableScroll: true,
+                extra: {
+                  lineStyle: 'curve'
+                }
+              });
+            }
+          } else {
+            wx.showToast({
+              title: "此设备在" + beginDate + "未开机",
+              icon: 'none',
+              duration: 5000
+            });
+            that.setData({
+              havedata: false
+            })
+          }
+        }
+      })
+    }
 
 
   },
   radiochange: function (res) {
+    console.log(res.detail.value)
     var that = this
-    var mockmap=that.data.mockInfoMap
-    for(var i in mockmap){
-      if(mockmap[i].name==res.detail.value){
+    var runInfoMoList = that.data.runInfoMoList
+    for (var i in runInfoMoList) {
+      if (runInfoMoList[i].name == res.detail.value) {
         that.setData({
-          mock1Name:mockmap[i].title
+          mock1: runInfoMoList[i].title,
+          mock1Name: runInfoMoList[i].title,
+          mockType:runInfoMoList[i].type
         })
       }
     }
-   
     that.getreportdatabykey(res.detail.value)
   },
   getDatefmt: function getDateStr(today) {
