@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/root/deviceList/deviceList",
+    "pages/root/index/index",
     "pages/root/help/help",
     "pages/root/help/videoList",
     "pages/root/help/download",
@@ -11,7 +12,6 @@
     "pages/root/salesChange/salesChange",
     "pages/root/dataMapList/dataMapList",
     "pages/login/login",
-    "pages/root/index/index",
     "pages/root/contactUs/contactUs",
     "pages/repair/repair",
     "pages/root/operation/operation",
@@ -53,30 +53,34 @@
         "pages/boiler-index/boiler-index",
         "pages/product/product",
         "pages/productadd/productadd",
-          "pages/auxiliary/auxiliary",
-            "pages/auxiliaryadd/auxiliaryadd",
-          "pages/sale/sale",
+        "pages/auxiliary/auxiliary",
+        "pages/auxiliaryadd/auxiliaryadd",
+        "pages/sale/sale",
         "pages/boiler-customer/boiler-customer",
         "pages/boiler-customeradd/boiler-customeradd",
-          "pages/boiler-model/boiler-model",
-          "pages/boiler-modeladd/boiler-modeladd",
-          "pages/user/user",
-          "pages/useredit/useredit",
-          "pages/role/role",
-          "pages/roleedit/roleedit",
-          "pages/roleallocation/roleallocation",
-          "pages/boileradd/boileradd",
-          "pages/productdetail/productdetail",
-          "pages/roleallocationchild/roleallocationchild"
+        "pages/boiler-model/boiler-model",
+        "pages/boiler-modeladd/boiler-modeladd",
+        "pages/user/user",
+        "pages/useredit/useredit",
+        "pages/role/role",
+        "pages/roleedit/roleedit",
+        "pages/roleallocation/roleallocation",
+        "pages/boileradd/boileradd",
+        "pages/productdetail/productdetail",
+        "pages/roleallocationchild/roleallocationchild"
       ]
     }
   ],
   "preloadRule": {
     "pages/root/soldUpdate/soldUpdate": {
-      "packages": ["pages/mapediter/"]
+      "packages": [
+        "pages/mapediter/"
+      ]
     },
     "pages/root/index/index": {
-      "packages": ["pages/customer/"]
+      "packages": [
+        "pages/customer/"
+      ]
     }
   },
   "window": {

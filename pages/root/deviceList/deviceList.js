@@ -533,7 +533,7 @@ Page({
     })
   },
   onLoad: function (options) {
-    
+
     var that = this;
     var ilist = that.data.imgList
     wx.getStorage({
@@ -580,6 +580,30 @@ Page({
 
       }
     })
+    wx.showLoading({
+      title: 'Loading',
+    })
+    wx.getStorage({
+      key: 'roleType',
+      success(res) {
+        if (res.data == 1) {
+          wx.switchTab({
+            url: '../deviceList/deviceList'
+          })
+        }
+        if (res.data ==2) {
+          wx.navigateTo({
+            url: '../../customer/pages/index/index'
+          })
+        }
+        wx.hideLoading();
+      },
+      fail(res) {
+        wx.setStorageSync('roleType', "1")
+      },
+    })
+   
+
     wx.getStorage({
       key: 'version',
       success(res) {
@@ -868,6 +892,17 @@ Page({
   },
   onShow: function () {
     var that = this
+     wx.getStorage({
+      key: 'roleType',
+      success(res) {
+        if (res.data != 1) {
+          wx.setStorageSync('roleType', 1)
+        }
+      },
+      fail(res) {
+        wx.setStorageSync('roleType', "1")
+      },
+    })
     wx.getStorage({
       key: 'userType',
       fail(res) {
@@ -1100,9 +1135,9 @@ Page({
                       })
                     }
                     errcount1 = errorList.length,
-                    that.setData({
-                      errorNewList: that.data.errorNewList.concat(errorList)
-                    })
+                      that.setData({
+                        errorNewList: that.data.errorNewList.concat(errorList)
+                      })
                     var mock11 = ''
                     var mock22 = ''
                     for (var index in device.Focus) {
@@ -1115,15 +1150,15 @@ Page({
                         break;
                       }
                     }
-                    if (device.Run.name!="") {
-                     
+                    if (device.Run.name != "") {
+
                       runday = device.Run.name + ":" + device.Run.vstr
                     }
                     console.log(device.status)
                     if (device.status) {
-                      runstate1 = "-"+ device.status.vstr
+                      runstate1 = "-" + device.status.vstr
                     }
-                    if(device.getStoveElements().length>0){
+                    if (device.getStoveElements().length > 0) {
                       var el = device.getStoveElements()[0].values
                       var stove = device.getStoveElements()[0].prefix
                       for (var i in el) {
@@ -1131,8 +1166,8 @@ Page({
                           stove = stove + "-" + el[i]
                         }
                       }
-                    
-                        src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
+
+                      src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     }
                     var ilist = that.data.imgList
                     if (that.finddevice(ilist, deviceno)) {
@@ -1140,7 +1175,7 @@ Page({
                         if (ilist[i].deviceNo === deviceno) {
                           ilist[i].deviceNo = deviceno
                           ilist[i].title = title1
-                          ilist[i].runstate =runstate1
+                          ilist[i].runstate = runstate1
                           ilist[i].imgStyle = imgstyle1
                           ilist[i].errcount = errcount1
                           ilist[i].src = src1
@@ -1162,7 +1197,7 @@ Page({
                     } else {
                       ilist.push({
                         title: title1,
-                        runstate:"-"+ runstate1,
+                        runstate: "-" + runstate1,
                         deviceNo: deviceno,
                         imgStyle: imgstyle1,
                         errcount: errcount1,
@@ -1251,7 +1286,7 @@ Page({
                         if (ilist[i].deviceNo === deviceno) {
                           ilist[i].deviceNo = deviceno
                           ilist[i].title = title1
-                          ilist[i].runstate ="-"+ runstate1
+                          ilist[i].runstate = "-" + runstate1
                           ilist[i].imgStyle = imgstyle1
                           ilist[i].errcount = errcount1
                           ilist[i].src = src1
@@ -1273,7 +1308,7 @@ Page({
                     } else {
                       ilist.push({
                         title: title1,
-                        runstate:"-"+ runstate1,
+                        runstate: "-" + runstate1,
                         deviceNo: deviceno,
                         imgStyle: imgstyle1,
                         errcount: errcount1,
@@ -1333,7 +1368,7 @@ Page({
                           var ilist = that.data.imgList
                           ilist.push({
                             title: deviceno,
-                            runstate:"-"+ "Error",
+                            runstate: "-" + "Error",
                             deviceNo: deviceno,
                             lang: app.globalData.lang
                           })
@@ -1398,7 +1433,7 @@ Page({
                               if (ilist[i].runstate != "-Error") {
                                 ilist[i].deviceNo = deviceno
                                 ilist[i].title = deviceno
-                                ilist[i].runstate = "-"+"Error"
+                                ilist[i].runstate = "-" + "Error"
                                 ilist[i].error = 1
                                 that.setData({
                                   imgList: ilist

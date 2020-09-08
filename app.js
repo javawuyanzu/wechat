@@ -132,6 +132,7 @@ App({
       wx.setStorageSync('orders', [])
       wx.setStorageSync('userType', 0)
       wx.setStorageSync('version', "2.5.0")
+      wx.setStorageSync('roleType',1)
     }
   },
   globalData: {
