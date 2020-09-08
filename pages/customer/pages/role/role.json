@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "职务管理",
+  "usingComponents": {
+    "menu": "../../component/customer/movemenu/movemenu"
+  }
+}

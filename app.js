@@ -152,5 +152,15 @@ App({
     device:null,
     content: null,
     editpage:null,
+    customer:{
+      orgId: null,
+      employeeId: null,
+      userName: null,
+      userId: null,
+      openId: null,
+      roleId: null,
+      roleName: null,
+      listResource: []
+    }
   },
 })

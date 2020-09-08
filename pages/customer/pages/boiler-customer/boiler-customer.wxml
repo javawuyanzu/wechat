@@ -1,0 +1,43 @@
+
+<view class="zmenu" >
+
+<view class="menu" wx:for="{{customerList}}" wx:for-item="item" wx:key="{{code}}"bindtap="Click1" data-bean="{{item}}">
+<view style=" margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
+<view style="width: 50%; padding-left: 2%;">客户名称：{{item.name}}</view>
+<view style="width: 50%;">电话：{{item.phone}}</view>
+</view>
+
+<view style="margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
+<view style="width: 50%;padding-left: 2%;">地址:{{item.province}}{{item.city}}{{item.district}}</view>
+</view>
+
+<view style="margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
+<view style="padding-left: 2%;" >详细地址:{{item.address}}</view>
+
+</view>
+</view>
+</view>
+
+<view class="noData" wx:if="{{customerList.length==0}}">
+<view>暂无数据</view>
+</view>
+
+<view wx:if="{{menuShow}}" class="shade"></view>
+<view wx:if="{{menuShow}}" class="bumenu">
+  <view class='select_box'>
+   <view style="width: 35%; font-size: 35rpx;    background-color: white; padding-top: 10rpx; text-align: center;"> 客户：</view>
+ <view class='select' catchtap='selectTap'>
+  <text class='select_text'>{{selectData[index].name}}</text>
+  <image class='select_img {{show&&"select_img_rotate"}}' src='../../images/customer/xia.png'></image>   
+ </view>
+ <view class='option_box' style='height:{{show?(selectData.length>5?300:selectData.length*60):0}}rpx;'>
+  <text class='option' style='{{index==selectData.length-1&&"border:0;"}}' wx:for='{{selectData}}' wx:key='this' data-index='{{index}}' data-bean="{{item}}" catchtap='optionTap'>{{item.name}}</text>
+ </view>
+</view>
+<view style="display: flex;width=100%;">
+  <button class="quenyButton" bindtap='closeButton'>取消</button>
+  <button class="quenyButton1" bindtap='quenyButton1'>搜索</button>
+  </view>
+</view>
+
+<menu class="menulist" bindmenuItemClick="menuItemClick" mainmodel="{{mainmodel}}" menulist ="{{menulist}}" ></menu>

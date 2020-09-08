@@ -1,0 +1,20 @@
+
+<view class="zmenu" >
+<view class="menu" wx:for="{{userList}}" wx:for-item="item" wx:key="{{code}}"bindtap="Click1" data-bean="{{item}}">
+<view style=" margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
+<view wx:if="{{item.userName!=null}}" style="width: 50%; padding-left: 2%;">员工姓名：{{item.userName}}</view>
+<view  wx:if="{{item.userName==null}}" style="width: 50%; padding-left: 2%;">员工姓名：</view>
+<view wx:if="{{item.roleName!=null}}" style="width: 50%;">职务：{{item.roleName}}</view>
+<view wx:if="{{item.roleName==null}}" style="width: 50%;">职务：</view>
+</view>
+<view style=" margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
+<view wx:if="{{item.mark!=null}}" style="width: 50%; padding-left: 2%;">备注：{{item.mark}}</view>
+<view wx:if="{{item.mark==null}}" style="width: 50%; padding-left: 2%;">备注：</view>
+</view>
+</view>
+</view>
+
+
+<view class="noData" wx:if="{{userList.length==0}}">
+<view>暂无数据</view>
+</view>

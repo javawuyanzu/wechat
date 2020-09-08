@@ -1,0 +1,16 @@
+
+<!-- <checkbox-group wx:for="{{listResource}}" data-bean="{{item}}" bindtap="checkboxChange">
+  <label class="checkbox"   >
+    <checkbox value="{{item.id}}" checked="{{item.checked}}"/>{{item.resName}}
+  </label>
+</checkbox-group>
+
+<button class="quenyButton1" bindtap='quenyButton1'>确定</button> -->
+
+<view wx:for="{{listResource}}" data-bean="{{item}}" bindtap="checkboxChange">
+  <view class="checkbox">
+    {{item.resName}}
+  </view>
+</view>
+
+<button class="quenyButton1" bindtap='quenyButton1'>确定</button>

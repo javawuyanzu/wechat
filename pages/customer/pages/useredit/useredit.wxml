@@ -1,0 +1,38 @@
+
+<view wx:if="{{title=='编辑'}}" class="wx-popup" >
+  <view class='popup-container'>
+    <view style="width: 80%;margin-top: 40rpx; margin-left: 10%;" class="itemView">
+    <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">员工姓名:</view><input value="{{user.userName}}" style="width: 100%;border:1px solid #efefef"  
+    bindinput="userNameInput"/>
+  </view>
+<view style="width: 80%;margin-top: 40rpx; margin-left: 10%;">
+<view style="width: 100%;  font-size: 35rpx; padding-top: 10rpx;">备注 </view><textarea auto-height="true" value="{{user.mark}}" style="width:100%;border:1px solid #efefef" bindinput="markInput" />
+  </view>
+   <button class="quenyButton1" bindtap='quenyButton1'>确定</button>
+  </view>
+</view>
+
+<view wx:if="{{title=='职务管理'}}" class="wx-popup" >
+  <view class='popup-container'>
+    <view style="width: 80%;margin-top: 40rpx; margin-left: 10%;" class="itemView">
+    <view style="width: 100%;  font-size: 35rpx; padding-top: 10rpx;">{{user.userName}}</view>
+  </view>
+
+
+ <view class='select_box1'>
+   <view style="width: 25%; font-size: 35rpx;   "> 职务：</view>
+ <view class='select1' catchtap='selectTap'>
+  <text class='select_text1'>{{roleList[index].roleName}}</text>
+  <image class='select_img1 {{show&&"select_img_rotate1"}}' src='../../images/customer/xia.png'></image>   
+ </view>
+ <view class='option_box1' style='height:{{show?(roleList.length>5?300:roleList.length*60):0}}rpx;'>
+  <text class='option1' style='{{index==roleList.length-1&&"border:0;"}}' wx:for='{{roleList}}' wx:key='this' data-index='{{index}}' data-bean="{{item}}" catchtap='optionTap'>{{item.roleName}}</text>
+ </view>
+</view>
+   <button class="quenyButton1" bindtap='quenyButton'>确定</button>
+  </view>
+</view>
+ 
+
+
+  

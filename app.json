@@ -44,11 +44,39 @@
         "editer/mappointlist/index",
         "editer/editer"
       ]
+    },
+    {
+      "root": "pages/customer/",
+      "pages": [
+        "pages/index/index",
+        "pages/login/login",
+        "pages/boiler-index/boiler-index",
+        "pages/product/product",
+        "pages/productadd/productadd",
+          "pages/auxiliary/auxiliary",
+            "pages/auxiliaryadd/auxiliaryadd",
+          "pages/sale/sale",
+        "pages/boiler-customer/boiler-customer",
+        "pages/boiler-customeradd/boiler-customeradd",
+          "pages/boiler-model/boiler-model",
+          "pages/boiler-modeladd/boiler-modeladd",
+          "pages/user/user",
+          "pages/useredit/useredit",
+          "pages/role/role",
+          "pages/roleedit/roleedit",
+          "pages/roleallocation/roleallocation",
+          "pages/boileradd/boileradd",
+          "pages/productdetail/productdetail",
+          "pages/roleallocationchild/roleallocationchild"
+      ]
     }
   ],
   "preloadRule": {
     "pages/root/soldUpdate/soldUpdate": {
       "packages": ["pages/mapediter/"]
+    },
+    "pages/root/index/index": {
+      "packages": ["pages/customer/"]
     }
   },
   "window": {

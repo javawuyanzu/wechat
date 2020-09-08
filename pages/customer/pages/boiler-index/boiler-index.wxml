@@ -1,0 +1,36 @@
+<!--index.wxml-->
+<view wx:if="{{menusInfo.length>0}}" class="z-menus">
+  <view wx:for="{{menusInfo}}" wx:if="{{item.show1==true}}"   wx:for-index="idx" wx:for-item="item" wx:key="idx" class="menus" >
+  <view data-bean="{{item}}"  class="menusInfo">
+  <view class="menusInfo-name" > {{item.resName}}</view>
+  </view>
+  <view class="menuschilds">
+  <view wx:if="{{item.hidden!=true&&item.show1==true}}" class="menuschild" wx:for="{{item.menuschild}}" data-bean="{{items}}"  wx:for-index="index" wx:for-item="items" wx:key="index" bindtap='menus' >
+ 	<image
+  class="imag"
+				src="../../images/customer/{{items.url}}.png"
+			></image>
+  <view class="menuschild-name">{{items.resName}}</view>
+  </view>
+   <view wx:if="{{item.hidden==true&&item.show1==true&&item.id!=0}}" class="menuschild" data-bean="{{item}}" bindtap='menus' wx:for-index="index" wx:for-item="items" wx:key="index" >
+ 	<image
+  class="imag"
+				src="../../images/customer/{{item.url}}.png"
+			></image>
+  <view class="menuschild-name">{{item.resName}}</view>
+  </view>
+
+<view wx:if="{{item.id==0}}" class="menuschild" bindtap='addDevice'>
+  <image
+  class="imag"
+				src="../../images/customer/add.png"
+			></image>
+  <view class="menuschild-name">添加</view>
+  </view>
+
+  </view>
+  </view>
+</view>
+<view class="z-menu-1" wx:if="{{menusInfo.length==0}}" >
+请让管理员开通权限
+</view>

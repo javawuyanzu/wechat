@@ -43,7 +43,19 @@
 			</view>
 		</view>
 
-
+		<view>
+			<navigator url="../../customer/pages/index/index" hover-class="none">
+				<view class="user-list-item">
+					<view class="item-left">
+						<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
+						<text>{{content.boilerManagement_exType}}</text>
+					</view>
+					<view class="item-right">
+						<image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../../images/right-arrow-gray.png"></image>
+					</view>
+				</view>
+			</navigator>
+		</view>
 
 
 

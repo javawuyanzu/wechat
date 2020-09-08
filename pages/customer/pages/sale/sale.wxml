@@ -1,0 +1,41 @@
+
+<view  class="selectmenu" >
+<view class="bumenu">
+  <view class='select_box'>
+   <view style="width: 15%; font-size: 35rpx;padding-top: 10rpx; padding-left: 10px;"> 客户：</view>
+ <view class='select' catchtap='selectTap'>
+  <text class='select_text'>{{selectData[index].name}}</text>
+  <image class='select_img {{show&&"select_img_rotate"}}' src='../../images/customer/xia.png'></image>   
+ </view>
+ <view class='option_box' style='height:{{show?(selectData.length>5?300:selectData.length*60):0}}rpx;'>
+  <text class='option' style='{{index==selectData.length-1&&"border:0;"}}' wx:for='{{selectData}}' wx:key='this' data-index='{{index}}' data-bean="{{item}}" catchtap='optionTap'>{{item.name}}</text>
+ </view>
+ <button bindtap='addcustomer'  class="quenyButton">新增</button>
+</view>
+</view>
+
+
+ <view class="section">
+ <view style="width: 15%; font-size: 35rpx;padding-top: 30rpx; padding-left: 10px;">时间:</view>
+  <picker mode="date" bindchange="bindrepairDateChange" disabled="{{show}}" value="{{repairDate}}" >
+    <view class="picker">
+      {{repairDate}}
+    </view>
+  </picker>
+</view>
+
+</view>
+<view class="section">
+<view style="width: 15%; font-size: 35rpx; padding-left: 10px;">地址：</view><textarea style=" width: 55%; border:1px solid #efefef; height: 70rpx;"  auto-height disabled="{{show}}" value="{{conent}}" bindblur="atuoGetLocation" />
+<button   class="quenyButton">搜索</button>
+
+</view>
+<view>
+<map id="map" longitude="117.141411" latitude="36.199445" scale="5" controls="{{controls}}" bindcontroltap="controltap"   markers="{{markers}}" bindmarkertap="markertap" bindregionchange="regionchange"  style="width: 100%; height: 350px;"></map>
+</view>
+
+<view>
+<button bindtap='sell'  class="quenyButton1">售出</button>
+</view>
+
+

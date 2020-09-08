@@ -63,6 +63,7 @@ var English = {
   userType_title: "User identity selection",
   warningType_exType: "Alarm way",
   myOrder_exType: "My order",
+  boilerManagement_exType: "Management of boiler",
   warningType_nowChoose: "Current selection",
   warningType_updatesuccess: "Modify the success",
   lanuage_title: "Select the language",
