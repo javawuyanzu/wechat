@@ -1,15 +1,17 @@
 <!--index.wxml-->
 <view class='popup-container'>
-<view style="width: 100%; margin-left: 10px;">
-<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">姓名： </view><input  style=" margin-top: 40rpx;width: 90%;border:1px solid #efefef" bindinput="nameInput" />
+  <view style="width: 100%; margin-left: 10px;">
+<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">推荐码： </view><input  style="height: 40px; margin-top: 30rpx;width: 90%;border:1px solid #efefef" bindinput="referralCodeInput" />
   </view>
 
 <view style="width: 100%; margin-left: 10px;">
-<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">手机号： </view><input type="number" maxlength="11" style=" margin-top: 40rpx;width: 90%;border:1px solid #efefef" bindblur="loginPhone" />
+<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">姓名： </view><input  style="height: 30px; margin-top: 40rpx;width: 90%;border:1px solid #efefef" bindinput="nameInput" />
   </view>
+
 <view style="width: 100%; margin-left: 10px;">
-<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">推荐码： </view><input  style=" margin-top: 40rpx;width: 90%;border:1px solid #efefef" bindinput="referralCodeInput" />
+<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">手机号： </view><input type="number" maxlength="11" style=" height: 30px; margin-top: 40rpx;width: 90%;border:1px solid #efefef" bindblur="loginPhone" />
   </view>
+
 
 <view class="yanzheng">
     <input placeholder="短信验证码" bindinput='yanZhengInput' />

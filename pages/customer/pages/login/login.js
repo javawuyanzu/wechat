@@ -20,53 +20,60 @@ Page({
   },
   getNewCode: function () {
     let that=this
-    wx.request({
-                url:  'https://apis.sdcsoft.com.cn/wechat/user/reg/sms/zh',
-                method:  "GET",
-                data:  {
-                  number:that.data.phone
-                },
-                header:  {
-                    'content-type':  'application/x-www-form-urlencoded'
-                },
-                success:  function  (res)  {
-                    if  (res.data.code == 1) {
-                        wx.showToast({
-                            title:  "未查询到相关用户信息",
-                            icon:  'none',
-                            duration:  2000
-                        });
-                    } else {
-                        that.setData({
-                            verificationCode:  res.data.data
-                        })
-                        wx.showToast({
-                            title:  "短信验证码已发送",
-                            icon:  'none',
-                            duration:  2000
-                        });
-                    }
-                }
-            })
-    
-    // 开始倒计时
-    that.setData({ 
-      getCode: true,
-      seconds: 60,
-      timer: setInterval(function(){
-        let seconds = that.data.seconds
-        that.setData({ seconds: seconds - 1 })
-        if (that.data.seconds == 0) {
-          // 读秒结束 清空计时器
-          clearInterval(that.data.timer)
-          that.setData({
-            getCode: false,
-            seconds: "",
-          })
-        }
-      }, 1000)
-    })
-
+    if(that.data.phone==""||that.data.phone==null){
+       wx.showToast({
+                        title:  "请输入手机号",
+                        icon:  'none',
+                        duration:  2000
+                    });
+    }else{
+      wx.request({
+                  url:  'https://apis.sdcsoft.com.cn/wechat/user/reg/sms/zh',
+                  method:  "GET",
+                  data:  {
+                    number:that.data.phone
+                  },
+                  header:  {
+                      'content-type':  'application/x-www-form-urlencoded'
+                  },
+                  success:  function  (res)  {
+                      if  (res.data.code == 1) {
+                          wx.showToast({
+                              title:  "发送失败",
+                              icon:  'none',
+                              duration:  2000
+                          });
+                      } else {
+                          that.setData({
+                              verificationCode:  res.data.data
+                          })
+                          wx.showToast({
+                              title:  "短信验证码已发送",
+                              icon:  'none',
+                              duration:  2000
+                          });
+                      }
+                  }
+              })
+      
+      // 开始倒计时
+      that.setData({ 
+        getCode: true,
+        seconds: 60,
+        timer: setInterval(function(){
+          let seconds = that.data.seconds
+          that.setData({ seconds: seconds - 1 })
+          if (that.data.seconds == 0) {
+            // 读秒结束 清空计时器
+            clearInterval(that.data.timer)
+            that.setData({
+              getCode: false,
+              seconds: "",
+            })
+          }
+        }, 1000)
+      })
+    }
   },
   nameInput: function (e) {
     let that = this
@@ -124,7 +131,7 @@ Page({
             })
           }else{
             wx.showToast({
-              title: data.data.msg,
+              title: "创建失败",
               icon: 'success',
               duration: 2000
             })
