@@ -62,39 +62,59 @@ Page({
 }
           }
          
-  // 实例化API核心类
-  var demo = new QQMapWX({
-   key: that.data.key
-  });
-  // 调用接口
-  demo.reverseGeocoder({
-   location: {
-    latitude: that.data.arr.latitude,
-    longitude: that.data.arr.longitude
-   },
-   coord_type: 3, //baidu经纬度
-   success: function(res) {
-    var latitude = res.result.ad_info.location.lat;
-    var longitude = res.result.ad_info.location.lng;
-    var markers = [{
-     iconPath: "../../images/customer/map.png",
-     longitude: longitude,
-     latitude: latitude,
-     id: 1,
-     width: 30,
-     height: 30,
-    }]
-    that.setData({
-      productList: that.data.arr,
-      markers:markers,
-      index: index,
-      repairDate: that.data.arr.saleDate,
-      conent: that.data.arr.street,
+  //  实例化API核心类
+  // var demo = new QQMapWX({
+  //  key: that.data.key
+  // });
+  // // 调用接口
+  // demo.reverseGeocoder({
+  //  location: {
+  //   latitude: that.data.arr.latitude,
+  //   longitude: that.data.arr.longitude
+  //  },
+  //  coord_type: 3, //baidu经纬度
+  //  success: function(res) {
+  //   var latitude = res.result.ad_info.location.lat;
+  //   var longitude = res.result.ad_info.location.lng;
+  //   console.log(that.data.arr.latitude)
+  //   console.log(latitude)
+  //   var markers = [{
+  //    iconPath: "../../images/customer/map.png",
+  //    longitude: longitude,
+  //    latitude: latitude,
+  //    id: 1,
+  //    width: 30,
+  //    height: 30,
+  //   }]
+  //   that.setData({
+  //     productList: that.data.arr,
+  //     markers:markers,
+  //     index: index,
+  //     repairDate: that.data.arr.saleDate,
+  //     conent: that.data.arr.street,
      
-    })
+  //   })
   
-   },
-  });  
+  //  },
+  // });  
+  let location=that.bMapToQQMap(that.data.arr.longitude,that.data.arr.latitude)
+  console.log(location)
+  var markers = [{
+    iconPath: "../../images/customer/map.png",
+    longitude: location[0],
+    latitude: location[1],
+    id: 1,
+    width: 30,
+    height: 30,
+   }]
+   that.setData({
+     productList: that.data.arr,
+     markers:markers,
+     index: index,
+     repairDate: that.data.arr.saleDate,
+     conent: that.data.arr.street,
+    
+   })
         } else {
         
           that.setData({
@@ -121,6 +141,37 @@ Page({
   regionchange(e) {
    
   },
+  qqMapToBMap:function (lng, lat) {
+
+    if (lng == null || lng == '' || lat == null || lat == '')
+        return [lng, lat];
+
+    var x_pi = 3.14159265358979324;
+    var x = parseFloat(lng);
+    var y = parseFloat(lat);
+    var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
+    var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
+    var lng = (z * Math.cos(theta) + 0.0065).toFixed(5);
+    var lat = (z * Math.sin(theta) + 0.006).toFixed(5);
+    return [lng, lat];
+
+},
+bMapToQQMap:function (lng, lat) {
+
+  if (lng == null || lng == '' || lat == null || lat == '')
+      return [lng, lat];
+
+  var x_pi = 3.14159265358979324;
+  var x = parseFloat(lng) - 0.0065;
+  var y = parseFloat(lat) - 0.006;
+  var z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
+  var theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
+  var lng = (z * Math.cos(theta)).toFixed(7);
+  var lat = (z * Math.sin(theta)).toFixed(7);
+
+  return [lng, lat];
+
+},
   bindrepairDateChange: function (e) {
     this.setData({
       repairDate: e.detail.value,
@@ -130,6 +181,39 @@ Page({
     this.setData({
       conent: e.detail.value
     })
+  },
+  getLocation:function(e){
+    let that=this
+wx.request({
+            url: 'https://apis.map.qq.com/ws/geocoder/v1/?location='+e.detail.latitude+','+e.detail.longitude+'&key='+this.data.key,
+             success: function (result) {
+   
+  let arr1=[{
+    height: 30,
+      iconPath: "../../images/customer/map.png",
+    id: 1,
+      latitude: e.detail.latitude,
+      longitude: e.detail.longitude,
+     width: 30,
+      city: result.data.result.address_component.city,
+      district:result.data.result.address_component.district,
+      province: result.data.result.address_component.province,
+
+    }]
+    
+    that.setData({
+      markers: arr1,
+      "product.longitude": result.data.result.location.lng,
+      "product.latitude": result.data.result.location.lat,
+      "product.street": result.data.result.address,
+      "product.province": result.data.result.address_component.province,
+      "product.district":result.data.result.address_component.district,
+      "product.city": result.data.result.address_component.city,
+      conent:result.data.result.address
+    })
+   
+            }
+          })
   },
   addcustomer:function(){
     let productList = JSON.stringify(this.data.productList)   
@@ -184,11 +268,14 @@ Page({
         "product.customerName": this.data.selectData[0].name,
       });
    }
+   let location=this.qqMapToBMap(this.data.product.longitude,this.data.product.latitude)
    this.setData({
     "product.editDateTime": util.formatTime(new Date()),
     "product.id": this.data.arr.id,
     "product.isSell": 1,
     "product.saleDate": this.data.repairDate,
+    "product.longitude": location[0],
+    "product.latitude": location[1],
   });
   
     let that=this

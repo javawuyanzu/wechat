@@ -30,6 +30,9 @@
 <view style="margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
   <view style="width: 50%;padding-left: 2%;">锅炉名称：{{item.boilerName}}</view>
 </view>
+<view style="margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
+  <view style="width: 50%;padding-left: 2%;">维保周期：{{serviceCycle}}</view>
+</view>
 
 <view style="margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
   <view wx:if="{{item.serviceEndDate!=null}}" style="width: 50%;padding-left: 2%;">维保到期时间：{{item.serviceEndDate}}</view>

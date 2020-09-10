@@ -6,6 +6,7 @@ Page({
   data: {
     productList:[],
     productCategoryList: [],
+    serviceCycle:""
   },
   onLoad: function (options) {
       let product = JSON.parse(options.product);

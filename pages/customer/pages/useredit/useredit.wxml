@@ -2,7 +2,7 @@
 <view wx:if="{{title=='编辑'}}" class="wx-popup" >
   <view class='popup-container'>
     <view style="width: 80%;margin-top: 40rpx; margin-left: 10%;" class="itemView">
-    <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">员工姓名:</view><input value="{{user.userName}}" style="width: 100%;border:1px solid #efefef"  
+    <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">员工姓名:</view><input value="{{user.userName}}" style="height:30px;width: 100%;border:1px solid #efefef"  
     bindinput="userNameInput"/>
   </view>
 <view style="width: 80%;margin-top: 40rpx; margin-left: 10%;">

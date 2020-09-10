@@ -31,7 +31,7 @@
 
 </view>
 <view>
-<map id="map" longitude="117.141411" latitude="36.199445" scale="5" controls="{{controls}}" bindcontroltap="controltap"   markers="{{markers}}" bindmarkertap="markertap" bindregionchange="regionchange"  style="width: 100%; height: 350px;"></map>
+<map id="map" longitude="117.141411" latitude="36.199445" scale="5" controls="{{controls}}" bindcontroltap="controltap" bindtap="getLocation"  markers="{{markers}}" bindmarkertap="markertap" bindregionchange="regionchange"  style="width: 100%; height: 350px;"></map>
 </view>
 
 <view>

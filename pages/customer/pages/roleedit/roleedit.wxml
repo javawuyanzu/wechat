@@ -2,11 +2,11 @@
 <view  class="wx-popup" >
   <view class='popup-container'>
     <view style="width: 80%;margin-top: 40rpx; margin-left: 10%;" class="itemView">
-    <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">职务名称:</view><input value="{{role.roleName}}" style="width: 100%;border:1px solid #efefef"  
+    <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">职务名称:</view><input value="{{role.roleName}}" style="height:30px;width: 100%;border:1px solid #efefef"  
     bindinput="roleNameInput"/>
   </view>
 <view style="width: 80%;margin-top: 40rpx; margin-left: 10%;">
-<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">职务描述 </view><input value="{{role.roleDesc}}" style="width: 100%;border:1px solid #efefef" bindinput="roleDescInput" />
+<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">职务描述 </view><input value="{{role.roleDesc}}" style="height:30px;width: 100%;border:1px solid #efefef" bindinput="roleDescInput" />
   </view>
    <button class="quenyButton1" bindtap='quenyButton1'>确定</button>
   </view>

@@ -37,14 +37,14 @@
 
  <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
   <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;"> 锅炉编号：</view>
- <input class="input" value="{{product.boilerNo}}" style=" border:1px solid #efefef;width: 100%" type="text"  
+ <input class="input" value="{{product.boilerNo}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
     bindinput="boilerNoInput"/>
  </view>
  
  <view wx:if="{{title!='编辑'}}" style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
   <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;"> 控制器/柜：</view>
   <view style="width: 100%; display: flex;  padding-top: 10rpx;">
-    <input class="input" value="{{product.controllerNo}}" style=" border:1px solid #efefef;width: 70%" type="number"  
+    <input class="input" value="{{product.controllerNo}}" style="height:30px; border:1px solid #efefef;width: 70%" type="number"  
     bindinput="controllerNoInput"/>
     <button class="quenyButton" bindtap='addDevice'>扫一扫</button>
   </view>
@@ -53,18 +53,23 @@
 
  <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
   <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx; "> 吨位：</view>
- <input class="input" value="{{product.tonnageNum}}" style=" border:1px solid #efefef;width: 100%" type="text"  
+ <input class="input" value="{{product.tonnageNum}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
     bindinput="tonnageNumInput"/>
  </view>
  <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
+  <view style="width: 40%;  font-size: 35rpx; padding-top: 10rpx; "> 维保周期(月)：</view>
+ <input class="input" value="{{product.serviceCycle}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
+    bindinput="serviceCycleInput"/>
+ </view>
+ <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
   <view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx; "> 锅炉名称：</view>
- <input class="input" value="{{product.boilerName}}" style=" border:1px solid #efefef;width: 100%" type="text"  
+ <input class="input" value="{{product.boilerName}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
     bindinput="boilerNameInput"/>
  </view>
  <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
   <view class="section__title">维保到期时间：</view>
   <picker mode="date" value="{{product.serviceEndDate}}" bindchange="bindDateChange">
-    <view style=" border:1px solid #efefef;width: 100%"  class="picker">
+    <view style=" border:1px solid #efefef;width: 100%;height:30px"  class="picker">
       {{product.serviceEndDate}}
     </view>
   </picker>

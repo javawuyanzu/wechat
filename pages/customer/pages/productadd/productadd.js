@@ -24,6 +24,7 @@ Page({
       boilerNo: "",
       boilerName:null,
       serviceEndDate:null,
+      serviceCycle:null,
       mark:null,
       saleDate: null,
       controllerNo: "",
@@ -66,6 +67,7 @@ Page({
         index3: options.index3,
         title: options.title
       })
+     
     }else{
       wx.setNavigationBarTitle({
         title: '添加锅炉' 
@@ -261,10 +263,17 @@ Page({
       }
     })
   },
+  
   tonnageNumInput: function (e) {
     let that = this
     that.setData({
       "product.tonnageNum": e.detail.value,
+    })
+  },
+  serviceCycleInput: function (e) {
+    let that = this
+    that.setData({
+      "product.serviceCycle": e.detail.value,
     })
   },
   boilerNameInput: function (e) {
@@ -296,7 +305,7 @@ Page({
         "product.boilerName": null,
         "product.serviceEndDate": null,
         "product.mark": null,
-
+        "product.serviceCycle": null,
       })
       wx.request({
         //获取openid接口   
@@ -322,6 +331,7 @@ Page({
         "product.boilerName": null,
         "product.serviceEndDate": null,
         "product.mark": null,
+        "product.serviceCycle": null,
       })
       wx.request({
         //获取openid接口   

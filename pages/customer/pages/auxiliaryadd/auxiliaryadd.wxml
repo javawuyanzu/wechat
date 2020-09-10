@@ -27,25 +27,25 @@
 
  <view style="width: 100%;margin-top: 20rpx;">
   <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 品牌：</view>
- <input class="input" value="{{auliliaryList.brandName}}" style=" border:1px solid #efefef;width: 90%" type="text"  
+ <input class="input" value="{{auliliaryList.brandName}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text"  
     bindinput="brandNameInput"/>
  </view>
  
  <view  style="width: 100%;margin-top: 20rpx;">
   <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 型号：</view>
- <input class="input" value="{{auliliaryList.modelName}}" style=" border:1px solid #efefef;width: 90%" type="text"  
+ <input class="input" value="{{auliliaryList.modelName}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text"  
     bindinput="modelNameInput"/>
  </view>
 
  <view style="width: 100%;margin-top: 20rpx;">
   <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 数量：</view>
- <input class="input" value="{{auliliaryList.amountOfUser}}" style=" border:1px solid #efefef;width: 90%" type="text" 
+ <input class="input" value="{{auliliaryList.amountOfUser}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text" 
     bindinput="amountOfUserInput"/>
  </view>
 
  <view style="width: 100%;margin-top: 20rpx;">
   <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 供货厂家：</view>
- <input class="input" value="{{auliliaryList.supplier}}" style=" border:1px solid #efefef;width: 90%" type="text" 
+ <input class="input" value="{{auliliaryList.supplier}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text" 
     bindinput="supplierInput"/>
  </view>
 
