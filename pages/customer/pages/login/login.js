@@ -131,7 +131,7 @@ Page({
             })
           }else{
             wx.showToast({
-              title: "创建失败",
+              title: "认证失败",
               icon: 'success',
               duration: 2000
             })
