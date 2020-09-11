@@ -85,7 +85,7 @@ background-color: white;
 }
 .option_box{
    
-  margin-left: 45%;
+  margin-left: 35%;
  position: absolute;
  top: 70rpx;
  width: 55%;
@@ -142,7 +142,7 @@ background-color: white;
 }
 .option_box1{
    
-  margin-left: 45%;
+  margin-left: 35%;
  position: absolute;
  top: 70rpx;
  width: 55%;
@@ -199,7 +199,7 @@ background-color: white;
 }
 .option_box2{
    
-  margin-left: 45%;
+  margin-left: 35%;
  position: absolute;
  top: 70rpx;
  width: 55%;
@@ -257,7 +257,7 @@ background-color: white;
 }
 .option_box3{
    
-  margin-left: 45%;
+  margin-left: 35%;
  position: absolute;
  top: 70rpx;
  width: 55%;

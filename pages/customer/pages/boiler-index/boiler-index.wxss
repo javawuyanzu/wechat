@@ -32,18 +32,18 @@ page{
 	
 }
 .menuschild {
-   width: 20%;
-  	margin-left: 60rpx;
+   width: 26%;
+  	margin-left: 40rpx;
 }
 .menuschild-name {
   margin-bottom: 10px;
-  font-size: 10px;
+  font-size: 15px;
   	line-height: 20rpx;
 	text-align: center;
 }
 .imag {
   margin-top: 10px;
-  margin-left: 35rpx;
+  margin-left: 24px;
   	background: rgba(191, 195, 241, 0.3);
   width: 30px;
   height: 30px;

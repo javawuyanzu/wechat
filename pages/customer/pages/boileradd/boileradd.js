@@ -47,83 +47,32 @@ Page({
   },
   quenyButton1: function (e) {
     let that = this
+
     wx.request({
       //获取openid接口   
-      url:  'https://apis.sdcsoft.com.cn/webapi/output/decoder/decode',
+      url:  'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/search?pageNum=1&pageSize=5',
                 data:  {
-                  deviceNo: that.data.deviceNo,
+                  boilerNo: "",
+                 controllerNo: that.data.deviceNo,
+                 customerName: null,
+                 isSell: null,
+                  media: null,
+                      power: null,
+                 productCategoryId: null,
+                  productCategoryName: "",
+                      saleDate: null,
+                     tonnageNum: null,
+                      userId:  app.globalData.customer.employeeId,
                 },
-                header:  {
-                    "Content-Type":  "application/x-www-form-urlencoded;charset=utf-8"
-                },
-                method:  'GET',
+               
+                method:  'post',
       success: function (data) {
-       
-        wx.request({
-          //获取openid接口   
-          url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/productcategory/list',
-          method: 'get',
-          success: function (res) {
-            that.setData({
-              "product.userId": app.globalData.customer.userId,
-              "product.controllerNo": data.data.data.deviceSuffix,
-              "product.productCategoryId": res.data.data[0].id,
-              "product.createDateTime": util.formatTime(new Date()),
-              "product.isSell": 0,
-              "product.orgId": app.globalData.customer.orgId,
-              "product.roleIdArray.roleId": app.globalData.customer.roleId,
-              "product.roleIdArray.roleName": app.globalData.customer.roleName,
-            })
-            wx.request({
-              //获取openid接口   
-              url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/create',
-              data: that.data.product,
-              method: 'post',
-              success: function (resport) {
-               
-                that.setData({
-                  "auliliaryList.modelName": data.data.data.deviceType,
-                  "auliliaryList.brandName": "",
-                  "auliliaryList.amountOfUser": 1,
-                  "auliliaryList.partCategoryId": 41,
-                  "auliliaryList.partSubCategoryId": 5,
-                  "auliliaryList.productId": resport.data.data,
-                  "auliliaryList.remarks": "",
-                  "auliliaryList.supplier": ""
-                })
-                let arr=[]
-                arr.push(that.data.auliliaryList)
-                wx.request({
-                  //获取openid接口   
-                  url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/productpartinfo/create',
-                  data: arr,
-                  method: 'post',
-                  success: function (data) {
-                    wx.showToast({
-                      title: '添加成功',
-                      icon: 'none',
-                      duration: 1500
-                    })
-                  }
-                })
-              }
-            })
-          }
-        })
-      }
-    })
-   
-  },
-  addDevice:function(){
-    let that=this
-    wx.scanCode({
-      success(res) {
-        let deviceNo = res.result
+       if(data.data.data.list.length==0){
         wx.request({
           //获取openid接口   
           url:  'https://apis.sdcsoft.com.cn/webapi/output/decoder/decode',
                     data:  {
-                      deviceNo: deviceNo,
+                      deviceNo: that.data.deviceNo,
                     },
                     header:  {
                         "Content-Type":  "application/x-www-form-urlencoded;charset=utf-8"
@@ -176,7 +125,6 @@ Page({
                           icon: 'none',
                           duration: 1500
                         })
-                       
                       }
                     })
                   }
@@ -185,6 +133,127 @@ Page({
             })
           }
         })
+       }else{
+        wx.showToast({
+          title: '该设备已存在',
+          icon: 'none',
+          duration: 1500
+        })
+       }
+       
+      }
+    })
+
+
+  
+   
+  },
+  addDevice:function(){
+    let that=this
+
+ 
+
+
+    wx.scanCode({
+      success(res) {
+        let deviceNo = res.result
+        wx.request({
+          //获取openid接口   
+          url:  'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/search?pageNum=1&pageSize=5',
+                    data:  {
+                      boilerNo: "",
+                     controllerNo:deviceNo,
+                     customerName: null,
+                     isSell: null,
+                      media: null,
+                          power: null,
+                     productCategoryId: null,
+                      productCategoryName: "",
+                          saleDate: null,
+                         tonnageNum: null,
+                          userId:  app.globalData.customer.employeeId,
+                    },
+                   
+                    method:  'post',
+          success: function (data) {
+           if(data.data.data.list.length==0){
+            wx.request({
+              //获取openid接口   
+              url:  'https://apis.sdcsoft.com.cn/webapi/output/decoder/decode',
+                        data:  {
+                          deviceNo: deviceNo,
+                        },
+                        header:  {
+                            "Content-Type":  "application/x-www-form-urlencoded;charset=utf-8"
+                        },
+                        method:  'GET',
+              success: function (data) {
+               
+                wx.request({
+                  //获取openid接口   
+                  url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/productcategory/list',
+                  method: 'get',
+                  success: function (res) {
+                    that.setData({
+                      "product.userId": app.globalData.customer.userId,
+                      "product.controllerNo": data.data.data.deviceSuffix,
+                      "product.productCategoryId": res.data.data[0].id,
+                      "product.createDateTime": util.formatTime(new Date()),
+                      "product.isSell": 0,
+                      "product.orgId": app.globalData.customer.orgId,
+                      "product.roleIdArray.roleId": app.globalData.customer.roleId,
+                      "product.roleIdArray.roleName": app.globalData.customer.roleName,
+                    })
+                    wx.request({
+                      //获取openid接口   
+                      url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/create',
+                      data: that.data.product,
+                      method: 'post',
+                      success: function (resport) {
+                       
+                        that.setData({
+                          "auliliaryList.modelName": data.data.data.deviceType,
+                          "auliliaryList.brandName": "",
+                          "auliliaryList.amountOfUser": 1,
+                          "auliliaryList.partCategoryId": 41,
+                          "auliliaryList.partSubCategoryId": 5,
+                          "auliliaryList.productId": resport.data.data,
+                          "auliliaryList.remarks": "",
+                          "auliliaryList.supplier": ""
+                        })
+                        let arr=[]
+                        arr.push(that.data.auliliaryList)
+                        wx.request({
+                          //获取openid接口   
+                          url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/productpartinfo/create',
+                          data: arr,
+                          method: 'post',
+                          success: function (data) {
+                            wx.showToast({
+                              title: '添加成功',
+                              icon: 'none',
+                              duration: 1500
+                            })
+                           
+                          }
+                        })
+                      }
+                    })
+                  }
+                })
+              }
+            })
+           }else{
+            wx.showToast({
+              title: '该设备已存在',
+              icon: 'none',
+              duration: 1500
+            })
+           }
+           
+          }
+        })
+     
        
       }
     })

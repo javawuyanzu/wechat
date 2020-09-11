@@ -78,7 +78,7 @@
 }
 .option_box{
    
-  margin-left: 15%;
+  margin-left: 18%;
  position: absolute;
  top: 70rpx;
  width: 55%;

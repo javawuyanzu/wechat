@@ -3,7 +3,7 @@
  background-color:#efefef;
  color: black;
  margin-top: 40rpx;
- font-size: 30rpx;
+ font-size: 15px;
  height: 10%;
   width: 70%;
    margin-left: 15%;  

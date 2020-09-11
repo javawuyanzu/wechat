@@ -1,15 +1,15 @@
 <!--index.wxml-->
 <view class='popup-container'>
   <view style="width: 100%; margin-left: 10px;">
-<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">推荐码： </view><input  style="height: 30px; width: 90%;border:1px solid #efefef" bindinput="referralCodeInput" />
+<view style="font-size: 15px; padding-top: 10rpx;">推荐码： </view><input  style="height: 30px; width: 90%;border:1px solid #efefef" bindinput="referralCodeInput" />
   </view>
 
 <view style="margin-top: 40rpx;width: 100%; margin-left: 10px;">
-<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">姓名： </view><input  style="height: 30px; width: 90%;border:1px solid #efefef" bindinput="nameInput" />
+<view style="  font-size: 15px; padding-top: 10rpx;">姓名： </view><input  style="height: 30px; width: 90%;border:1px solid #efefef" bindinput="nameInput" />
   </view>
 
 <view style=" margin-top: 40rpx;width: 100%; margin-left: 10px;">
-<view style="width: 30%;  font-size: 35rpx; padding-top: 10rpx;">手机号： </view><input type="number" maxlength="11" style=" height: 30px; width: 90%;border:1px solid #efefef" bindblur="loginPhone" />
+<view style="  font-size: 15px; padding-top: 10rpx;">手机号： </view><input type="number" maxlength="11" style=" height: 30px; width: 90%;border:1px solid #efefef" bindblur="loginPhone" />
   </view>
 
 

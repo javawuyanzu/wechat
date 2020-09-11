@@ -103,7 +103,7 @@ background-color: white;
 }
 .option_box{
    
-  margin-left: 45%;
+  margin-left: 35%;
  position: absolute;
  top: 70rpx;
  width: 55%;

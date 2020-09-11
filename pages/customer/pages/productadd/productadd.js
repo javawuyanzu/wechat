@@ -297,54 +297,90 @@ Page({
   },
   quenyButton1:function(){
     let that = this
-    if(that.data.title=="编辑"){
-      that.setData({
-        "product.roleIdArray.roleId": app.globalData.customer.roleId,
-        "product.roleIdArray.roleName": app.globalData.customer.roleName,
-        "product.editDateTime": util.formatTime(new Date()),
-        "product.boilerName": null,
-        "product.serviceEndDate": null,
-        "product.mark": null,
-        "product.serviceCycle": null,
-      })
-      wx.request({
-        //获取openid接口   
-        url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/modify',
-        data: that.data.product,
-        method: 'post',
-        success: function (data) {
-          wx.navigateBack({
-            
+    
+    wx.request({
+      //获取openid接口   
+      url:  'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/search?pageNum=1&pageSize=5',
+                data:  {
+                  boilerNo: "",
+                 controllerNo: that.data.product.controllerNo,
+                 customerName: null,
+                 isSell: null,
+                  media: null,
+                      power: null,
+                 productCategoryId: null,
+                  productCategoryName: "",
+                      saleDate: null,
+                     tonnageNum: null,
+                      userId:  app.globalData.customer.employeeId,
+                },
+               
+                method:  'post',
+      success: function (data) {
+        let arr=data.data.data.list
+        if(that.data.title=="编辑"){
+          that.setData({
+            "product.roleIdArray.roleId": app.globalData.customer.roleId,
+            "product.roleIdArray.roleName": app.globalData.customer.roleName,
+            "product.editDateTime": util.formatTime(new Date()),
+            "product.boilerName": null,
+            "product.serviceEndDate": null,
+            "product.mark": null,
+            "product.serviceCycle": null,
           })
-        }
-      })
-    }else{
-     
-      that.setData({
-        "product.userId": app.globalData.customer.userId,
-        "product.roleIdArray.roleId": app.globalData.customer.roleId,
-        "product.roleIdArray.roleName": app.globalData.customer.roleName,
-        "product.isSell": 0,
-        "product.orgId": app.globalData.customer.orgId,
-        "product.createDateTime": util.formatTime(new Date()),
-        "product.editDateTime": util.formatTime(new Date()),
-        "product.boilerName": null,
-        "product.serviceEndDate": null,
-        "product.mark": null,
-        "product.serviceCycle": null,
-      })
-      wx.request({
-        //获取openid接口   
-        url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/create',
-        data: that.data.product,
-        method: 'post',
-        success: function (data) {
-          wx.navigateBack({
-            
+          wx.request({
+            //获取openid接口   
+            url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/modify',
+            data: that.data.product,
+            method: 'post',
+            success: function (data) {
+              wx.navigateBack({
+                
+              })
+            }
           })
+        }else{
+          if(arr.length==0){
+            that.setData({
+              "product.userId": app.globalData.customer.userId,
+              "product.roleIdArray.roleId": app.globalData.customer.roleId,
+              "product.roleIdArray.roleName": app.globalData.customer.roleName,
+              "product.isSell": 0,
+              "product.orgId": app.globalData.customer.orgId,
+              "product.createDateTime": util.formatTime(new Date()),
+              "product.editDateTime": util.formatTime(new Date()),
+              "product.boilerName": null,
+              "product.serviceEndDate": null,
+              "product.mark": null,
+              "product.serviceCycle": null,
+            })
+            wx.request({
+              //获取openid接口   
+              url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/create',
+              data: that.data.product,
+              method: 'post',
+              success: function (data) {
+                wx.navigateBack({
+                  
+                })
+              }
+            })
+          }else{
+           wx.showToast({
+             title: '该设备已存在',
+             icon: 'none',
+             duration: 1500
+           })
+          }
+        
         }
-      })
-    }
+      
+       
+      }
+    })
+
+
+   
    
   },
 })

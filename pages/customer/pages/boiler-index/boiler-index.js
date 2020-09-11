@@ -4,6 +4,7 @@ const app = getApp()
 const util = require('../../utils/util.js')
 Page({
   data: {
+    show:false,
     menusInfo: [],
     listResource: [],
     hasUserInfo: false,
@@ -137,6 +138,15 @@ Page({
                     that.setData({
                       menusInfo: arr
                     })
+                    if(that.data.menusInfo.length==0){
+                      that.setData({
+                        show: true
+                      })
+                    }else{
+                      that.setData({
+                        show: false
+                      })
+                    }
                   }
                 })
               }

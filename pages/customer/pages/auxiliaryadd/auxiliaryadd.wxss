@@ -37,8 +37,6 @@
  transform:rotate(180deg); 
 }
 .option_box1{
-   
-  margin-left: 10px;
  position: absolute;
  top: 70rpx;
  width: 100%;
@@ -93,8 +91,6 @@
  transform:rotate(180deg); 
 }
 .option_box2{
-   
-  margin-left: 10px;
  position: absolute;
  top: 70rpx;
  width: 100%;

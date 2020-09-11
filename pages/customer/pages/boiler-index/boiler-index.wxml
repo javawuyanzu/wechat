@@ -31,6 +31,6 @@
   </view>
   </view>
 </view>
-<view class="z-menu-1" wx:if="{{menusInfo.length==0}}" >
+<view class="z-menu-1" wx:if="{{show}}" >
   请让管理员开通权限
 </view>

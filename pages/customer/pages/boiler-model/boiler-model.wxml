@@ -1,7 +1,7 @@
 
 <view class="zmenu" >
 <view class="menu" wx:for="{{productcategoryList}}" wx:for-item="item" wx:key="{{code}}"bindtap="Click1" data-bean="{{item}}">
-<view style=" margin-left: 3%; width: 100%; display: flex; margin-top: 3%; ">
+<view style=" margin-left: 3%;font-size: 15px; width: 100%; display: flex; margin-top: 3%; ">
 <view style="width: 50%; padding-left: 2%;">{{item.name}}</view>
 </view>
 </view>
