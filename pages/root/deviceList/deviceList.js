@@ -580,9 +580,7 @@ Page({
 
       }
     })
-    wx.showLoading({
-      title: 'Loading',
-    })
+  
     wx.getStorage({
       key: 'roleType',
       success(res) {
@@ -596,7 +594,6 @@ Page({
             url: '../../customer/pages/index/index'
           })
         }
-        wx.hideLoading();
       },
       fail(res) {
         wx.setStorageSync('roleType', "1")
@@ -1220,6 +1217,7 @@ Page({
                   } else {
                     let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
                     //data.setModbusNo 设置Modbus站号 默认1 1-255
+                    console.log(deviceType)
                     if (data.getTypeName() != deviceType) {
                       wx.request({
                         //获取openid接口   

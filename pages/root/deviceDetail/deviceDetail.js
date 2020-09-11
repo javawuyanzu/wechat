@@ -1020,6 +1020,7 @@ Page({
                     })
                   }
                 }
+                
                 that.setData({
                   bengAnimationList: device.getBeng(),
                   fanAnimationList: device.getFan(),
