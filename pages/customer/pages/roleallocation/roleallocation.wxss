@@ -4,7 +4,7 @@
 .checkbox{
   width: 100%;
   margin-left: 30px;
-   font-size: 50rpx;
+   font-size: 35rpx;
   margin-top: 20px;
 display: flex;
 }
@@ -16,7 +16,7 @@ display: flex;
  color: white;
  margin-top: 40rpx;
  font-size: 30rpx;
- height: 7%;
+ height: 6%;
   width: 70%;
    margin-left: 15%;  
 }

@@ -25,33 +25,33 @@
 
 
 
- <view style="width: 100%;margin-top: 20rpx;">
-  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 品牌：</view>
- <input class="input" value="{{auliliaryList.brandName}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text"  
+ <view style="width: 80%;margin-top: 20rpx;margin-left: 10%;">
+  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx;  "> 品牌：</view>
+ <input class="input" value="{{auliliaryList.brandName}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
     bindinput="brandNameInput"/>
  </view>
  
- <view  style="width: 100%;margin-top: 20rpx;">
-  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 型号：</view>
- <input class="input" value="{{auliliaryList.modelName}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text"  
+ <view  style="width: 80%;margin-top: 20rpx;margin-left: 10%;">
+  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; "> 型号：</view>
+ <input class="input" value="{{auliliaryList.modelName}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
     bindinput="modelNameInput"/>
  </view>
 
- <view style="width: 100%;margin-top: 20rpx;">
-  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 数量：</view>
- <input class="input" value="{{auliliaryList.amountOfUser}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text" 
+ <view style="width: 80%;margin-top: 20rpx;margin-left: 10%;">
+  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx;  "> 数量：</view>
+ <input class="input" value="{{auliliaryList.amountOfUser}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text" 
     bindinput="amountOfUserInput"/>
  </view>
 
- <view style="width: 100%;margin-top: 20rpx;">
-  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 供货厂家：</view>
- <input class="input" value="{{auliliaryList.supplier}}" style="height:30px; border:1px solid #efefef;width: 90%" type="text" 
+ <view style="width: 80%;margin-top: 20rpx;margin-left: 10%;">
+  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx;  "> 供货厂家：</view>
+ <input class="input" value="{{auliliaryList.supplier}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text" 
     bindinput="supplierInput"/>
  </view>
 
-  <view style="width: 100%;margin-top: 20rpx;">
-  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx; padding-left: 10px; "> 备注：</view>
- <textarea class="input" auto-height="true" value="{{auliliaryList.remarks}}" style=" border:1px solid #efefef;width: 90%"  
+  <view style="width: 80%;margin-top: 20rpx;margin-left: 10%;">
+  <view style="width: 25%; font-size: 35rpx; padding-top: 10rpx;  "> 备注：</view>
+ <textarea class="input" auto-height="true" value="{{auliliaryList.remarks}}" style=" border:1px solid #efefef;width:100%"  
     bindinput="remarksInput"/>
  </view>
 
