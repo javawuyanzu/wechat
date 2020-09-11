@@ -219,6 +219,7 @@ Page({
       'inputValue': ''
     })
   },
+
   inputMoble: function (e) {
     var that = this
     that.setData({

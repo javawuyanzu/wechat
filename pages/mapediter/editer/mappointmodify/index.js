@@ -18,11 +18,11 @@ Page({
       point.endian = 0
     } else if (1 == typ) {
       endians = ['AB', 'BA']
-      point.endian = 1
+      point.endian = 0
     }
     else {
       endians = ['AB CD', 'DC BA', 'CD AB']
-      point.endian = 1
+      point.endian = 0
     }
 
     this.setData({ point: point, endianindex: 0 })
