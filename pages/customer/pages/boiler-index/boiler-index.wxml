@@ -6,25 +6,28 @@
   </view>
   <view class="menuschilds">
   <view wx:if="{{item.hidden!=true&&item.show1==true}}" class="menuschild" wx:for="{{item.menuschild}}" data-bean="{{items}}"  wx:for-index="index" wx:for-item="items" wx:key="index" bindtap='menus' >
- 	<image
+  <view class="imagesize"><image
   class="imag"
 				src="../../images/customer/{{items.url}}.png"
-			></image>
+			></image></view>
+ 	
   <view class="menuschild-name">{{items.resName}}</view>
   </view>
    <view wx:if="{{item.hidden==true&&item.show1==true&&item.id!=0}}" class="menuschild" data-bean="{{item}}" bindtap='menus' wx:for-index="index" wx:for-item="items" wx:key="index" >
- 	<image
+    <view class="imagesize">	<image
   class="imag"
 				src="../../images/customer/{{item.url}}.png"
-			></image>
+			></image></view>
+ 
   <view class="menuschild-name">{{item.resName}}</view>
   </view>
 
 <view wx:if="{{item.id==0}}" class="menuschild" bindtap='addDevice'>
-  <image
+  <view class="imagesize"> <image
   class="imag"
 				src="../../images/customer/add.png"
-			></image>
+			></image></view>
+ 
   <view class="menuschild-name">添加</view>
   </view>
 

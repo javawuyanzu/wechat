@@ -33,17 +33,22 @@ page{
 }
 .menuschild {
    width: 26%;
-  	margin-left: 40rpx;
+    margin-left: 40rpx;
 }
 .menuschild-name {
+  margin-top: 10px;
   margin-bottom: 10px;
   font-size: 15px;
   	line-height: 20rpx;
 	text-align: center;
 }
+.imagesize{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 .imag {
-  margin-top: 10px;
-  margin-left: 24px;
+  margin-top: 10px; 
   	background: rgba(191, 195, 241, 0.3);
   width: 30px;
   height: 30px;
