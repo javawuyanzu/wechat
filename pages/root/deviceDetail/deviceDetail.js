@@ -52,6 +52,7 @@ Page({
     inputvalue: 0,
     inputValue: '',
     index: -1,
+    mockKey:"",
     index1: -1,
     zuotian: "",
     qiantian: "",
@@ -446,6 +447,7 @@ Page({
         timerStates: true,
       })
     }
+
     if (menuName == that.data.content.detail_reportMenu) {
       that.getreportdatabyday(that.data.mock1)
     }
@@ -1147,6 +1149,7 @@ Page({
                   report: true,
                   runInfoMoList: runInfoMoList,
                   mock1: runInfoMoList[0].name,
+                  mockKey: runInfoMoList[0].name,
                   mock1Name: runInfoMoList[0].title
                 })
               }
@@ -1422,7 +1425,8 @@ Page({
       var beginDate = that.getDateStr(null, -3)
     }
     var endDate = that.getDateStr(beginDate, 1)
-    if(that.data.newFrame){
+    
+    if(that.data.newFrame=='true'){
       wx.request({
         url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
         data: {
@@ -1503,6 +1507,7 @@ Page({
         }
       })
     }else{
+      console.log("321")
       wx.request({
         url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
         data: {
@@ -1516,7 +1521,6 @@ Page({
         },
         method: 'GET',
         success: function (res) {
-          console.log(res)
           if (res.data.code == 0) {
             that.setData({
               havedata: true
@@ -1596,7 +1600,7 @@ Page({
       var beginDate = that.getDateStr(null, -3)
     }
     var endDate = that.getDateStr(beginDate, 1)
-    if(that.data.newFrame){
+    if(that.data.newFrame=='true'){
       wx.request({
         url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
         data: {
@@ -1676,6 +1680,7 @@ Page({
         }
       })
     }else{
+      console.log("123")
       wx.request({
         url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
         data: {
@@ -1768,7 +1773,8 @@ Page({
         that.setData({
           mock1: runInfoMoList[i].title,
           mock1Name: runInfoMoList[i].title,
-          mockType:runInfoMoList[i].type
+          mockType:runInfoMoList[i].type,
+          mockKey:runInfoMoList[i].name
         })
       }
     }

@@ -21,16 +21,36 @@ Page({
   submit() {
     var that=this
     
-    if(that.data.startNo.substr(0,5)!==that.data.code||that.data.endNo.substr(0,5)!==that.data.code){
+    if(that.data.startNo==""||that.data.endNo==""){
       wx.showToast({
-        title: "所开编号不属于该企业",
+        title: "所开编号不能为空",
         icon: 'none',
         duration: 5000
       });
       return
     }
-    var startNo=Number(that.data.startNo)-1
-    var endNo=Number(that.data.endNo)
+    var startNo=that.data.startNo
+    var endNo=that.data.endNo
+    if(startNo.length<5){
+      var num =5-startNo.length
+      var prefix="";
+      for(var i =0;i<num;i++){
+        prefix+="0"
+      }
+    }
+    startNo=that.data.code+prefix+startNo
+    if(endNo.length<5){
+      var num =5-endNo.length
+      var prefix="";
+      for(var i =0;i<num;i++){
+        prefix+="0"
+      }
+    }
+    endNo=that.data.code+prefix+endNo
+
+    
+     startNo=Number(startNo)-1
+     endNo=Number(endNo)
     var deviceList=[]
     var length=endNo-startNo
     for(var i =0;i<length;i++){
@@ -43,7 +63,6 @@ Page({
         subType:"CTL_NJZJ_IPK2",
       })
     }
-    
     wx.request({
       url: 'https://apis.sdcsoft.com.cn/webapi/datacenter/core/device/create/wechat',
       method: "POST",

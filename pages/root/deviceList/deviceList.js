@@ -1147,11 +1147,12 @@ Page({
                         break;
                       }
                     }
+                    console.log(device.Run)
                     if (device.Run.name != "") {
 
                       runday = device.Run.name + ":" + device.Run.vstr
                     }
-                    console.log(device.status)
+                   
                     if (device.status) {
                       runstate1 = "-" + device.status.vstr
                     }
@@ -1163,7 +1164,7 @@ Page({
                           stove = stove + "-" + el[i]
                         }
                       }
-
+                     
                       src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     }
                     var ilist = that.data.imgList

@@ -19,7 +19,7 @@ Page({
   },
   onTypChange(e) {
     let sys = this.data.sysrun
-    sys.typ = parseInt(e.detail.value)
+    sys.typ = parseInt(Number(e.detail.value)+1)
     this.setData({ sysrun: sys, tindex: sys.typ })
   },
   setName(e) {

@@ -46,7 +46,7 @@ var SdcSoftDevice2 = /** @class */ (function () {
             if (this.run) {
                 return this.run;
             }
-            return { name: '', v: 0, typ: 0, vstr: '' };
+            return null;
         },
         set: function (run) {
             this.run = run;

@@ -226,11 +226,12 @@ var DeviceAdapter2 = /** @class */ (function () {
         item.v = v;
         if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_MathAction)) {
             try {
-                var result = this.mathAction(field[DeviceAdapter2.Formate_Field_Option_MathAction], v, field[DeviceAdapter2.Formate_Field_Option_Number]).toString();
+                var result = this.mathAction(field[DeviceAdapter2.Formate_Field_Option_MathAction], v, field[DeviceAdapter2.Formate_Field_Option_Number]);
+                item.v = result;
                 if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Unit)) {
                     result += field[DeviceAdapter2.Formate_Field_Option_Unit];
                 }
-                item.vstr = result;
+                item.vstr = result.toString();
             }
             catch (error) {
                 throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + error.msg };
@@ -468,6 +469,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                 var p = field[DeviceAdapter2.Formate_Field_Option_Part];
                 //为设备添加系统运行时间
                 if (!this.device.Run) {
+                    console.log('++++++++++++++++++++');
                     //v -1表示未进行过时间处理
                     var item_1 = this.formate[DeviceAdapter2.Formate_Key_System_Run];
                     //临时兼容旧版本设置，升级后将仅保留if内代码部分
@@ -523,8 +525,11 @@ var DeviceAdapter2 = /** @class */ (function () {
             }
             var lmax = field[DeviceAdapter2.Formate_Field_Option_Input][DeviceAdapter2.Formate_Field_Option_Ses_Max];
             var lmin = field[DeviceAdapter2.Formate_Field_Option_Input][DeviceAdapter2.Formate_Field_Option_Ses_Min];
+            console.log(item.v);
             item.v = Math.floor(((lmax - lmin) * (item.v - this.input.min)) / (this.input.max - this.input.min) * 100) / 100 - lmin;
             item.vstr = item.v + field[DeviceAdapter2.Formate_Field_Option_Unit];
+            // console.log(item)
+            // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
             return true;
         }
         return false;
@@ -642,6 +647,7 @@ var DeviceAdapter2 = /** @class */ (function () {
             this.isNUll = false;
         }
         this.Init2();
+        console.log(this.device.Run);
         for (var _i = 0, _a = Object.keys(this.formate[DeviceAdapter2.Formate_Key_DataMap]); _i < _a.length; _i++) {
             var key = _a[_i];
             if (this.formate[DeviceAdapter2.Formate_Key_DataMap].hasOwnProperty(key)) {
@@ -688,13 +694,25 @@ var DeviceAdapter2 = /** @class */ (function () {
                     num = Endian_1.Endian.HandleBytes(endian, data[index], data[index + 1], data[index + 2], data[index + 3]);
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_FLOAT;
                     if (null != mask) {
-                        if (num == mask) {
-                            continue;
+                        if (mask < 0) {
+                            mask = Math.abs(mask);
+                            num = num & mask;
+                        }
+                        else {
+                            if (num == mask) {
+                                continue;
+                            }
                         }
                     }
+                    //console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                    // console.log(key)
+                    // console.log(endian)
+                    // console.log(num)
                     var dv = new DataView(new ArrayBuffer(4));
                     dv.setInt32(0, num);
                     num = Math.round(dv.getFloat32(0) * 100) / 100;
+                    //console.log(num)
+                    //console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
                 }
                 else if (3 == typ) {
                     //console.log(data[index] + ' ' + data[index + 1] + ' ' + data[index + 2] + ' ' + data[index + 3])
@@ -710,7 +728,11 @@ var DeviceAdapter2 = /** @class */ (function () {
                 var fields = point[DeviceAdapter2.Formate_Key_Point_Fields];
                 for (var index_1 in fields) {
                     var field = fields[index_1];
-                    //首先处理控制点
+                    //首先处理field中的mask
+                    if (field.hasOwnProperty(DeviceAdapter2.Formate_Key_Point_Mask)) {
+                        mask = field[DeviceAdapter2.Formate_Key_Point_Mask];
+                        num = num & mask;
+                    }
                     if (DeviceAdapter2.Formate_Type_Exception == field.typ) { //如果是报警
                         this.handleExceptionField(field, num);
                     }
@@ -738,6 +760,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                         this.handleMathActionProperty(num, field, item);
                         this.handleInputField(field, item);
                         this.handleFocus(field, item);
+                        //console.log(item)
                         this.handleKongZhiField(key, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
                         this.device.WenDu.push(item);
                     }

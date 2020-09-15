@@ -372,7 +372,7 @@
 			<radio-group bindchange="radiochange">
 				<label class="checkbox" wx:for="{{runInfoMoList}}" wx:key="runInfoMoList">
 					<view style='margin:30rpx'>
-						<radio value="{{item.name}}" checked="{{mock1==item.name ? 'true' : ''}}" data-name="{{item.title}}" />{{item.title}}</view>
+						<radio value="{{item.name}}" checked="{{mockKey==item.name ? 'true' : ''}}" data-name="{{item.title}}" />{{item.title}}</view>
 				</label>
 			</radio-group>
 		</view>
