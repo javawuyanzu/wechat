@@ -26,6 +26,7 @@ Page({
       boilerNo: null,
       boilerName:null,
       serviceEndDate:null,
+      serviceCycle:null,
       mark:null,
       saleDate: null,
       controllerNo: null,

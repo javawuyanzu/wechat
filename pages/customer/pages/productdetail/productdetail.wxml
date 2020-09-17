@@ -35,7 +35,7 @@
   <view style="padding-left: 2%;">锅炉名称：{{item.boilerName}}</view>
 </view>
 <view style="margin-left: 3%;font-size: 15px; width: 100%; display: flex; margin-top: 3%; ">
-  <view style="padding-left: 2%;">维保周期：{{serviceCycle}}</view>
+  <view style="padding-left: 2%;">维保周期：{{item.serviceCycle}}</view>
 </view>
 
 <view style="margin-left: 3%;font-size: 15px; width: 100%; display: flex; margin-top: 3%; ">
