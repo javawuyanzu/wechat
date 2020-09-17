@@ -323,10 +323,6 @@ Page({
             "product.roleIdArray.roleId": app.globalData.customer.roleId,
             "product.roleIdArray.roleName": app.globalData.customer.roleName,
             "product.editDateTime": util.formatTime(new Date()),
-            "product.boilerName": null,
-            "product.serviceEndDate": null,
-            "product.mark": null,
-            "product.serviceCycle": null,
           })
           wx.request({
             //获取openid接口   
@@ -349,10 +345,6 @@ Page({
               "product.orgId": app.globalData.customer.orgId,
               "product.createDateTime": util.formatTime(new Date()),
               "product.editDateTime": util.formatTime(new Date()),
-              "product.boilerName": null,
-              "product.serviceEndDate": null,
-              "product.mark": null,
-              "product.serviceCycle": null,
             })
             wx.request({
               //获取openid接口   
