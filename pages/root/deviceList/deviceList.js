@@ -1124,6 +1124,7 @@ Page({
                     console.log(new Uint8Array(bytes))
                     app.globalData.adapter.handlerData(new Uint8Array(bytes))
                     let device = app.globalData.adapter.Device
+                    
                     var errorList = []
                     for (var index in device.BaoJing) {
                       errorList.push({
@@ -1147,10 +1148,11 @@ Page({
                         break;
                       }
                     }
-                    console.log(device.Run)
-                    if (device.Run.name != "") {
-
-                      runday = device.Run.name + ":" + device.Run.vstr
+                    console.log(device.Run) 
+                    if(device.Run!=null ){
+                      if (device.Run.name != "") {
+                        runday = device.Run.name + ":" + device.Run.vstr
+                      }
                     }
                    
                     if (device.status) {
@@ -1164,7 +1166,7 @@ Page({
                           stove = stove + "-" + el[i]
                         }
                       }
-                     
+                      console.log(stove) 
                       src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     }
                     var ilist = that.data.imgList

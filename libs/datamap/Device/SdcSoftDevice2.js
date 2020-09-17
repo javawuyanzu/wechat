@@ -55,6 +55,9 @@ var SdcSoftDevice2 = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(SdcSoftDevice2.prototype, "Power", {
+        get: function () {
+            return this.power;
+        },
         set: function (v) {
             this.power = v;
         },
@@ -62,6 +65,9 @@ var SdcSoftDevice2 = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(SdcSoftDevice2.prototype, "Media", {
+        get: function () {
+            return this.media;
+        },
         set: function (v) {
             this.media = v;
         },
@@ -138,6 +144,12 @@ var SdcSoftDevice2 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    SdcSoftDevice2.prototype.AddKongZhiItem = function (group, ctlItem) {
+        if (!this.ctl.containsKey(group)) {
+            this.ctl.addItem(group, []);
+        }
+        this.ctl.getItem(group).push(ctlItem);
+    };
     Object.defineProperty(SdcSoftDevice2.prototype, "KongZhi", {
         get: function () {
             return this.ctl;
@@ -175,6 +187,9 @@ var SdcSoftDevice2 = /** @class */ (function () {
     SdcSoftDevice2.prototype.getBeng = function () {
         var elements = [];
         var group = this.atMap.getItem(DeviceAdapter2_1.DeviceAdapter2.Formate_Field_AT_Class_Beng);
+        console.log('-----------aaaaaa-------------');
+        console.log(this.atMap);
+        console.log('------------aaaaaa------------');
         for (var i = 0; i < group.length; i++) {
             var el = new Element_1.Element();
             el.Title = group[i].name;

@@ -19,7 +19,9 @@ var DeviceAdapter2 = /** @class */ (function () {
         this.deviceNo = -1;
         //输入量程
         this.input = null;
-        //
+        //动画集合
+        this.atMap = new comms_1.StringHashMap();
+        //动画集合处理计数
         this.atMapCount = new comms_1.StringHashMap();
         /**
          * 转为handleKongZhiField，创建的全局变量
@@ -55,10 +57,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                 ctlItem.Description = ctl.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? ctl[DeviceAdapter2.Formate_Field_Option_Description] : '';
                 ctlField.Value = 0;
                 ctlField.addCtlItem(ctlItem);
-                if (!this.device.KongZhi.containsKey(group)) {
-                    this.device.KongZhi.addItem(group, []);
-                }
-                this.device.KongZhi.getItem(group).push(ctlField);
+                this.device.AddKongZhiItem(group, ctlField);
             }
             else if (DeviceAdapter2.CTL_TAG_REG == type) { //如果是寄存器控制
                 var ctlField = new Fields_1.CtlField();
@@ -78,10 +77,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     ctlItem.Description = ctl.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? ctl[DeviceAdapter2.Formate_Field_Option_Description] : '';
                     ctlField.Value = 0;
                     ctlField.addCtlItem(ctlItem);
-                    if (!this.device.KongZhi.containsKey(group)) {
-                        this.device.KongZhi.addItem(group, []);
-                    }
-                    this.device.KongZhi.getItem(group).push(ctlField);
+                    this.device.AddKongZhiItem(group, ctlField);
                 }
                 else {
                     throw '控制点：' + ctl[DeviceAdapter2.Formate_Field_Option_Name] + ' 未明确数据类型';
@@ -109,7 +105,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     group.push(element);
                 }
             }
-            else { //如果是泵
+            else { //如果是泵/风机
                 for (var key3 = 0; key3 < atemt.length; key3++) {
                     var atemtfield = atemt[key3];
                     var element = {
@@ -123,7 +119,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     this.atMapCount.addItem(element.name, 0);
                 }
             }
-            this.device.AtMap.addItem(key2, group);
+            this.atMap.addItem(key2, group);
         }
     };
     DeviceAdapter2.prototype.Init = function (formate, addrMap) {
@@ -149,16 +145,6 @@ var DeviceAdapter2 = /** @class */ (function () {
                 }
                 else if (DeviceAdapter2.Formate_Key_No == key) {
                     this.deviceNo = this.formate[key];
-                }
-                else if (DeviceAdapter2.Formate_Key_Power == key) {
-                    var power = this.formate[key];
-                    this.device.JiBen.push(power);
-                    this.device.Power = power[DeviceAdapter2.Formate_Field_Option_Value];
-                }
-                else if (DeviceAdapter2.Formate_Key_Media == key) {
-                    var media = this.formate[key];
-                    this.device.JiBen.push(media);
-                    this.device.Media = media[DeviceAdapter2.Formate_Field_Option_Value];
                 }
                 else if (DeviceAdapter2.Formate_Key_ValueMap == key) {
                     for (var _b = 0, _c = Object.keys(this.formate[key]); _b < _c.length; _b++) {
@@ -329,7 +315,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     break;
                 case DeviceAdapter2.Formate_Field_Option_RefType_At:
                     var refgroup = field[DeviceAdapter2.Formate_Field_Option_RefGroup];
-                    var emt = this.device.AtMap.getItem(refgroup)[index];
+                    var emt = this.atMap.getItem(refgroup)[index];
                     if (!emt) {
                         throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + "关联的动画元素无效！" };
                     }
@@ -374,9 +360,13 @@ var DeviceAdapter2 = /** @class */ (function () {
                         var count_1 = this.atMapCount.getItem(emt.name);
                         //增加处理数量
                         this.atMapCount.addItem(emt.name, count_1 + 1);
+                        //
                         if (1 == item.v) {
                             emt[DeviceAdapter2.Formate_Field_Option_Value] |= (item.v << count_1);
                         }
+                        console.log('---------gggggggg-------------------');
+                        console.log(emt.name);
+                        console.log('---------gggggggg-------------------');
                     }
                     break;
             }
@@ -409,8 +399,21 @@ var DeviceAdapter2 = /** @class */ (function () {
             this.handleVMapProperty(field, item);
             this.device.BaoJing.push(item);
         }
+        else if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_MathAction)) {
+            try {
+                var result = this.mathAction(field[DeviceAdapter2.Formate_Field_Option_MathAction], num, field[DeviceAdapter2.Formate_Field_Option_Number]);
+                if (1 <= result) {
+                    item.v = 1;
+                    item.vstr = item.name;
+                    this.device.BaoJing.push(item);
+                }
+            }
+            catch (error) {
+                throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + error.msg };
+            }
+        }
         else {
-            if (0 < num) {
+            if (1 <= num) {
                 //console.log('num->' + num)
                 //记录异常信息
                 item.vstr = item.name;
@@ -538,7 +541,7 @@ var DeviceAdapter2 = /** @class */ (function () {
         if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Ctl)) {
             var keyNum = parseInt(key);
             // 如果是可控点位
-            var group = field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Ctl_Group];
+            var group = field[DeviceAdapter2.Formate_Field_Option_Ctl][DeviceAdapter2.Formate_Field_Option_Ctl_Group];
             if (fieldsCount > 1) {
                 //如果是单点多可控位
                 if (keyNum < 10000) {
@@ -557,7 +560,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     this.mCtlField.Address = NumberUtil_1.NumberUtil.NumberToString(keyNum - 1 + bit, 16, 4);
                     this.mCtlField.addCtlItem(ctlItem);
                     if (this.count == fieldsCount) {
-                        this.device.KongZhi.getItem(group).push(this.mCtlField);
+                        this.device.AddKongZhiItem(group, this.mCtlField);
                         this.mCtlField = null;
                         this.count = 0;
                     }
@@ -581,7 +584,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     ctlItem.Value = num & (1 << field[DeviceAdapter2.Formate_Field_Option_Bit]);
                     this.mCtlField.addCtlItem(ctlItem);
                     if (this.count == fieldsCount) {
-                        this.device.KongZhi.getItem(group).push(this.mCtlField);
+                        this.device.AddKongZhiItem(group, this.mCtlField);
                         this.mCtlField = null;
                         this.count = 0;
                     }
@@ -599,10 +602,10 @@ var DeviceAdapter2 = /** @class */ (function () {
                     ctlField.Value = num;
                     var ctlItem = new Fields_1.CtlItem();
                     ctlItem.Name = field[DeviceAdapter2.Formate_Field_Option_Name];
-                    ctlItem.Description = field[DeviceAdapter2.Formate_Key_KongZhi].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Description] : '';
+                    ctlItem.Description = field[DeviceAdapter2.Formate_Field_Option_Ctl].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Description] : '';
                     ctlItem.Value = ctlField.Value;
                     ctlField.addCtlItem(ctlItem);
-                    this.device.KongZhi.getItem(group).push(ctlField);
+                    this.device.AddKongZhiItem(group, ctlField);
                 }
                 else {
                     var ctlField = new Fields_1.CtlField();
@@ -621,13 +624,13 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                     var ctlItem = new Fields_1.CtlItem();
                     ctlItem.Name = field[DeviceAdapter2.Formate_Field_Option_Name];
-                    ctlItem.Description = field[DeviceAdapter2.Formate_Key_KongZhi].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Description] : '';
+                    ctlItem.Description = field[DeviceAdapter2.Formate_Field_Option_Ctl].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Description] : '';
                     //设置控制点位在UI初始化是显示的数值
                     ctlItem.Value = value;
                     //设置控制点位在UI初始化是显示的单位
                     ctlItem.Unit = unit;
                     ctlField.addCtlItem(ctlItem);
-                    this.device.KongZhi.getItem(group).push(ctlField);
+                    this.device.AddKongZhiItem(group, ctlField);
                 }
             }
         }
@@ -685,8 +688,14 @@ var DeviceAdapter2 = /** @class */ (function () {
                     //console.log(num)
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_UINT;
                     if (null != mask) {
-                        if (num == mask) {
-                            continue;
+                        if (mask < 0) {
+                            mask = Math.abs(mask);
+                            num = num & mask;
+                        }
+                        else {
+                            if (num == mask) {
+                                continue;
+                            }
                         }
                     }
                 }
@@ -720,8 +729,14 @@ var DeviceAdapter2 = /** @class */ (function () {
                     //console.log(endian + ' ' + num)
                     ctlTyp = Fields_1.CtlField.CTL_TYPE_LONG;
                     if (null != mask) {
-                        if (num == mask) {
-                            continue;
+                        if (mask < 0) {
+                            mask = Math.abs(mask);
+                            num = num & mask;
+                        }
+                        else {
+                            if (num == mask) {
+                                continue;
+                            }
                         }
                     }
                 }
@@ -753,6 +768,13 @@ var DeviceAdapter2 = /** @class */ (function () {
                             this.handleSystemStatusField(field, item);
                         }
                         this.handleKongZhiField(key, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
+                        //处理燃料、介质自举
+                        if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Power)) {
+                            this.device.Power = item.v;
+                        }
+                        else if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Media)) {
+                            this.device.Media = item.v;
+                        }
                         this.device.JiBen.push(item);
                     }
                     else if (DeviceAdapter2.Formate_Type_WenDu == field.typ) { //如果是温度
@@ -795,6 +817,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                                 this.handleMathActionProperty(num, field, item);
                             }
                         }
+                        console.log(field.name);
                         this.handleKongZhiField(key, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
                         this.device.SheZhi.push(item);
                         //console.log("*****************" + field.name + "********************")
@@ -837,11 +860,57 @@ var DeviceAdapter2 = /** @class */ (function () {
             if (this.isNUll) {
                 return null;
             }
+            //处理燃料介质，放在此处兼容JNZJ点位中包含燃料介质点设备进行自举
+            console.log('---------xxxxxx------------');
+            console.log(this.device.Power);
+            console.log(this.device.Media);
+            console.log('---------xxxxxx------------');
+            if (this.device.Power < 0) {
+                var power = this.formate[DeviceAdapter2.Formate_Key_Power];
+                this.device.JiBen.push(power);
+                this.device.Power = power[DeviceAdapter2.Formate_Field_Option_Value];
+            }
+            if (this.device.Media < 0) {
+                var media = this.formate[DeviceAdapter2.Formate_Key_Media];
+                this.device.JiBen.push(media);
+                this.device.Media = media[DeviceAdapter2.Formate_Field_Option_Value];
+            }
             //添加计算点位到基本信息
             this.countMap.forEach(function (v, i) {
                 var item = { "name": v[DeviceAdapter2.Formate_Field_Option_Name], "v": v[DeviceAdapter2.Formate_Field_Option_Value], "vstr": v[DeviceAdapter2.Formate_Field_Option_VString] };
                 _this.device.JiBen.push(item);
             });
+            //清理无效泵和风机-兼容NJZJ
+            //将未参与处理的水泵/风机动画清除
+            for (var _i = 0, _a = Object.keys(this.formate[DeviceAdapter2.Formate_Key_AtMap]); _i < _a.length; _i++) {
+                var key = _a[_i];
+                if (key != DeviceAdapter2.Formate_Field_AT_Class_Fire) {
+                    var group = this.atMap.getItem(key);
+                    if (!this.device.AtMap.containsKey(key)) {
+                        this.device.AtMap.addItem(key, []);
+                    }
+                    for (var i in group) {
+                        var name_1 = group[i].name;
+                        if (this.atMapCount.getItem(name_1) > 0) {
+                            this.device.AtMap.getItem(key).push(group[i]);
+                        }
+                    }
+                }
+                else {
+                    if (!this.device.AtMap.containsKey(key)) {
+                        this.device.AtMap.addItem(key, []);
+                    }
+                    var group = this.atMap.getItem(key);
+                    for (var i in group) {
+                        this.device.AtMap.getItem(key).push(group[i]);
+                    }
+                }
+            }
+            console.log('--------------mmmmmmmmmmmmm--------------------');
+            console.log(this.atMap);
+            console.log('--------------yyyyyyyyy-------------');
+            console.log(this.device.AtMap);
+            console.log('--------------yyyyyyyyy-------------');
             return this.device;
         },
         enumerable: false,
@@ -914,6 +983,8 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.Formate_Field_Option_MathAction_Div = 'div';
     DeviceAdapter2.Formate_Field_Option_MathAction_Mod = 'mod';
     DeviceAdapter2.Formate_Field_Option_Number = 'number';
+    DeviceAdapter2.Formate_Field_Option_Power = DeviceAdapter2.Formate_Key_Power;
+    DeviceAdapter2.Formate_Field_Option_Media = DeviceAdapter2.Formate_Key_Media;
     DeviceAdapter2.Formate_Field_Option_Unit = 'unit';
     DeviceAdapter2.Formate_Field_Option_Focus = 'focus';
     DeviceAdapter2.Formate_Field_Option_ValueMap = 'vm';
