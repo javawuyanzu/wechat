@@ -1148,7 +1148,6 @@ Page({
                         break;
                       }
                     }
-                    console.log(device.Run) 
                     if(device.Run!=null ){
                       if (device.Run.name != "") {
                         runday = device.Run.name + ":" + device.Run.vstr
@@ -1166,7 +1165,6 @@ Page({
                           stove = stove + "-" + el[i]
                         }
                       }
-                      console.log(stove) 
                       src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     }
                     var ilist = that.data.imgList

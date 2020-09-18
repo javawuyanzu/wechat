@@ -31,6 +31,7 @@ Page({
     switchquantityMap: [],
     bengAnimationList: [],
     fanAnimationList: [],
+    fireList:[],
     bengList: [],
     fanList: [],
     runInfoMoList: [],
@@ -1003,8 +1004,10 @@ Page({
                     that.getException(errorList);
                   }
                 }
+                
+                console.log(device.getStoveElements()) 
                 var imgstyle1 = that.data.imgstyle
-                if (device.getStoveElements().length > 0) {
+                if (device.getStoveElements().length > 0&device.getStoveElements().length ==1) {
                   var el = device.getStoveElements()[0].values
                   var stove = device.getStoveElements()[0].prefix
                   for (var i in el) {
@@ -1015,6 +1018,23 @@ Page({
                   that.setData({
                     src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif',
                   })
+                }else{
+                  var elements=device.getStoveElements()
+                  var fireList=[]
+                  for (var k in elements) {
+                    var el =elements[k].values
+                    var stove = elements[k].prefix
+                    for (var i in el) {
+                      if (el[i] != -1) {
+                        stove = stove + "-" + el[i]
+                      }
+                    }
+                    fireList.push({title:elements[k].title,  src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'})
+                  }
+                  that.setData({
+                    fireList: fireList,
+                  })
+                
                 }
                 for (var i in device.jb) {
                   if (device.jb[i].name == "介质") {

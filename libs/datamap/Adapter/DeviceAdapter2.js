@@ -364,9 +364,6 @@ var DeviceAdapter2 = /** @class */ (function () {
                         if (1 == item.v) {
                             emt[DeviceAdapter2.Formate_Field_Option_Value] |= (item.v << count_1);
                         }
-                        console.log('---------gggggggg-------------------');
-                        console.log(emt.name);
-                        console.log('---------gggggggg-------------------');
                     }
                     break;
             }
@@ -472,7 +469,6 @@ var DeviceAdapter2 = /** @class */ (function () {
                 var p = field[DeviceAdapter2.Formate_Field_Option_Part];
                 //为设备添加系统运行时间
                 if (!this.device.Run) {
-                    console.log('++++++++++++++++++++');
                     //v -1表示未进行过时间处理
                     var item_1 = this.formate[DeviceAdapter2.Formate_Key_System_Run];
                     //临时兼容旧版本设置，升级后将仅保留if内代码部分
@@ -650,7 +646,6 @@ var DeviceAdapter2 = /** @class */ (function () {
             this.isNUll = false;
         }
         this.Init2();
-        console.log(this.device.Run);
         for (var _i = 0, _a = Object.keys(this.formate[DeviceAdapter2.Formate_Key_DataMap]); _i < _a.length; _i++) {
             var key = _a[_i];
             if (this.formate[DeviceAdapter2.Formate_Key_DataMap].hasOwnProperty(key)) {
@@ -817,7 +812,6 @@ var DeviceAdapter2 = /** @class */ (function () {
                                 this.handleMathActionProperty(num, field, item);
                             }
                         }
-                        console.log(field.name);
                         this.handleKongZhiField(key, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
                         this.device.SheZhi.push(item);
                         //console.log("*****************" + field.name + "********************")
@@ -861,10 +855,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                 return null;
             }
             //处理燃料介质，放在此处兼容JNZJ点位中包含燃料介质点设备进行自举
-            console.log('---------xxxxxx------------');
-            console.log(this.device.Power);
-            console.log(this.device.Media);
-            console.log('---------xxxxxx------------');
+         
             if (this.device.Power < 0) {
                 var power = this.formate[DeviceAdapter2.Formate_Key_Power];
                 this.device.JiBen.push(power);
@@ -906,11 +897,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                 }
             }
-            console.log('--------------mmmmmmmmmmmmm--------------------');
-            console.log(this.atMap);
-            console.log('--------------yyyyyyyyy-------------');
-            console.log(this.device.AtMap);
-            console.log('--------------yyyyyyyyy-------------');
+         
             return this.device;
         },
         enumerable: false,

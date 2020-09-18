@@ -1,6 +1,10 @@
 button::after {
   border: none;
 }
+.fireimage{
+  width: 180px;
+  height: 65px;
+}
 .swiper-tab{ 
  width: 100%; 
  text-align: center; 
