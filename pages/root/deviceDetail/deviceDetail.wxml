@@ -4,10 +4,17 @@
 </view>
 
 <view hidden="{{currentTab!=runinfoMenu}}">
-	<view class='view'>
+	<view class='view'wx:if="{{fireList.length==0}}">
 		<image style="width: 300px; height: 140px;" mode="aspectFit" src="{{src}}"></image>
 		<view style='position: absolute;right:300rpx;top:220rpx;color:white;'>{{jiarezu}}</view>
 	</view>
+	<view class='view' wx:else>
+		<view wx:for="{{fireList}}" wx:for-item="item" wx:key="key" style=' float:left'>
+			<image class="fireimage" mode="aspectFit" src="{{item.src}}"></image>
+			<text style='font-size:14px;display:block;text-align: center; '>{{item.title}}</text>
+		</view>
+	</view>
+	<view style="overflow:hidden;_zoom:1;"></view>
 	<view style='width:100%；height:75px;'>
 		<view wx:for="{{bengList}}" wx:for-item="item" wx:key="key" style='width: 100px; height:75px; float:left'>
 			<image style="width: 100px; height:50px;" mode="aspectFit" src="{{item.src}}"></image>
