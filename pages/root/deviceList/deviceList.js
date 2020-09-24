@@ -1,6 +1,6 @@
 const app = getApp();
 let map = new Map()
-
+import req from '../../../utils/Request.js'
 Page({
   data: {
     imgList: [],
@@ -54,6 +54,7 @@ Page({
       },
       success(res) {
         var httplist = res.data
+        console.log(httplist)
         if (res.data.length == 0) {
           wx.showLoading({
             title: 'Loading',
@@ -552,35 +553,11 @@ Page({
         that.setData({
           imgList: ilist
         })
-        for (var i in list) {
-          var dataMapId = list[i].dataMapId
-          if (list[i].newFrame) {
-            wx.request({
-              url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
-              data: {
-                id: dataMapId,
-              },
-              method: 'GET',
-              header: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-              },
-              success: function (res) {
-                let map = JSON.parse(res.data.data.deviceDataMap);
-                let addr = JSON.parse(res.data.data.pointIndexMap);
-                list[i].map = map
-                list[i].addr = addr
-                wx.setStorage({
-                  key: 'deviceList',
-                  data: list
-                })
-              }
-            })
-          }
-        }
+       
 
       }
     })
-  
+
     wx.getStorage({
       key: 'roleType',
       success(res) {
@@ -589,7 +566,7 @@ Page({
             url: '../deviceList/deviceList'
           })
         }
-        if (res.data ==2) {
+        if (res.data == 2) {
           wx.navigateTo({
             url: '../../customer/pages/index/index'
           })
@@ -599,7 +576,7 @@ Page({
         wx.setStorageSync('roleType', "1")
       },
     })
-   
+
 
     wx.getStorage({
       key: 'version',
@@ -889,7 +866,7 @@ Page({
   },
   onShow: function () {
     var that = this
-     wx.getStorage({
+    wx.getStorage({
       key: 'roleType',
       success(res) {
         if (res.data != 1) {
@@ -1036,6 +1013,7 @@ Page({
     } else {
       newFrame = false
     }
+
     let map = deviceNos[index].map
     let addr = deviceNos[index].addr
     var runstate = ''
@@ -1120,11 +1098,12 @@ Page({
                 var bytes = res.data
                 try {
                   if (newFrame) {
+
                     app.globalData.adapter.Init(map, addr)
                     console.log(new Uint8Array(bytes))
                     app.globalData.adapter.handlerData(new Uint8Array(bytes))
                     let device = app.globalData.adapter.Device
-                    
+                          
                     var errorList = []
                     for (var index in device.BaoJing) {
                       errorList.push({
@@ -1148,12 +1127,13 @@ Page({
                         break;
                       }
                     }
-                    if(device.Run!=null ){
+
+                    if (device.Run != null) {
                       if (device.Run.name != "") {
                         runday = device.Run.name + ":" + device.Run.vstr
                       }
                     }
-                   
+                    console.log(device.status)
                     if (device.status) {
                       runstate1 = "-" + device.status.vstr
                     }

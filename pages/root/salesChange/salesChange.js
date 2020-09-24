@@ -102,7 +102,7 @@ Page({
           enId: enId,
           cnId: cnId,
           isCanCtl: that.data.canctl,
-          iMEI: "0",
+          iMEI: "",
         },
         header: {
           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"

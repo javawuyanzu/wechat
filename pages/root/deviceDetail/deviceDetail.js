@@ -328,9 +328,7 @@ Page({
         str += that.data.controlList[i][commmd].getCommandString();
       }
     }
-    console.log(that.data.media != 0)
-    console.log(that.data.media != 3)
-    console.log(that.data.media != 0 || that.data.media != 3)
+    
     if (that.data.media != 0 & that.data.media != 3) {
       wx.showToast({
         title: '当前锅炉类型不支持远程控制',
@@ -986,9 +984,38 @@ Page({
               success: function (res) {
                 let map = JSON.parse(res.data.data.deviceDataMap)
                 let addr = JSON.parse(res.data.data.pointIndexMap)
+                wx.getStorage({
+                  key: 'deviceList',
+                  success(res) {
+                    var list = res.data
+                    for (var i in list) {
+                      if(deviceNo==list[i].deviceNo){
+                        list[i].map = map
+                        list[i].addr = addr
+                      }
+                    }
+                    wx.setStorage({
+                      key: 'deviceList',
+                      data: list
+                    })
+                  }
+                })
                 app.globalData.adapter.Init(map, addr)
                 app.globalData.adapter.handlerData(new Uint8Array(bytes))
                 let device = app.globalData.adapter.Device
+                var clist=device.KongZhi.map
+                if (JSON.stringify(clist) != '{}') {
+                  that.setData({
+                    controlList: clist,
+                    control: true,
+                  })
+                }
+                 console.log(clist)
+              //     device.KongZhi.each((k,v)=>{
+              //         console.log(k)
+              //         console.log(v)
+              //     })
+
                 var errorList = []
                 var myDate = new Date();
                 if (device.bj.length > 0) {
