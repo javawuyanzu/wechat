@@ -9,18 +9,141 @@ Page({
     seconds: "", 
     timer: '' ,
     name: '',
+    unionId:"",
     verificationCode:null,
     yanzheng:null,
     referralCode:"",
     phone: '',
+    empower:true,
     getCode: false
   },
   //事件处理函数
   onLoad: function () { 
+    var that = this
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          wx.login({
+            success: function (res) {
+              var code = res.code;//登录凭证
+              if (code) {
+                //2、调用获取用户信息接口
+                wx.getUserInfo({
+                  success: function (res) {
+                    //3.请求自己的服务器，解密用户信息 获取unionId等加密信息
+                    wx.request({
+                      url: 'https://apis.sdcsoft.com.cn/wechat/device/getUnionId',
+                      method: 'get',
+                      header: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                      },
+                      data: { encryptedData: res.encryptedData, iv: res.iv, code: code },
+                      success: function (data) {
+                        that.setData({
+                          unionId:data.data.data.unionId
+                          })
+                      },
+                      fail: function () {
+                        console.log('系统错误')
+                      }
+                    })
+                  },
+                  fail: function () {
+                    console.log('获取用户信息失败')
+                  }
+                })
+
+              } else {
+                console.log('获取用户登录态失败！' + r.errMsg)
+              }
+            },
+            fail: function () {
+              console.log('登陆失败')
+            }
+          })
+        } else {
+         that.setData({
+          empower:false
+         })
+        }
+
+      }
+    })
+  },
+  bindGetUserInfo: function (e) {
+    var that = this
+    that.setData({
+      empower:true
+    })
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          wx.login({
+            success: function (res) {
+              var code = res.code;//登录凭证
+              if (code) {
+                //2、调用获取用户信息接口
+                wx.getUserInfo({
+                  success: function (res) {
+                    //3.请求自己的服务器，解密用户信息 获取unionId等加密信息
+                    wx.request({
+                      url: 'https://apis.sdcsoft.com.cn/wechat/device/getUnionId',
+                      method: 'get',
+                      header: {
+                        'content-type': 'application/x-www-form-urlencoded'
+                      },
+                      data: { encryptedData: res.encryptedData, iv: res.iv, code: code },
+                      success: function (data) {
+                        var unionId = data.data.data.unionId
+                        app.globalData.unionId = unionId
+                        that.setData({
+                          unionId:data.data.data.unionId,
+                          empower:true
+                          })
+                        console.log(unionId)
+                      },
+                      fail: function () {
+                        console.log('系统错误')
+                      }
+                    })
+                  },
+                  fail: function () {
+                    console.log('获取用户信息失败')
+                  }
+                })
+
+              } else {
+                console.log('获取用户登录态失败！' + r.errMsg)
+              }
+            },
+            fail: function () {
+              console.log('登陆失败')
+            }
+          })
+
+        } else {
+          console.log('获取用户信息失败')
+        }
+
+      }
+    })
+  },
+  refusedEmpower: function () {
+    wx.switchTab({
+      url: '../../../root/index/index'
+    })
   },
   getNewCode: function () {
     let that=this
-    if(that.data.phone==""||that.data.phone==null){
+    if (!(/^1[34578]\d{9}$/.test(that.data.phone))) {
+      wx.showToast({
+        title: '手机号有误',
+        icon: 'success',
+        duration: 2000
+      })
+    
+  } 
+   else if(that.data.phone==""||that.data.phone==null){
        wx.showToast({
                         title:  "请输入手机号",
                         icon:  'none',
@@ -89,18 +212,11 @@ Page({
   },
   loginPhone: function (e) {
     let phone = e.detail.value;
-    if (!(/^1[34578]\d{9}$/.test(phone))) {
-        wx.showToast({
-          title: '手机号有误',
-          icon: 'success',
-          duration: 2000
-        })
-      
-    } else{
+   
       this.setData({
         phone: phone
       })
-    }
+    
   },
   yanZhengInput: function (e) {
    
@@ -121,6 +237,7 @@ Page({
           invCode: that.data.referralCode,
           openId: app.globalData.customer.openId,
           userName: that.data.name,
+          unionId:that.data.unionId,
           mobile: that.data.phone
         },
         method: 'post',

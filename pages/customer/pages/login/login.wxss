@@ -31,3 +31,58 @@
   width: 70%;
    margin-left: 15%;  
 }
+.toast-box {
+   width: 100%;
+   height: 100%;
+   opacity: 1;
+   position: fixed;
+   top: 0px;
+   left: 0px;
+ }
+ .toastbg {
+   opacity: 0.2;
+   background-color: black;
+   position: absolute;
+   width: 100%;
+   min-height: 100vh;
+ }
+
+ .showToast {
+   position: absolute;
+   opacity: 1;
+   width: 70%; 
+   margin-left: 15%;
+   margin-top: 40%;
+ }
+  
+ 
+ .toastbg {
+   opacity: 0.2;
+   top:0;  
+   background-color: black;
+   overflow: hidden;   
+   /*要显示在wrap的上面 */   
+   z-index: 1;   
+   position: fixed;  
+   width: 100%;
+   min-height: 100vh;
+ }
+ .showToast {
+   z-index: 50;   
+   position: fixed;
+   width: 54%;
+  left: 13%;
+   top: 17%;
+ }
+ .toast-title {
+   background-color: white;
+ }
+.toast-button {
+   display: flex;
+ }
+ .button1 {
+   width: 50%;
+ }
+ .button2 {
+   width: 50%;
+ }

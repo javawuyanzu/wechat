@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/root/deviceList/deviceList",
+    "pages/login/login",
     "pages/root/index/index",
     "pages/root/help/help",
     "pages/root/help/videoList",
@@ -11,7 +12,6 @@
     "pages/root/soldUpdate/soldUpdate",
     "pages/root/salesChange/salesChange",
     "pages/root/dataMapList/dataMapList",
-    "pages/login/login",
     "pages/root/contactUs/contactUs",
     "pages/repair/repair",
     "pages/root/operation/operation",

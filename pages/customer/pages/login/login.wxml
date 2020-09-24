@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class='popup-container'>
+<view  class='popup-container'>
   <view style="width: 100%; margin-left: 10px;">
 <view style="font-size: 15px; padding-top: 10rpx;">推荐码： </view><input  style="height: 30px; width: 90%;border:1px solid #efefef" bindinput="referralCodeInput" />
   </view>
@@ -9,7 +9,7 @@
   </view>
 
 <view style=" margin-top: 40rpx;width: 100%; margin-left: 10px;">
-<view style="  font-size: 15px; padding-top: 10rpx;">手机号： </view><input type="number" maxlength="11" style=" height: 30px; width: 90%;border:1px solid #efefef" bindblur="loginPhone" />
+<view style="  font-size: 15px; padding-top: 10rpx;">手机号： </view><input type="number" maxlength="11" style=" height: 30px; width: 90%;border:1px solid #efefef" bindinput="loginPhone" />
   </view>
 
 
@@ -19,4 +19,20 @@
   </view>
 
    <button class="quenyButton1" bindtap='addButton'>确定</button>
+  </view>
+
+
+  <view hidden='{{empower}}' class='toastbg'></view>
+  <view hidden='{{empower}}' class='showToast'>
+    <view class='toast-title'>
+      <text>提示</text>
+    </view>
+    <view class='toast-button'>
+      <view class='button1'>
+        <button catchtap='refusedEmpower'>拒绝授权</button>
+      </view>
+      <view class='button2'>
+         <button wx:if="{{true}}" open-type="getUserInfo"  bindgetuserinfo="bindGetUserInfo" style="">允许授权</button>
+      </view>
+    </view>
   </view>
