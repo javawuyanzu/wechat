@@ -187,6 +187,9 @@ var SdcSoftDevice2 = /** @class */ (function () {
     SdcSoftDevice2.prototype.getBeng = function () {
         var elements = [];
         var group = this.atMap.getItem(DeviceAdapter2_1.DeviceAdapter2.Formate_Field_AT_Class_Beng);
+        console.log('-----------aaaaaa-------------');
+        console.log(this.atMap);
+        console.log('------------aaaaaa------------');
         for (var i = 0; i < group.length; i++) {
             var el = new Element_1.Element();
             el.Title = group[i].name;
