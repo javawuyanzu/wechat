@@ -25,13 +25,13 @@
     </view>
   </picker>
 </view>
-
-</view>
-<view class="section">
-<view style="width: 15%; font-size: 15px; padding-left: 3%">地址：</view><textarea style=" width: 55%; border:1px solid #efefef; "  auto-height="true" disabled="{{show}}" value="{{conent}}" bindblur="atuoGetLocation" />
+<view class="section1">
+<view style="width: 15%; font-size: 15px; padding-left: 3%">地址：</view><input style=" width: 55%; border:1px solid #efefef; display: flex; "  disabled="{{show}}" value="{{conent}}" bindblur="atuoGetLocation" />
 <button   class="quenyButton">搜索</button>
 
 </view>
+</view>
+
 <view>
 <map id="map" longitude="117.141411" latitude="36.199445" scale="5" controls="{{controls}}" bindcontroltap="controltap" bindtap="getLocation"  markers="{{markers}}" bindmarkertap="markertap" bindregionchange="regionchange"  style="width: 100%; height: 350px;"></map>
 </view>

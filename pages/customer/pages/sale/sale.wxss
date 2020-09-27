@@ -3,7 +3,7 @@
 .selectmenu{
     bottom: 0rpx;
    width: 100%;
-  height: 20%;
+  height: 30%;
 
 }
 .bumenu{
@@ -83,7 +83,7 @@
  top: 70rpx;
  width: 55%;
  box-sizing: border-box;
- height: 0;
+ height: 20%;
  overflow-y: auto;
  border-top: 0;
  background: #fff;
@@ -94,6 +94,13 @@
  line-height: 40rpx;
  font-size: 30rpx;
  padding: 10rpx;
+}
+.section1{
+  margin-top: 13%;
+  display: flex;
+ width: 100%;
+  height: 19%;
+  font-size: 35rpx;
 }
 
 
