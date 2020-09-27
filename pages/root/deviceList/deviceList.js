@@ -1103,7 +1103,6 @@ Page({
                     console.log(new Uint8Array(bytes))
                     app.globalData.adapter.handlerData(new Uint8Array(bytes))
                     let device = app.globalData.adapter.Device
-                          
                     var errorList = []
                     for (var index in device.BaoJing) {
                       errorList.push({

@@ -20,6 +20,7 @@ Page({
     imgstyle: '',
     deviceNo: '',
     src: '',
+    newkz_v:null,
     errorList: [],
     baseInfoMap: [],
     mockInfoMap: [],
@@ -230,13 +231,18 @@ Page({
   },
   editData: function (e) {
     var that = this;
+    if(that.data.newFrame=='true'){
+      that.setData({
+        newkz_v: e.currentTarget.dataset.v
+      })
+    }
     that.setData({
       ifedit: true,
       index: e.currentTarget.dataset.index,
       index1: e.currentTarget.dataset.index1,
       inputmin: e.currentTarget.dataset.min,
       inputmax: e.currentTarget.dataset.max,
-      placeholder: that.data.content.detail_pl1 + e.currentTarget.dataset.min + '-' + e.currentTarget.dataset.max + that.data.content.detail_pl2,
+      placeholder: "请输入要设置的数值",
     })
   },
   cancel: function (e) {
@@ -254,28 +260,30 @@ Page({
   },
   confirm: function (e) {
     var that = this;
-    if (that.data.inputmax < that.data.inputvalue || that.data.inputmin > that.data.inputvalue) {
-      wx.showToast({
-        title: that.data.content.detail_pl1 + that.data.inputmin + '-' + that.data.inputmax + that.data.content.detail_pl2,
-        icon: 'none',
-        duration: 2000
-      })
-    } else {
-      let cList = []
-      cList = that.data.controlList
-      //console.log(cList)
+    // if (that.data.inputmax < that.data.inputvalue || that.data.inputmin > that.data.inputvalue) {
+    //   wx.showToast({
+    //     title: that.data.content.detail_pl1 + that.data.inputmin + '-' + that.data.inputmax + that.data.content.detail_pl2,
+    //     icon: 'none',
+    //     duration: 2000
+    //   })
+    // } else {
+    
+    // }
+    let cList = []
+    cList = that.data.controlList
+    if(that.data.newFrame=='true'){
+      let temp = cList[that.data.index+""][that.data.index1].ctls[[that.data.newkz_v]]
+      temp.v=parseFloat(that.data.inputvalue)
+      console.log(temp)
+    }else{
       let temp = cList[that.data.index][that.data.index1];
-
       temp.setValue(parseFloat(that.data.inputvalue))
-      // cList[index].splice(that.data.index, 1);
-      // cList[index].push(temp)
-      that.setData({
-        controlList: cList,
-        ifedit: false,
-        'inputValue': ''
-      })
     }
-
+    that.setData({
+      controlList: cList,
+      ifedit: false,
+      'inputValue': ''
+    })
   },
   editMoble: function () {
     var that = this
@@ -323,11 +331,23 @@ Page({
   formSubmit: function (e) {
     var that = this
     let str = ''
-    for (var i in that.data.controlList) {
-      for (var commmd in that.data.controlList[i]) {
-        str += that.data.controlList[i][commmd].getCommandString();
+    if(that.data.newFrame=='true'){
+      for (var i in that.data.controlList) {
+        for (var commmd in that.data.controlList[i]) {
+          console.log(that.data.controlList[i][commmd])
+          console.log(that.data.controlList[i][commmd].Command)
+          str += that.data.controlList[i][commmd].Command;
+        }
+      }
+     
+    }else{
+      for (var i in that.data.controlList) {
+        for (var commmd in that.data.controlList[i]) {
+          str += that.data.controlList[i][commmd].getCommandString();
+        }
       }
     }
+    console.log(str)
     
     if (that.data.media != 0 & that.data.media != 3) {
       wx.showToast({
@@ -427,7 +447,7 @@ Page({
 
     }
     //console.log(that.data.controlList)
-    console.log(str)
+    //console.log(str)
   },
 
   navbarTap: function (e) {
@@ -687,7 +707,6 @@ Page({
             }
 
             if (munu == that.data.content.detail_deviceword) {
-              console.log(i)
               that.setData({
                 deviceword: i
               })
@@ -788,7 +807,7 @@ Page({
 
       }
     }
-
+   
   },
   subTopic: function (topic) {
     var client = app.globalData.client;
@@ -970,7 +989,6 @@ Page({
         responseType: 'arraybuffer',
         success: function (res) {
           var bytes = res.data
-          console.log(that.data.newFrame)
           if (that.data.newFrame == "true") {
             wx.request({
               url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
@@ -1004,13 +1022,13 @@ Page({
                 app.globalData.adapter.handlerData(new Uint8Array(bytes))
                 let device = app.globalData.adapter.Device
                 var clist=device.KongZhi.map
+          
                 if (JSON.stringify(clist) != '{}') {
                   that.setData({
                     controlList: clist,
                     control: true,
                   })
                 }
-                 console.log(clist)
               //     device.KongZhi.each((k,v)=>{
               //         console.log(k)
               //         console.log(v)
