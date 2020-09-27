@@ -128,7 +128,7 @@ var DeviceAdapter2 = /** @class */ (function () {
         this.countMap = [];
     };
     DeviceAdapter2.prototype.Init2 = function () {
-        this.deviceNo = 0; //清理站号
+        this.deviceNo = -1; //清理站号
         this.device = new SdcSoftDevice2_1.SdcSoftDevice2();
         this.valueMap.clear();
         this.atMapCount.clear();
@@ -588,10 +588,12 @@ var DeviceAdapter2 = /** @class */ (function () {
         return false;
     };
     DeviceAdapter2.prototype.handleKongZhiField = function (key, field, fieldsCount, ctlTyp, num, value, unit) {
-        if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Ctl)) {
+        if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Kz)) {
             var keyNum = parseInt(key);
             // 如果是可控点位
-            var group = field[DeviceAdapter2.Formate_Field_Option_Ctl][DeviceAdapter2.Formate_Field_Option_Ctl_Group];
+            var group = field[DeviceAdapter2.Formate_Field_Option_Kz][DeviceAdapter2.Formate_Field_Option_Ctl_Group];
+            var addr = field[DeviceAdapter2.Formate_Field_Option_Kz][DeviceAdapter2.Formate_Field_Option_Ctl_Addr];
+            //console.log("group->"+group);
             if (fieldsCount > 1) {
                 //如果是单点多可控位
                 if (keyNum < 10000) {
@@ -607,7 +609,12 @@ var DeviceAdapter2 = /** @class */ (function () {
                     ctlItem.Name = field[DeviceAdapter2.Formate_Field_Option_Name];
                     ctlItem.Bit = bit;
                     ctlItem.Value = num & (1 << field[DeviceAdapter2.Formate_Field_Option_Bit]);
-                    this.mCtlField.Address = NumberUtil_1.NumberUtil.NumberToString(keyNum - 1 + bit, 16, 4);
+                    if (addr) {
+                        this.mCtlField.Address = addr;
+                    }
+                    else {
+                        this.mCtlField.Address = NumberUtil_1.NumberUtil.NumberToString(keyNum - 1 + bit, 16, 4);
+                    }
                     this.mCtlField.addCtlItem(ctlItem);
                     if (this.count == fieldsCount) {
                         this.device.AddKongZhiItem(group, this.mCtlField);
@@ -624,8 +631,13 @@ var DeviceAdapter2 = /** @class */ (function () {
                         this.mCtlField.Typ = Fields_1.CtlField.CTL_TYPE_UINT;
                         this.mCtlField.Action = Fields_1.CtlField.CTL_ACTION_REG;
                         this.mCtlField.Value = num;
-                        var adds = keyNum - 40001;
-                        this.mCtlField.Address = NumberUtil_1.NumberUtil.NumberToString(adds, 16, 4);
+                        if (addr) {
+                            this.mCtlField.Address = addr;
+                        }
+                        else {
+                            var adds = keyNum - 40001;
+                            this.mCtlField.Address = NumberUtil_1.NumberUtil.NumberToString(adds, 16, 4);
+                        }
                     }
                     var ctlItem = new Fields_1.CtlItem();
                     ctlItem.Name = field[DeviceAdapter2.Formate_Field_Option_Name];
@@ -646,13 +658,18 @@ var DeviceAdapter2 = /** @class */ (function () {
                     var ctlField = new Fields_1.CtlField();
                     ctlField.No = this.deviceNo;
                     ctlField.Typ = Fields_1.CtlField.CTL_TYPE_BYTE;
-                    var adds = keyNum - 1;
-                    ctlField.Address = NumberUtil_1.NumberUtil.NumberToString(adds, 16, 4);
+                    if (addr) {
+                        ctlField.Address = addr;
+                    }
+                    else {
+                        var adds = keyNum - 1;
+                        ctlField.Address = NumberUtil_1.NumberUtil.NumberToString(adds, 16, 4);
+                    }
                     ctlField.Action = Fields_1.CtlField.CTL_ACTION_COI;
                     ctlField.Value = num;
                     var ctlItem = new Fields_1.CtlItem();
                     ctlItem.Name = field[DeviceAdapter2.Formate_Field_Option_Name];
-                    ctlItem.Description = field[DeviceAdapter2.Formate_Field_Option_Ctl].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Description] : '';
+                    ctlItem.Description = field[DeviceAdapter2.Formate_Field_Option_Kz].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Description] : '';
                     ctlItem.Value = ctlField.Value;
                     ctlField.addCtlItem(ctlItem);
                     this.device.AddKongZhiItem(group, ctlField);
@@ -661,8 +678,13 @@ var DeviceAdapter2 = /** @class */ (function () {
                     var ctlField = new Fields_1.CtlField();
                     ctlField.No = this.deviceNo;
                     ctlField.Typ = ctlTyp;
-                    var adds = keyNum - 40001;
-                    ctlField.Address = NumberUtil_1.NumberUtil.NumberToString(adds, 16, 4);
+                    if (addr) {
+                        ctlField.Address = addr;
+                    }
+                    else {
+                        var adds = keyNum - 40001;
+                        ctlField.Address = NumberUtil_1.NumberUtil.NumberToString(adds, 16, 4);
+                    }
                     if (Fields_1.CtlField.CTL_TYPE_UINT == ctlTyp) {
                         ctlField.Action = Fields_1.CtlField.CTL_ACTION_REG;
                     }
@@ -674,7 +696,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                     var ctlItem = new Fields_1.CtlItem();
                     ctlItem.Name = field[DeviceAdapter2.Formate_Field_Option_Name];
-                    ctlItem.Description = field[DeviceAdapter2.Formate_Field_Option_Ctl].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Key_KongZhi][DeviceAdapter2.Formate_Field_Option_Description] : '';
+                    ctlItem.Description = field[DeviceAdapter2.Formate_Field_Option_Kz].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Field_Option_Kz][DeviceAdapter2.Formate_Field_Option_Description] : '';
                     //设置控制点位在UI初始化是显示的数值
                     ctlItem.Value = value;
                     //设置控制点位在UI初始化是显示的单位
@@ -744,6 +766,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                                 continue;
                             }
                             else if ((num & mask) == mask) {
+                                //console.log('haha->' + key)
                                 continue;
                             }
                         }
@@ -1077,7 +1100,7 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.Formate_Field_Option_Ses_Min = 'lmin'; //点位量程最小值
     DeviceAdapter2.Formate_Field_Option_Ses_Max = 'lmax'; //点位量程最大值
     DeviceAdapter2.Formate_Field_Option_Description = 'desc';
-    DeviceAdapter2.Formate_Field_Option_Ctl = 'kz';
+    DeviceAdapter2.Formate_Field_Option_Kz = 'kz';
     DeviceAdapter2.Formate_Field_Option_Ctl_Mode = 'mode';
     DeviceAdapter2.Formate_Field_Option_Ctl_Addr = 'addr';
     DeviceAdapter2.Formate_Field_Option_Ctl_Min = 'min';
@@ -1109,4 +1132,3 @@ var DeviceAdapter2 = /** @class */ (function () {
     return DeviceAdapter2;
 }());
 exports.DeviceAdapter2 = DeviceAdapter2;
-//增加长整数，0，1开始的点位

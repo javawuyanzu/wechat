@@ -100,11 +100,9 @@ page{
   background:#27c79a; 
 }
 .section_top{
-  height:40px;
-  font-size:16px;
+  height:5px;
   background:#eee;
   width:100%;
-  line-height:40px;
 }
 .section{
   height:30px;

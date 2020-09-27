@@ -447,7 +447,38 @@
 			</form>
 		</view>
 		<view wx:else>
-		
+					<form bindsubmit="formSubmit" bindreset="formReset">
+				<block wx:for="{{controlList}}" wx:for-item="item" wx:key="key" wx:for-index="index">
+					<view wx:if="{{item.length>0}}">
+						<block wx:for="{{item}}" wx:for-item="item1" wx:key="key" wx:for-index="index1">
+								<block wx:for="{{item1.ctls}}" wx:for-item="kz" wx:key="k" wx:for-index="v">
+									<view class="section" catchtap='editData' data-index="{{index}}" data-index1="{{index1}}" data-v="{{v}}"  data-max="{{kz.max}}" data-min="{{kz.min}}">
+										<label style='display:block;float:left;'>{{kz.name}}：</label>
+										
+										<image style="width: 42rpx; height: 42rpx;float:right;" src="../../../images/right.png"></image>
+										<label style='display:block;float:right;'>{{kz.v}}{{kz.unit}}</label>
+									</view>
+									<view wx:if="{{kz.desc.length!=0}}" style='display: block;margin-top: -35rpx;margin-left: 30rpx;font-size: 12px;'>{{kz.desc}}</view>
+						</block>
+					
+							<!-- <view wx:if="{{item1.valueType==5|| item1.valueType==6}}">
+								<view class="section_time">
+									<label style='display:block;float:left;'>{{content.detail_startstopcontrol}}：</label>
+									<label style='display:block;float:right;'>{{content.detail_yunxing}}</label>
+									<switch style='zoom:.9;float:right;margin-top:-4px;' data-index="{{index}}" data-index1="{{index1}}" checked="{{item1.valueString=='2'||item1.valueString=='3' ?'true':''}}" bindchange="switchChange" />
+									<label style='display:block;float:right;margin-right: 10rpx;'>{{content.detail_daiming}}</label>
+								</view>
+							</view> -->
+						
+						</block>
+					</view>
+						<view class="section_top"></view>
+				</block>
+			
+				<view class="btn-area">
+					<button formType="submit" type="primary">{{content.detail_nowzhixing}}</button>
+				</view>
+			</form>
 		</view>
 	</view>
 </view>
