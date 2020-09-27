@@ -1,7 +1,7 @@
 <!--index.wxml-->
 <view  class='popup-container'>
   <view style="width: 100%; margin-left: 10px;">
-<view style="font-size: 15px; padding-top: 10rpx;">推荐码： </view><input  style="height: 30px; width: 90%;border:1px solid #efefef" bindinput="referralCodeInput" />
+<view style="font-size: 15px; padding-top: 10rpx;">邀请码： </view><input  style="height: 30px; width: 90%;border:1px solid #efefef" bindinput="referralCodeInput" />
   </view>
 
 <view style="margin-top: 40rpx;width: 100%; margin-left: 10px;">
