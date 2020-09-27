@@ -334,8 +334,6 @@ Page({
     if(that.data.newFrame=='true'){
       for (var i in that.data.controlList) {
         for (var commmd in that.data.controlList[i]) {
-          console.log(that.data.controlList[i][commmd])
-          console.log(that.data.controlList[i][commmd].Command)
           str += that.data.controlList[i][commmd].Command;
         }
       }
