@@ -1,5 +1,5 @@
 const util = require('../../utils/util.js')
-import QQMapWX from '../../utils/qqmap-wx-jssdk.js';
+import {QQMapWX} from '../../utils/qqmap-wx-jssdk.js';
 const app = getApp()
 Page({
 
