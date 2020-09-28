@@ -25,18 +25,28 @@ Page({
         { id: 7, title: "锅炉管理系统大数据", src: "l0972e6hew2" },
         { id: 8,title: "锅炉管理系统监控功能", src: "e0972drfiu0" },
       ],
+      wechatcustomer: [
+        { id: 1,title: "微信锅炉厂操作", src: "o3156vz1qan" },
+        { id: 2,title: "微信锅炉厂注册", src: "w3156tpak5t" }
+      ],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-     var that=this
+     var that=this 
     if(options.title=='wechat'){
       that.setData({
         title:"微信小程序视频讲解",
         engTitle:"WeChat Video Help",
         videoList:that.data.wechat
+      })
+    }else if(options.title=='wechatcustomer'){
+      that.setData({
+        title:"微信小程序锅炉厂管理视频讲解",
+        engTitle:"WeChat Customer Video Help",
+        videoList:that.data.wechatcustomer
       })
     }else{
       that.setData({
