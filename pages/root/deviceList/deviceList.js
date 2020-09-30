@@ -1132,10 +1132,11 @@ Page({
                         runday = device.Run.name + ":" + device.Run.vstr
                       }
                     }
-                    console.log(device.status)
+                   
                     if (device.status) {
                       runstate1 = "-" + device.status.vstr
                     }
+                    console.log(device.getStoveElements())
                     if (device.getStoveElements().length > 0) {
                       var el = device.getStoveElements()[0].values
                       var stove = device.getStoveElements()[0].prefix
@@ -1144,6 +1145,7 @@ Page({
                           stove = stove + "-" + el[i]
                         }
                       }
+                      console.log(stove)
                       src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     }
                     var ilist = that.data.imgList

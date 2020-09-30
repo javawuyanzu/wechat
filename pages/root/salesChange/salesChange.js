@@ -31,6 +31,7 @@ Page({
     datamaptyp: 0,
     deviceDataMaparray: ["否", "是"],
     deviceDataMap: 0,
+    iccid:""
   },
   bindsim: function (e) {
     this.setData({
@@ -49,7 +50,7 @@ Page({
         cnId=""
       }
     if (that.data.comm==0){
-      if (typeof (that.data.sim) == "undefined" || that.data.sim == '898607B61518900') {
+      if (typeof (that.data.sim) == "undefined" || that.data.sim == that.data.iccid) {
         wx.showToast({
           title: "请补全Sim卡号",
           icon: 'none',
@@ -249,7 +250,6 @@ Page({
                 for(var i in list){
                   console.log(datamapId)
                   if(datamapId!=null){
-                    console.log(list[i].id)
                     if(datamapId==list[i].id){
                       that.setData({
                         datamapName:list[i].title
@@ -292,7 +292,7 @@ Page({
             }
             var simtemp=""
             if (res.data.data.iMEI == null || res.data.data.iMEI =='null' || res.data.data.iMEI =='0'){
-              simtemp ="898607B61518900"
+              simtemp = that.data.iccid
               that.setData({
                 comm:1
               })
@@ -345,6 +345,18 @@ Page({
            
            
           }
+        })
+      }
+    })
+    wx.request({
+      url: 'https://apis.sdcsoft.com.cn/wechat/iccid/get',
+      method: "Get",
+      data: {
+      },
+      success: function (res) {
+        
+        that.setData({
+          iccid:res.data
         })
       }
     })
