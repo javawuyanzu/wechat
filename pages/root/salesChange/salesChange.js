@@ -78,16 +78,24 @@ Page({
         method: 'GET',
         success: function (res) {
           console.log(res)
-          wx.showToast({
-            title: '修改成功',
-            icon: 'success',
-            duration: 2000,
-            success(res) {
-              wx.switchTab({
-                url: '../index/index'
-              })
-            }
-          });
+          if(res.data.code==0){
+            wx.showToast({
+              title: '修改成功',
+              icon: 'success',
+              duration: 2000,
+              success(res) {
+                wx.switchTab({
+                  url: '../index/index'
+                })
+              }
+            });
+          }else{
+            wx.showToast({
+              title: 'Sim卡号不存在，请联系管理员',
+              icon: 'none',
+              duration: 2000
+            });
+          }
         }
       })
     }else{

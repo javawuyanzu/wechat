@@ -144,6 +144,12 @@ var SdcSoftDevice2 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    SdcSoftDevice2.prototype.AddKongZhiGroup = function (group) {
+        if (!this.ctl.containsKey(group)) {
+            this.ctl.addItem(group, []);
+        }
+        return this.ctl.getItem(group);
+    };
     SdcSoftDevice2.prototype.AddKongZhiItem = function (group, ctlItem) {
         if (!this.ctl.containsKey(group)) {
             this.ctl.addItem(group, []);

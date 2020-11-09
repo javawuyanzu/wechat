@@ -84,9 +84,9 @@ module.exports = /** @class */ (function (_super) {
         _this.addPoint(new meta_1.SettingField('se_tingluyalisheding', 256, 4, '停炉压力设定', 'MPa'));
         _this.addPoint(new meta_1.SettingField('se_chaoyabaojingyalisheding', 260, 4, '超压报警压力设定', 'MPa'));
         _this.addPoint(new meta_1.SettingField('se_paiyanchaowenbaojing', 264, 4, '排烟超温报警', '℃'));
-        _this.addPoint(new meta_1.SettingField('se_guolushuiweimubiaosheding', 268, 4, '锅炉水位目标设定', 'mm'));
-        _this.addPoint(new meta_1.SettingField('se_guolushuiweijigaobaojingsheding', 272, 4, '锅炉水位极高报警设定', 'mm'));
-        _this.addPoint(new meta_1.SettingField('se_guolushuiweijidibaojingsheding', 276, 4, '锅炉水位极低报警设定', 'mm'));
+        _this.addPoint(new meta_1.SettingField('se_guolushuiweimubiaosheding', 268, 4, '锅炉水位目标设定', '%'));
+        _this.addPoint(new meta_1.SettingField('se_guolushuiweijigaobaojingsheding', 272, 4, '锅炉水位极高报警设定', '%'));
+        _this.addPoint(new meta_1.SettingField('se_guolushuiweijidibaojingsheding', 276, 4, '锅炉水位极低报警设定', '%'));
         _this.addPoint(new meta_1.SettingField('se_addshuibengshoudongpinlüsheding', 280, 4, '给水泵手动频率设定', 'Hz'));
         _this.addPoint(new meta_1.SettingField('se_chuyangqibushuimubiaosheding', 284, 4, '除氧器补水目标设定', 'mm'));
         _this.addPoint(new meta_1.SettingField('se_chuyangqijigaobaojingsheding', 288, 4, '除氧器极高报警设定', 'mm'));
