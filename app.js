@@ -1,10 +1,13 @@
 const app = getApp();
 var openid='';
 import './vendor/weapp-cookie/index'
+import mqtt from '/libs/mqtt/mqtt.js'
+import {
+  Wechat_DeviceAdapter
+} from '/libs/devices-lib/index.js'
+var deviceAdapter = Wechat_DeviceAdapter.setLang('zh-cn');
 
-
-
-import { DeviceAdapter, ComValueMap,Endian} from '/libs/devicelib/index.js';
+import { DeviceAdapter, ComValueMap,Endian} from '/libs/datamap/index.js';
 let adapter = new DeviceAdapter()
 App({
   data: {},
@@ -40,7 +43,63 @@ App({
       })
     }
   },
+  conmqtt: function () {
+    var that = this
+    return new Promise(function (resolve, reject) {
+      wx.login({
+        success: function (res) {
+          wx.request({
+            //获取openid接口  
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+            data: {
+              js_code: res.code,
+            },
+            method: 'GET',
+            success: function (res) {
+              openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+              var options = {
+                keepalive: 30,
+                clientId: openid,
+                protocolId: 'MQTT',
+                protocolVersion: 4,
+                clean: true,
+                reconnectPeriod: 1000,
+                connectTimeout: 30 * 1000,
+                rejectUnauthorized: false
+              }
+              var client = mqtt.connect('wxs://rancher.sdcsoft.com.cn:443/mqtt', options);
+             
+              that.globalData.client = client
+              client.on('error', function (err) {
+                console.log(err)
+                client.end()
+              });
+              client.on('connect', function () {
+                console.log('client connected:' + options.clientId)
+                resolve("200")
+              })
+              client.on('packetsend', function (packet) {
+                //console.log(packet)
+              })
+              client.on('close', function (e) {
+                console.log(e)
+                console.log(options.clientId + ' disconnected');
+                client.reconnect();
+              })
+              client.on('message', function (topic, message, packet) {
+                for (var i in that.globalData.callBack) {
+                  if (that.globalData.callBack[i]) {
+                    that.globalData.callBack[i](topic, message);
+                  }
+                }
+              })
+            }
+          })
+        }
+      })
  
+    })
+  },
  
   onLaunch: function () {
     var that = this
@@ -81,6 +140,7 @@ App({
     powerArray:ComValueMap.power,
     mediaArray:ComValueMap.media,
     adapter:adapter,
+    deviceAdapter: deviceAdapter,
     lang: 'zh-cn',
     client: null,
     callBack: [null, null],
