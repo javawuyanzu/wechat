@@ -45,7 +45,7 @@ Page({
    
     wx.request({
       //获取openid接口   
-      url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/customer/list',
+      url: 'https://apis.sdcsoft.com.cn/webapi/enterprise/customer/list',
       data: {
         pageNum: 1,
         pageSize: 1000
@@ -236,7 +236,7 @@ wx.request({
   },
   atuoGetLocation(e) {
     let that = this
-     qqmapsdk= new QQMapWX({
+     qqmapsdk = new QQMapWX({
       key: that.data.key // 必填
     });
     let arr = []
@@ -282,7 +282,7 @@ wx.request({
     let that=this
     wx.request({
       //获取openid接口   
-      url: 'https://apis.sdcsoft.com.cn/webapi/boilermanage/product/sell',
+      url: 'https://apis.sdcsoft.com.cn/webapi/enterprise/product/sell',
       data:that.data.product ,
       method: 'post',
       success: function (res) {

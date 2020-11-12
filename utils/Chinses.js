@@ -65,6 +65,7 @@ var Chinese = {
   warningType_exType: "报警方式",
   myOrder_exType: "我的订单",
   boilerManagement_exType: "锅炉管理",
+  enterpriseManagement_exType: "企业管理",
   warningType_nowChoose: "当前选择：",
   warningType_updatesuccess: "修改成功",
   lanuage_title: "选择语言",

@@ -1,0 +1,83 @@
+
+
+<view  class="bumenu">
+ 
+ <view class='select_box1'>
+   <view style="font-size: 15px; padding-top: 10rpx;"> 锅炉型号：</view>
+ <view class='select1' catchtap='selectTap1'>
+  <text class='select_text1'>{{productType[index1].name}}</text>
+  <image class='select_img1 {{show1&&"select_img_rotate1"}}' src='../../images/customer/xia.png'></image>   
+ </view>
+ <view class='option_box1' style='height:{{show1?(productType.length>5?300:productType.length*60):0}}rpx;'>
+  <text class='option1' style='{{index==productType.length-1&&"border:0;"}}' wx:for='{{productType}}' wx:key='this' data-index='{{index}}' data-bean="{{item}}" catchtap='optionTap1'>{{item.name}}</text>
+ </view>
+</view>
+
+ <view class='select_box2'>
+   <view style=" font-size: 15px;padding-top: 10rpx; "> 燃料：</view>
+ <view class='select2' catchtap='selectTap2'>
+  <text class='select_text2'>{{fuelList[index2].label}}</text>
+  <image class='select_img2 {{show2&&"select_img_rotate2"}}' src='../../images/customer/xia.png'></image>   
+ </view>
+ <view class='option_box2' style='height:{{show2?(fuelList.length>5?300:fuelList.length*60):0}}rpx;'>
+  <text class='option2' style='{{index==fuelList.length-1&&"border:0;"}}' wx:for='{{fuelList}}' wx:key='this' data-index='{{index}}' data-bean="{{item}}" catchtap='optionTap2'>{{item.label}}</text>
+ </view>
+</view>
+
+ <view class='select_box3'>
+   <view style=" font-size: 15px; padding-top: 10rpx;  "> 介质：</view>
+ <view class='select3' catchtap='selectTap3'>
+  <text class='select_text3'>{{mediuList[index3].label}}</text>
+  <image class='select_img3 {{show3&&"select_img_rotate3"}}' src='../../images/customer/xia.png'></image>   
+ </view>
+ <view class='option_box3' style='height:{{show3?(mediuList.length>5?300:mediuList.length*60):0}}rpx;'>
+  <text class='option3' style='{{index==mediuList.length-1&&"border:0;"}}' wx:for='{{mediuList}}' wx:key='this' data-index='{{index}}' data-bean="{{item}}" catchtap='optionTap3'>{{item.label}}</text>
+ </view>
+</view>
+
+ <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
+  <view style=" font-size: 15px; padding-top: 10rpx;"> 锅炉编号：</view>
+ <input class="input" value="{{product.boilerNo}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
+    bindinput="boilerNoInput"/>
+ </view>
+ 
+ <view wx:if="{{title!='编辑'}}" style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
+  <view style=" font-size: 15px; padding-top: 10rpx;"> 控制器/柜：</view>
+  <view style="width: 100%; display: flex;  padding-top: 10rpx;">
+    <input class="input" value="{{product.controllerNo}}" style="height:30px; border:1px solid #efefef;width: 70%" type="number"  
+    bindinput="controllerNoInput"/>
+    <button class="quenyButton" bindtap='addDevice'>扫一扫</button>
+  </view>
+ 
+ </view>
+
+ <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
+  <view style="  font-size: 15px; padding-top: 10rpx; "> 吨位：</view>
+ <input class="input" value="{{product.tonnageNum}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
+    bindinput="tonnageNumInput"/>
+ </view>
+ <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
+  <view style="  font-size: 15px; padding-top: 10rpx; "> 维保周期(月)：</view>
+ <input class="input" value="{{product.serviceCycle}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
+    bindinput="serviceCycleInput"/>
+ </view>
+ <view style="width: 80%;margin-top: 20rpx; margin-left: 10%;">
+  <view style=" font-size: 15px; padding-top: 10rpx; "> 锅炉名称：</view>
+ <input class="input" value="{{product.boilerName}}" style="height:30px; border:1px solid #efefef;width: 100%" type="text"  
+    bindinput="boilerNameInput"/>
+ </view>
+ <view style="width: 80%;margin-top: 20rpx; font-size: 15px;margin-left: 10%;">
+  <view class="section__title">质保到期时间：</view>
+  <picker mode="date" value="{{product.serviceEndDate}}" bindchange="bindDateChange">
+    <view style=" border:1px solid #efefef;width: 100%;height:30px"  class="picker">
+      {{product.serviceEndDate}}
+    </view>
+  </picker>
+</view>
+ <view style="width: 80%;margin-top: 20rpx;margin-left: 10%;">
+  <view style="  font-size: 15px;  padding-top: 10rpx; ">备注：</view>
+ <textarea class="input" auto-height="true" value="{{product.mark}}" style="  border:1px solid #efefef;width: 100%"   
+    bindinput="markInput"/>
+ </view>
+<button class="quenyButton1" bindtap='quenyButton1'>确定</button>
+</view>

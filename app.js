@@ -162,6 +162,16 @@ App({
       roleId: null,
       roleName: null,
       listResource: []
+    },
+    enterprise:{
+      orgId: null,
+      employeeId: null,
+      userName: null,
+      userId: null,
+      openId: null,
+      roleId: null,
+      roleName: null,
+      listResource: []
     }
   },
 })
