@@ -1,10 +1,10 @@
 module.exports = (function() {
 var __MODS__ = {};
-var __DEFINE__ = function(modId, func, req) { var m = { exports: {} }; __MODS__[modId] = { status: 0, func: func, req: req, m: m }; };
-var __REQUIRE__ = function(modId, source) { if(!__MODS__[modId]) return require(source); if(!__MODS__[modId].status) { var m = { exports: {} }; __MODS__[modId].status = 1; __MODS__[modId].func(__MODS__[modId].req, m, m.exports); if(typeof m.exports === "object") { __MODS__[modId].m.exports.__proto__ = m.exports.__proto__; Object.keys(m.exports).forEach(function(k) { __MODS__[modId].m.exports[k] = m.exports[k]; Object.defineProperty(m.exports, k, { set: function(val) { __MODS__[modId].m.exports[k] = val; }, get: function() { return __MODS__[modId].m.exports[k]; } }); }); if(m.exports.__esModule) Object.defineProperty(__MODS__[modId].m.exports, "__esModule", { value: true }); } else { __MODS__[modId].m.exports = m.exports; } } return __MODS__[modId].m.exports; };
+var __DEFINE__ = function(modId, func, req) { var m = { exports: {}, _tempexports: {} }; __MODS__[modId] = { status: 0, func: func, req: req, m: m }; };
+var __REQUIRE__ = function(modId, source) { if(!__MODS__[modId]) return require(source); if(!__MODS__[modId].status) { var m = __MODS__[modId].m; m._exports = m._tempexports; var desp = Object.getOwnPropertyDescriptor(m, "exports"); if (desp && desp.configurable) Object.defineProperty(m, "exports", { set: function (val) { if(typeof val === "object" && val !== m._exports) { m._exports.__proto__ = val.__proto__; Object.keys(val).forEach(function (k) { m._exports[k] = val[k]; }); } m._tempexports = val }, get: function () { return m._tempexports; } }); __MODS__[modId].status = 1; __MODS__[modId].func(__MODS__[modId].req, m, m.exports); } return __MODS__[modId].m.exports; };
 var __REQUIRE_WILDCARD__ = function(obj) { if(obj && obj.__esModule) { return obj; } else { var newObj = {}; if(obj != null) { for(var k in obj) { if (Object.prototype.hasOwnProperty.call(obj, k)) newObj[k] = obj[k]; } } newObj.default = obj; return newObj; } };
 var __REQUIRE_DEFAULT__ = function(obj) { return obj && obj.__esModule ? obj.default : obj; };
-__DEFINE__(1573525725022, function(require, module, exports) {
+__DEFINE__(1604966990762, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const SdcSoftDevice_1 = require("./devices/SdcSoftDevice");
@@ -15,8 +15,8 @@ exports.Web_DeviceAdapter = DeviceAdapterUtil_1.Web_DeviceAdapter;
 const Commands = require("./command/Command");
 exports.Commands = Commands;
 
-}, function(modId) {var map = {"./devices/SdcSoftDevice":1573525725023,"./utils/DeviceAdapterUtil":1573525725034,"./command/Command":1573525725029}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725023, function(require, module, exports) {
+}, function(modId) {var map = {"./devices/SdcSoftDevice":1604966990763,"./utils/DeviceAdapterUtil":1604966990774,"./command/Command":1604966990769}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990763, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const comms_1 = require("@sdcsoft/comms");
@@ -253,8 +253,8 @@ setWarningMsg(msg:string){
 SdcSoftDevice.NO_SUB_DEVICE_TYPE = '-1';
 exports.SdcSoftDevice = SdcSoftDevice;
 
-}, function(modId) { var map = {"../meta/DeviceFieldForUI":1573525725024,"../entities/Element":1573525725032,"../meta/ByteField":1573525725026,"../map/map":1573525725033}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725024, function(require, module, exports) {
+}, function(modId) { var map = {"../meta/DeviceFieldForUI":1604966990764,"../entities/Element":1604966990772,"../meta/ByteField":1604966990766,"../map/map":1604966990773}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990764, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const ExceptionField_1 = require("./ExceptionField");
@@ -338,8 +338,8 @@ class DeviceFieldForUI {
 exports.DeviceFieldForUI = DeviceFieldForUI;
 //}
 
-}, function(modId) { var map = {"./ExceptionField":1573525725025}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725025, function(require, module, exports) {
+}, function(modId) { var map = {"./ExceptionField":1604966990765}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990765, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const ByteField_1 = require("./ByteField");
@@ -376,8 +376,8 @@ ExceptionField.Exception_Error = 1;
 exports.ExceptionField = ExceptionField;
 //}
 
-}, function(modId) { var map = {"./ByteField":1573525725026,"./DeviceFieldForUI":1573525725024}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725026, function(require, module, exports) {
+}, function(modId) { var map = {"./ByteField":1604966990766,"./DeviceFieldForUI":1604966990764}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990766, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const CommandField_1 = require("./CommandField");
@@ -479,8 +479,8 @@ class ByteField extends CommandField_1.CommandField {
 exports.ByteField = ByteField;
 //}
 
-}, function(modId) { var map = {"./CommandField":1573525725027,"./DeviceFieldForUI":1573525725024,"../command/Command":1573525725029}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725027, function(require, module, exports) {
+}, function(modId) { var map = {"./CommandField":1604966990767,"./DeviceFieldForUI":1604966990764,"../command/Command":1604966990769}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990767, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const PointField_1 = require("./PointField");
@@ -541,8 +541,8 @@ class CommandField extends PointField_1.PointField {
 exports.CommandField = CommandField;
 //}
 
-}, function(modId) { var map = {"./PointField":1573525725028}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725028, function(require, module, exports) {
+}, function(modId) { var map = {"./PointField":1604966990768}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990768, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 //namespace DevicesLib.meta {
@@ -575,7 +575,7 @@ exports.PointField = PointField;
 //}
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725029, function(require, module, exports) {
+__DEFINE__(1604966990769, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const CRC16Util_1 = require("../utils/CRC16Util");
@@ -822,8 +822,8 @@ class OpenCloseCommand extends IntCommand {
 exports.OpenCloseCommand = OpenCloseCommand;
 //}
 
-}, function(modId) { var map = {"../utils/CRC16Util":1573525725030,"../utils/NumberUtil":1573525725031}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725030, function(require, module, exports) {
+}, function(modId) { var map = {"../utils/CRC16Util":1604966990770,"../utils/NumberUtil":1604966990771}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990770, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const NumberUtil_1 = require("./NumberUtil");
@@ -877,8 +877,8 @@ CRC16Util.crc16_tab_l = [0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0
 exports.CRC16Util = CRC16Util;
 //}
 
-}, function(modId) { var map = {"./NumberUtil":1573525725031}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725031, function(require, module, exports) {
+}, function(modId) { var map = {"./NumberUtil":1604966990771}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1604966990771, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class NumberUtil {
@@ -893,7 +893,7 @@ class NumberUtil {
 exports.NumberUtil = NumberUtil;
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725032, function(require, module, exports) {
+__DEFINE__(1604966990772, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class Element {
@@ -954,7 +954,7 @@ Element.Index_Fan_Status = 1;
 exports.Element = Element;
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725033, function(require, module, exports) {
+__DEFINE__(1604966990773, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const comms_1 = require("@sdcsoft/comms");
@@ -1011,7 +1011,7 @@ map.KEY_POINT_RUN_HOURS = 'ba_yunxingxiaoshishu';
 exports.map = map;
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1573525725034, function(require, module, exports) {
+__DEFINE__(1604966990774, function(require, module, exports) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const SdcSoftDevice_1 = require("../devices/SdcSoftDevice");
@@ -1294,7 +1294,7 @@ class Web_DeviceAdapter {
 Web_DeviceAdapter.lang = 'zh-cn';
 exports.Web_DeviceAdapter = Web_DeviceAdapter;
 
-}, function(modId) { var map = {"../devices/SdcSoftDevice":1573525725023}; return __REQUIRE__(map[modId], modId); })
-return __REQUIRE__(1573525725022);
+}, function(modId) { var map = {"../devices/SdcSoftDevice":1604966990763}; return __REQUIRE__(map[modId], modId); })
+return __REQUIRE__(1604966990762);
 })()
 //# sourceMappingURL=index.js.map

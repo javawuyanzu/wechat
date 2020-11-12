@@ -176,7 +176,7 @@
       <text>{{version}}版本更新内容：</text>
     </view>
     <view  style="padding-left: 2vh;padding-top: 2vh;background-color: white;">
-      <text>1、新协议解析正式生效</text>
+      <text>1、版本框架升级</text>
     </view>
     <view class='toast-button'>
       <view class='button2' style="width:100%">

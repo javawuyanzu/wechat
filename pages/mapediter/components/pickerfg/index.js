@@ -1,4 +1,4 @@
-import { DeviceAdapter } from '../../../../libs/datamap/index.js';
+import { DeviceAdapter } from '../../../../libs/devicelib/index.js';
 Component({
   /**
    * 组件的属性列表
