@@ -273,7 +273,7 @@ Page({
     cList = that.data.controlList
     if(that.data.newFrame=='true'){
       let temp = cList[that.data.index+""][that.data.index1].ctls[[that.data.newkz_v]]
-      temp.v=parseFloat(that.data.inputvalue)
+      temp.Value=parseFloat(that.data.inputvalue)
       console.log(temp)
     }else{
       let temp = cList[that.data.index][that.data.index1];
@@ -334,10 +334,10 @@ Page({
     if(that.data.newFrame=='true'){
       for (var i in that.data.controlList) {
         for (var commmd in that.data.controlList[i]) {
+          console.log(that.data.controlList[i][commmd])
           str += that.data.controlList[i][commmd].Command;
         }
       }
-     
     }else{
       for (var i in that.data.controlList) {
         for (var commmd in that.data.controlList[i]) {
@@ -345,17 +345,19 @@ Page({
         }
       }
     }
+  
+ 
     console.log(str)
     
-    if (that.data.media != 0 & that.data.media != 3) {
-      wx.showToast({
-        title: '当前锅炉类型不支持远程控制',
-        icon: 'error',
-        duration: 1000,
-        mask: true
-      })
-      return
-    }
+    // if (that.data.media != 0 & that.data.media != 3) {
+    //   wx.showToast({
+    //     title: '当前锅炉类型不支持远程控制',
+    //     icon: 'error',
+    //     duration: 1000,
+    //     mask: true
+    //   })
+    //   return
+    // }
     if (str != '') {
       if (that.data.deviceNo.substr(0, 2) == '20') {
         var strlist = [];
@@ -544,6 +546,7 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
+   
     wx.showLoading({
       title: "loading...",
     })
@@ -842,6 +845,7 @@ Page({
     //     control: true,
     //   })
     // }
+
     if (JSON.stringify(clist) != '{}') {
       that.setData({
         controlList: clist,
@@ -1019,8 +1023,8 @@ Page({
                 app.globalData.adapter.Init(map, addr)
                 app.globalData.adapter.handlerData(new Uint8Array(bytes))
                 let device = app.globalData.adapter.Device
+                 
                 var clist=device.KongZhi.map
-          
                 if (JSON.stringify(clist) != '{}') {
                   that.setData({
                     controlList: clist,

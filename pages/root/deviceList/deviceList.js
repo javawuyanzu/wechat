@@ -33,7 +33,6 @@ Page({
     wx.getStorage({
       key: 'time',
       success(res) {
-
         that.setData({
           timer: setInterval(function () {
             if (that.data.timerStates) {
@@ -129,6 +128,7 @@ Page({
       ifName: true,
       lock: true,
       deviceNo: e.currentTarget.dataset.id,
+      timerStates: false,
     })
   },
   closeTap: function (e) {
@@ -136,6 +136,7 @@ Page({
     that.setData({
       ifName: false,
       lock: false,
+      timerStates: true,
     })
   },
   closeStyle: function (e) {
@@ -206,6 +207,7 @@ Page({
     that.setData({
       ifdelete: false,
       lock: false,
+      timerStates: true,
     })
   },
   yesdelete: function (e) {
@@ -284,6 +286,7 @@ Page({
 
             that.setData({
               ifdelete: false,
+              timerStates: true,
             })
           }
         });
@@ -357,6 +360,7 @@ Page({
           success(res) {
             that.setData({
               ifrename: false,
+              timerStates: true,
               lock: false,
             })
           }
@@ -412,6 +416,7 @@ Page({
             that.setData({
               ifstyle: false,
               lock: false,
+              timerStates: true,
             })
           }
         });
@@ -455,6 +460,7 @@ Page({
             that.setData({
               ifstyle: false,
               lock: false,
+              timerStates: true,
             })
           }
         });
@@ -466,6 +472,7 @@ Page({
     that.setData({
       ifrename: false,
       lock: false,
+      timerStates: true,
     })
   },
   versionHidden: function (e) {
@@ -534,7 +541,6 @@ Page({
     })
   },
   onLoad: function (options) {
-
     var that = this;
     var ilist = that.data.imgList
     wx.getStorage({
@@ -1103,6 +1109,7 @@ Page({
                     console.log(new Uint8Array(bytes))
                     app.globalData.adapter.handlerData(new Uint8Array(bytes))
                     let device = app.globalData.adapter.Device
+                    console.log(device)
                     var errorList = []
                     for (var index in device.BaoJing) {
                       errorList.push({
@@ -1136,7 +1143,6 @@ Page({
                     if (device.status) {
                       runstate1 = "-" + device.status.vstr
                     }
-                    console.log(device.getStoveElements())
                     if (device.getStoveElements().length > 0) {
                       var el = device.getStoveElements()[0].values
                       var stove = device.getStoveElements()[0].prefix
@@ -1145,7 +1151,6 @@ Page({
                           stove = stove + "-" + el[i]
                         }
                       }
-                      console.log(stove)
                       src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
                     }
                     var ilist = that.data.imgList
@@ -1632,7 +1637,6 @@ Page({
           that.setData({
             imgList: ilist
           })
-
         }
       }
     })
