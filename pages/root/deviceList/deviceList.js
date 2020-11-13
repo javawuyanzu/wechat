@@ -911,7 +911,7 @@ Page({
   },
   onShow: function () {
     var that = this
-
+      console.log("--------------------------------------",that.data.updateLock)
     if(that.data.updateLock){
       that.mqttInit()
     }
@@ -1111,6 +1111,7 @@ Page({
     return d
   },
   getdata(deviceNo,bytes,mqttlist) {
+    console.log(deviceNo,bytes)
     var that = this
     let map = null
     let addr = null
@@ -1139,12 +1140,11 @@ Page({
   
       try {
           app.globalData.adapter.Init(map, addr)
-          console.log(new Uint8Array(bytes))
+     
           app.globalData.adapter.handlerData(new Uint8Array(bytes))
           let device = app.globalData.adapter.Device
         
           deviceMap.set(deviceNo,device)
-          console.log(device)
           var errorList = []
           for (var index in device.BaoJing) {
             errorList.push({
@@ -1178,7 +1178,6 @@ Page({
           if (device.status) {
             runstate1 = "-" + device.status.vstr
           }
-          console.log(device.getStoveElements())
           if (device.getStoveElements().length > 0) {
             var el = device.getStoveElements()[0].values
             var stove = device.getStoveElements()[0].prefix
