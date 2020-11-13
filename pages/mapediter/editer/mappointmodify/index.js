@@ -15,14 +15,14 @@ Page({
 
     if (0 == typ) {
       endians = ['A']
-      point.endian = 0
+      point.endina = 0
     } else if (1 == typ) {
       endians = ['AB', 'BA']
-      point.endian = 0
+      point.endina = 0
     }
     else {
       endians = ['AB CD', 'DC BA', 'CD AB']
-      point.endian = 0
+      point.endina = 0
     }
 
     this.setData({ point: point, endianindex: 0 })
@@ -37,7 +37,7 @@ Page({
   onEndianChange(e) {
     let point = this.data.point
     let v = parseInt(e.detail.value)
-    point.endian = v
+    point.endina = v
     this.setData({ point: point, endianindex: v })
   },
   setMask(e) {
@@ -79,7 +79,7 @@ Page({
       let point = info.point
       point.addr = info.addr
       let endians = this.initEndians(point.typ)
-      this.setData({ point: point, typindex: point.typ, endians: endians, endianindex: point.endian })
+      this.setData({ point: point, typindex: point.typ, endians: endians, endianindex: point.endina })
     }
   },
 

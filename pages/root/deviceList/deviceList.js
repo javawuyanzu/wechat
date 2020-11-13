@@ -1,6 +1,10 @@
 const app = getApp();
-let map = new Map()
+let deviceMap = new Map()
+let client =null
 import req from '../../../utils/Request.js'
+import mqtt from '../../../libs/mqtt.js'
+import { SdcSoftClient } from '../../../libs/index.js'
+
 Page({
   data: {
     imgList: [],
@@ -9,6 +13,7 @@ Page({
     opend: '',
     ifName: false,
     lock: false,
+    updateLock: false,
     ifstyle: false,
     ifdelete: false,
     deviceTitle: '',
@@ -16,112 +21,60 @@ Page({
     timer: '',
     timerStates: true,
     content: null,
-    devices: map,
     mqttif: false,
     userType: null,
     version: null,
     ifversion: false,
   },
-  onHide: function () {
-    var that = this
-    that.setData({
-      timerStates: false
-    })
-  },
-  timer: function () {
-    var that = this
-    wx.getStorage({
-      key: 'time',
-      success(res) {
-        that.setData({
-          timer: setInterval(function () {
-            if (that.data.timerStates) {
-              that.httptimer()
-            }
-          }, 10000)
-        })
-      }
-    })
-  },
-
-  httptimer: function () {
-    var that = this
-    wx.getStorage({
-      key: 'deviceList',
-      fail(res) {
-        console.log(res)
-      },
-      success(res) {
-        var httplist = res.data
-        console.log(httplist)
-        if (res.data.length == 0) {
-          wx.showLoading({
-            title: 'Loading',
-          })
-          wx.login({
+   mqttConn: function () {
+    return new Promise(function (resolve, reject) {
+      wx.login({
+        success: function (res) {
+          wx.showLoading({title: '正在加载…'})
+          wx.request({
+            //获取openid接口  
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+            data: {
+              js_code: res.code,
+            },
+            method: 'GET',
             success: function (res) {
-              wx.request({
-                //获取openid接口  
-                url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
-                data: {
-                  js_code: res.code,
-                },
-                method: 'GET',
-                header: {
-                  'content-type': 'application/x-www-form-urlencoded'
-                },
-                success: function (res) {
-                  var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
-
-                  wx.request({
-                    //获取openid接口   
-                    url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/list',
-                    data: {
-                      openId: openid,
-                    },
-                    method: 'GET',
-                    success: function (res) {
-                      console.log(res)
-                      wx.hideLoading();
-                      if (res.data.data.length == 0) {
-                        return;
-                      } else {
-                        var templist = res.data.data
-                        for (var i = 0; i < templist.length; i++) {
-                          if (templist[i].mqttName != null) {
-                            templist.splice(i, 1);
-                            continue
-                          }
-                          httplist.push({
-                            deviceNo: templist[i].deviceNo,
-                            deviceName: templist[i].deviceName,
-                            deviceType: templist[i].deviceType,
-                            imgStyle: templist[i].imgStyle
-                          });
-                        }
-                        that.getdata(httplist, 0);
-                        wx.setStorageSync('deviceList', httplist)
-                        wx.setStorageSync('cachedVersion', 1.0)
-                        wx.hideLoading();
-                      }
-                    }
-                  })
-                }
-              })
+              var openId = res.data.openid
+              console.log(openId)
+              client = new SdcSoftClient(mqtt, "wxs://skt.sdcsoft.cn", "8084", 'sdcsoft.com.cn', '80201288@qq.com', openId)
+              app.globalData.client = client
+              app.globalData.openId = openId
+              //添加客户端错误事件响应
+              client.OnError = function (err) {
+                console.log(err)
+              }
+              //添加连接成功的事件响应操作
+              client.OnConnect = function (pt) {
+                wx.hideLoading()
+                resolve("200")
+              }
+              //添加掉线事件响应
+              client.OnOffine = function (connect) {
+                console.log('连接断开')
+                //重新连接
+                connect.Connect()
+              }
+              //添加手动断线事件响应
+              client.OnClose = function (connect) {
+                console.log('关闭连接')
+                //重新连接
+                connect.Connect()
+              }
+              client.Connect()
+            
             }
           })
-        } else {
-          for (var i = 0; i < httplist.length; i++) {
-            if (typeof (httplist[i].mqttName) != "undefined") {
-              httplist.splice(i, 1);
-            }
-          }
-          that.getdata(httplist, 0);
         }
-      }
+      })
+
     })
-    that.errorLing();
   },
+
   longTap: function (e) {
     var that = this;
     that.setData({
@@ -153,10 +106,9 @@ Page({
     var title = e.currentTarget.dataset.title
     var type = e.currentTarget.dataset.type
     var jiarezu = e.currentTarget.dataset.jiarezu
-    var device = map.get(deviceNo)
+    var device = deviceMap.get(deviceNo)
     var newFrame = e.currentTarget.dataset.newframe
     var dataMapId = e.currentTarget.dataset.datamapid
-    //var device = this.data.devices.get(deviceNo)
     app.globalData.device = device
     //检查锁
     if (this.data.lock) {
@@ -213,6 +165,10 @@ Page({
   yesdelete: function (e) {
     var that = this
     var deviceList = []
+    var client = app.globalData.client;
+    client.removeMessageListener(that.data.deviceNo).then(function(){
+      console.log("0233333333"+'取消成功！')
+      })
     wx.getStorage({
       key: 'deviceList',
       success(res) {
@@ -540,29 +496,184 @@ Page({
       }
     })
   },
-  onLoad: function (options) {
+  updateData: function (e) {
     var that = this;
-    var ilist = that.data.imgList
-    wx.getStorage({
-      key: 'deviceList',
-      success(res) {
-        var list = res.data
-        for (var i in list) {
-          ilist.push({
-            title: list[i].deviceNo,
-            runstate: that.data.content.list_runstate,
-            deviceNo: list[i].deviceNo,
-            imgStyle: 0,
-            simTitle: ""
+    wx.showLoading({
+      title: 'Loading',
+    })
+    that.updateList().then(function () {
+      that.mqttInit()
+      that.setData({
+        updateLock: true
+      })
+    })
+      
+  },
+  updateList: function (e) {
+    return new Promise(function (resolve, reject) {
+      wx.login({
+        success: function (res) {
+          wx.request({
+            //获取openid接口  
+            url: 'https://apis.sdcsoft.com.cn/wechat/device/getopenid',
+            data: {
+              js_code: res.code,
+            },
+            method: 'GET',
+            header: {
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            success: function (res) {
+              var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
+    
+              wx.request({
+                //获取openid接口   
+                url: 'https://apis.sdcsoft.com.cn/wechat/showDeviceStore/list',
+                data: {
+                  openId: openid,
+                },
+                method: 'GET',
+                success: function (res) {
+                  console.log(res)
+                  if (res.data.data.length == 0) {
+                    return;
+                  } else {
+                    var deviceList = res.data.data
+                    for(var i in deviceList){
+                      var deviceNo =deviceList[i].deviceNo
+                      req.get('https://apis.sdcsoft.com.cn/webapi/output/decoder/decode', {
+                  deviceNo: deviceNo,
+                    }, {
+                      'content-type': 'application/x-www-form-urlencoded'
+                    }).then(res => {
+                      var dataMapId=null;
+                      if (res.data.data.deviceDataMapCn) {
+                        dataMapId = res.data.data.deviceDataMapCn;
+                      } 
+                      if (res.data.data.deviceDataMapEn) {
+                        dataMapId = res.data.data.deviceDataMapEn;
+                      } 
+                      var device={dataMapId:dataMapId,deviceNo:res.data.data.deviceSuffix};
+                    
+                      return device
+                    }).then(device => {
+                      if (device.dataMapId!=null) {
+                        req.get('https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get', {id:device.dataMapId}, {
+                          'content-type': 'application/x-www-form-urlencoded'
+                        }).then(res => {
+                          let map= JSON.parse(res.data.data.deviceDataMap)
+                          let addr = JSON.parse(res.data.data.pointIndexMap)
+                          
+                            for(var k in deviceList){
+                              if(deviceList[k].deviceNo==device.deviceNo){
+                                deviceList.splice(k,1)
+                                deviceList.push({
+                                  map: map,
+                                  addr: addr,
+                                  dataMapId: device.dataMapId,
+                                  deviceNo: device.deviceNo,
+                                  deviceName: '',
+                                  imgStyle: 0
+                                });
+                                wx.setStorage({
+                                  key: 'deviceList',
+                                  data: deviceList,
+                                  success: function (res) {
+                                    resolve(deviceList)
+                                  }
+                                })
+                              }
+                            }
+                        })
+                      }
+                    })
+          
+                    }
+                    wx.hideLoading();
+                  }
+                }
+              })
+            }
           })
         }
-        that.setData({
-          imgList: ilist
-        })
-       
+      })
+    })
+  },
 
+  onLoad: function (options) {
+    var that = this;
+    wx.getStorage({
+      key: 'deviceList',
+      fail(res) {
+        console.log(res)
+      },
+      success(res) {
+        var httplist = res.data
+        if (res.data.length == 0) {
+          that.updateData()
+          console.log("123")
+        } else {
+          var ilist = []
+          for (var i in httplist) {
+            ilist.push({
+              title: httplist[i].deviceNo,
+              runstate: "未连接",
+              deviceNo: httplist[i].deviceNo,
+              imgStyle: 0,
+              simTitle: ""
+            })
+          }
+          that.setData({
+            imgList: ilist
+          })
+          wx.getStorage({
+            key: 'version',
+            success(res) {
+             var version= res.data
+              wx.request({
+                url: 'https://apis.sdcsoft.com.cn/wechat/iccid/version',
+                method: "Get",
+                data: {
+                },
+                success: function (res) {
+                  console.log(res)
+                    if(res.data!=version){
+                      wx.showToast({
+                        title: '当前小程序版本为：'+version+"，请更新至最新版本："+res.data,
+                        icon: 'none',
+                        duration: 5000,
+                        mask: true
+                      })
+                    }
+                 
+                }
+              })
+              if (res.data != "2.6.0") {
+                that.setData({
+                  ifversion: true,
+                  updateLock: true,
+                  version: "2.6.0"
+                })
+                wx.setStorageSync('version', "2.6.0")
+                that.updateData()
+              }else{
+                that.mqttInit()
+              }
+            },
+            fail(res) {
+              wx.setStorageSync('version', "2.6.0")
+              that.setData({
+                ifversion: true,
+                version: "2.6.0"
+              })
+            },
+          })
+       
+        }
       }
     })
+    that.errorLing();
+
 
     wx.getStorage({
       key: 'roleType',
@@ -584,25 +695,8 @@ Page({
     })
 
 
-    wx.getStorage({
-      key: 'version',
-      success(res) {
-        if (res.data != "2.5.0") {
-          that.setData({
-            ifversion: true,
-            version: "2.5.0"
-          })
-          wx.setStorageSync('version', "2.5.0")
-        }
-      },
-      fail(res) {
-        wx.setStorageSync('version', "2.5.0")
-        that.setData({
-          ifversion: true,
-          version: "2.5.0"
-        })
-      },
-    })
+    
+   
     wx.login({
       success: function (res) {
         wx.request({
@@ -613,7 +707,6 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-            console.log(res.data.openid)
             var openid = res.data.openid.substr(0, 10) + '_' + res.data.openid.substr(res.data.openid.length - 8, res.data.openid.length)
             app.globalData.openid = openid
 
@@ -653,33 +746,7 @@ Page({
         })
       }
     })
-
-
-
-    // getApp().conmqtt().then(function () {
-    //   //that.subTopic("/Msg/20/000/00001")
-
-    //   app.globalData.client.publish("/CTL/20/000/00001", "123123", function (err) {
-    //     //console.log(err)
-    //     if (!err) {
-    //       wx.showToast({
-    //         title: '发布成功',
-    //         icon: 'success',
-    //         duration: 1000,
-    //         mask: true
-    //       })
-    //     }
-    //     else {
-    //       wx.showToast({
-    //         title: '发布失败',
-    //         icon: 'error',
-    //         duration: 1000,
-    //         mask: true
-    //       })
-    //     }
-    //   })
-    // })
-
+    
     that.updateDevice();
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../../utils/Chinses.js")
@@ -734,37 +801,9 @@ Page({
     wx.setNavigationBarTitle({
       title: that.data.content.list_title
     })
-    wx.getStorage({
-      key: 'deviceList',
-      success(res) {
-        var httplist = res.data
-        var imglist = []
-        for (var i = 0; i < httplist.length; i++) {
-          if (typeof (httplist[i].mqttName) != "undefined") {
-            getApp().conmqtt().then(function () {
-              wx.getStorage({
-                key: 'deviceList',
-                success(res) {
-                  var mqttlist = res.data
-                  for (var i = 0; i < mqttlist.length; i++) {
-
-                    if (typeof (mqttlist[i].mqttName) != "undefined") {
-                      that.subTopic(mqttlist[i].mqttName)
-                    }
-                  }
-                }
-              })
-            })
-          }
-        }
-      }
-    })
-    that.timer();
-    app.globalData.callBack[0] = function (t, m) {
-      //console.log('列表页收到数据：' + t + ':=' + m);
-      that.getmqttdata(t, m)
-    }
+  
   },
+ 
   tologin: function () {
     wx.redirectTo({
       url: '../loginChoose/loginChoose'
@@ -872,6 +911,35 @@ Page({
   },
   onShow: function () {
     var that = this
+      console.log("--------------------------------------",that.data.updateLock)
+    if(that.data.updateLock){
+      that.mqttInit()
+    }
+    
+    // wx.getStorage({
+    //   key: 'deviceList',
+    //   success(res) {
+    //     var mqttlist = res.data
+    //     getApp().conmqtt().then(function () {
+    //       let client = app.globalData.client;
+    //       for (var i = 0; i < mqttlist.length; i++) {
+    //         var deviceNo=mqttlist[i].deviceNo
+    //         client.addMessageListener(deviceNo, (deviceno, msg) => {
+    //          that.getdata(deviceno,msg,mqttlist)
+    //         })
+    //       }
+    //     })
+    //   }
+    // })
+    wx.getStorage({
+      key: 'deviceList',
+      success(res) {
+        var list = res.data
+        console.log(list.length)
+       
+        that.getSimStatus(list, 0)
+      }
+    })
     wx.getStorage({
       key: 'roleType',
       success(res) {
@@ -897,19 +965,54 @@ Page({
         })
       }
     })
-    that.httptimer()
     that.setData({
       timerStates: true
     })
+ 
+
+
+  },
+ 
+  mqttInit:function (){
+    var that= this
+   
+   if(client){
     wx.getStorage({
       key: 'deviceList',
       success(res) {
-        var list = res.data
-        that.getSimStatus(list, 0)
+        var mqttlist = res.data
+        console.log(mqttlist)
+        for (var i = 0; i < mqttlist.length; i++) {
+          var deviceNo=mqttlist[i].deviceNo
+          client.addMessageListener(deviceNo, (deviceno, msg) => {
+           that.getdata(deviceno,msg,mqttlist)
+          }).then(function(){
+                console.log(deviceNo+'监听成功！')
+            })
+        }
       }
     })
-
-
+   }else{
+    that.mqttConn().then(function () {
+      wx.getStorage({
+        key: 'deviceList',
+        success(res) {
+          var mqttlist = res.data
+          console.log("888",mqttlist)
+          for (var i = 0; i < mqttlist.length; i++) {
+            var deviceNo=mqttlist[i].deviceNo
+            client.addMessageListener(deviceNo, (deviceno, msg) => {
+             that.getdata(deviceno,msg,mqttlist)
+            }).then(function(){
+                  console.log(deviceNo+'监听成功！')
+              })
+          }
+        }
+      })
+    })
+   }
+   
+   
   },
   getSimStatus(deviceNos, index) {
 
@@ -1007,568 +1110,89 @@ Page({
     map.set(deviceNo, d)
     return d
   },
-  getdata(deviceNos, index) {
+  getdata(deviceNo,bytes,mqttlist) {
+    console.log(deviceNo,bytes)
     var that = this
-    if (index == deviceNos.length) {
-      return;
-    }
-    var newFrame = ''
-
-    if (deviceNos[index].newFrame) {
-      newFrame = deviceNos[index].newFrame
-    } else {
-      newFrame = false
-    }
-
-    let map = deviceNos[index].map
-    let addr = deviceNos[index].addr
-    var runstate = ''
-    var title = ''
-    var deviceNo = ''
-    var src = ''
-    var mock1 = ''
-    var mock2 = ''
-    var mock3 = ''
-    var errcount = ''
-    var imgstyle = ''
+    let map = null
+    let addr = null
     var runday = ''
     var jiarezu = ''
-    var control = ''
-    var type = ''
-    var lang = ''
+    var dataMapId= ''
     var simTitle = ''
-    var deviceno = deviceNos[index].deviceNo
-    var dataMapId = deviceNos[index].dataMapId
-    if (typeof (deviceNos[index].mqttName) == "undefined" || deviceNos[index].mqttName == null) {
-      var title1 = ''
-      var deviceType = deviceNos[index].deviceType
-      var runstate1 = ''
-      var src1 = ''
-      var errcount1 = 0
-      if (deviceNos[index].deviceName == '' || deviceNos[index].deviceName == null) {
-        title1 = deviceNos[index].deviceNo
-      } else {
-        title1 = deviceNos[index].deviceName + "-" + deviceNos[index].deviceNo
-      }
-      var imgstyle1 = deviceNos[index].imgStyle
-
-      wx.getStorage({
-        key: 'deviceList',
-        success(res) {
-          var deviceList = res.data
-
-          wx.request({
-            url: 'https://apis.sdcsoft.com.cn/webapi/output/device/get',
-            data: {
-              deviceNo: deviceno,
-            },
-            method: 'GET',
-            header: {
-              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-            },
-            responseType: 'arraybuffer',
-            success: function (res) {
-              if (res.data == null || res.data.byteLength == 0) {
-                var ilist = that.data.imgList
-                if (that.finddevice(ilist, deviceno)) {
-                  for (var i = 0; i < ilist.length; i++) {
-                    if (ilist[i].deviceNo === deviceno) {
-                      ilist[i].deviceNo = deviceno
-                      ilist[i].title = title1
-                      ilist[i].runstate = that.data.content.list_runstate
-                      ilist[i].imgStyle = imgstyle1
-                      ilist[i].errcount = errcount1
-                      ilist[i].src = src1
-                      ilist[i].mock1 = ""
-                      ilist[i].mock2 = ""
-                      simTitle: simTitle
-                      that.setData({
-                        imgList: ilist
-                      })
-                      break;
-                    }
-                  }
-                } else {
-                  ilist.push({
-                    title: deviceno,
-                    runstate: that.data.content.list_runstate,
-                    deviceNo: deviceno,
-                    imgStyle: imgstyle1,
-                    simTitle: simTitle
-                  })
-                  that.setData({
-                    imgList: ilist
-                  })
-                }
-              } else {
-                var bytes = res.data
-                try {
-                  if (newFrame) {
-
-                    app.globalData.adapter.Init(map, addr)
-                    console.log(new Uint8Array(bytes))
-                    app.globalData.adapter.handlerData(new Uint8Array(bytes))
-                    let device = app.globalData.adapter.Device
-                    console.log(device)
-                    var errorList = []
-                    for (var index in device.BaoJing) {
-                      errorList.push({
-                        deviceNo: deviceno,
-                        title: device.BaoJing[index].name
-                      })
-                    }
-                    errcount1 = errorList.length,
-                      that.setData({
-                        errorNewList: that.data.errorNewList.concat(errorList)
-                      })
-                    var mock11 = ''
-                    var mock22 = ''
-                    for (var index in device.Focus) {
-                      if (mock11 === "") {
-                        mock11 = device.Focus[index].name + ":" + device.Focus[index].vstr
-                        continue;
-                      }
-                      if (mock22 === "") {
-                        mock22 = device.Focus[index].name + ":" + device.Focus[index].vstr
-                        break;
-                      }
-                    }
-
-                    if (device.Run != null) {
-                      if (device.Run.name != "") {
-                        runday = device.Run.name + ":" + device.Run.vstr
-                      }
-                    }
-                   
-                    if (device.status) {
-                      runstate1 = "-" + device.status.vstr
-                    }
-                    if (device.getStoveElements().length > 0) {
-                      var el = device.getStoveElements()[0].values
-                      var stove = device.getStoveElements()[0].prefix
-                      for (var i in el) {
-                        if (el[i] != -1) {
-                          stove = stove + "-" + el[i]
-                        }
-                      }
-                      src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
-                    }
-                    var ilist = that.data.imgList
-                    if (that.finddevice(ilist, deviceno)) {
-                      for (var i = 0; i < ilist.length; i++) {
-                        if (ilist[i].deviceNo === deviceno) {
-                          ilist[i].deviceNo = deviceno
-                          ilist[i].title = title1
-                          ilist[i].runstate = runstate1
-                          ilist[i].imgStyle = imgstyle1
-                          ilist[i].errcount = errcount1
-                          ilist[i].src = src1
-                          ilist[i].mock1 = mock11
-                          ilist[i].mock2 = mock22
-                          ilist[i].runday = runday
-                          ilist[i].type = deviceType
-                          ilist[i].lang = app.globalData.lang
-                          ilist[i].jiarezu = jiarezu
-                          ilist[i].newFrame = newFrame
-                          ilist[i].dataMapId = dataMapId
-                          simTitle: simTitle
-                          that.setData({
-                            imgList: ilist
-                          })
-                          break;
-                        }
-                      }
-                    } else {
-                      ilist.push({
-                        title: title1,
-                        runstate: "-" + runstate1,
-                        deviceNo: deviceno,
-                        imgStyle: imgstyle1,
-                        errcount: errcount1,
-                        src: src1,
-                        mock1: mock11,
-                        mock2: mock22,
-                        runday: day + hour,
-                        type: deviceType,
-                        lang: app.globalData.lang,
-                        jiarezu: jiarezu,
-                        simTitle: simTitle,
-                        newFrame: newFrame,
-                        dataMapId: dataMapId
-                      })
-                      that.setData({
-                        imgList: ilist
-                      })
-                    }
-
-                  } else {
-                    let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
-                    //data.setModbusNo 设置Modbus站号 默认1 1-255
-                    console.log(deviceType)
-                    if (data.getTypeName() != deviceType) {
-                      wx.request({
-                        //获取openid接口   
-                        url: 'https://apis.sdcsoft.com.cn/wechat/device/modify/type',
-                        data: {
-                          suffix: deviceno,
-                          deviceType: deviceType,
-                          subType: data.getTypeName(),
-                        },
-                        method: 'GET',
-                        success: function (res) {
-                          deviceType = data.getTypeName()
-                        }
-                      })
-                    }
-                    var errorList = []
-                    for (var index in data.getExceptionFields().map) {
-                      errorList.push({
-                        deviceNo: deviceNo,
-                        title: data.getExceptionFields().map[index].title
-                      })
-                    }
-                    that.setData({
-                      errorNewList: that.data.errorNewList.concat(errorList)
-                    })
-                    var day = ''
-                    var hour = ''
-                    var jiarezu1 = ''
-                    var mock11 = ''
-                    var mock22 = ''
-                    for (var index in data.getDeviceFocusFields()) {
-                      if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
-                        jiarezu1 = data.getDeviceFocusFields()[index].value
-                      }
-                      if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
-                        day = data.getDeviceFocusFields()[index].valueString
-                      }
-                      if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
-                        hour = data.getDeviceFocusFields()[index].valueString
-                      }
-                    }
-                    for (var index in data.getBaseInfoFields().map) {
-                      if (data.getBaseInfoFields().map[index].name === "o_system_status") {
-                        runstate1 = data.getBaseInfoFields().map[index].valueString
-
-                      }
-
-                    }
-                    for (var index in data.getMockFields().map) {
-                      if (mock11 === "") {
-                        mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-                        continue;
-                      }
-                      if (mock22 === "") {
-                        mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-                        break;
-                      }
-                    }
-                    errcount1 = errorList.length,
-                      src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
-                    var ilist = that.data.imgList
-                    if (that.finddevice(ilist, deviceno)) {
-                      for (var i = 0; i < ilist.length; i++) {
-                        if (ilist[i].deviceNo === deviceno) {
-                          ilist[i].deviceNo = deviceno
-                          ilist[i].title = title1
-                          ilist[i].runstate = "-" + runstate1
-                          ilist[i].imgStyle = imgstyle1
-                          ilist[i].errcount = errcount1
-                          ilist[i].src = src1
-                          ilist[i].mock1 = mock11
-                          ilist[i].mock2 = mock22
-                          ilist[i].runday = "运行时间：" + day + hour
-                          ilist[i].type = deviceType
-                          ilist[i].lang = app.globalData.lang
-                          ilist[i].jiarezu = jiarezu1
-                          ilist[i].newFrame = newFrame
-                          ilist[i].dataMapId = dataMapId
-                          simTitle: simTitle
-                          that.setData({
-                            imgList: ilist
-                          })
-                          break;
-                        }
-                      }
-                    } else {
-                      ilist.push({
-                        title: title1,
-                        runstate: "-" + runstate1,
-                        deviceNo: deviceno,
-                        imgStyle: imgstyle1,
-                        errcount: errcount1,
-                        src: src1,
-                        mock1: mock11,
-                        mock2: mock22,
-                        runday: day + hour,
-                        type: deviceType,
-                        lang: app.globalData.lang,
-                        jiarezu: jiarezu1,
-                        simTitle: simTitle,
-                        newFrame: newFrame,
-                        dataMapId: dataMapId
-                      })
-                      that.setData({
-                        imgList: ilist
-                      })
-                    }
-                  }
-                } catch (e) {
-                  console.log(e)
-                  wx.request({
-                    url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
-                    data: {
-                      deviceNo: deviceno,
-                    },
-                    header: {
-                      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-                    },
-                    method: 'GET',
-                    success: function (res) {
-                      console.log(res)
-                      var newFrame = res.data.data.newFrame;
-                      if (!newFrame) {
-                        var ilist = that.data.imgList
-                        if (that.finddevice(ilist, deviceno)) {
-                          for (var i = 0; i < ilist.length; i++) {
-                            if (ilist[i].deviceNo === deviceno) {
-                              if (ilist[i].runstate != "-Error") {
-                                ilist[i].deviceNo = deviceno
-                                ilist[i].title = deviceno
-                                ilist[i].runstate = "Error"
-                                ilist[i].error = 1
-                                that.setData({
-                                  imgList: ilist
-                                })
-                                wx.showModal({
-                                  title: that.data.content.list_prompt,
-                                  content: that.data.content.list_error1 + deviceno + that.data.content.list_error2,
-                                  success(res) { }
-                                })
-                              }
-                              break;
-                            }
-                          }
-                        } else {
-                          var ilist = that.data.imgList
-                          ilist.push({
-                            title: deviceno,
-                            runstate: "-" + "Error",
-                            deviceNo: deviceno,
-                            lang: app.globalData.lang
-                          })
-                        }
-                        that.setData({
-                          imgList: ilist
-                        })
-                        return
-                      }
-                      try {
-                        var dataMapId;
-                        if (res.data.data.deviceDataMapCn) {
-                          dataMapId = res.data.data.deviceDataMapCn
-                        } else {
-                          dataMapId = res.data.data.deviceDataMapEn
-                        }
-                        wx.request({
-                          url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
-                          data: {
-                            id: dataMapId,
-                          },
-                          method: 'GET',
-                          header: {
-                            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-                          },
-                          success: function (res) {
-                            console.log(res)
-                            let map = JSON.parse(res.data.data.deviceDataMap)
-                            let addr = JSON.parse(res.data.data.pointIndexMap)
-                            wx.getStorage({
-                              key: 'deviceList',
-                              success(res) {
-                                deviceList = res.data;
-                                for (var i in deviceList) {
-                                  if (deviceList[i].deviceNo == deviceno) {
-                                    deviceList[i].map = map,
-                                      deviceList[i].addr = addr,
-                                      deviceList[i].dataMapId = dataMapId,
-                                      deviceList[i].newFrame = newFrame,
-                                      deviceList[i].deviceNo = deviceno,
-                                      deviceList[i].deviceName = '',
-                                      deviceList[i].deviceType = "",
-                                      deviceList[i].imgStyle = 0
-                                  }
-                                }
-                                wx.setStorage({
-                                  key: 'deviceList',
-                                  data: deviceList,
-                                  success: function (res) {
-                                  }
-                                })
-                              }
-                            })
-                          }
-                        })
-                      } catch (error) {
-                        console.log(error)
-                        var ilist = that.data.imgList
-                        if (that.finddevice(ilist, deviceno)) {
-                          for (var i = 0; i < ilist.length; i++) {
-                            if (ilist[i].deviceNo === deviceno) {
-                              if (ilist[i].runstate != "-Error") {
-                                ilist[i].deviceNo = deviceno
-                                ilist[i].title = deviceno
-                                ilist[i].runstate = "-" + "Error"
-                                ilist[i].error = 1
-                                that.setData({
-                                  imgList: ilist
-                                })
-                                wx.showModal({
-                                  title: that.data.content.list_prompt,
-                                  content: that.data.content.list_error1 + deviceno + that.data.content.list_error2,
-                                  success(res) { }
-                                })
-                              }
-                              break;
-                            }
-                          }
-                        } else {
-                          var ilist = that.data.imgList
-                          ilist.push({
-                            title: deviceno,
-                            runstate: "-Error",
-                            deviceNo: deviceno,
-                            lang: app.globalData.lang
-                          })
-                        }
-                        that.setData({
-                          imgList: ilist
-                        })
-                        return
-                      }
-
-                    }
-                  })
-                }
-              }
-            }
-          })
-        }
-      })
-    }
-    index++
-    that.getdata(deviceNos, index)
-  },
-  getmqttdata(deviceNo, byte) {
-    var that = this;
-    var runstate1 = ''
-    var title = ''
-    var src1 = ''
-    var mock1 = ''
-    var mock2 = ''
-    var errcount1 = ''
-    var imgstyle = ''
-    var runday = ''
-    var jiarezu = ''
-    var control = ''
-    var type = ''
+    var deviceno = deviceNo
     var title1 = ''
-    var imgstyle1 = 0
-    var deviceType = ''
-    wx.getStorage({
-      key: 'deviceList',
-      success(res) {
-        var deviceList = res.data
-        for (var i = 0; i < deviceList.length; i++) {
-          if (deviceList[i].mqttName === deviceNo) {
-            deviceType = deviceList[i].deviceType
-            deviceNo = deviceList[i].deviceNo
-
-            if (deviceList[i].deviceName === '') {
-              title1 = deviceList[i].deviceNo
-            } else {
-              title1 = deviceNos[index].deviceName + "-" + deviceNos[index].deviceNo
-            }
-            break;
-          }
+    var runstate1 = ''
+    var src1 = ''
+    var errcount1 = 0
+    for (var i = 0; i < mqttlist.length; i++) {
+      if (mqttlist[i].deviceNo === deviceNo) {
+         map = mqttlist[i].map
+         addr = mqttlist[i].addr
+         dataMapId= mqttlist[i].dataMapId
+         var imgstyle1 = mqttlist[i].imgStyle
+         if (mqttlist[i].deviceName == '' || mqttlist[i].deviceName == null) {
+          title1 = mqttlist[i].deviceNo
+        } else {
+          title1 = mqttlist[i].deviceName + "-" + mqttlist[ilist].deviceNo
         }
-        try {
-          var databyte = new Uint8Array(byte)
-          let data = that.getDeviceFromBytes(deviceNo, deviceType, databyte);
-          //console.log(data)
-          // data.getMockFields().each((key, value) => {
-          //   console.log('title:=' + value.getTitle() + ' value:=' + value.getValueString());
-          // });
-          if (data == null) {
-            title1: title1,
-              runstate1 = that.data.content.list_runstate,
-              deviceNo = deviceNo,
-              imgstyle = 0,
-              errcount1 = 0,
-              src1 = '',
-              mock1 = ''
-            // if (byte.length > 5) {
-            //   wx.showToast({
-            //     title: deviceNo + '号设备，数据异常',
-            //     icon: 'none',
-            //     duration: 2000
-            //   })
-            // }
-
+      }
+    }
+  
+      try {
+          app.globalData.adapter.Init(map, addr)
+     
+          app.globalData.adapter.handlerData(new Uint8Array(bytes))
+          let device = app.globalData.adapter.Device
+        
+          deviceMap.set(deviceNo,device)
+          var errorList = []
+          for (var index in device.BaoJing) {
+            errorList.push({
+              deviceNo: deviceno,
+              title: device.BaoJing[index].name
+            })
           }
-          else {
-            var errorList = []
-            for (var index in data.getExceptionFields().map) {
-              errorList.push({
-                deviceNo: deviceNo,
-                title: data.getExceptionFields().map[index].title
-              })
-            }
+          errcount1 = errorList.length,
             that.setData({
               errorNewList: that.data.errorNewList.concat(errorList)
             })
-            var day = ''
-            var hour = ''
-            var jiarezu1 = ''
-            var mock11 = ''
-            var mock22 = ''
-            for (var index in data.getBaseInfoFields().map) {
-              if (data.getBaseInfoFields().map[index].name === "o_system_status") {
-                runstate1 = data.getBaseInfoFields().map[index].valueString
+          var mock11 = ''
+          var mock22 = ''
+          for (var index in device.Focus) {
+            if (mock11 === "") {
+              mock11 = device.Focus[index].name + ":" + device.Focus[index].vstr
+              continue;
+            }
+            if (mock22 === "") {
+              mock22 = device.Focus[index].name + ":" + device.Focus[index].vstr
+              break;
+            }
+          }
+
+          if (device.Run != null) {
+            if (device.Run.name != "") {
+              runday = device.Run.name + ":" + device.Run.vstr
+            }
+          }
+        
+          if (device.status) {
+            runstate1 = "-" + device.status.vstr
+          }
+          if (device.getStoveElements().length > 0) {
+            var el = device.getStoveElements()[0].values
+            var stove = device.getStoveElements()[0].prefix
+            for (var i in el) {
+              if (el[i] != -1) {
+                stove = stove + "-" + el[i]
               }
             }
-
-            for (var index in data.getDeviceFocusFields()) {
-              if (data.getDeviceFocusFields()[index].name === "jia_re_zu_count") {
-                jiarezu1 = data.getDeviceFocusFields()[index].value
-              }
-              if (data.getDeviceFocusFields()[index].name === "ba_yunxingtianshu") {
-                day = data.getDeviceFocusFields()[index].valueString
-              }
-              if (data.getDeviceFocusFields()[index].name === "ba_yunxingxiaoshishu") {
-                hour = data.getDeviceFocusFields()[index].valueString
-              }
-            }
-
-            for (var index in data.getMockFields().map) {
-              if (mock11 === "") {
-                mock11 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-                continue;
-              }
-              if (mock22 === "") {
-                mock22 = data.getMockFields().map[index].title + ":" + data.getMockFields().map[index].valueString
-                break;
-              }
-            }
-            errcount1 = errorList.length,
-              src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif'
-
+            src1 = 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'
           }
           var ilist = that.data.imgList
-          if (that.finddevice(ilist, deviceNo)) {
+          if (that.finddevice(ilist, deviceno)) {
             for (var i = 0; i < ilist.length; i++) {
-              if (ilist[i].deviceNo === deviceNo) {
-                ilist[i].deviceNo = deviceNo
+              if (ilist[i].deviceNo === deviceno) {
+                ilist[i].deviceNo = deviceno
                 ilist[i].title = title1
                 ilist[i].runstate = runstate1
                 ilist[i].imgStyle = imgstyle1
@@ -1576,10 +1200,11 @@ Page({
                 ilist[i].src = src1
                 ilist[i].mock1 = mock11
                 ilist[i].mock2 = mock22
-                ilist[i].runday = day + hour
-                ilist[i].type = deviceType
+                ilist[i].runday = runday
                 ilist[i].lang = app.globalData.lang
-                ilist[i].jiarezu = jiarezu1
+                ilist[i].jiarezu = jiarezu
+                ilist[i].dataMapId = dataMapId
+                simTitle: simTitle
                 that.setData({
                   imgList: ilist
                 })
@@ -1589,57 +1214,62 @@ Page({
           } else {
             ilist.push({
               title: title1,
-              runstate: runstate1,
-              deviceNo: deviceNo,
+              runstate: "-" + runstate1,
+              deviceNo: deviceno,
               imgStyle: imgstyle1,
               errcount: errcount1,
               src: src1,
               mock1: mock11,
               mock2: mock22,
-              runday: day + hour,
-              type: deviceType,
+              runday:runday,
               lang: app.globalData.lang,
-              jiarezu: jiarezu1
+              jiarezu: jiarezu,
+              simTitle: simTitle,
+              dataMapId: dataMapId
             })
             that.setData({
               imgList: ilist
             })
           }
-        } catch (e) {
-          console.log(e)
-          var ilist = that.data.imgList
-          if (that.finddevice(ilist, deviceNo)) {
+      } catch (e) {
+        console.log(e)
+        var ilist = that.data.imgList
+          if (that.finddevice(ilist, deviceno)) {
             for (var i = 0; i < ilist.length; i++) {
-              if (ilist[i].deviceNo === deviceNo) {
-                ilist[i].deviceNo = deviceNo
-                ilist[i].title = deviceNo
-                ilist[i].runstate = "Error"
-                that.setData({
-                  imgList: ilist
-                })
-                wx.showModal({
-                  title: that.data.content.list_prompt,
-                  content: that.data.content.list_error1 + deviceNo + that.data.content.list_error2,
-                  success(res) { }
-                })
+              if (ilist[i].deviceNo === deviceno) {
+                if (ilist[i].runstate != "-Error") {
+                  ilist[i].deviceNo = deviceno
+                  ilist[i].title = deviceno
+                  ilist[i].runstate = "-" + "Error"
+                  ilist[i].error = 1
+                  ilist[i].mock1 = ''
+                  ilist[i].mock2 = ''
+                  that.setData({
+                    imgList: ilist
+                  })
+                  wx.showModal({
+                    title: that.data.content.list_prompt,
+                    content: that.data.content.list_error1 + deviceno + that.data.content.list_error2,
+                    success(res) { }
+                  })
+                }
                 break;
               }
             }
           } else {
             var ilist = that.data.imgList
             ilist.push({
-              title: deviceNo,
-              runstate: "Error",
-              deviceNo: deviceNo,
+              title: deviceno,
+              runstate: "-Error",
+              deviceNo: deviceno,
               lang: app.globalData.lang
             })
           }
           that.setData({
             imgList: ilist
           })
-        }
       }
-    })
   },
+
 
 })

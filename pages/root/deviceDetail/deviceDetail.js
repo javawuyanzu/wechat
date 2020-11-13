@@ -231,11 +231,11 @@ Page({
   },
   editData: function (e) {
     var that = this;
-    if(that.data.newFrame=='true'){
+   
       that.setData({
         newkz_v: e.currentTarget.dataset.v
       })
-    }
+    
     that.setData({
       ifedit: true,
       index: e.currentTarget.dataset.index,
@@ -271,14 +271,9 @@ Page({
     // }
     let cList = []
     cList = that.data.controlList
-    if(that.data.newFrame=='true'){
-      let temp = cList[that.data.index+""][that.data.index1].ctls[[that.data.newkz_v]]
-      temp.Value=parseFloat(that.data.inputvalue)
-      console.log(temp)
-    }else{
-      let temp = cList[that.data.index][that.data.index1];
-      temp.setValue(parseFloat(that.data.inputvalue))
-    }
+    let temp = cList[that.data.index+""][that.data.index1].ctls[[that.data.newkz_v]]
+    temp.Value=parseFloat(that.data.inputvalue)
+    console.log(temp)
     that.setData({
       controlList: cList,
       ifedit: false,
@@ -331,18 +326,10 @@ Page({
   formSubmit: function (e) {
     var that = this
     let str = ''
-    if(that.data.newFrame=='true'){
-      for (var i in that.data.controlList) {
-        for (var commmd in that.data.controlList[i]) {
-          console.log(that.data.controlList[i][commmd])
-          str += that.data.controlList[i][commmd].Command;
-        }
-      }
-    }else{
-      for (var i in that.data.controlList) {
-        for (var commmd in that.data.controlList[i]) {
-          str += that.data.controlList[i][commmd].getCommandString();
-        }
+    for (var i in that.data.controlList) {
+      for (var commmd in that.data.controlList[i]) {
+        console.log(that.data.controlList[i][commmd])
+        str += that.data.controlList[i][commmd].Command;
       }
     }
   
@@ -547,9 +534,6 @@ Page({
   onLoad: function (options) {
     var that = this;
    
-    wx.showLoading({
-      title: "loading...",
-    })
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../../utils/Chinses.js")
       that.setData({
@@ -716,6 +700,49 @@ Page({
         }
       })
     }
+    that.dataparse(app.globalData.device,options.deviceNo,options.imgstyle)
+    var client = app.globalData.client;
+    var imgstyle=options.imgstyle
+    var deviceNo=options.deviceNo
+    client.addMessageListener(deviceNo, (deviceno, msg) => {
+      console.log(deviceno, msg)
+      wx.request({
+        url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
+        data: {
+          id: that.data.dataMapId,
+        },
+        method: 'GET',
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        success: function (res) {
+          let map = JSON.parse(res.data.data.deviceDataMap)
+          let addr = JSON.parse(res.data.data.pointIndexMap)
+          wx.getStorage({
+            key: 'deviceList',
+            success(res) {
+              var list = res.data
+              for (var i in list) {
+                if(deviceNo==list[i].deviceNo){
+                  list[i].map = map
+                  list[i].addr = addr
+                }
+              }
+              wx.setStorage({
+                key: 'deviceList',
+                data: list
+              })
+            }
+          })
+          app.globalData.adapter.Init(map, addr)
+          app.globalData.adapter.handlerData(new Uint8Array(msg))
+          let device = app.globalData.adapter.Device
+             that.dataparse(device,deviceno,imgstyle)
+        }
+      })     
+
+     })
+   
     wx.request({
       //获取openid接口  
       url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/find/deviceNo/openId',
@@ -733,7 +760,7 @@ Page({
         })
       }
     })
-    if (options.newFrame == "true") {
+ 
       that.setData({
         detail_base: "基本信息",
         detail_wendu: "温度",
@@ -745,26 +772,13 @@ Page({
         detail_shebei: "设备",
         detail_dingshi: "定时",
       })
-    } else {
-      var keylist = GroupKeys.getKeys();
-      that.setData({
-        detail_base: GroupKeys.getTitle(keylist[0]),
-        detail_mock: GroupKeys.getTitle(keylist[1]),
-        detail_ex: GroupKeys.getTitle(keylist[2]),
-        detail_deviceinfo: GroupKeys.getTitle(keylist[3]),
-        detail_deviceparameters: GroupKeys.getTitle(keylist[4]),
-        detail_weeksetting: GroupKeys.getTitle(keylist[5]),
-        detail_startstoptime: GroupKeys.getTitle(keylist[6]),
-        detail_switchquantity: GroupKeys.getTitle(keylist[7]),
-      })
-    }
+    
     that.setData({
       deviceNo: options.deviceNo,
       imgstyle: options.imgstyle,
       jiarezu: options.jiarezu,
       deviceType: options.type,
       dataMapId: options.dataMapId,
-      newFrame: options.newFrame,
       zuotian: that.getDateStr(null, -1),
       qiantian: that.getDateStr(null, -2),
       daqiantian: that.getDateStr(null, -3)
@@ -789,25 +803,7 @@ Page({
     wx.setNavigationBarTitle({
       title: options.title
     })
-    if (options.deviceNo.substr(0, 2) != '20') {
-      that.timer();
-    } else {
-      that.setData({
-        mqttname: "/Msg/" + options.deviceNo.substr(0, 2) + "/" + options.deviceNo.substr(2, 3) + "/" + options.deviceNo.substr(5, 5)
-      })
-      that.dataparse(app.globalData.device)
-      app.globalData.callBack[1] = function (t, m) {
-        console.log(that.data.mqttname)
-        if (that.data.mqttname == t) {
-          // console.log('详情页收到数据：' + t + ':=' + m);
-          let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(m))
-          console.log(data)
-          that.dataparse(data, options.deviceNo)
-
-        }
-
-      }
-    }
+    
    
   },
   subTopic: function (topic) {
@@ -829,107 +825,119 @@ Page({
       })
     }
   },
-  dataparse: function (data, deviceNo) {
-    var that = this
-    var errorList = []
-    var clist = data.getCommands().map
-    var media = -1
-    for (var index in data.getBaseInfoFields().map) {
-      if (data.getBaseInfoFields().map[index].name === "o_media") {
-        media = data.getBaseInfoFields().map[index].value
-      }
-    }
-
-    // if (media == 0 || media == 1) {
-    //   that.setData({
-    //     control: true,
-    //   })
-    // }
-
+  dataparse: function (device,deviceNo,imgstyle) {
+    var that = this;
+    var clist=device.KongZhi.map
     if (JSON.stringify(clist) != '{}') {
       that.setData({
         controlList: clist,
         control: true,
       })
     }
-
+    var errorList = []
     var myDate = new Date();
-    for (var index in data.getExceptionFields().map) {
-      errorList.push({
-        deviceNo: deviceNo,
-        title: data.getExceptionFields().map[index].title,
-        date: myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + '-' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds(),
-        states: that.data.content.detail_nochuli
+    if (device.bj.length > 0) {
+      for (var index in device.bj) {
+        errorList.push({
+          deviceNo: deviceNo,
+          title: device.bj[index].name,
+          date: myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + '-' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds(),
+          states: that.data.content.detail_nochuli
+        })
+      }
+      if (that.data.exRecord) {
+        that.getException(errorList);
+      }
+    }
+    var imgstyle1 = imgstyle
+    if (device.getStoveElements().length > 0&device.getStoveElements().length ==1) {
+      var el = device.getStoveElements()[0].values
+      var stove = device.getStoveElements()[0].prefix
+      for (var i in el) {
+        if (el[i] != -1) {
+          stove = stove + "-" + el[i]
+        }
+      }
+      that.setData({
+        src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif',
+      })
+    }else{
+      var elements=device.getStoveElements()
+      var fireList=[]
+      for (var k in elements) {
+        var el =elements[k].values
+        var stove = elements[k].prefix
+        for (var i in el) {
+          if (el[i] != -1) {
+            stove = stove + "-" + el[i]
+          }
+        }
+        fireList.push({title:elements[k].title,  src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'})
+      }
+      that.setData({
+        fireList: fireList,
+      })
+    
+    }
+    for (var i in device.jb) {
+      if (device.jb[i].name == "介质") {
+        that.setData({
+          media: device.jb[i].v
+        })
+      }
+    }
+    
+    that.setData({
+      bengAnimationList: device.getBeng(),
+      fanAnimationList: device.getFan(),
+      baseInfoMap: device.jb,
+      wenduMap: device.wd,
+      exMap: device.bj,
+      yaliMap: device.yl,
+      liuliangMap: device.ll,
+      kaiguanMap: device.kg,
+      shebeiMap: device.sb,
+      shezhiMap: device.sz,
+      dingshiMap: device.ds,
+    })
+    if (that.data.mock1 == null) {
+      var runInfoMoList = []
+      for (var wd in that.data.wenduMap) {
+        runInfoMoList.push({
+          name: that.data.wenduMap[wd].name,
+          title: that.data.wenduMap[wd].name,
+          type: "wd",
+        })
+      }
+      for (var yl in that.data.yaliMap) {
+        runInfoMoList.push({
+          name: that.data.yaliMap[yl].name,
+          title: that.data.yaliMap[yl].name,
+          type: "yl",
+        })
+      }
+      for (var ll in that.data.liuliangMap) {
+        runInfoMoList.push({
+          name: that.data.liuliangMap[ll].name,
+          title: that.data.liuliangMap[ll].name,
+          type: "ll",
+        })
+      }
+    if (runInfoMoList.length > 0) {
+      that.setData({
+        report: true,
+        runInfoMoList: runInfoMoList,
+        mock1: runInfoMoList[0].name,
+        mock1Name: runInfoMoList[0].title,
+        mockType:runInfoMoList[0].type
       })
     }
-    if (that.data.exRecord) {
-      that.getException(errorList);
-    }
-    var imgstyle1 = that.data.imgstyle
-    var keylist = GroupKeys.getKeys();
-
-    var baseInfoMap = []
-    for (let i in data.getBaseInfoFields().map) {
-      baseInfoMap.push(data.getBaseInfoFields().map[i]);
-    }
-    var mockInfoMap = []
-    for (let i in data.getMockFields().map) {
-      if (data.getMockFields().map[i]) {
-        mockInfoMap.push(data.getMockFields().map[i]);
-      }
-    }
-    var settingInfoMap = []
-    for (let i in data.getSettingFields().map) {
-      if (data.getSettingFields().map[i]) {
-        settingInfoMap.push(data.getSettingFields().map[i]);
-      }
-
-    }
-    var deviceInfoMap = []
-    for (let i in data.getDeviceFields().map) {
-      if (data.getDeviceFields().map[i]) {
-        deviceInfoMap.push(data.getDeviceFields().map[i]);
-      }
-    }
-    var weeksettingMap = []
-    for (let i in data.getFieldsMap(keylist[5]).map) {
-      if (data.getFieldsMap(keylist[5]).map[i]) {
-        weeksettingMap.push(data.getFieldsMap(keylist[5]).map[i]);
-      }
-    }
-    var startstoptimeMap = []
-    for (let i in data.getFieldsMap(keylist[6]).map) {
-      if (data.getFieldsMap(keylist[6]).map[i]) {
-        startstoptimeMap.push(data.getFieldsMap(keylist[6]).map[i]);
-      }
-    }
-    var switchquantityMap = []
-    for (let i in data.getFieldsMap(keylist[7]).map) {
-      if (data.getFieldsMap(keylist[7]).map[i]) {
-        switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
-      }
-    }
-    that.setData({
-      src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
-      bengAnimationList: data.getBeng(),
-      exceptionInfoMap: data.getExceptionFields().map,
-      fanAnimationList: data.getFan(),
-      baseInfoMap: baseInfoMap,
-      mockInfoMap: mockInfoMap,
-      settingInfoMap: settingInfoMap,
-      deviceInfoMap: deviceInfoMap,
-      weeksettingMap: weeksettingMap,
-      startstoptimeMap: startstoptimeMap,
-      switchquantityMap: switchquantityMap,
-    })
-    wx.hideLoading()
+  }
     for (var i = 0; i < that.data.bengAnimationList.length; i++) {
-      console.log()
       var src = 'bengList[' + i + '].src'
       var title = 'bengList[' + i + '].title'
-
       that.setData({
-        [title]: that.data.bengAnimationList[i].getTitle(),
+        [title]: that.data.bengAnimationList[i].title,
         [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/beng/' + that.data.bengAnimationList[i].getElementPrefixAndValuesString() + '.gif'
       })
     }
@@ -938,7 +946,7 @@ Page({
       var src = 'fanList[' + i + '].src'
       var title = 'fanList[' + i + '].title'
       that.setData({
-        [title]: that.data.fanAnimationList[i].getTitle(),
+        [title]: that.data.fanAnimationList[i].title,
         [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/fan/' + that.data.fanAnimationList[i].getElementPrefixAndValuesString() + '.gif'
       })
     }
@@ -974,333 +982,6 @@ Page({
     }
   },
   onShow: function () {
-    var that = this;
-    var type = that.data.deviceType
-    var deviceNo = that.data.deviceNo
-    if (deviceNo.substr(0, 2) != '20') {
-      wx.request({
-        //获取openid接口    
-        url: 'https://apis.sdcsoft.com.cn/webapi/output/device/get',
-        data: {
-          deviceNo: deviceNo,
-        },
-        method: 'GET',
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-        },
-        responseType: 'arraybuffer',
-        success: function (res) {
-          var bytes = res.data
-          if (that.data.newFrame == "true") {
-            wx.request({
-              url: 'https://apis.sdcsoft.com.cn/wechat/DeviceDataMap/get',
-              data: {
-                id: that.data.dataMapId,
-              },
-              method: 'GET',
-              header: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-              },
-              success: function (res) {
-                let map = JSON.parse(res.data.data.deviceDataMap)
-                let addr = JSON.parse(res.data.data.pointIndexMap)
-                wx.getStorage({
-                  key: 'deviceList',
-                  success(res) {
-                    var list = res.data
-                    for (var i in list) {
-                      if(deviceNo==list[i].deviceNo){
-                        list[i].map = map
-                        list[i].addr = addr
-                      }
-                    }
-                    wx.setStorage({
-                      key: 'deviceList',
-                      data: list
-                    })
-                  }
-                })
-                app.globalData.adapter.Init(map, addr)
-                app.globalData.adapter.handlerData(new Uint8Array(bytes))
-                let device = app.globalData.adapter.Device
-                 
-                var clist=device.KongZhi.map
-                if (JSON.stringify(clist) != '{}') {
-                  that.setData({
-                    controlList: clist,
-                    control: true,
-                  })
-                }
-              //     device.KongZhi.each((k,v)=>{
-              //         console.log(k)
-              //         console.log(v)
-              //     })
-
-                var errorList = []
-                var myDate = new Date();
-                if (device.bj.length > 0) {
-                  for (var index in device.bj) {
-                    errorList.push({
-                      deviceNo: deviceNo,
-                      title: device.bj[index].name,
-                      date: myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + '-' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds(),
-                      states: that.data.content.detail_nochuli
-                    })
-                  }
-                  if (that.data.exRecord) {
-                    that.getException(errorList);
-                  }
-                }
-                
-                console.log(device.getStoveElements()) 
-                var imgstyle1 = that.data.imgstyle
-                if (device.getStoveElements().length > 0&device.getStoveElements().length ==1) {
-                  var el = device.getStoveElements()[0].values
-                  var stove = device.getStoveElements()[0].prefix
-                  for (var i in el) {
-                    if (el[i] != -1) {
-                      stove = stove + "-" + el[i]
-                    }
-                  }
-                  that.setData({
-                    src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif',
-                  })
-                }else{
-                  var elements=device.getStoveElements()
-                  var fireList=[]
-                  for (var k in elements) {
-                    var el =elements[k].values
-                    var stove = elements[k].prefix
-                    for (var i in el) {
-                      if (el[i] != -1) {
-                        stove = stove + "-" + el[i]
-                      }
-                    }
-                    fireList.push({title:elements[k].title,  src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'})
-                  }
-                  that.setData({
-                    fireList: fireList,
-                  })
-                
-                }
-                for (var i in device.jb) {
-                  if (device.jb[i].name == "介质") {
-                    that.setData({
-                      media: device.jb[i].v
-                    })
-                  }
-                }
-                
-                that.setData({
-                  bengAnimationList: device.getBeng(),
-                  fanAnimationList: device.getFan(),
-                  baseInfoMap: device.jb,
-                  wenduMap: device.wd,
-                  exMap: device.bj,
-                  yaliMap: device.yl,
-                  liuliangMap: device.ll,
-                  kaiguanMap: device.kg,
-                  shebeiMap: device.sb,
-                  shezhiMap: device.sz,
-                  dingshiMap: device.ds,
-                })
-                wx.hideLoading()
-                if (that.data.mock1 == null) {
-                  var runInfoMoList = []
-                  for (var wd in that.data.wenduMap) {
-                    runInfoMoList.push({
-                      name: that.data.wenduMap[wd].name,
-                      title: that.data.wenduMap[wd].name,
-                      type: "wd",
-                    })
-                  }
-                  for (var yl in that.data.yaliMap) {
-                    runInfoMoList.push({
-                      name: that.data.yaliMap[yl].name,
-                      title: that.data.yaliMap[yl].name,
-                      type: "yl",
-                    })
-                  }
-                  for (var ll in that.data.liuliangMap) {
-                    runInfoMoList.push({
-                      name: that.data.liuliangMap[ll].name,
-                      title: that.data.liuliangMap[ll].name,
-                      type: "ll",
-                    })
-                  }
-                if (runInfoMoList.length > 0) {
-                  that.setData({
-                    report: true,
-                    runInfoMoList: runInfoMoList,
-                    mock1: runInfoMoList[0].name,
-                    mock1Name: runInfoMoList[0].title,
-                    mockType:runInfoMoList[0].type
-                  })
-                }
-              }
-                for (var i = 0; i < that.data.bengAnimationList.length; i++) {
-                  var src = 'bengList[' + i + '].src'
-                  var title = 'bengList[' + i + '].title'
-                  that.setData({
-                    [title]: that.data.bengAnimationList[i].title,
-                    [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/beng/' + that.data.bengAnimationList[i].getElementPrefixAndValuesString() + '.gif'
-                  })
-                }
-
-                for (var i = 0; i < that.data.fanAnimationList.length; i++) {
-                  var src = 'fanList[' + i + '].src'
-                  var title = 'fanList[' + i + '].title'
-                  that.setData({
-                    [title]: that.data.fanAnimationList[i].title,
-                    [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/fan/' + that.data.fanAnimationList[i].getElementPrefixAndValuesString() + '.gif'
-                  })
-                }
-              }
-            })
-          
-          } else {
-            var errorList = []
-            let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
-            var clist = data.getCommands().map
-            data.getDeviceFocusFields()
-            var media = -1
-            for (var index in data.getBaseInfoFields().map) {
-              if (data.getBaseInfoFields().map[index].name === "o_media") {
-                media = data.getBaseInfoFields().map[index].value
-              }
-            }
-
-            that.setData({
-              media: media
-            })
-            if (JSON.stringify(clist) != '{}') {
-              that.setData({
-                controlList: clist,
-                control: true,
-              })
-            }
-            var myDate = new Date();
-            for (var index in data.getExceptionFields().map) {
-              errorList.push({
-                deviceNo: deviceNo,
-                title: data.getExceptionFields().map[index].title,
-                date: myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + '-' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds(),
-                states: that.data.content.detail_nochuli
-              })
-            }
-
-            if (that.data.exRecord) {
-              that.getException(errorList);
-            }
-            var imgstyle1 = that.data.imgstyle
-            console.log(that.data.mock1 == null)
-            if (that.data.mock1 == null) {
-
-              var gf = new gfrm.GroupFieldsRelationalMapping;
-              var moMap = gf.groupMap.getItem("mockInfo")["map"]["map"]
-              var runInfoMoList = []
-              for (var index in data.getMockFields().map) {
-                for (var mo in moMap) {
-                  if (moMap[mo] == data.getMockFields().map[index].name) {
-                    runInfoMoList.push({
-                      name: moMap[mo],
-                      title: data.getMockFields().map[index].title
-                    })
-                  }
-                }
-              }
-
-
-              if (runInfoMoList.length > 0) {
-                that.setData({
-                  report: true,
-                  runInfoMoList: runInfoMoList,
-                  mock1: runInfoMoList[0].name,
-                  mockKey: runInfoMoList[0].name,
-                  mock1Name: runInfoMoList[0].title
-                })
-              }
-
-            }
-            var keylist = GroupKeys.getKeys();
-            var baseInfoMap = []
-            for (let i in data.getBaseInfoFields().map) {
-              baseInfoMap.push(data.getBaseInfoFields().map[i]);
-            }
-            var mockInfoMap = []
-            for (let i in data.getMockFields().map) {
-              if (data.getMockFields().map[i]) {
-                mockInfoMap.push(data.getMockFields().map[i]);
-              }
-            }
-            var settingInfoMap = []
-            for (let i in data.getSettingFields().map) {
-              if (data.getSettingFields().map[i]) {
-                settingInfoMap.push(data.getSettingFields().map[i]);
-              }
-            }
-            var deviceInfoMap = []
-            for (let i in data.getDeviceFields().map) {
-              if (data.getDeviceFields().map[i]) {
-                deviceInfoMap.push(data.getDeviceFields().map[i]);
-              }
-            }
-            var weeksettingMap = []
-            for (let i in data.getFieldsMap(keylist[5]).map) {
-              if (data.getFieldsMap(keylist[5]).map[i]) {
-                weeksettingMap.push(data.getFieldsMap(keylist[5]).map[i]);
-              }
-            }
-            var startstoptimeMap = []
-            for (let i in data.getFieldsMap(keylist[6]).map) {
-              if (data.getFieldsMap(keylist[6]).map[i]) {
-                startstoptimeMap.push(data.getFieldsMap(keylist[6]).map[i]);
-              }
-            }
-            var switchquantityMap = []
-            for (let i in data.getFieldsMap(keylist[7]).map) {
-              if (data.getFieldsMap(keylist[7]).map[i]) {
-                switchquantityMap.push(data.getFieldsMap(keylist[7]).map[i]);
-              }
-            }
-            that.setData({
-              src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + data.getStoveElement().getElementPrefixAndValuesString().substr(0, 8) + imgstyle1 + data.getStoveElement().getElementPrefixAndValuesString().substr(9, 2) + '.gif',
-              bengAnimationList: data.getBeng(),
-              exceptionInfoMap: data.getExceptionFields().map,
-              fanAnimationList: data.getFan(),
-              baseInfoMap: baseInfoMap,
-              mockInfoMap: mockInfoMap,
-              settingInfoMap: settingInfoMap,
-              deviceInfoMap: deviceInfoMap,
-              weeksettingMap: weeksettingMap,
-              startstoptimeMap: startstoptimeMap,
-              switchquantityMap: switchquantityMap,
-            })
-            wx.hideLoading()
-            for (var i = 0; i < that.data.bengAnimationList.length; i++) {
-              var src = 'bengList[' + i + '].src'
-              var title = 'bengList[' + i + '].title'
-              that.setData({
-                [title]: that.data.bengAnimationList[i].title,
-                [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/beng/' + that.data.bengAnimationList[i].getElementPrefixAndValuesString() + '.gif'
-              })
-            }
-
-            for (var i = 0; i < that.data.fanAnimationList.length; i++) {
-              var src = 'fanList[' + i + '].src'
-              var title = 'fanList[' + i + '].title'
-              that.setData({
-                [title]: that.data.fanAnimationList[i].title,
-                [src]: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/fan/' + that.data.fanAnimationList[i].getElementPrefixAndValuesString() + '.gif'
-              })
-            }
-          }
-
-        }
-      })
-    } else {
-      wx.hideLoading()
-    }
   },
   timer: function () {
     var that = this
@@ -1493,167 +1174,85 @@ Page({
     }
     var endDate = that.getDateStr(beginDate, 1)
     
-    if(that.data.newFrame=='true'){
-      wx.request({
-        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
-        data: {
-          key: key,
-          begintime: beginDate,
-          endtime: endDate,
-          deviceNo: that.data.deviceNo,
-          type:that.data.mockType,
-        },
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-        },
-        method: 'GET',
-        success: function (res) {
-          console.log(res)
-          if (res.data.code == 0) {
-            that.setData({
-              havedata: true
-            })
-            var systemStateCategories = []
-            var systemStateData = res.data.data.data
-            var detelist = res.data.data.date
-            for (var d in detelist) {
-              systemStateCategories.push(DateUtil.dateFormat(new Date(detelist[d]), "yyyy-MM-dd HH:mm:ss"))
-            }
-  
-            if (systemStateData.length > 0) {
-              var windowWidth = 320;
-              try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth;
-              } catch (e) {
-                console.error('getSystemInfoSync failed!');
-              }
-              lineChart = new wxCharts({
-                canvasId: 'mockLine',
-                type: 'line',
-                categories: systemStateCategories,
-                animation: false,
-                series: [{
-                  name: that.data.mock1Name,
-                  data: systemStateData,
-                  format: function (val, name) {
-                    var fomatFloat = parseFloat(val);
-                    return fomatFloat.toFixed(2);
-                  }
-                }],
-                xAxis: {
-                  disableGrid: false
-                },
-                yAxis: {
-                  title: that.data.content.detail_y,
-                  format: function (val) {
-                    return val.toFixed(2);
-                  },
-                  min: 0
-                },
-                width: windowWidth,
-                height: 200,
-                dataLabel: true,
-                dataPointShape: true,
-                enableScroll: true,
-                extra: {
-                  lineStyle: 'curve'
-                }
-              });
-            }
-          } else {
-            wx.showToast({
-              title: "此设备在" + beginDate + "未开机",
-              icon: 'none',
-              duration: 5000
-            });
-            that.setData({
-              havedata: false
-            })
+    wx.request({
+      url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
+      data: {
+        key: key,
+        begintime: beginDate,
+        endtime: endDate,
+        deviceNo: that.data.deviceNo,
+        type:that.data.mockType,
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.code == 0) {
+          that.setData({
+            havedata: true
+          })
+          var systemStateCategories = []
+          var systemStateData = res.data.data.data
+          var detelist = res.data.data.date
+          for (var d in detelist) {
+            systemStateCategories.push(DateUtil.dateFormat(new Date(detelist[d]), "yyyy-MM-dd HH:mm:ss"))
           }
-        }
-      })
-    }else{
-      console.log("321")
-      wx.request({
-        url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
-        data: {
-          key: key,
-          begintime: beginDate,
-          endtime: endDate,
-          deviceNo: that.data.deviceNo
-        },
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-        },
-        method: 'GET',
-        success: function (res) {
-          if (res.data.code == 0) {
-            that.setData({
-              havedata: true
-            })
-            var systemStateCategories = []
-            var systemStateData = res.data.data.data[0]
-            var detelist = res.data.data.date
-            for (var d in detelist) {
-              systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
+
+          if (systemStateData.length > 0) {
+            var windowWidth = 320;
+            try {
+              var res = wx.getSystemInfoSync();
+              windowWidth = res.windowWidth;
+            } catch (e) {
+              console.error('getSystemInfoSync failed!');
             }
-  
-            if (systemStateData.length > 0) {
-              var windowWidth = 320;
-              try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth;
-              } catch (e) {
-                console.error('getSystemInfoSync failed!');
-              }
-  
-              lineChart = new wxCharts({
-                canvasId: 'mockLine',
-                type: 'line',
-                categories: systemStateCategories,
-                animation: false,
-                series: [{
-                  name: that.data.mock1Name,
-                  data: systemStateData,
-                  format: function (val, name) {
-                    var fomatFloat = parseFloat(val);
-                    return fomatFloat.toFixed(2);
-                  }
-                }],
-                xAxis: {
-                  disableGrid: false
-                },
-                yAxis: {
-                  title: that.data.content.detail_y,
-                  format: function (val) {
-                    return val.toFixed(2);
-                  },
-                  min: 0
-                },
-                width: windowWidth,
-                height: 200,
-                dataLabel: true,
-                dataPointShape: true,
-                enableScroll: true,
-                extra: {
-                  lineStyle: 'curve'
+            lineChart = new wxCharts({
+              canvasId: 'mockLine',
+              type: 'line',
+              categories: systemStateCategories,
+              animation: false,
+              series: [{
+                name: that.data.mock1Name,
+                data: systemStateData,
+                format: function (val, name) {
+                  var fomatFloat = parseFloat(val);
+                  return fomatFloat.toFixed(2);
                 }
-              });
-            }
-          } else {
-            wx.showToast({
-              title: "此设备在" + beginDate + "未开机",
-              icon: 'none',
-              duration: 5000
+              }],
+              xAxis: {
+                disableGrid: false
+              },
+              yAxis: {
+                title: that.data.content.detail_y,
+                format: function (val) {
+                  return val.toFixed(2);
+                },
+                min: 0
+              },
+              width: windowWidth,
+              height: 200,
+              dataLabel: true,
+              dataPointShape: true,
+              enableScroll: true,
+              extra: {
+                lineStyle: 'curve'
+              }
             });
-            that.setData({
-              havedata: false
-            })
           }
+        } else {
+          wx.showToast({
+            title: "此设备在" + beginDate + "未开机",
+            icon: 'none',
+            duration: 5000
+          });
+          that.setData({
+            havedata: false
+          })
         }
-      })
-    }
+      }
+    })
   },
   getreportdatabyday: function (key) {
     var that = this
@@ -1667,167 +1266,84 @@ Page({
       var beginDate = that.getDateStr(null, -3)
     }
     var endDate = that.getDateStr(beginDate, 1)
-    if(that.data.newFrame=='true'){
-      wx.request({
-        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
-        data: {
-          key: key,
-          begintime: beginDate,
-          endtime: endDate,
-          deviceNo: that.data.deviceNo,
-          type:that.data.mockType,
-        },
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-        },
-        method: 'GET',
-        success: function (res) {
-          console.log(res)
-          if (res.data.code == 0) {
-            that.setData({
-              havedata: true
-            })
-            var systemStateCategories = []
-            var systemStateData = res.data.data.data
-            var detelist = res.data.data.date
-            for (var d in detelist) {
-              systemStateCategories.push(DateUtil.dateFormat(new Date(detelist[d]), "yyyy-MM-dd HH:mm:ss"))
-            }
-            if (systemStateData.length > 0) {
-              var windowWidth = 320;
-              try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth;
-              } catch (e) {
-                console.error('getSystemInfoSync failed!');
-              }
-              lineChart = new wxCharts({
-                canvasId: 'mockLine',
-                type: 'line',
-                categories: systemStateCategories,
-                animation: false,
-                series: [{
-                  name: that.data.mock1Name,
-                  data: systemStateData,
-                  format: function (val, name) {
-                    var fomatFloat = parseFloat(val);
-                    return fomatFloat.toFixed(2);
-                  }
-                }],
-                xAxis: {
-                  disableGrid: false
-                },
-                yAxis: {
-                  title: that.data.content.detail_y,
-                  format: function (val) {
-                    return val.toFixed(2);
-                  },
-                  min: 0
-                },
-                width: windowWidth,
-                height: 200,
-                dataLabel: true,
-                dataPointShape: true,
-                enableScroll: true,
-                extra: {
-                  lineStyle: 'curve'
-                }
-              });
-            }
-          } else {
-            wx.showToast({
-              title: "此设备在" + beginDate + "未开机",
-              icon: 'none',
-              duration: 5000
-            });
-            that.setData({
-              havedata: false
-            })
+    wx.request({
+      url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
+      data: {
+        key: key,
+        begintime: beginDate,
+        endtime: endDate,
+        deviceNo: that.data.deviceNo,
+        type:that.data.mockType,
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        if (res.data.code == 0) {
+          that.setData({
+            havedata: true
+          })
+          var systemStateCategories = []
+          var systemStateData = res.data.data.data
+          var detelist = res.data.data.date
+          for (var d in detelist) {
+            systemStateCategories.push(DateUtil.dateFormat(new Date(detelist[d]), "yyyy-MM-dd HH:mm:ss"))
           }
-        }
-      })
-    }else{
-      console.log("123")
-      wx.request({
-        url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
-        data: {
-          key: key,
-          begintime: beginDate,
-          endtime: endDate,
-          deviceNo: that.data.deviceNo
-        },
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-        },
-        method: 'GET',
-        success: function (res) {
-          console.log(res)
-          if (res.data.code == 0) {
-            that.setData({
-              havedata: true
-            })
-            var systemStateCategories = []
-            var systemStateData = res.data.data.data[0]
-            var detelist = res.data.data.date
-            for (var d in detelist) {
-              systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
+          if (systemStateData.length > 0) {
+            var windowWidth = 320;
+            try {
+              var res = wx.getSystemInfoSync();
+              windowWidth = res.windowWidth;
+            } catch (e) {
+              console.error('getSystemInfoSync failed!');
             }
-  
-            if (systemStateData.length > 0) {
-              var windowWidth = 320;
-              try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth;
-              } catch (e) {
-                console.error('getSystemInfoSync failed!');
-              }
-  
-              lineChart = new wxCharts({
-                canvasId: 'mockLine',
-                type: 'line',
-                categories: systemStateCategories,
-                animation: false,
-                series: [{
-                  name: that.data.mock1Name,
-                  data: systemStateData,
-                  format: function (val, name) {
-                    var fomatFloat = parseFloat(val);
-                    return fomatFloat.toFixed(2);
-                  }
-                }],
-                xAxis: {
-                  disableGrid: false
-                },
-                yAxis: {
-                  title: that.data.content.detail_y,
-                  format: function (val) {
-                    return val.toFixed(2);
-                  },
-                  min: 0
-                },
-                width: windowWidth,
-                height: 200,
-                dataLabel: true,
-                dataPointShape: true,
-                enableScroll: true,
-                extra: {
-                  lineStyle: 'curve'
+            lineChart = new wxCharts({
+              canvasId: 'mockLine',
+              type: 'line',
+              categories: systemStateCategories,
+              animation: false,
+              series: [{
+                name: that.data.mock1Name,
+                data: systemStateData,
+                format: function (val, name) {
+                  var fomatFloat = parseFloat(val);
+                  return fomatFloat.toFixed(2);
                 }
-              });
-            }
-          } else {
-            wx.showToast({
-              title: "此设备在" + beginDate + "未开机",
-              icon: 'none',
-              duration: 5000
+              }],
+              xAxis: {
+                disableGrid: false
+              },
+              yAxis: {
+                title: that.data.content.detail_y,
+                format: function (val) {
+                  return val.toFixed(2);
+                },
+                min: 0
+              },
+              width: windowWidth,
+              height: 200,
+              dataLabel: true,
+              dataPointShape: true,
+              enableScroll: true,
+              extra: {
+                lineStyle: 'curve'
+              }
             });
-            that.setData({
-              havedata: false
-            })
           }
+        } else {
+          wx.showToast({
+            title: "此设备在" + beginDate + "未开机",
+            icon: 'none',
+            duration: 5000
+          });
+          that.setData({
+            havedata: false
+          })
         }
-      })
-    }
+      }
+    })
 
 
   },
