@@ -1145,6 +1145,9 @@ Page({
                     }
                     if (device.getStoveElements().length > 0) {
                       var el = device.getStoveElements()[0].values
+                      if(el[4]!=-1){
+                                      jiarezu=el[4]
+                                    }
                       var stove = device.getStoveElements()[0].prefix
                       for (var i in el) {
                         if (el[i] != -1) {

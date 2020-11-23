@@ -1,6 +1,19 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CtlField = exports.CtlItem = exports.POINT_TYPE_STRING = exports.POINT_TYPE_LONG = exports.POINT_TYPE_FLOAT = exports.POINT_TYPE_UINT = exports.POINT_TYPE_BYTE = void 0;
+exports.FixCtlField = exports.PointCtlField = exports.CtlField = exports.CtlItem = exports.POINT_TYPE_STRING = exports.POINT_TYPE_LONG = exports.POINT_TYPE_FLOAT = exports.POINT_TYPE_UINT = exports.POINT_TYPE_BYTE = void 0;
 var NumberUtil_1 = require("../tools/NumberUtil");
 var CRC16Util_1 = require("../tools/CRC16Util");
 var Endian_1 = require("../Endian/Endian");
@@ -127,44 +140,60 @@ var CtlItem = /** @class */ (function () {
     return CtlItem;
 }());
 exports.CtlItem = CtlItem;
-// export class CtlField {
-//     no: string = '01';
-//     addr: string = '00';
-//     min: number = 0;
-//     max: number = 0;
-//     group: number = 1;
-//     fn: Function | null = null;
-//     v: number = 0;
-//     desc: string = ''
-//     constructor(ctl: any) {
-//         this.no = ctl['no'];
-//         this.addr = ctl['addr'];
-//         this.min = ctl['min'];
-//         this.max = ctl['max'];
-//         this.group = ctl['group'];
-//         this.fn = ctl['fn'];
-//         this.v = 0;
-//         this.desc = ctl['desc']
-//     }
-//     setValue(v: number) {
-//         if (this.fn) {
-//             this.v = this.fn(v)
-//             return
-//         }
-//         this.v = v
-//     }
-// }
 var CtlField = /** @class */ (function () {
     function CtlField() {
         this.ctls = [];
-        this.endian = Endian_1.Endian.Big;
-        this.v = 0;
-        this.action = '03';
-        this.addr = '00';
-        this.typ = 0;
-        this.no = 1;
     }
-    Object.defineProperty(CtlField.prototype, "Endian", {
+    CtlField.hexStringToBytes = function (str) {
+        if (null != str && str.length != 0) {
+            var len = str.length / 2;
+            var bytes = new ArrayBuffer(len);
+            var v = new Uint8Array(bytes);
+            for (var i = 0; i < len; i++) {
+                v[i] = (parseInt(str.substr(i * 2, 2), 16));
+            }
+            return v;
+        }
+        return null;
+    };
+    CtlField.toNumbers = function (str) {
+        var numbers = [];
+        if (null != str && str.length != 0) {
+            var len = str.length / 2;
+            for (var i = 0; i < len; i++) {
+                //console.log(str.substr(i * 2, 2))
+                numbers.push(parseInt(str.substr(i * 2, 2), 16));
+            }
+        }
+        return numbers;
+    };
+    CtlField.intToBytes4 = function (n) {
+        var b = new ArrayBuffer(4);
+        var v = new Uint8Array(b);
+        for (var i = 0; i < 4; i++) {
+            v[i] = (n >> (24 - i * 8));
+        }
+        return b;
+    };
+    CtlField.CTL_ACTION_COI = '05';
+    CtlField.CTL_ACTION_REG = '06';
+    CtlField.CTL_ACTION_REG_2 = '10';
+    return CtlField;
+}());
+exports.CtlField = CtlField;
+var PointCtlField = /** @class */ (function (_super) {
+    __extends(PointCtlField, _super);
+    function PointCtlField() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.endian = Endian_1.Endian.Big;
+        _this.v = 0;
+        _this.action = '03';
+        _this.addr = '00';
+        _this.typ = 0;
+        _this.no = 1;
+        return _this;
+    }
+    Object.defineProperty(PointCtlField.prototype, "Endian", {
         get: function () {
             return this.endian;
         },
@@ -174,7 +203,7 @@ var CtlField = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(CtlField.prototype, "Value", {
+    Object.defineProperty(PointCtlField.prototype, "Value", {
         get: function () {
             return this.v;
         },
@@ -184,7 +213,7 @@ var CtlField = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(CtlField.prototype, "Action", {
+    Object.defineProperty(PointCtlField.prototype, "Action", {
         get: function () {
             return this.action;
         },
@@ -194,7 +223,7 @@ var CtlField = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(CtlField.prototype, "Address", {
+    Object.defineProperty(PointCtlField.prototype, "Address", {
         get: function () {
             return this.addr;
         },
@@ -204,7 +233,7 @@ var CtlField = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(CtlField.prototype, "Typ", {
+    Object.defineProperty(PointCtlField.prototype, "Typ", {
         get: function () {
             return this.typ;
         },
@@ -214,7 +243,7 @@ var CtlField = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(CtlField.prototype, "No", {
+    Object.defineProperty(PointCtlField.prototype, "No", {
         get: function () {
             return this.no;
         },
@@ -224,10 +253,10 @@ var CtlField = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    CtlField.prototype.addCtlItem = function (ctlItem) {
+    PointCtlField.prototype.addCtlItem = function (ctlItem) {
         this.ctls.push(ctlItem);
     };
-    CtlField.prototype.getCtlItems = function () {
+    PointCtlField.prototype.getCtlItems = function () {
         for (var i in this.ctls) {
             var bit = this.ctls[i].Bit;
             if (null != bit) {
@@ -238,7 +267,7 @@ var CtlField = /** @class */ (function () {
         }
         return this.ctls;
     };
-    Object.defineProperty(CtlField.prototype, "Command", {
+    Object.defineProperty(PointCtlField.prototype, "Command", {
         get: function () {
             if (this.ctls.length == 1) {
                 if (this.ctls[0].Flag) {
@@ -339,42 +368,39 @@ var CtlField = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    CtlField.hexStringToBytes = function (str) {
-        if (null != str && str.length != 0) {
-            var len = str.length / 2;
-            var bytes = new ArrayBuffer(len);
-            var v = new Uint8Array(bytes);
-            for (var i = 0; i < len; i++) {
-                v[i] = (parseInt(str.substr(i * 2, 2), 16));
+    return PointCtlField;
+}(CtlField));
+exports.PointCtlField = PointCtlField;
+var FixCtlField = /** @class */ (function (_super) {
+    __extends(FixCtlField, _super);
+    function FixCtlField() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    FixCtlField.prototype.addCtlItem = function (ctlItem) {
+        if (16 == ctlItem.Description.length) {
+            ctlItem.Description += '0000000000';
+            this.ctls.push(ctlItem);
+        }
+        else if (26 == ctlItem.Description.length) {
+            this.ctls.push(ctlItem);
+        }
+        else {
+            throw '命令字符串长度错误，仅支持16/26字符的HEX的Modbus Rtu命令';
+        }
+    };
+    FixCtlField.prototype.getCtlItems = function () {
+        return this.ctls;
+    };
+    Object.defineProperty(FixCtlField.prototype, "Command", {
+        get: function () {
+            if (this.ctls.length) {
+                return this.ctls[0].Description;
             }
-            return v;
-        }
-        return null;
-    };
-    CtlField.toNumbers = function (str) {
-        var numbers = [];
-        if (null != str && str.length != 0) {
-            var len = str.length / 2;
-            for (var i = 0; i < len; i++) {
-                //console.log(str.substr(i * 2, 2))
-                numbers.push(parseInt(str.substr(i * 2, 2), 16));
-            }
-        }
-        return numbers;
-    };
-    CtlField.intToBytes4 = function (n) {
-        var b = new ArrayBuffer(4);
-        var v = new Uint8Array(b);
-        for (var i = 0; i < 4; i++) {
-            v[i] = (n >> (24 - i * 8));
-        }
-        return b;
-    };
-    CtlField.CTL_ACTION_COI = '05';
-    CtlField.CTL_ACTION_REG = '06';
-    CtlField.CTL_ACTION_REG_2 = '10';
-    return CtlField;
-}());
-exports.CtlField = CtlField;
-//锅炉上线的确定
-//微信使用频率
+            return '';
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return FixCtlField;
+}(CtlField));
+exports.FixCtlField = FixCtlField;

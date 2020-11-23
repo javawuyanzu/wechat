@@ -16,8 +16,10 @@ export declare class DeviceAdapter2 {
     static readonly Power_Mei = 2;
     static readonly Power_ShengWuZhi = 3;
     static readonly Power_YuRe = 4;
+    static readonly Power_BANHUAN = 5;
     static readonly CTL_TAG_CLC = 0;
     static readonly CTL_TAG_REG = 1;
+    static readonly CTL_TAG_FIX = 2;
     static readonly Formate_Type_Exception = 0;
     static readonly Formate_Type_JiBen = 1;
     static readonly Formate_Type_WenDu = 2;

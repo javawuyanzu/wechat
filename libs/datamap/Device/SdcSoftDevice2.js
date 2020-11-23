@@ -177,11 +177,21 @@ var SdcSoftDevice2 = /** @class */ (function () {
     SdcSoftDevice2.prototype.getStoveElements = function () {
         var elements = [];
         var group = this.atMap.getItem(DeviceAdapter2_1.DeviceAdapter2.Formate_Field_AT_Class_Fire);
+        // console.log('-------------group-------------')
+        // console.log(group)
+        // console.log('-------------group end-------------')
         for (var i = 0; i < group.length; i++) {
             var el = new Element_1.Element();
             el.Title = group[i].name;
             el.Prefix = Element_1.Element.Prefix_Stove;
-            el.SetValues(Element_1.Element.Index_A_Power, this.power, this.media, group[i].v, 0);
+            //为锅炉动画增加一个数组位
+            //0燃料 1介质 2大小火 3立卧 4数量（电锅炉为加热组数量）
+            if (this.power == DeviceAdapter2_1.DeviceAdapter2.Power_Dian) {
+                el.SetValues(Element_1.Element.Index_A_Power, this.power, this.media, group[i].v, 0, group[i].amount);
+            }
+            else {
+                el.SetValues(Element_1.Element.Index_A_Power, this.power, this.media, group[i].v, 0);
+            }
             el.Amount = group[i].amount;
             elements.push(el);
         }
