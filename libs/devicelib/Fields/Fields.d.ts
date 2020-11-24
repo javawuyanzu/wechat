@@ -43,11 +43,19 @@ export declare class CtlItem {
     set Value(v: number);
     get Value(): number;
 }
-export declare class CtlField {
+export declare abstract class CtlField {
     static readonly CTL_ACTION_COI = "05";
     static readonly CTL_ACTION_REG = "06";
     static readonly CTL_ACTION_REG_2 = "10";
-    ctls: CtlItem[];
+    protected ctls: CtlItem[];
+    abstract addCtlItem(ctlItem: CtlItem): void;
+    abstract getCtlItems(): CtlItem[];
+    abstract get Command(): string;
+    static hexStringToBytes(str: string): Uint8Array | null;
+    static toNumbers(str: string): number[];
+    static intToBytes4(n: number): ArrayBuffer;
+}
+export declare class PointCtlField extends CtlField {
     endian: number;
     set Endian(v: number);
     get Endian(): number;
@@ -69,7 +77,9 @@ export declare class CtlField {
     addCtlItem(ctlItem: CtlItem): void;
     getCtlItems(): CtlItem[];
     get Command(): string;
-    static hexStringToBytes(str: string): Uint8Array | null;
-    static toNumbers(str: string): number[];
-    static intToBytes4(n: number): ArrayBuffer;
+}
+export declare class FixCtlField extends CtlField {
+    addCtlItem(ctlItem: CtlItem): void;
+    getCtlItems(): CtlItem[];
+    get Command(): string;
 }

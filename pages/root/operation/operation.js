@@ -139,7 +139,8 @@ Page({
               key: 'deviceList',
               data: deviceList,
               success: function (res) {
-               
+                app.globalData.updateLock=true
+                app.globalData.deviceNo=deviceNo
                 wx.showToast({
                   title: that.data.content.operation_addsuccess,
                   icon: 'success',

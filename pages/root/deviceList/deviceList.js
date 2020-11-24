@@ -503,9 +503,7 @@ Page({
     })
     that.updateList().then(function () {
       that.mqttInit()
-      that.setData({
-        updateLock: true
-      })
+   
     })
       
   },
@@ -651,7 +649,6 @@ Page({
               if (res.data != "2.6.0") {
                 that.setData({
                   ifversion: true,
-                  updateLock: true,
                   version: "2.6.0"
                 })
                 wx.setStorageSync('version', "2.6.0")
@@ -911,9 +908,20 @@ Page({
   },
   onShow: function () {
     var that = this
-      console.log("--------------------------------------",that.data.updateLock)
-    if(that.data.updateLock){
+    if(app.globalData.updateLock){
+      var ilist=that.data.imgList
+      ilist.push({
+        title: app.globalData.deviceNo,
+        runstate: "未连接",
+        deviceNo: app.globalData.deviceNo,
+        imgStyle: 0,
+        simTitle: ""
+      })
+      that.setData({
+        imgList :ilist
+      })
       that.mqttInit()
+      app.globalData.updateLock=false
     }
     
     // wx.getStorage({
@@ -1178,8 +1186,13 @@ Page({
           if (device.status) {
             runstate1 = "-" + device.status.vstr
           }
+         
           if (device.getStoveElements().length > 0) {
+         
             var el = device.getStoveElements()[0].values
+            if(el[4]!=-1){
+              jiarezu=el[4]
+            }
             var stove = device.getStoveElements()[0].prefix
             for (var i in el) {
               if (el[i] != -1) {

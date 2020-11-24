@@ -181,7 +181,12 @@ var SdcSoftDevice2 = /** @class */ (function () {
             var el = new Element_1.Element();
             el.Title = group[i].name;
             el.Prefix = Element_1.Element.Prefix_Stove;
-            el.SetValues(Element_1.Element.Index_A_Power, this.power, this.media, group[i].v, 0);
+            if (this.power == DeviceAdapter2_1.DeviceAdapter2.Power_Dian) {
+                el.SetValues(Element_1.Element.Index_A_Power, this.power, this.media, group[i].v, 0, group[i].amount);
+            }
+            else {
+                el.SetValues(Element_1.Element.Index_A_Power, this.power, this.media, group[i].v, 0);
+            }
             el.Amount = group[i].amount;
             elements.push(el);
         }

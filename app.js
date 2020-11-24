@@ -90,6 +90,7 @@ App({
     device:null,
     content: null,
     editpage:null,
+    updateLock:false,
     customer:{
       orgId: null,
       employeeId: null,
