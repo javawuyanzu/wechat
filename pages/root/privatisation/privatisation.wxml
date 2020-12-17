@@ -1,0 +1,38 @@
+<view class="page" data-weui-theme="{{theme}}">
+    <view class="page__hd">
+        <view class="page__title">Privatization management</view>
+        <view class="page__desc">锅炉私有化管理</view>
+    </view>
+    <view class="page__bd" >
+        <view class="weui-cells weui-cells_after-title" wx:for="{{list}}" wx:key="key" wx:for-item="item">
+             <view   class="weui-cell weui-cell_access"  wx:if="{{item.mobile==null}}">
+                <view class="weui-cell__bd">邀请码</view>
+                <view  bindtap='copyText' data-openId="{{item.openId}}"> 点击复制</view>
+            </view>
+            <view  class="weui-cell weui-cell_access"  wx:else>
+                <view class="weui-cell__bd">{{item.realName}}-{{item.mobile}}</view>
+                <view  bindtap='delete' data-id="{{item.id}}"> 点击删除</view>
+            </view>
+        </view>
+        
+    </view>
+</view>
+<view class='toast-box' hidden='{{!ifdelete}}'>
+  <view class='toastbg'></view>
+  <view class='showToast'>
+    <view class='toast-title'>
+      <text>提示</text>
+    </view>
+    <view class='toast-main1'>
+      <text>是否要删除该成员</text>
+    </view>
+    <view class='toast-button'>
+      <view class='button1'>
+        <button catchtap='nodelete'>取消</button>
+      </view>
+      <view class='button2'>
+        <button catchtap='yesdelete'>删除</button>
+      </view>
+    </view>
+  </view>
+</view>

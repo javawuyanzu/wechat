@@ -17,18 +17,23 @@
         </form>
     </view>
 </view>
-<view class='toast-box' hidden='{{!empower}}'>
+<view class='toast-box' hidden='{{!privatisation}}'>
   <view class='toastbg'></view>
   <view class='showToast'>
     <view class='toast-title'>
-      <text>{{content.list_prompt}}</text>
+      <text>提示</text>
+    </view>
+    <view class='toast-main1'>
+      <view >
+       该设备已被用户购买私有化服务，获得该用户的邀请码点击去认证即可添加设备
+      </view>
     </view>
     <view class='toast-button'>
       <view class='button1'>
-        <button catchtap='refusedEmpower'>{{content.operation_noshouquan}}</button>
+        <button catchtap='cancelPrivatisation'>取消</button>
       </view>
       <view class='button2'>
-         <button wx:if="{{true}}" open-type="getUserInfo"  bindgetuserinfo="bindGetUserInfo" style="">{{content.operation_shouquan}}</button>
+        <button catchtap='certification'>去认证</button>
       </view>
     </view>
   </view>

@@ -111,10 +111,10 @@ var DeviceAdapter2 = /** @class */ (function () {
                 for (var key3 = 0; key3 < atemt.length; key3++) {
                     var atemtfield = atemt[key3];
                     var element = {
-                        "name": atemtfield[DeviceAdapter2.Formate_Field_Option_Name],
-                        "typ": atemtfield[DeviceAdapter2.Formate_Field_Option_Type],
-                        "amount": atemtfield[DeviceAdapter2.Formate_Field_Option_Amount],
-                        "v": atemtfield[DeviceAdapter2.Formate_Field_Option_Value]
+                        'name': atemtfield[DeviceAdapter2.Formate_Field_Option_Name],
+                        'typ': atemtfield[DeviceAdapter2.Formate_Field_Option_Type],
+                        'amount': atemtfield[DeviceAdapter2.Formate_Field_Option_Amount],
+                        'v': atemtfield[DeviceAdapter2.Formate_Field_Option_Value]
                     };
                     group.push(element);
                 }
@@ -123,9 +123,9 @@ var DeviceAdapter2 = /** @class */ (function () {
                 for (var key3 = 0; key3 < atemt.length; key3++) {
                     var atemtfield = atemt[key3];
                     var element = {
-                        "name": atemtfield[DeviceAdapter2.Formate_Field_Option_Name],
-                        "amount": atemtfield[DeviceAdapter2.Formate_Field_Option_Amount],
-                        "v": atemtfield[DeviceAdapter2.Formate_Field_Option_Value]
+                        'name': atemtfield[DeviceAdapter2.Formate_Field_Option_Name],
+                        'amount': atemtfield[DeviceAdapter2.Formate_Field_Option_Amount],
+                        'v': atemtfield[DeviceAdapter2.Formate_Field_Option_Value]
                     };
                     group.push(element);
                     // 记录泵/风机动画 已经处理的设备个数，应该处理的个数与设备amount是对应的
@@ -153,8 +153,8 @@ var DeviceAdapter2 = /** @class */ (function () {
             if (this.formate.hasOwnProperty(key)) {
                 if (DeviceAdapter2.Formate_Key_Input == key) {
                     this.input = {
-                        min: this.formate[key]["min"],
-                        max: this.formate[key]["max"]
+                        min: this.formate[key]['min'],
+                        max: this.formate[key]['max']
                     };
                 }
                 else if (DeviceAdapter2.Formate_Key_No == key) {
@@ -202,7 +202,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     result = Math.floor((v / bn) * 100) / 100;
                 }
                 else {
-                    throw { msg: "除" + v + "操作无效！" };
+                    throw { msg: '除' + v + '操作无效！' };
                 }
                 break;
             case 'mod':
@@ -210,7 +210,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     result = v % bn;
                 }
                 else {
-                    throw { msg: "对 0 取余操作无效！" };
+                    throw { msg: '对 0 取余操作无效！' };
                 }
                 break;
             case 'add':
@@ -260,16 +260,16 @@ var DeviceAdapter2 = /** @class */ (function () {
             try {
                 if (this.valueMap.containsKey(mapName)) {
                     item.vstr = this.valueMap.getItem(mapName).getItem(item.v.toString());
-                    //console.log("a->" + field.name + "->" + this.valueMap.getItem(mapName).getItem(item.v.toString()))
+                    //console.log('a->' + field.name + '->' + this.valueMap.getItem(mapName).getItem(item.v.toString()))
                 }
                 else {
                     item.vstr = ComValueMap_1.ComValueMap[mapName][item.v];
-                    //console.log("b->" + field.name + "->" + ComValueMap[mapName][item.v])
+                    //console.log('b->' + field.name + '->' + ComValueMap[mapName][item.v])
                 }
                 return true;
             }
             catch (error) {
-                throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + "的数值映射无效！" };
+                throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + '的数值映射无效！' };
             }
         }
         return false;
@@ -311,7 +311,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     //count.fn运算的结果存储在计算属性count.v中作为中间结果，并在下个关联的formate.field处理中参与到count.fn的运算
                     var count = this.countMap[index];
                     if (!count) {
-                        throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + "关联的计算点位无效！" };
+                        throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + '关联的计算点位无效！' };
                     }
                     var v1 = item.v;
                     var v2 = count[DeviceAdapter2.Formate_Field_Option_Value];
@@ -345,7 +345,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                                 power = powerx[DeviceAdapter2.Formate_Field_Option_Value];
                             }
                             //根据燃料介质自举燃烧器
-                            var fire = { "name": "rsq" + index, "amount": 0, "typ": 0, "v": 0, "stop": true };
+                            var fire = { 'name': 'rsq' + index, 'amount': 0, 'typ': 0, 'v': 0, 'stop': true };
                             if (power == DeviceAdapter2.Power_Dian) {
                                 fire.typ = 0;
                             }
@@ -368,7 +368,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                             groupx[index] = fire;
                         }
                         else {
-                            var ate = { "name": "", "amount": 1, "v": 0 };
+                            var ate = { 'name': '', 'amount': 1, 'v': 0 };
                             ate.name = item.name;
                             ate.v = item.v;
                             //groupx.splice(index, 1, ate)
@@ -383,7 +383,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     // console.log(group)
                     // console.log('xxxxxxxxxxxxxxxxxxxxxx'+index)
                     if (!emt) {
-                        throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + "关联的动画元素无效！" };
+                        throw { msg: field[DeviceAdapter2.Formate_Field_Option_Name] + '关联的动画元素无效！' };
                     }
                     // console.log('xxxxxxxxxx')
                     // console.log(emt)
@@ -448,7 +448,7 @@ var DeviceAdapter2 = /** @class */ (function () {
     };
     DeviceAdapter2.prototype.handleExceptionField = function (field, num) {
         var level = field[DeviceAdapter2.Formate_Field_Option_ExecptionLevel];
-        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "level": level, "vstr": "" };
+        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': num, 'level': level, 'vstr': '' };
         //console.log(num)
         //console.log(item)
         if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Bit)) {
@@ -534,7 +534,7 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.prototype.handleSystemRunField = function (field, item, count) {
         if (field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_System_Run)) {
             if (!field.hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Part)) {
-                throw { msg: field.name + "缺少 part 属性" };
+                throw { msg: field.name + '缺少 part 属性' };
             }
             if (field[DeviceAdapter2.Formate_Field_Option_System_Run]) {
                 //验证是时间的哪一部分
@@ -638,6 +638,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                 }
                 var ctlItem = new Fields_1.CtlItem();
                 ctlItem.Name = field[DeviceAdapter2.Formate_Field_Option_Name];
+                ctlItem.Description = field[DeviceAdapter2.Formate_Field_Option_Kz].hasOwnProperty(DeviceAdapter2.Formate_Field_Option_Description) ? field[DeviceAdapter2.Formate_Field_Option_Kz][DeviceAdapter2.Formate_Field_Option_Description] : '';
                 var bit = field[DeviceAdapter2.Formate_Field_Option_Bit];
                 if (bit) {
                     ctlItem.setValue(num & (1 << bit));
@@ -900,20 +901,20 @@ var DeviceAdapter2 = /** @class */ (function () {
                         // console.log('String is little endian')
                         for (var i = count - 1; i >= index; i--) {
                             if (0 == data[i]) {
-                                console.log(i);
+                                //console.log(i)
                                 continue;
                             }
-                            console.log(i + '->' + data[i]);
+                            //console.log(i + '->' + data[i])
                             str += String.fromCharCode(data[i]);
                         }
                         // console.log('count -1 = ' + (count - 1) + ' index = ' + index)
                     }
                     var field = point[DeviceAdapter2.Formate_Key_Point_Fields][0];
-                    var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": 0, "vstr": str };
+                    var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': 0, 'vstr': str };
                     this.device.JiBen.push(item);
                     continue;
                 }
-                // if(key == "40223"){
+                // if(key == '40223'){
                 //     console.log(num)
                 // }
                 var fields = point[DeviceAdapter2.Formate_Key_Point_Fields];
@@ -938,7 +939,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                         this.handleExceptionField(field, num);
                     }
                     else if (DeviceAdapter2.Formate_Type_JiBen == field.typ) { //如果是基本信息
-                        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
+                        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': num, 'vstr': '' };
                         if (!this.handleBitField(field, item)) {
                             if (!this.handleVMapProperty(field, item)) {
                                 this.handleMathActionProperty(num, field, item);
@@ -964,7 +965,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                         this.device.JiBen.push(item);
                     }
                     else if (DeviceAdapter2.Formate_Type_WenDu == field.typ) { //如果是温度
-                        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": 0, "vstr": '' };
+                        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': 0, 'vstr': '' };
                         this.handleMathActionProperty(num, field, item);
                         this.handleInputField(field, item);
                         this.handleFocus(field, item);
@@ -972,7 +973,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                         this.device.WenDu.push(item);
                     }
                     else if (DeviceAdapter2.Formate_Type_Yali == field.typ) { //如果是压力
-                        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": 0, "vstr": '' };
+                        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': 0, 'vstr': '' };
                         this.handleMathActionProperty(num, field, item);
                         this.handleInputField(field, item);
                         this.handleFocus(field, item);
@@ -980,7 +981,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                         this.device.YaLi.push(item);
                     }
                     else if (DeviceAdapter2.Formate_Type_LiuLiang == field.typ) { //如果是流量
-                        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": 0, "vstr": '' };
+                        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': 0, 'vstr': '' };
                         this.handleMathActionProperty(num, field, item);
                         this.handleInputField(field, item);
                         this.handleFocus(field, item);
@@ -989,7 +990,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                     else if (DeviceAdapter2.Formate_Type_KaiGuan == field.typ) { //如果是开关
                         //框架不再提供固定vm，因此要求开关点必需要有vm属性
-                        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
+                        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': num, 'vstr': '' };
                         this.handleKaiGuanField(field, item);
                         //console.log(item.name)
                         this.handleKongZhiField(key, endian, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
@@ -1004,8 +1005,8 @@ var DeviceAdapter2 = /** @class */ (function () {
                         }
                     }
                     else if (DeviceAdapter2.Formate_Type_SheZhi == field.typ) { //如果是设置
-                        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
-                        //console.log("*****************" + field.name + "********************")
+                        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': num, 'vstr': '' };
+                        //console.log('*****************' + field.name + '********************')
                         if (!this.handleBitField(field, item)) {
                             if (!this.handleVMapProperty(field, item)) {
                                 this.handleMathActionProperty(num, field, item);
@@ -1014,13 +1015,13 @@ var DeviceAdapter2 = /** @class */ (function () {
                         //console.log(field.name)
                         this.handleKongZhiField(key, endian, field, fields.length, ctlTyp, num, item.v, field[DeviceAdapter2.Formate_Field_Option_Unit]);
                         this.device.SheZhi.push(item);
-                        //console.log("*****************" + field.name + "********************")
+                        //console.log('*****************' + field.name + '********************')
                         //this.handleCtlProperty(field)
                     }
                     else if (DeviceAdapter2.Formate_Type_SheBei == field.typ) { //如果是设备
-                        var item = { "name": field[DeviceAdapter2.Formate_Field_Option_Name], "v": num, "vstr": '' };
-                        // if(item.name == "循环泵启停"){
-                        //     console.log("xhb->"+num)
+                        var item = { 'name': field[DeviceAdapter2.Formate_Field_Option_Name], 'v': num, 'vstr': '' };
+                        // if(item.name == '循环泵启停'){
+                        //     console.log('xhb->'+num)
                         //     console.log
                         // }
                         if (!this.handleBitField(field, item)) {
@@ -1046,7 +1047,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                         var item = this.device.DingShi[idx];
                         if (!idx) {
                             if (3 == part) {
-                                item = { "name": field.name, "h": null, "m": null };
+                                item = { 'name': field.name, 'h': null, 'm': null };
                                 item['h'] = Math.floor(num / 60);
                                 item['m'] = num % 60;
                                 this.device.DingShi.push(item);
@@ -1061,7 +1062,7 @@ var DeviceAdapter2 = /** @class */ (function () {
                             }
                             else {
                                 if (1 == part) {
-                                    item["h"] = num;
+                                    item['h'] = num;
                                 }
                                 else if (2 == part) {
                                     item['m'] = num;
@@ -1101,7 +1102,7 @@ var DeviceAdapter2 = /** @class */ (function () {
             }
             //添加计算点位到基本信息
             this.countMap.forEach(function (v, i) {
-                var item = { "name": v[DeviceAdapter2.Formate_Field_Option_Name], "v": v[DeviceAdapter2.Formate_Field_Option_Value], "vstr": v[DeviceAdapter2.Formate_Field_Option_VString] };
+                var item = { 'name': v[DeviceAdapter2.Formate_Field_Option_Name], 'v': v[DeviceAdapter2.Formate_Field_Option_Value], 'vstr': v[DeviceAdapter2.Formate_Field_Option_VString] };
                 _this.device.JiBen.push(item);
             });
             //清理无效泵和风机-兼容NJZJ
@@ -1131,29 +1132,108 @@ var DeviceAdapter2 = /** @class */ (function () {
                     }
                 }
             }
-            console.log('--------------yyyyyyyyy-------------');
-            console.log(this.device.AtMap.getItem(DeviceAdapter2.Formate_Field_AT_Class_Fire));
-            console.log(this.device.AtMap.getItem(DeviceAdapter2.Formate_Field_AT_Class_Beng));
-            console.log(this.device.AtMap.getItem(DeviceAdapter2.Formate_Field_AT_Class_Fan));
-            console.log('--------------yyyyyyyyy-------------');
+            // console.log('--------------yyyyyyyyy-------------')
+            // console.log(this.device.AtMap.getItem(DeviceAdapter2.Formate_Field_AT_Class_Fire))
+            // console.log(this.device.AtMap.getItem(DeviceAdapter2.Formate_Field_AT_Class_Beng))
+            // console.log(this.device.AtMap.getItem(DeviceAdapter2.Formate_Field_AT_Class_Fan))
+            // console.log('--------------yyyyyyyyy-------------')
+            //为南京中嘉IP系列控制器增加关注点
+            if (this.formate.hasOwnProperty('title')) {
+                if (this.formate['title'].indexOf('南京中嘉IP系列') > -1) {
+                    if (this.device.Power == DeviceAdapter2.Power_Dian) {
+                        for (var i in this.device.SheBei) {
+                            if (this.device.SheBei[i].name === '加热组数') {
+                                this.device.Focus.push(this.device.SheBei[i]);
+                                break;
+                            }
+                        }
+                    }
+                    else if (this.device.Power == DeviceAdapter2.Power_YouQi || this.device.Power == DeviceAdapter2.Power_Mei || this.device.Power == DeviceAdapter2.Power_ShengWuZhi) {
+                        for (var i in this.device.WenDu) {
+                            if (this.device.WenDu[i].name === '排烟温度') {
+                                this.device.Focus.push(this.device.WenDu[i]);
+                                break;
+                            }
+                        }
+                    }
+                    if (this.device.Media == DeviceAdapter2.Media_ReShui) {
+                        for (var i in this.device.WenDu) {
+                            if (this.device.WenDu[i].name === '出口温度' || this.device.WenDu[i].name == '进口温度') {
+                                this.device.Focus.push(this.device.WenDu[i]);
+                                break;
+                            }
+                        }
+                    }
+                    else if (this.device.Media == DeviceAdapter2.Media_ZhengQi) {
+                        for (var i in this.device.JiBen) {
+                            if (this.device.JiBen[i].name === '压力状态' || this.device.JiBen[i].name === '液位状态') {
+                                this.device.Focus.push(this.device.JiBen[i]);
+                                break;
+                            }
+                        }
+                        for (var i in this.device.YaLi) {
+                            if (this.device.YaLi[i].name === '蒸汽压力') {
+                                this.device.Focus.push(this.device.YaLi[i]);
+                                break;
+                            }
+                        }
+                    }
+                    else if (this.device.Media == DeviceAdapter2.Media_DaoReYou) {
+                        for (var i in this.device.JiBen) {
+                            if (this.device.JiBen[i].name === '液位状态') {
+                                this.device.Focus.push(this.device.JiBen[i]);
+                                break;
+                            }
+                        }
+                        for (var i in this.device.WenDu) {
+                            if (this.device.WenDu[i].name === '出口温度' || this.device.WenDu[i].name == '进口温度') {
+                                this.device.Focus.push(this.device.WenDu[i]);
+                                break;
+                            }
+                        }
+                    }
+                    else if (this.device.Media == DeviceAdapter2.Media_ReFeng) {
+                        for (var i in this.device.WenDu) {
+                            if (this.device.WenDu[i].name === '热风温度') {
+                                this.device.Focus.push(this.device.WenDu[i]);
+                                break;
+                            }
+                        }
+                    }
+                    else if (this.device.Media == DeviceAdapter2.Media_ZhenKong) {
+                        for (var i in this.device.YaLi) {
+                            if (this.device.YaLi[i].name === '真空压力') {
+                                this.device.Focus.push(this.device.YaLi[i]);
+                                break;
+                            }
+                        }
+                        for (var i in this.device.WenDu) {
+                            if (this.device.WenDu[i].name === '出口温度' || this.device.WenDu[i].name == '进口温度') {
+                                this.device.Focus.push(this.device.WenDu[i]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             return this.device;
         },
         enumerable: false,
         configurable: true
     });
     DeviceAdapter2.FnGroups = [
-        "算术运算",
-        "时间运算"
+        '算术运算',
+        '时间运算'
     ];
     DeviceAdapter2.Fns = [[
-            { "title": "累加", "desc": "详细介绍信息", "fn": function (a, b) { return a + b; } },
-            { "title": "除10", "desc": "详细介绍信息", "fn": function (v) { return Math.floor(v / 10); } },
-            { "title": "除100", "desc": "详细介绍信息", "fn": function (v) { return Math.floor(v / 100); } },
-            { "title": "除1000", "desc": "详细介绍信息", "fn": function (v) { return Math.floor(v / 1000); } }
+            { 'title': '累加', 'desc': '详细介绍信息', 'fn': function (a, b) { return a + b; } },
+            { 'title': '除10', 'desc': '详细介绍信息', 'fn': function (v) { return Math.floor(v / 10); } },
+            { 'title': '除100', 'desc': '详细介绍信息', 'fn': function (v) { return Math.floor(v / 100); } },
+            { 'title': '除1000', 'desc': '详细介绍信息', 'fn': function (v) { return Math.floor(v / 1000); } }
         ], [
-            { "title": "时分合并", "desc": "详细介绍信息", "fn": function (h, m) { return h * 60 + m; } },
-            { "title": "时分拆解", "desc": "详细介绍信息", "fn": function (a) { return [Math.floor(a / 60), a % 60]; } },
-            { "title": "天时拆解", "desc": "详细介绍信息", "fn": function (a) { return [Math.floor(a / 24), a % 24]; } },
+            { 'title': '时分合并', 'desc': '详细介绍信息', 'fn': function (h, m) { return h * 60 + m; } },
+            { 'title': '时分拆解', 'desc': '详细介绍信息', 'fn': function (a) { return [Math.floor(a / 60), a % 60]; } },
+            { 'title': '天时拆解', 'desc': '详细介绍信息', 'fn': function (a) { return [Math.floor(a / 24), a % 24]; } },
         ]];
     DeviceAdapter2.Power_YouQi = 0;
     DeviceAdapter2.Power_Dian = 1;
@@ -1162,6 +1242,11 @@ var DeviceAdapter2 = /** @class */ (function () {
     DeviceAdapter2.Power_YuRe = 4;
     //板换
     DeviceAdapter2.Power_BANHUAN = 5;
+    DeviceAdapter2.Media_ReShui = 0;
+    DeviceAdapter2.Media_ZhengQi = 1;
+    DeviceAdapter2.Media_DaoReYou = 2;
+    DeviceAdapter2.Media_ReFeng = 3;
+    DeviceAdapter2.Media_ZhenKong = 4;
     //控制目标线圈类型
     DeviceAdapter2.CTL_TAG_CLC = 0;
     //控制目标寄存器类型

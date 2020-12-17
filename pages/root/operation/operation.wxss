@@ -167,9 +167,8 @@ button::after {
  
   opacity: 1;
  
-  width: 54%;
- 
-  margin-left: 23%;
+  width: 70%;
+  margin-left: 14%;
  
   margin-top: 45%;
  

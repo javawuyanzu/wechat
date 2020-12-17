@@ -1,7 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+import req from '../../utils/Request.js'
 Page({
   data: {
     menus: null,
@@ -13,7 +13,7 @@ Page({
     orders: true,
     items: [],
     content: null,
-    outTradeNo:null,
+    outTradeNo: null,
   },
 
   wxpay: function (param) {
@@ -28,7 +28,7 @@ Page({
 
         console.log(res)
         wx.navigateBack({
-          delta:3, // 回退前 delta(默认为1) 页面
+          delta: 3, // 回退前 delta(默认为1) 页面
           success: function (res) {
             that.createOrderAndItem()
             wx.showToast({
@@ -36,7 +36,7 @@ Page({
               icon: 'success',
               duration: 2000
             })
-           
+
           },
           fail: function () {
             // fail
@@ -46,7 +46,7 @@ Page({
             // complete
           }
         })
-       
+
       },
       fail: function (res) {
         console.log("支付失败")
@@ -59,7 +59,7 @@ Page({
           success: function (res) {
             wx.showToast({
               title: '支付失败',
-              icon: 'success',
+              icon: 'none',
               duration: 2000
             })
           },
@@ -119,14 +119,16 @@ Page({
                         console.log(res)
                         var orderId = res.data.data.id
                         that.setData({
-                          outTradeNo:res.data.data.outTradeNo
+                          outTradeNo: res.data.data.outTradeNo
                         })
                         wx.getStorage({
                           key: 'orders',
                           success: function (res) {
                             var list = res.data
                             var itemList = []
+                            let body = list[0].deviceNo
                             for (var i in list) {
+                              body += "-" + list[i].resourceName
                               itemList.push({
                                 orderId: orderId,
                                 resourceId: list[i].resourceId,
@@ -140,6 +142,7 @@ Page({
                                 marker: ""
                               })
                             }
+                            console.log(body)
                             wx.request({
                               url: 'https://apis.sdcsoft.com.cn/wechat/JinRong_OrderItem/wx/create/many',
                               method: "POST",
@@ -155,7 +158,8 @@ Page({
                                   url: 'https://apis.sdcsoft.com.cn/wechat/PayOrder/createPayOrder',
                                   method: 'POST',
                                   data: {
-                                    money: that.data.discount.paymentAmount*100,
+                                    title:body,
+                                    money: that.data.discount.paymentAmount * 100,
                                     openId: openidmax,
                                     orderNo: that.data.outTradeNo
                                   },
@@ -174,13 +178,13 @@ Page({
                                     that.wxpay(param)
                                   },
                                 })
-                             
+
 
                               }
                             })
 
 
-                          
+
                           },
                         })
                       }
@@ -213,7 +217,7 @@ Page({
         var resList = []
         var smsList = []
         for (var i in list) {
-          if (list[i].resourceId==5){
+          if (list[i].resourceId == 5) {
             smsList.push({
               employeeMobile: list[i].employeeMobile,
               deviceNo: list[i].deviceNo,
@@ -222,7 +226,7 @@ Page({
               amount: list[i].amount,
               openId: app.globalData.openid,
             })
-          } else if (list[i].resourceId == 6){
+          } else if (list[i].resourceId == 6) {
             wx.request({
               url: 'https://apis.sdcsoft.com.cn/wechat/smsPaymentRecords/create',
               method: "POST",
@@ -235,8 +239,66 @@ Page({
                 console.log(res)
               }
             })
-           
-          }else{
+          } else if (list[i].members != null) {
+            var members=list[i].members
+            console.log(members)
+            var date = new Date().setFullYear((new Date().getFullYear() + 1))
+            var deviceNo = list[i].deviceNo
+            req.get('https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list', {}, {
+              'content-type': 'application/x-www-form-urlencoded'
+            }).then(res => {
+              var list = res.data.data
+              var resList = []
+              for (var i in list) {
+                if (list[i].status == 0) {
+                  resList.push({
+                    openId: app.globalData.openid,
+                    resId: list[i].id,
+                    deviceNo: deviceNo,
+                    dueTime: date,
+                  })
+                }
+              }
+              var smsList = []
+              smsList.push({
+                deviceNo: deviceNo,
+                range: 12,
+                rangeType: 2,
+                amount: 1,
+                openId: app.globalData.openid,
+              })
+              req.get('https://apis.sdcsoft.com.cn/wechat/RoleResource/remove', { openId: app.globalData.openid, deviceNo: deviceNo }, {
+                'content-type': 'application/x-www-form-urlencoded'
+              }).then(res => {
+                req.post('https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/create/many', { deviceSmsMapList: JSON.stringify(smsList) }, {
+                  'content-type': 'application/x-www-form-urlencoded'
+                })
+                req.post('https://apis.sdcsoft.com.cn/wechat/RoleResource/newUser/create/many', { role_ResourceList: JSON.stringify(resList) }, {
+                  'content-type': 'application/x-www-form-urlencoded'
+                }).then(res => {
+                  var plist=[];
+                  for(var i=0;i<members;i++){
+                    var p ={deviceNo:deviceNo,buyersOpenId:app.globalData.openid,dueTime:date}
+                    plist.push(p)
+                  }
+                  wx.request({
+                    url: 'https://apis.sdcsoft.com.cn/wechat/privatisation/create/many',
+                    method: "POST",
+                    data: {
+                      plist: JSON.stringify(plist)
+                    },
+                    header: {
+                      'content-type': 'application/x-www-form-urlencoded'
+                    },
+                    success: function (res) {
+                      console.log(res)
+                    }
+                  })
+                })
+              })
+             
+            })
+          } else {
             resList.push({
               openId: app.globalData.openid,
               resId: list[i].resourceId,
@@ -245,11 +307,11 @@ Page({
               rangeType: list[i].rangeType,
               amount: list[i].amount,
             })
-           
+
           }
-          
+
         }
-       
+
         wx.request({
           url: 'https://apis.sdcsoft.com.cn/wechat/Relation_DeviceSmsMap/create/many',
           method: "POST",

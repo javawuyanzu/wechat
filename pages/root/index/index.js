@@ -14,6 +14,7 @@ Page({
     userindex: 0,
     canctlarray: ["不可控", "可控"],
     canctl: 0,
+    privatisation: true,
   },
   bindPickerExChange: function (e) {
     var that = this
@@ -122,6 +123,21 @@ Page({
         that.setData({
           exindex: res.data
         })
+      }
+    })
+    wx.request({
+      //获取openid接口   
+      url: 'https://apis.sdcsoft.com.cn/wechat/privatisation/find/buyersOpenId',
+      data: {
+        buyersOpenId: app.globalData.openid,
+      },
+      method: 'GET',
+      success: function (res) {
+        if (res.data.data.length>0) {
+          that.setData({
+            privatisation: true
+          })
+        }
       }
     })
     wx.request({

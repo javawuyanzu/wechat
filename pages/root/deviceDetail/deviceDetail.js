@@ -546,7 +546,6 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
-   
     wx.showLoading({
       title: "loading...",
     })
@@ -1025,6 +1024,7 @@ Page({
                 let device = app.globalData.adapter.Device
                  
                 var clist=device.KongZhi.map
+                console.log(clist)
                 if (JSON.stringify(clist) != '{}') {
                   that.setData({
                     controlList: clist,

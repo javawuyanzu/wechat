@@ -21,7 +21,9 @@
     "pages/payMenu/payMenu",
     "pages/order/order",
     "pages/root/orderItem/orderItem",
-    "pages/root/video/video"
+    "pages/root/video/video",
+    "pages/root/privatisation/privatisation",
+    "pages/root/privatisation/certification"
   ],
   "subPackages": [
     {

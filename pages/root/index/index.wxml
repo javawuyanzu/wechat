@@ -29,7 +29,7 @@
 
 		</view>
 
-		<view class="user-list-item">
+		<!-- <view class="user-list-item">
 			<view class="item-left">
 				<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
 				<text>{{content.index_userType}}</text>
@@ -41,9 +41,9 @@
 					</text>
 				</picker>
 			</view>
-		</view>
+		</view> -->
 
-		<view>
+		<!-- <view>
 			<navigator url="../../customer/pages/index/index" hover-class="none">
 				<view class="user-list-item">
 					<view class="item-left">
@@ -69,9 +69,21 @@
 					</view>
 				</view>
 			</navigator>
+		</view> -->
+
+			<view wx:if="{{privatisation}}">
+			<navigator url="../privatisation/privatisation" hover-class="none">
+				<view class="user-list-item">
+					<view class="item-left">
+						<image style="width: 42rpx; height: 42rpx" src="../../../images/collect-kong.png"></image>
+						<text>锅炉私有化管理</text>
+					</view>
+					<view class="item-right">
+						<image style="width: 26rpx; height: 40rpx;vertical-align: middle;" src="../../../images/right-arrow-gray.png"></image>
+					</view>
+				</view>
+			</navigator>
 		</view>
-
-
 		<view wx:if="{{sole}}">
 			<navigator url="../soldUpdate/soldUpdate" hover-class="none">
 				<view class="user-list-item">

@@ -56,6 +56,7 @@ var Chinese = {
   detail_controlMenu: "控制",
   detail_smsMenu: "短信",
   detail_deviceword: "资料",
+  detail_private: "私有",
   index_exType: "报警方式",
   index_userType: "用户身份选择",
   index_canIUse: "绑定平台账号",

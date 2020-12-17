@@ -20,10 +20,10 @@ Page({
     smsExRangeType: null,
     smsExPrice: null,
     smsExAmount: 0,
-    iMEI:null,
-    media:-1,
+    iMEI: null,
+    media: -1,
   },
-  addExAmount: function(event) {
+  addExAmount: function (event) {
     var that = this
     var data = event.currentTarget.dataset
 
@@ -42,7 +42,7 @@ Page({
       smsExResName: resName
     })
   },
-  minusExAmount: function(event) {
+  minusExAmount: function (event) {
     var that = this
     if (that.data.smsExAmount == 0) {
       return
@@ -64,14 +64,14 @@ Page({
     })
   },
 
-  selectMenu: function(event) {
+  selectMenu: function (event) {
     let data = event.currentTarget.dataset
     this.setData({
       selectedMenuId: data.id
     })
 
   },
-  chooseProduct: function(event) {
+  chooseProduct: function (event) {
     var that = this
     var data = event.currentTarget.dataset
     var resId = data.resid
@@ -83,9 +83,9 @@ Page({
         resId: resId
       },
       method: 'GET',
-      success: function(res) {
+      success: function (res) {
         var resList = res.data.data
-        if (resList.length > 0 && resId != 5) {
+        if (resList.length > 0 && resId != 5 && resId != 8 && resId != 9) {
           wx.showToast({
             title: "当前设备该服务未到期，请到期购买",
             icon: 'none',
@@ -95,69 +95,90 @@ Page({
         } else {
           wx.request({
             //获取openid接口  
-            url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/list/resid',
+            url: 'https://apis.sdcsoft.com.cn/wechat/privatisation/find/deviceNo',
             data: {
-              resId: resId,
+              deviceNo: that.data.deviceNo
             },
             method: 'GET',
-            success: function(res) {
-              console.log(res)
-              var productList = res.data.data
-              var chooseProductList = []
-              wx.getStorage({
-                key: 'orders',
-                success: function(res) {
-                  var orderList = res.data
-                  for (var i in productList) {
-                    var title;
-                    if (productList[i].rangeType == 2) {
-                      title = productList[i].price + "元，" + productList[i].range + "个月"
+            success: function (res) {
+              if( app.globalData.openid!=res.data.data[0].buyersOpenId){
+                wx.showToast({
+                  title: "当前设备已被其他用户私有化，其他用户不可购买服务",
+                  icon: 'none',
+                  duration: 2000
+                });
+                return
+              }
+              wx.request({
+                //获取openid接口  
+                url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/list/resid',
+                data: {
+                  resId: resId,
+                },
+                method: 'GET',
+                success: function (res) {
+                  console.log(res)
+                  var productList = res.data.data
+                  var chooseProductList = []
+                  wx.getStorage({
+                    key: 'orders',
+                    success: function (res) {
+                      var orderList = res.data
+                      for (var i in productList) {
+                        var title;
+                        if (productList[i].rangeType == 2) {
+                          title = productList[i].price + "元，" + productList[i].range + "个月"
+                        }
+                        if (productList[i].rangeType == 1) {
+                          title = productList[i].price + "元，" + productList[i].range + "天"
+                        }
+                        var index = that.findOrder(orderList, productList[i].range, productList[i].rangeType, productList[i].resourceId, productList[i].price)
+                        if (index != -1) {
+                          chooseProductList.push({
+                            resId: productList[i].resourceId,
+                            resName: productList[i].resourceName,
+                            range: productList[i].range,
+                            rangeType: productList[i].rangeType,
+                            title: title,
+                            price: productList[i].price,
+                            count: orderList[index].amount,
+                            members: productList[i].members,
+                          })
+                        } else {
+                          chooseProductList.push({
+                            resId: productList[i].resourceId,
+                            resName: productList[i].resourceName,
+                            range: productList[i].range,
+                            rangeType: productList[i].rangeType,
+                            title: title,
+                            price: productList[i].price,
+                            members: productList[i].members,
+                            count: 0
+                          })
+                        }
+                      }
+                      if (resId == 5) {
+                        that.setData({
+                          chooseSmsExWindow: true,
+                          chooseProductList: chooseProductList
+                        })
+
+                      } else {
+                        that.setData({
+                          chooseDeviceWindow: true,
+                          chooseProductList: chooseProductList
+                        })
+
+                      }
+
+
                     }
-                    if (productList[i].rangeType == 1) {
-                      title = productList[i].price + "元，" + productList[i].range + "天"
-                    }
-                    var index = that.findOrder(orderList, productList[i].range, productList[i].rangeType, productList[i].resourceId, productList[i].price)
-                    if (index != -1) {
-                      chooseProductList.push({
-                        resId: productList[i].resourceId,
-                        resName: productList[i].resourceName,
-                        range: productList[i].range,
-                        rangeType: productList[i].rangeType,
-                        title: title,
-                        price: productList[i].price,
-                        count: orderList[index].amount
-                      })
-                    } else {
-                      chooseProductList.push({
-                        resId: productList[i].resourceId,
-                        resName: productList[i].resourceName,
-                        range: productList[i].range,
-                        rangeType: productList[i].rangeType,
-                        title: title,
-                        price: productList[i].price,
-                        count: 0
-                      })
-                    }
-                  }
-                  if (resId == 5) {
-                    that.setData({
-                      chooseSmsExWindow: true,
-                      chooseProductList: chooseProductList
-                    })
-
-                  } else {
-                    that.setData({
-                      chooseDeviceWindow: true,
-                      chooseProductList: chooseProductList
-                    })
-
-                  }
-
-
+                  })
                 }
               })
             }
           })
+
         }
       }
     })
@@ -166,7 +187,7 @@ Page({
   },
 
 
-  gotoOrder: function() {
+  gotoOrder: function () {
     var that = this
     var total = that.data.total
     if (total.count > 0) {
@@ -176,7 +197,7 @@ Page({
     }
   },
 
-  minusCount: function(event) {
+  minusCount: function (event) {
     var that = this
     var data = event.currentTarget.dataset
     var total = that.data.total
@@ -193,7 +214,7 @@ Page({
 
     wx.getStorage({
       key: 'orders',
-      success: function(res) {
+      success: function (res) {
         var list = res.data
 
         if (list.length > 0) {
@@ -218,7 +239,7 @@ Page({
         wx.setStorage({
           key: "orders",
           data: list,
-          success: function(res) {}
+          success: function (res) { }
         });
       },
     })
@@ -230,46 +251,46 @@ Page({
     })
   },
   // float浮点数加法运算
-  accAdd: function(arg1, arg2) {
+  accAdd: function (arg1, arg2) {
     var r1, r2, m;
     try {
       r1 = arg1.toString().split(".")[1].length;
-    }   
+    }
     catch (e) {
       r1 = 0;
-    }   
+    }
     try {
       r2 = arg2.toString().split(".")[1].length;
-    }   
+    }
     catch (e) {
       r2 = 0;
-    }   
+    }
     m = Math.pow(10, Math.max(r1, r2));
-    return (arg1 * m + arg2 * m) / m; 
+    return (arg1 * m + arg2 * m) / m;
   },
   // float浮点数减法运算
-  subtract: function(arg1, arg2) {
+  subtract: function (arg1, arg2) {
     var r1, r2, m, n;
     try {
       r1 = arg1.toString().split(".")[1].length;
-    }   
+    }
     catch (e) {
       r1 = 0;
-    }   
+    }
     try {
       r2 = arg2.toString().split(".")[1].length;
-    }   
+    }
     catch (e) {
       r2 = 0;
-    }   
+    }
     m = Math.pow(10, Math.max(r1, r2));
     //last modify by deeka  
     //动态控制精度长度  
     n = (r1 >= r2) ? r1 : r2;
-    return ((arg1 * m - arg2 * m) / m).toFixed(n); 
+    return ((arg1 * m - arg2 * m) / m).toFixed(n);
   },
 
-  addCount: function(event) {
+  addCount: function (event) {
     var that = this
     var data = event.currentTarget.dataset
 
@@ -280,10 +301,10 @@ Page({
     var deviceNo = that.data.deviceNo
     var resId = data.resid
     var price = data.price
-
+    var members = data.members
     wx.getStorage({
       key: 'orders',
-      success: function(res) {
+      success: function (res) {
         var list = res.data
         if (list.length > 0) {
 
@@ -304,7 +325,8 @@ Page({
               deviceNo: deviceNo,
               price: price,
               amount: 1,
-              iMEI: that.data.iMEI
+              iMEI: that.data.iMEI,
+              members: members
             })
             that.chooseProductListAdd(range, rangeType, resId, price, 1, resName);
           }
@@ -317,7 +339,8 @@ Page({
             deviceNo: deviceNo,
             price: price,
             amount: 1,
-            iMEI: that.data.iMEI
+            iMEI: that.data.iMEI,
+            members: members
           })
           that.chooseProductListAdd(range, rangeType, resId, price, 1, resName);
         }
@@ -325,7 +348,7 @@ Page({
         wx.setStorage({
           key: "orders",
           data: list,
-          success: function(res) {
+          success: function (res) {
             that.noBuySame(range, rangeType, resId, price)
           }
         });
@@ -340,7 +363,7 @@ Page({
     })
 
   },
-  findName: function(list, range, rangeType, resId) {
+  findName: function (list, range, rangeType, resId) {
     for (var i in list) {
       if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId) {
         return true
@@ -349,7 +372,7 @@ Page({
     }
     return false
   },
-  findPhone: function(list, phone) {
+  findPhone: function (list, phone) {
     for (var i in list) {
       if (phone == list[i].employeeMobile) {
         return true
@@ -358,7 +381,7 @@ Page({
     }
     return false
   },
-  findOrder: function(list, range, rangeType, resId, price) {
+  findOrder: function (list, range, rangeType, resId, price) {
     for (var i in list) {
       if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId && price == list[i].price) {
         return i
@@ -367,7 +390,7 @@ Page({
     }
     return -1
   },
-  findResDevice: function(list, deviceNo, resId) {
+  findResDevice: function (list, deviceNo, resId) {
     for (var i in list) {
       if (deviceNo == list[i].deviceNo && resId == list[i].resId) {
         return i
@@ -376,7 +399,7 @@ Page({
     }
     return -1
   },
-  confirm: function(e) {
+  confirm: function (e) {
     var data = e.currentTarget.dataset
     var list = data.count
     var length = 0;
@@ -393,7 +416,7 @@ Page({
       chooseDeviceWindow: false,
     })
   },
-  exConfirm: function(e) {
+  exConfirm: function (e) {
     var that = this;
     if (that.data.smsExAmount != 0) {
       that.setData({
@@ -403,29 +426,29 @@ Page({
     }
 
   },
-  exDeviceHidden: function(e) {
+  exDeviceHidden: function (e) {
     var that = this;
     that.setData({
       chooseSmsExWindow: false,
     })
   },
-  exPhoneHidden: function(e) {
+  exPhoneHidden: function (e) {
     var that = this;
     that.setData({
       chooseExPhone: false,
     })
   },
-  chooseDevicHidden: function(e) {
+  chooseDevicHidden: function (e) {
     var that = this;
     that.setData({
       chooseDeviceWindow: false,
     })
   },
-  noBuySame: function(range, rangeType, resId, price) {
+  noBuySame: function (range, rangeType, resId, price) {
     var that = this;
     var chooseProductList = that.data.chooseProductList
     for (var i in chooseProductList) {
-      if (chooseProductList[i].range == range && chooseProductList[i].rangeType == rangeType && chooseProductList[i].resId == resId) {} else {
+      if (chooseProductList[i].range == range && chooseProductList[i].rangeType == rangeType && chooseProductList[i].resId == resId) { } else {
         if (chooseProductList[i].count != 0) {
           chooseProductList[i].count = 0
           var range1 = chooseProductList[i].range
@@ -433,7 +456,7 @@ Page({
           var resId1 = chooseProductList[i].resId
           wx.getStorage({
             key: 'orders',
-            success: function(res) {
+            success: function (res) {
               var list = res.data
               if (list.length > 0) {
                 if (that.findName(list, range1, rangeType1, resId1)) {
@@ -465,7 +488,7 @@ Page({
             if (menus[i].id == resId) {
               var plist = menus[i].productList
               for (var k in plist) {
-                if (plist[i].range == range && plist[i].rangeType == rangeType && plist[i].resourceId == resId && plist[i].price == price) {} else {
+                if (plist[i].range == range && plist[i].rangeType == rangeType && plist[i].resourceId == resId && plist[i].price == price) { } else {
                   plist.splice(i, 1)
                 }
               }
@@ -482,7 +505,7 @@ Page({
       chooseProductList: chooseProductList,
     })
   },
-  chooseProductListAdd: function(range, rangeType, resId, price, amount, resName) {
+  chooseProductListAdd: function (range, rangeType, resId, price, amount, resName) {
     var that = this;
     var chooseProductList = that.data.chooseProductList
     for (var i in chooseProductList) {
@@ -531,7 +554,7 @@ Page({
       chooseProductList: chooseProductList,
     })
   },
-  chooseProductListremove: function(range, rangeType, resId, price) {
+  chooseProductListremove: function (range, rangeType, resId, price) {
     var that = this;
 
     var chooseProductList = that.data.chooseProductList
@@ -558,7 +581,7 @@ Page({
       chooseProductList: chooseProductList,
     })
   },
-  removeOrder: function(event) {
+  removeOrder: function (event) {
     var that = this
     var data = event.currentTarget.dataset
     var range = data.range
@@ -591,7 +614,7 @@ Page({
       })
       wx.getStorage({
         key: 'orders',
-        success: function(res) {
+        success: function (res) {
           var list = res.data
           for (var i in list) {
             if (range == list[i].range && rangeType == list[i].rangeType && resId == list[i].resourceId && list[i].employeeMobile == employeemobile) {
@@ -624,7 +647,7 @@ Page({
       })
       wx.getStorage({
         key: 'orders',
-        success: function(res) {
+        success: function (res) {
           var list = res.data
 
           if (list.length > 0) {
@@ -661,7 +684,7 @@ Page({
     }
 
   },
-  onUnload: function() {
+  onUnload: function () {
     // console.log("---")
     // wx.setStorage({
     //   key: "orders",
@@ -670,7 +693,7 @@ Page({
   },
 
 
-  onLoad: function(options) {
+  onLoad: function (options) {
     var that = this;
     that.setData({
       deviceNo: options.deviceNo,
@@ -681,7 +704,7 @@ Page({
     });
     wx.getStorage({
       key: 'orders',
-      fail: function(res) {
+      fail: function (res) {
         wx.setStorage({
           key: "orders",
           data: []
@@ -700,10 +723,10 @@ Page({
       //获取openid接口  
       url: 'https://apis.sdcsoft.com.cn/wechat/Resource_Product/Resource/list',
       method: 'GET',
-      success: function(res) {
+      success: function (res) {
         console.log(res)
         var result = res.data.data
-        
+
         wx.request({
           url: 'https://apis.sdcsoft.com.cn/wechat/device/getsuffix',
           data: {
@@ -714,13 +737,13 @@ Page({
           },
           method: 'GET',
           success: function (res) {
-            var menus=[];
+            var menus = [];
             for (var i in result) {
               if (result[i].id == 6 & res.data.data.iMEI == null) {
                 //result.splice(i, 1)
-              } else if (result[i].id == 4 & res.data.data.canCtl != true  ) {
-              
-              }  else {
+              } else if (result[i].id == 4 & res.data.data.canCtl != true) {
+
+              } else {
                 that.setData({
                   iMEI: res.data.data.iMEI
                 })
@@ -734,13 +757,13 @@ Page({
             console.log(menus)
           }
         })
-      
+
       }
     })
 
 
   },
-  getInputVal: function(e) {
+  getInputVal: function (e) {
     var nowIdx = e.currentTarget.dataset.idx; //获取当前索引
     var val = e.detail.value; //获取输入的值
     var oldVal = this.data.inputVal;
@@ -768,14 +791,14 @@ Page({
       })
     }
   },
-  addList: function() {
+  addList: function () {
     var old = this.data.array;
     old.push(1); //这里不管push什么，只要数组长度增加1就行
     this.setData({
       array: old
     })
   },
-  delList: function(e) {
+  delList: function (e) {
     var nowidx = e.currentTarget.dataset.idx; //当前索引
     var oldInputVal = this.data.inputVal; //所有的input值
     var oldarr = this.data.array; //循环内容
@@ -790,7 +813,7 @@ Page({
     })
   },
   //用户名和密码输入框事件
-  inputChange: function() {
+  inputChange: function () {
     var that = this;
     for (let i = 0; i < that.data.inputVal.length; i++) {
       if (that.data.inputVal[i] == null) {
@@ -809,7 +832,7 @@ Page({
     }
     wx.getStorage({
       key: 'orders',
-      success: function(res) {
+      success: function (res) {
         var orderlist = res.data
         for (let i = 0; i < that.data.inputVal.length; i++) {
           var phone = that.data.inputVal[i]
@@ -829,7 +852,7 @@ Page({
               deviceNo: that.data.deviceNo,
               employeeMobile: phone,
             },
-            success: function(res) {
+            success: function (res) {
               var list = res.data.data
               var currentTime = new Date();
               for (var i = 0; i < list.length; i++) {
@@ -861,7 +884,7 @@ Page({
                 if (menus[i].id == that.data.smsExResId) {
                   console.log(menus[i])
                   var plist = menus[i].productList
-                  
+
                   for (var k in phonelist) {
                     plist.push({
                       resourceName: resourceName,
@@ -897,7 +920,7 @@ Page({
               wx.setStorage({
                 key: "orders",
                 data: orderlist,
-                success: function(res) {
+                success: function (res) {
                   console.log(orderlist)
                 }
               });

@@ -75,7 +75,7 @@
                 {{product.count}}  
               </view> 
               <view wx:if="{{product.count == 0 }}" class="dish-item-count-plus" bindtap="addCount"
-               data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"
+               data-name="{{product.resName}}"  data-range="{{product.range}}"  data-rangeType="{{product.rangeType}}" data-price="{{product.price}}" data-resId="{{product.resId}}"  data-members="{{product.members}}"
               >
                 <image class="image" src="../../images/countSelAdd1.png" />
               </view>

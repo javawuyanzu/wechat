@@ -190,7 +190,7 @@
 			<block wx:for="{{dingshiMap}}" wx:key="dingshiMap" wx:for-item="item" wx:for-index="index">
 				<view class="{{lang==='zh-cn'?'bg-gray-zh':'bg-gray-en'}}">
 					<view>
-						<text decode="{{true}}"  style="">{{item.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.vstr}}</text>
+						<text decode="{{true}}"  style="">{{item.name}}：{{item.h}}时:{{item.m}}分</text>
 					</view>
 				</view>
 			</block>
@@ -526,7 +526,7 @@
 		</view>
 		<view class='toast-main'>
 			<view class='toast-input'>
-				<input placeholder='{{placeholder}}' type="number" bindinput="dName" value='{{inputValue}}'></input>
+				<input placeholder='{{placeholder}}' type="digit" bindinput="dName" value='{{inputValue}}'></input>
 			</view>
 		</view>
 		<view class='toast-button'>

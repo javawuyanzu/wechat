@@ -162,9 +162,72 @@ Page({
     if (this.data.lock) {
       return;
     } else {
-      wx.navigateTo({
-        url: "/pages/root/deviceDetail/deviceDetail?deviceNo=" + deviceNo + "&imgstyle=" + imgstyle + "&control=" + control + "&title=" + title + "&type=" + type + "&jiarezu=" + jiarezu + "&newFrame=" + newFrame + "&dataMapId=" + dataMapId,
+      wx.request({
+        //获取openid接口   
+        url: 'https://apis.sdcsoft.com.cn/wechat/privatisation/find/deviceNo',
+        data: {
+          deviceNo: deviceNo,
+        },
+        method: 'GET',
+        success: function (res) {
+          var list = res.data.data
+          var exist=false
+          if (list.length>0) {
+         
+            for (var i = 0; i < list.length; i++) {
+              if(list[i].openId==app.globalData.openid){
+                exist=true
+              }
+            }
+            var currentTime = new Date();
+            for (var i = 0; i < list.length; i++) {
+              var dt = list[i].dueTime
+              var format = dt.replace(/-/g, '/')
+              var dt = new Date(Date.parse(format))
+              var days = dt.getTime() - currentTime.getTime();
+              var time = parseInt(days / (1000 * 60 * 60 * 24));
+              console.log(time)
+              if(time<90){
+                wx.showToast({
+                  icon: 'none',
+                  duration: 5000,
+                  title: '您的私有化服务即将过期，请及时续费！'
+                })
+              }
+              if (currentTime > dt) {
+                wx.request({
+                  //获取openid接口  
+                  url: 'https://apis.sdcsoft.com.cn/wechat/privatisation/remove',
+                  data: {
+                    id: list[i].id,
+                  },
+                  method: 'GET',
+                  success: function (res) {
+                    console.log(res)
+                  }
+                })
+              }
+            }
+
+         
+          }else{
+            exist=true
+          }
+          if(exist){
+            wx.navigateTo({
+              url: "/pages/root/deviceDetail/deviceDetail?deviceNo=" + deviceNo + "&imgstyle=" + imgstyle + "&control=" + control + "&title=" + title + "&type=" + type + "&jiarezu=" + jiarezu + "&newFrame=" + newFrame + "&dataMapId=" + dataMapId,
+            })
+          }else{
+            wx.showToast({
+              icon: 'none',
+              duration: 2000,
+              title: '该设备已被其他用户私有化'
+            })
+            return
+          }
+        }
       })
+
     }
   },
   runstate: function (e) {
@@ -543,6 +606,10 @@ Page({
   onLoad: function (options) {
     var that = this;
     var ilist = that.data.imgList
+
+
+
+
     wx.getStorage({
       key: 'deviceList',
       success(res) {
@@ -559,29 +626,29 @@ Page({
         that.setData({
           imgList: ilist
         })
-       
+
 
       }
     })
 
-    wx.getStorage({
-      key: 'roleType',
-      success(res) {
-        if (res.data == 1) {
-          wx.switchTab({
-            url: '../deviceList/deviceList'
-          })
-        }
-        if (res.data == 2) {
-          wx.navigateTo({
-            url: '../../customer/pages/index/index'
-          })
-        }
-      },
-      fail(res) {
-        wx.setStorageSync('roleType', "1")
-      },
-    })
+    // wx.getStorage({
+    //   key: 'roleType',
+    //   success(res) {
+    //     if (res.data == 1) {
+    //       wx.switchTab({
+    //         url: '../deviceList/deviceList'
+    //       })
+    //     }
+    //     if (res.data == 2) {
+    //       wx.navigateTo({
+    //         url: '../../customer/pages/index/index'
+    //       })
+    //     }
+    //   },
+    //   fail(res) {
+    //     wx.setStorageSync('roleType', "1")
+    //   },
+    // })
 
 
     wx.getStorage({
@@ -1139,15 +1206,15 @@ Page({
                         runday = device.Run.name + ":" + device.Run.vstr
                       }
                     }
-                   
+
                     if (device.status) {
                       runstate1 = "-" + device.status.vstr
                     }
                     if (device.getStoveElements().length > 0) {
                       var el = device.getStoveElements()[0].values
-                      if(el[4]!=-1){
-                                      jiarezu=el[4]
-                                    }
+                      if (el[4] != -1) {
+                        jiarezu = el[4]
+                      }
                       var stove = device.getStoveElements()[0].prefix
                       for (var i in el) {
                         if (el[i] != -1) {
@@ -1207,6 +1274,7 @@ Page({
                   } else {
                     let data = that.getDeviceFromBytes(deviceno, deviceType, res.data)
                     //data.setModbusNo 设置Modbus站号 默认1 1-255
+                    console.log(data)
                     console.log(deviceType)
                     if (data.getTypeName() != deviceType) {
                       wx.request({
