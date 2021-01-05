@@ -1036,7 +1036,7 @@ Page({
                           list[i].simTitle = "物联卡状态:正常"
                         }
                         if (res.data.state == '01') {
-                          list[i].simTitle = "物联卡状态:代缴费"
+                          list[i].simTitle = "物联卡状态:待缴费"
                         }
                         if (res.data.state == '02') {
                           list[i].simTitle = "物联卡状态:欠费"

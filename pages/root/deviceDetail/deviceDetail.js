@@ -18,6 +18,7 @@ Page({
     date: '00:00',
     exRecord: false,
     imgstyle: '',
+    accessToken: '',
     deviceNo: '',
     src: '',
     newkz_v:null,
@@ -37,16 +38,19 @@ Page({
     fanList: [],
     runInfoMoList: [],
     timer: '',
+    currentIndex:0,
     timerStates: true,
     // 展开折叠
     selectedFlag: [false, false, false, false, false, false, false, false, false],
-    navbar: [],
+    navbar: ['基本', '报警', '报表', '控制', '短信', '资料', '监控'],
     currentTab: 0,
     control: false,
     havedata: true,
     report: false,
     ifedit: false,
     placeholder: '',
+    startTime: null,
+    endTime: null,
     controlList: [],
     showList: [],
     inputmin: 0,
@@ -75,19 +79,119 @@ Page({
     mqttname: "",
     runinfoMenu: -1,
     payMenu: -1,
-    exceptionMenu: -1,
-    reportMenu: -1,
-    controlMenu: -1,
-    smsMenu: -1,
-    deviceword: -1,
+    exceptionMenu: false,
+    reportMenu: false,
+    controlMenu: false,
+    smsMenu: false,
+    deviceword: false,
     baseNavbar: [],
     media: -1,
     deviceSmsMapDueTime: "",
     deviceSmsMapDueMoble: null,
     deviceSmsMapId: 0,
+    monitoringType: 0,
+    text:"当前设备未安装摄像头",
     downloadFile: [
     ],
     mockType:"",
+  },
+  zuo: function () {
+    wx.request({
+      url: 'https://open.ys7.com/api/lapp/device/ptz/start',
+      method: "POST",
+      data: {
+        accessToken: this.data.accessToken,
+        deviceSerial:this.data.deviceSerial,
+        channelNo:this.data.channelNo,
+        direction:0,
+        speed:2,
+      }, header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      success: function (res) {
+        wx.showToast({
+          title: res.data.msg,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+      }
+    })
+  },
+  you: function () {
+    wx.request({
+      url: 'https://open.ys7.com/api/lapp/device/ptz/start',
+      method: "POST",
+      data: {
+        accessToken: this.data.accessToken,
+        deviceSerial:this.data.deviceSerial,
+        channelNo:this.data.channelNo,
+        direction:3,
+        speed:1,
+      }, header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      success: function (res) {
+        wx.showToast({
+          title: res.data.msg,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+      }
+    })
+  },
+  xia: function () {
+    wx.request({
+      url: 'https://open.ys7.com/api/lapp/device/ptz/start',
+      method: "POST",
+      data: {
+        accessToken: this.data.accessToken,
+        deviceSerial:this.data.deviceSerial,
+        channelNo:this.data.channelNo,
+        direction:1,
+        speed:1,
+      }, header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      success: function (res) {
+        wx.showToast({
+          title: res.data.msg,
+          icon: 'none',
+          duration: 1000,
+          mask: true
+        })
+      }
+    })
+  },
+  shang: function () {
+    wx.request({
+      url: 'https://open.ys7.com/api/lapp/device/ptz/start',
+      method: "POST",
+      data: {
+        accessToken: this.data.accessToken,
+        deviceSerial:this.data.deviceSerial,
+        channelNo:this.data.channelNo,
+        direction:0,
+        speed:1,
+      }, header: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      success: function (res) {
+        wx.showToast({
+          title: res.data.msg,
+          icon: 'none',
+          duration: 3000,
+          mask: true
+        })
+      }
+    })
+  },
+  toPay: function (e) {
+    wx.navigateTo({
+      url: "../../payMenu/payMenu?deviceNo=" + this.data.deviceNo
+    })
+   
   },
   savefiles(e) {
     var that = this
@@ -451,26 +555,28 @@ Page({
   },
 
   navbarTap: function (e) {
+   
+   
     var that = this
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
-    var menuName = e.currentTarget.dataset.name
-    if (menuName == that.data.content.detail_controlMenu) {
+    var idx=e.currentTarget.dataset.idx 
+    if (idx == 3) {
       that.setData({
         timerStates: false,
       })
     }
-    if (menuName == that.data.content.detail_runinfoMenu) {
+    if (idx == 0) {
       that.setData({
         timerStates: true,
       })
     }
 
-    if (menuName == that.data.content.detail_reportMenu) {
+    if (idx == 2) {
       that.getreportdatabyday(that.data.mock1)
     }
-    if (menuName == that.data.content.detail_deviceword) {
+    if (idx == 5) {
       wx.request({
         //获取openid接口  
         url: 'https://apis.sdcsoft.com.cn/webapi/docs/device',
@@ -493,14 +599,6 @@ Page({
       })
     }
 
-    // if (menuName == that.data.content.detail_payMenu) {
-    //   that.setData({
-    //     currentTab: e.currentTarget.dataset.idx - 1
-    //   })
-    //   wx.navigateTo({
-    //     url: '../payMenu/payMenu?deviceNo=' + that.data.deviceNo
-    //   })
-    // }
   },
   onHide: function () {
     app.globalData.callBack[1] = null
@@ -519,26 +617,73 @@ Page({
     var that = this;
     var list = that.data.baseNavbar
     if (num == 2) {
-      list.push(that.data.content.detail_exceptionMenu)
       that.setData({
-        exRecord: true
+        exRecord: true,
+        exceptionMenu: true
       })
     }
     if (num == 3) {
-      list.push(that.data.content.detail_reportMenu)
+      that.setData({
+        reportMenu: true
+      })
     }
     if (num == 4) {
-      list.push(that.data.content.detail_controlMenu)
+      that.setData({
+        controlMenu: true
+      })
     }
     if (num == 5) {
-      list.push(that.data.content.detail_smsMenu)
+      that.setData({
+        smsMenu: true
+      })
     }
 
     if (num == 7) {
-      list.push(that.data.content.detail_deviceword)
+      that.setData({
+        deviceword: true
+      })
     }
-    that.setData({
-      navbar: list
+   
+  },
+  onUnload: function (options) {
+    var that= this
+    var endTime = new Date()
+    var total =  (endTime - that.data.startTime) / 1000
+    var day = parseInt(total / (24 * 60 * 60));
+    var afterDay = total - day * 24 * 60 * 60;//取得算出天数后剩余的秒数
+    var hour = parseInt(afterDay / (60 * 60));
+    var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60;//取得算出小时数后剩余的秒数
+    var min = parseInt(afterHour / 60);
+    var beginDatetime = new Date(that.data.startTime)
+      beginDatetime = beginDatetime.getFullYear() + '-' + (beginDatetime.getMonth() + 1) + '-' + beginDatetime.getDate() + ' ' + beginDatetime.getHours() + ':' + beginDatetime.getMinutes() + ':' + beginDatetime.getSeconds()
+      var endDatetime = new Date(endTime)
+      endDatetime = endDatetime.getFullYear() + '-' + (endDatetime.getMonth() + 1) + '-' + endDatetime.getDate() + ' ' + endDatetime.getHours() + ':' + endDatetime.getMinutes() + ':' + endDatetime.getSeconds()
+      wx.request({
+        //获取openid接口  
+        url: 'https://apis.sdcsoft.com.cn/wechat/DeviceOnlineRecord/create',
+        data: {
+          minutes: min,
+          beginDatetime: beginDatetime,
+          endDatetime: endDatetime,
+          openId: app.globalData.openid,
+          deviceNo:that.data.deviceNo
+        },
+        method: 'post',
+        success: function (res) {
+          console.log(res)
+        }
+      })
+  },
+  itemClick: function(res) {
+    var position = res.currentTarget.id;
+
+    this.setData({
+      monitoringType:this.data.monitoringList[position].type,
+      nowTitle: this.data.monitoringList[position].name,
+      nowHLSUrl: this.data.monitoringList[position].hLS,
+      currentIndex:position,
+      deviceSerial:this.data.monitoringList[position].deviceSerial,
+      channelNo:this.data.monitoringList[position].channelNo,
     })
   },
   /**
@@ -548,6 +693,47 @@ Page({
     var that = this;
     wx.showLoading({
       title: "loading...",
+    })
+    that.setData({
+      startTime:new Date()
+    })
+    wx.request({
+      //获取openid接口  
+      url: 'http://127.0.0.1:8088/wechat/monitoring/find/deviceNo',
+      data: {
+        deviceNo: options.deviceNo,
+      },
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+       if(res.data.data.length>0){
+        that.setData({
+          monitoringList:res.data.data,
+          nowHLSUrl:res.data.data[0].hLS,
+          nowTitle:res.data.data[0].name,
+          deviceSerial:res.data.data[0].deviceSerial,
+          channelNo:res.data.data[0].channelNo,
+          monitoringType:res.data.data[0].type,
+          text:"当前播放："
+
+        })
+        wx.request({
+          url: 'https://open.ys7.com/api/lapp/token/get',
+          method: "POST",
+          data: {
+            appKey: "82a7cd96476440039ed8147d91860abf",
+            appSecret: "dbf47743eb247ba631c96d3be1441f08",
+          }, header: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+          },
+          success: function (res) {
+            that.setData({
+              accessToken: res.data.data.accessToken
+            })
+          }
+        })
+       }
+      }
     })
     if (app.globalData.lang === 'zh-cn') {
       var chinese = require("../../../utils/Chinses.js")
@@ -662,56 +848,8 @@ Page({
               }
 
             }
-          } else {
-            that.setData({
-              navbar: that.data.baseNavbar
-            })
-            // if (that.data.navbar.length == 2) {
-            //   that.setData({
-            //     isHidden: true
-            //   })
-            // }
-          }
-          var munuList = that.data.navbar
-          for (var i in munuList) {
-            var munu = munuList[i]
-            if (munu == that.data.content.detail_runinfoMenu) {
-              that.setData({
-                runinfoMenu: i,
-              })
-            }
-            if (munu == that.data.content.detail_payMenu) {
-              that.setData({
-                payMenu: i
-              })
-            }
-            if (munu == that.data.content.detail_exceptionMenu) {
-              that.setData({
-                exceptionMenu: i
-              })
-            }
-            if (munu == that.data.content.detail_reportMenu) {
-              that.setData({
-                reportMenu: i
-              })
-            }
-            if (munu == that.data.content.detail_controlMenu) {
-              that.setData({
-                controlMenu: i,
-              })
-            }
-            if (munu == that.data.content.detail_smsMenu) {
-              that.setData({
-                smsMenu: i
-              })
-            }
-
-            if (munu == that.data.content.detail_deviceword) {
-              that.setData({
-                deviceword: i
-              })
-            }
-          }
+          } 
+          
         }
       })
     }

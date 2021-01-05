@@ -32,7 +32,7 @@ var Chinese = {
   detail_zhixing: "执行成功",
   detail_loading: "正在加载...",
   detail_navbar: ['基本'],
-  detail_cnavbar: ['运行信息', '报警信息', '统计报表', '管理控制'],
+  detail_cnavbar: ['基本', '报警', '报表', '控制', '短信', '资料'],
   detail_nochuli: "未处理",
   detail_treated: "已处理",
   detail_navbar1: ['基本'],

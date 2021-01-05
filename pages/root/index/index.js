@@ -102,7 +102,7 @@ Page({
   },
   tolist: function () {
     wx.redirectTo({
-      url: '/pages/deviceList/deviceList'
+      url: '../deviceList/deviceList'
     })
   },
   onLoad: function () {

@@ -223,6 +223,70 @@ page{
     padding-left: 510rpx;
     background: rgba(0, 0, 0, 0.6);
 }
+/*摄像头样式*/
 
+.top {
+  width: 100%;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+  color: #09a6d9;
+  font-size: 40rpx;
+}
+
+.row {
+  display: flex;
+  /* flex-direction: row;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: flex-start; */
+}
+
+.item {
+  display: flex;
+  height: 80rpx;
+  width: 33.333%;
+  float: left;
+  justify-content: center;
+  align-items: center;
+}
+
+.item text {
+  width: 80%;
+  height: 70%;
+  display: flex;
+  color: #36ab60;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  font-size: 36rpx;
+  border-radius: 5px;
+  box-shadow: #ddd 0px 2px 2px 1px;
+}
+.cbutton{
+  width: 30%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  font-size: 36rpx;
+  border-radius: 5px;
+  box-shadow: #ddd 0px 2px 2px 1px;
+}
+.item.active text {
+  background: #eee;
+}
+.add_icon{
+ 
+  position: fixed;
+  width: 50px;
+  height: 45px;
+bottom: 165px;
+right: 20px;
+ 
+}
 
 

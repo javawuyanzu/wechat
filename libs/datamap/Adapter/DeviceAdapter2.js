@@ -330,7 +330,8 @@ var DeviceAdapter2 = /** @class */ (function () {
                 case DeviceAdapter2.Formate_Field_Option_RefType_At:
                     var refgroup = field[DeviceAdapter2.Formate_Field_Option_RefGroup];
                     //console.log(refgroup)
-                    //如果动画中该组无元素，则进行动画元素的自举操作
+                    //如果动画中该组无元素，则进行动console.log()画元素的自举操作
+                 
                     if (!this.atMap.getItem(refgroup)[index]) {
                         var groupx = this.atMap.getItem(refgroup);
                         //如果是燃烧器关联动画,实现NJZJ控制器燃烧器自举
@@ -790,6 +791,7 @@ var DeviceAdapter2 = /** @class */ (function () {
         }
         this.Init2();
         //console.log(this.device.Run)
+        console.log(DeviceAdapter2.Formate_Key_DataMap)
         for (var _i = 0, _a = Object.keys(this.formate[DeviceAdapter2.Formate_Key_DataMap]); _i < _a.length; _i++) {
             var key = _a[_i];
             if (this.formate[DeviceAdapter2.Formate_Key_DataMap].hasOwnProperty(key)) {
