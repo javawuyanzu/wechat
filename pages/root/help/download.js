@@ -17,7 +17,7 @@ Page({
         var list=res.data.data
           var files=[]
           for(var i in list){
-            files.push({file:list[i].fileName,path:"",url:"https://docs.sdcsoft.com.cn/gl/comms/"+"/"+list[i].fileName})
+            files.push({file:list[i].fileName,path:"",url:"https://docs.sdcsoft.com.cn/docs/comms/"+"/"+list[i].fileName})
           }
           that.setData({
             downloadFile:files

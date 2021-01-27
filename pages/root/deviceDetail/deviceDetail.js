@@ -21,7 +21,7 @@ Page({
     accessToken: '',
     deviceNo: '',
     src: '',
-    newkz_v:null,
+    newkz_v: null,
     errorList: [],
     baseInfoMap: [],
     mockInfoMap: [],
@@ -33,12 +33,12 @@ Page({
     switchquantityMap: [],
     bengAnimationList: [],
     fanAnimationList: [],
-    fireList:[],
+    fireList: [],
     bengList: [],
     fanList: [],
     runInfoMoList: [],
     timer: '',
-    currentIndex:0,
+    currentIndex: 0,
     timerStates: true,
     // 展开折叠
     selectedFlag: [false, false, false, false, false, false, false, false, false],
@@ -58,7 +58,7 @@ Page({
     inputvalue: 0,
     inputValue: '',
     index: -1,
-    mockKey:"",
+    mockKey: "",
     index1: -1,
     zuotian: "",
     qiantian: "",
@@ -90,10 +90,10 @@ Page({
     deviceSmsMapDueMoble: null,
     deviceSmsMapId: 0,
     monitoringType: 0,
-    text:"当前设备未安装摄像头",
+    text: "当前设备未安装摄像头",
     downloadFile: [
     ],
-    mockType:"",
+    mockType: "",
   },
   zuo: function () {
     wx.request({
@@ -101,10 +101,10 @@ Page({
       method: "POST",
       data: {
         accessToken: this.data.accessToken,
-        deviceSerial:this.data.deviceSerial,
-        channelNo:this.data.channelNo,
-        direction:0,
-        speed:2,
+        deviceSerial: this.data.deviceSerial,
+        channelNo: this.data.channelNo,
+        direction: 0,
+        speed: 2,
       }, header: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
       },
@@ -124,10 +124,10 @@ Page({
       method: "POST",
       data: {
         accessToken: this.data.accessToken,
-        deviceSerial:this.data.deviceSerial,
-        channelNo:this.data.channelNo,
-        direction:3,
-        speed:1,
+        deviceSerial: this.data.deviceSerial,
+        channelNo: this.data.channelNo,
+        direction: 3,
+        speed: 1,
       }, header: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
       },
@@ -147,10 +147,10 @@ Page({
       method: "POST",
       data: {
         accessToken: this.data.accessToken,
-        deviceSerial:this.data.deviceSerial,
-        channelNo:this.data.channelNo,
-        direction:1,
-        speed:1,
+        deviceSerial: this.data.deviceSerial,
+        channelNo: this.data.channelNo,
+        direction: 1,
+        speed: 1,
       }, header: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
       },
@@ -170,10 +170,10 @@ Page({
       method: "POST",
       data: {
         accessToken: this.data.accessToken,
-        deviceSerial:this.data.deviceSerial,
-        channelNo:this.data.channelNo,
-        direction:0,
-        speed:1,
+        deviceSerial: this.data.deviceSerial,
+        channelNo: this.data.channelNo,
+        direction: 0,
+        speed: 1,
       }, header: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
       },
@@ -191,13 +191,14 @@ Page({
     wx.navigateTo({
       url: "../../payMenu/payMenu?deviceNo=" + this.data.deviceNo
     })
-   
+
   },
   savefiles(e) {
     var that = this
     const fileName = e.currentTarget.dataset.file;   //获取页面要下载的文件名
     const url = e.currentTarget.dataset.url;
     const idx = e.currentTarget.dataset.idx;
+    console.log(url)
     let $this = this;
     var fileType = fileName.substr(fileName.indexOf('.') + 1, fileName.length)
     wx.showLoading({
@@ -225,6 +226,22 @@ Page({
                     console.log('读取成功', res)
                   },
                   fail: (err) => {
+                    wx.setClipboardData({
+                      data: url,
+                      success: function (res) {
+                        wx.getClipboardData({
+                          success: function (res) {
+                          
+                            wx.showToast({
+                              title: '微信暂不支持此类型文件下载，下载路径已复制请到浏览器中下载',
+                              icon: 'none',
+                              duration: 3000,
+                              mask: true
+                            })
+                          }
+                        })
+                      }
+                    })
                     console.log('读取失败', err)
                   }
                 })
@@ -335,7 +352,7 @@ Page({
   },
   editData: function (e) {
     var that = this;
-    if(that.data.newFrame=='true'){
+    if (that.data.newFrame == 'true') {
       that.setData({
         newkz_v: e.currentTarget.dataset.v
       })
@@ -371,15 +388,15 @@ Page({
     //     duration: 2000
     //   })
     // } else {
-    
+
     // }
     let cList = []
     cList = that.data.controlList
-    if(that.data.newFrame=='true'){
-      let temp = cList[that.data.index+""][that.data.index1].ctls[[that.data.newkz_v]]
-      temp.Value=parseFloat(that.data.inputvalue)
+    if (that.data.newFrame == 'true') {
+      let temp = cList[that.data.index + ""][that.data.index1].ctls[[that.data.newkz_v]]
+      temp.Value = parseFloat(that.data.inputvalue)
       console.log(temp)
-    }else{
+    } else {
       let temp = cList[that.data.index][that.data.index1];
       temp.setValue(parseFloat(that.data.inputvalue))
     }
@@ -435,24 +452,24 @@ Page({
   formSubmit: function (e) {
     var that = this
     let str = ''
-    if(that.data.newFrame=='true'){
+    if (that.data.newFrame == 'true') {
       for (var i in that.data.controlList) {
         for (var commmd in that.data.controlList[i]) {
           console.log(that.data.controlList[i][commmd])
           str += that.data.controlList[i][commmd].Command;
         }
       }
-    }else{
+    } else {
       for (var i in that.data.controlList) {
         for (var commmd in that.data.controlList[i]) {
           str += that.data.controlList[i][commmd].getCommandString();
         }
       }
     }
-  
- 
+
+
     console.log(str)
-    
+
     // if (that.data.media != 0 & that.data.media != 3) {
     //   wx.showToast({
     //     title: '当前锅炉类型不支持远程控制',
@@ -555,13 +572,13 @@ Page({
   },
 
   navbarTap: function (e) {
-   
-   
+
+
     var that = this
     that.setData({
       currentTab: e.currentTarget.dataset.idx
     })
-    var idx=e.currentTarget.dataset.idx 
+    var idx = e.currentTarget.dataset.idx
     if (idx == 3) {
       that.setData({
         timerStates: false,
@@ -590,7 +607,7 @@ Page({
           console.log(list)
           var files = []
           for (var i in list) {
-            files.push({ file: list[i].fileName, path: "", url: "https://docs.sdcsoft.com.cn/gl/devices/" + that.data.deviceNo + "/" + list[i].fileName })
+            files.push({ file: list[i].fileName, path: "", url: "https://docs.sdcsoft.com.cn/docs/devices/" + that.data.deviceNo + "/" + list[i].fileName })
           }
           that.setData({
             downloadFile: files
@@ -643,47 +660,47 @@ Page({
         deviceword: true
       })
     }
-   
+
   },
   onUnload: function (options) {
-    var that= this
+    var that = this
     var endTime = new Date()
-    var total =  (endTime - that.data.startTime) / 1000
+    var total = (endTime - that.data.startTime) / 1000
     var day = parseInt(total / (24 * 60 * 60));
     var afterDay = total - day * 24 * 60 * 60;//取得算出天数后剩余的秒数
     var hour = parseInt(afterDay / (60 * 60));
     var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60;//取得算出小时数后剩余的秒数
     var min = parseInt(afterHour / 60);
     var beginDatetime = new Date(that.data.startTime)
-      beginDatetime = beginDatetime.getFullYear() + '-' + (beginDatetime.getMonth() + 1) + '-' + beginDatetime.getDate() + ' ' + beginDatetime.getHours() + ':' + beginDatetime.getMinutes() + ':' + beginDatetime.getSeconds()
-      var endDatetime = new Date(endTime)
-      endDatetime = endDatetime.getFullYear() + '-' + (endDatetime.getMonth() + 1) + '-' + endDatetime.getDate() + ' ' + endDatetime.getHours() + ':' + endDatetime.getMinutes() + ':' + endDatetime.getSeconds()
-      wx.request({
-        //获取openid接口  
-        url: 'https://apis.sdcsoft.com.cn/wechat/DeviceOnlineRecord/create',
-        data: {
-          minutes: min,
-          beginDatetime: beginDatetime,
-          endDatetime: endDatetime,
-          openId: app.globalData.openid,
-          deviceNo:that.data.deviceNo
-        },
-        method: 'post',
-        success: function (res) {
-          console.log(res)
-        }
-      })
+    beginDatetime = beginDatetime.getFullYear() + '-' + (beginDatetime.getMonth() + 1) + '-' + beginDatetime.getDate() + ' ' + beginDatetime.getHours() + ':' + beginDatetime.getMinutes() + ':' + beginDatetime.getSeconds()
+    var endDatetime = new Date(endTime)
+    endDatetime = endDatetime.getFullYear() + '-' + (endDatetime.getMonth() + 1) + '-' + endDatetime.getDate() + ' ' + endDatetime.getHours() + ':' + endDatetime.getMinutes() + ':' + endDatetime.getSeconds()
+    wx.request({
+      //获取openid接口  
+      url: 'https://apis.sdcsoft.com.cn/wechat/DeviceOnlineRecord/create',
+      data: {
+        minutes: min,
+        beginDatetime: beginDatetime,
+        endDatetime: endDatetime,
+        openId: app.globalData.openid,
+        deviceNo: that.data.deviceNo
+      },
+      method: 'post',
+      success: function (res) {
+        console.log(res)
+      }
+    })
   },
-  itemClick: function(res) {
+  itemClick: function (res) {
     var position = res.currentTarget.id;
 
     this.setData({
-      monitoringType:this.data.monitoringList[position].type,
+      monitoringType: this.data.monitoringList[position].type,
       nowTitle: this.data.monitoringList[position].name,
       nowHLSUrl: this.data.monitoringList[position].hLS,
-      currentIndex:position,
-      deviceSerial:this.data.monitoringList[position].deviceSerial,
-      channelNo:this.data.monitoringList[position].channelNo,
+      currentIndex: position,
+      deviceSerial: this.data.monitoringList[position].deviceSerial,
+      channelNo: this.data.monitoringList[position].channelNo,
     })
   },
   /**
@@ -695,44 +712,44 @@ Page({
       title: "loading...",
     })
     that.setData({
-      startTime:new Date()
+      startTime: new Date()
     })
     wx.request({
       //获取openid接口  
-      url: 'http://127.0.0.1:8088/wechat/monitoring/find/deviceNo',
+      url: 'https://apis.sdcsoft.com.cn/wechat/monitoring/find/deviceNo',
       data: {
         deviceNo: options.deviceNo,
       },
       method: 'GET',
       success: function (res) {
         console.log(res)
-       if(res.data.data.length>0){
-        that.setData({
-          monitoringList:res.data.data,
-          nowHLSUrl:res.data.data[0].hLS,
-          nowTitle:res.data.data[0].name,
-          deviceSerial:res.data.data[0].deviceSerial,
-          channelNo:res.data.data[0].channelNo,
-          monitoringType:res.data.data[0].type,
-          text:"当前播放："
+        if (res.data.data.length > 0) {
+          that.setData({
+            monitoringList: res.data.data,
+            nowHLSUrl: res.data.data[0].hLS,
+            nowTitle: res.data.data[0].name,
+            deviceSerial: res.data.data[0].deviceSerial,
+            channelNo: res.data.data[0].channelNo,
+            monitoringType: res.data.data[0].type,
+            text: "当前播放："
 
-        })
-        wx.request({
-          url: 'https://open.ys7.com/api/lapp/token/get',
-          method: "POST",
-          data: {
-            appKey: "82a7cd96476440039ed8147d91860abf",
-            appSecret: "dbf47743eb247ba631c96d3be1441f08",
-          }, header: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-          },
-          success: function (res) {
-            that.setData({
-              accessToken: res.data.data.accessToken
-            })
-          }
-        })
-       }
+          })
+          wx.request({
+            url: 'https://open.ys7.com/api/lapp/token/get',
+            method: "POST",
+            data: {
+              appKey: "82a7cd96476440039ed8147d91860abf",
+              appSecret: "dbf47743eb247ba631c96d3be1441f08",
+            }, header: {
+              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+            },
+            success: function (res) {
+              that.setData({
+                accessToken: res.data.data.accessToken
+              })
+            }
+          })
+        }
       }
     })
     if (app.globalData.lang === 'zh-cn') {
@@ -848,8 +865,8 @@ Page({
               }
 
             }
-          } 
-          
+          }
+
         }
       })
     }
@@ -945,7 +962,7 @@ Page({
 
       }
     }
-   
+
   },
   subTopic: function (topic) {
     var client = app.globalData.client;
@@ -1146,7 +1163,7 @@ Page({
                   success(res) {
                     var list = res.data
                     for (var i in list) {
-                      if(deviceNo==list[i].deviceNo){
+                      if (deviceNo == list[i].deviceNo) {
                         list[i].map = map
                         list[i].addr = addr
                       }
@@ -1160,8 +1177,8 @@ Page({
                 app.globalData.adapter.Init(map, addr)
                 app.globalData.adapter.handlerData(new Uint8Array(bytes))
                 let device = app.globalData.adapter.Device
-                 
-                var clist=device.KongZhi.map
+
+                var clist = device.KongZhi.map
                 console.log(clist)
                 if (JSON.stringify(clist) != '{}') {
                   that.setData({
@@ -1169,10 +1186,10 @@ Page({
                     control: true,
                   })
                 }
-              //     device.KongZhi.each((k,v)=>{
-              //         console.log(k)
-              //         console.log(v)
-              //     })
+                //     device.KongZhi.each((k,v)=>{
+                //         console.log(k)
+                //         console.log(v)
+                //     })
 
                 var errorList = []
                 var myDate = new Date();
@@ -1189,10 +1206,10 @@ Page({
                     that.getException(errorList);
                   }
                 }
-                
-                console.log(device.getStoveElements()) 
+
+                console.log(device.getStoveElements())
                 var imgstyle1 = that.data.imgstyle
-                if (device.getStoveElements().length > 0&device.getStoveElements().length ==1) {
+                if (device.getStoveElements().length > 0 & device.getStoveElements().length == 1) {
                   var el = device.getStoveElements()[0].values
                   var stove = device.getStoveElements()[0].prefix
                   for (var i in el) {
@@ -1203,23 +1220,23 @@ Page({
                   that.setData({
                     src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif',
                   })
-                }else{
-                  var elements=device.getStoveElements()
-                  var fireList=[]
+                } else {
+                  var elements = device.getStoveElements()
+                  var fireList = []
                   for (var k in elements) {
-                    var el =elements[k].values
+                    var el = elements[k].values
                     var stove = elements[k].prefix
                     for (var i in el) {
                       if (el[i] != -1) {
                         stove = stove + "-" + el[i]
                       }
                     }
-                    fireList.push({title:elements[k].title,  src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif'})
+                    fireList.push({ title: elements[k].title, src: 'http://www.sdcsoft.com.cn/app/gl/animation/animation/stove/' + stove.substr(0, 7) + "-" + imgstyle1 + '.gif' })
                   }
                   that.setData({
                     fireList: fireList,
                   })
-                
+
                 }
                 for (var i in device.jb) {
                   if (device.jb[i].name == "介质") {
@@ -1228,7 +1245,7 @@ Page({
                     })
                   }
                 }
-                
+
                 that.setData({
                   bengAnimationList: device.getBeng(),
                   fanAnimationList: device.getFan(),
@@ -1266,16 +1283,17 @@ Page({
                       type: "ll",
                     })
                   }
-                if (runInfoMoList.length > 0) {
-                  that.setData({
-                    report: true,
-                    runInfoMoList: runInfoMoList,
-                    mock1: runInfoMoList[0].name,
-                    mock1Name: runInfoMoList[0].title,
-                    mockType:runInfoMoList[0].type
-                  })
+                  if (runInfoMoList.length > 0) {
+                    that.setData({
+                      report: true,
+                      runInfoMoList: runInfoMoList,
+                      mock1: runInfoMoList[0].name,
+                      mockKey: runInfoMoList[0].name,
+                      mock1Name: runInfoMoList[0].title,
+                      mockType: runInfoMoList[0].type
+                    })
+                  }
                 }
-              }
                 for (var i = 0; i < that.data.bengAnimationList.length; i++) {
                   var src = 'bengList[' + i + '].src'
                   var title = 'bengList[' + i + '].title'
@@ -1295,7 +1313,7 @@ Page({
                 }
               }
             })
-          
+
           } else {
             var errorList = []
             let data = app.globalData.deviceAdapter.getSdcSoftDevice(that.data.deviceType, new Uint8Array(res.data))
@@ -1630,16 +1648,19 @@ Page({
       var beginDate = that.getDateStr(null, -3)
     }
     var endDate = that.getDateStr(beginDate, 1)
-    
-    if(that.data.newFrame=='true'){
+
+    if (that.data.newFrame == 'true') {
+      wx.showLoading({
+        title: "正在加载数据...",
+      })
       wx.request({
-        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
+        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/wechat/mock',
         data: {
           key: key,
           begintime: beginDate,
           endtime: endDate,
           deviceNo: that.data.deviceNo,
-          type:that.data.mockType,
+          type: that.data.mockType,
         },
         header: {
           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -1647,7 +1668,7 @@ Page({
         method: 'GET',
         success: function (res) {
           console.log(res)
-          if (res.data.code == 0) {
+          if (res.data.status == 0) {
             that.setData({
               havedata: true
             })
@@ -1657,7 +1678,7 @@ Page({
             for (var d in detelist) {
               systemStateCategories.push(DateUtil.dateFormat(new Date(detelist[d]), "yyyy-MM-dd HH:mm:ss"))
             }
-  
+
             if (systemStateData.length > 0) {
               var windowWidth = 320;
               try {
@@ -1711,7 +1732,7 @@ Page({
           }
         }
       })
-    }else{
+    } else {
       console.log("321")
       wx.request({
         url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
@@ -1736,7 +1757,7 @@ Page({
             for (var d in detelist) {
               systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
             }
-  
+
             if (systemStateData.length > 0) {
               var windowWidth = 320;
               try {
@@ -1745,7 +1766,7 @@ Page({
               } catch (e) {
                 console.error('getSystemInfoSync failed!');
               }
-  
+
               lineChart = new wxCharts({
                 canvasId: 'mockLine',
                 type: 'line',
@@ -1778,6 +1799,9 @@ Page({
                   lineStyle: 'curve'
                 }
               });
+              wx.hideLoading({
+                success: (res) => { },
+              })
             }
           } else {
             wx.showToast({
@@ -1805,15 +1829,18 @@ Page({
       var beginDate = that.getDateStr(null, -3)
     }
     var endDate = that.getDateStr(beginDate, 1)
-    if(that.data.newFrame=='true'){
+    if (that.data.newFrame == 'true') {
+      wx.showLoading({
+        title: "正在加载数据...",
+      })
       wx.request({
-        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/customer/wechat/mock',
+        url: 'https://apis.sdcsoft.com.cn/webapi/report/newframe/wechat/mock',
         data: {
           key: key,
           begintime: beginDate,
           endtime: endDate,
           deviceNo: that.data.deviceNo,
-          type:that.data.mockType,
+          type: that.data.mockType,
         },
         header: {
           "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -1821,7 +1848,7 @@ Page({
         method: 'GET',
         success: function (res) {
           console.log(res)
-          if (res.data.code == 0) {
+          if (res.data.status == 0) {
             that.setData({
               havedata: true
             })
@@ -1871,6 +1898,9 @@ Page({
                   lineStyle: 'curve'
                 }
               });
+              wx.hideLoading({
+                success: (res) => { },
+              })
             }
           } else {
             wx.showToast({
@@ -1884,7 +1914,7 @@ Page({
           }
         }
       })
-    }else{
+    } else {
       console.log("123")
       wx.request({
         url: 'https://apis.sdcsoft.com.cn/webapi/report/device/wechat/mock',
@@ -1910,7 +1940,7 @@ Page({
             for (var d in detelist) {
               systemStateCategories.push(DateUtil.dateFormat(new Date(DateUtil.stringToDate(detelist[d]).getTime() - 8 * 60 * 60 * 1000), "yyyy-MM-dd HH:mm:ss"))
             }
-  
+
             if (systemStateData.length > 0) {
               var windowWidth = 320;
               try {
@@ -1919,7 +1949,7 @@ Page({
               } catch (e) {
                 console.error('getSystemInfoSync failed!');
               }
-  
+
               lineChart = new wxCharts({
                 canvasId: 'mockLine',
                 type: 'line',
@@ -1978,8 +2008,8 @@ Page({
         that.setData({
           mock1: runInfoMoList[i].title,
           mock1Name: runInfoMoList[i].title,
-          mockType:runInfoMoList[i].type,
-          mockKey:runInfoMoList[i].name
+          mockType: runInfoMoList[i].type,
+          mockKey: runInfoMoList[i].title
         })
       }
     }
